@@ -1,0 +1,78 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // User profile images
+    match /users/{userId}/profile/{filename} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == userId
+        && resource.size < 5 * 1024 * 1024 // 5MB limit
+        && resource.contentType.matches('image/.*');
+      allow delete: if request.auth != null && 
+        (request.auth.uid == userId || isAdmin());
+    }
+    
+    // Notice attachments
+    match /notices/{noticeId}/attachments/{filename} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && (isAdmin() || isTeacher())
+        && resource.size < 10 * 1024 * 1024 // 10MB limit
+        && (resource.contentType.matches('image/.*') ||
+            resource.contentType.matches('application/pdf') ||
+            resource.contentType.matches('application/msword') ||
+            resource.contentType.matches('application/vnd.openxmlformats-officedocument.wordprocessingml.document'));
+      allow delete: if request.auth != null && 
+        (getNoticeAuthor(noticeId) == request.auth.uid || isAdmin());
+    }
+    
+    // Message attachments
+    match /messages/{messageId}/attachments/{filename} {
+      allow read: if request.auth != null && canAccessMessage(messageId);
+      allow write: if request.auth != null && canAccessMessage(messageId)
+        && resource.size < 25 * 1024 * 1024 // 25MB limit
+        && (resource.contentType.matches('image/.*') ||
+            resource.contentType.matches('video/.*') ||
+            resource.contentType.matches('application/pdf') ||
+            resource.contentType.matches('text/.*'));
+      allow delete: if request.auth != null && canAccessMessage(messageId);
+    }
+    
+    // Public assets (logos, banners, etc.)
+    match /public/{filename} {
+      allow read: if true;
+      allow write, delete: if request.auth != null && isAdmin();
+    }
+    
+    // Temporary uploads (for processing)
+    match /temp/{userId}/{filename} {
+      allow read, write: if request.auth != null && request.auth.uid == userId
+        && resource.size < 50 * 1024 * 1024; // 50MB limit
+      allow delete: if request.auth != null && 
+        (request.auth.uid == userId || isAdmin());
+    }
+    
+    // Helper functions
+    function isAdmin() {
+      return request.auth != null && 
+        firestore.exists(/databases/(default)/documents/users/$(request.auth.uid)) &&
+        firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    function isTeacher() {
+      return request.auth != null && 
+        firestore.exists(/databases/(default)/documents/users/$(request.auth.uid)) &&
+        firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.role == 'teacher';
+    }
+    
+    function getNoticeAuthor(noticeId) {
+      return firestore.get(/databases/(default)/documents/notices/$(noticeId)).data.authorId;
+    }
+    
+    function canAccessMessage(messageId) {
+      let messageData = firestore.get(/databases/(default)/documents/messages/$(messageId)).data;
+      return messageData.senderId == request.auth.uid || 
+             messageData.recipientId == request.auth.uid ||
+             isAdmin();
+    }
+  }
+}
