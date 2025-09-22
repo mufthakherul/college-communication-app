@@ -1,0 +1,9 @@
+{
+  "projects": {
+    "default": "campus-mesh-dev",
+    "staging": "campus-mesh-staging",
+    "production": "campus-mesh-prod"
+  },
+  "targets": {},
+  "etags": {}
+}

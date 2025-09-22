@@ -1,0 +1,32 @@
+{
+  "conditions": [],
+  "parameters": {
+    "maintenance_mode": {
+      "defaultValue": {
+        "value": "false"
+      },
+      "description": "Enable maintenance mode to prevent app usage during updates"
+    },
+    "max_file_size_mb": {
+      "defaultValue": {
+        "value": "25"
+      },
+      "description": "Maximum file size for uploads in MB"
+    },
+    "features": {
+      "defaultValue": {
+        "value": "{\"messaging\": true, \"notices\": true, \"analytics\": true}"
+      },
+      "description": "Feature flags for different app functionalities"
+    }
+  },
+  "version": {
+    "versionNumber": "1",
+    "updateTime": "2024-01-01T00:00:00Z",
+    "updateUser": {
+      "email": "admin@campus-mesh.edu"
+    },
+    "updateOrigin": "CONSOLE",
+    "updateType": "INCREMENTAL_UPDATE"
+  }
+}
