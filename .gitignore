@@ -32,3 +32,18 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+# Node.js dependencies
+node_modules/
+functions/node_modules/
+functions/package-lock.json
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+storage-debug.log
+
+# Environment files
+.env
+.env.local
