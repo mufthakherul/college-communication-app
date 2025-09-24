@@ -44,8 +44,8 @@ firebase login
 ### Environment Setup
 ```bash
 # Clone repository
-git clone https://github.com/your-org/campus-mesh.git
-cd campus-mesh
+git clone https://github.com/mufthakherul/college-communication-app.git
+cd college-communication-app
 
 # Install dependencies
 npm install -g firebase-tools
