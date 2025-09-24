@@ -86,7 +86,7 @@ export const updateNotice = functions.https.onCall(async (data, context) => {
 async function sendNoticeNotifications(noticeId: string, notice: any) {
   try {
     // Get users matching target audience
-    let usersQuery = admin.firestore().collection("users");
+    let usersQuery = admin.firestore().collection("users").where("isActive", "==", true);
     
     if (notice.targetAudience && notice.targetAudience !== "all") {
       usersQuery = usersQuery.where("role", "==", notice.targetAudience);
