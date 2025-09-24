@@ -36,8 +36,8 @@ Campus Mesh follows a modern, scalable architecture:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-org/campus-mesh.git
-   cd campus-mesh
+   git clone https://github.com/mufthakherul/college-communication-app.git
+   cd college-communication-app
    ```
 
 2. **Set up development environment**
@@ -134,8 +134,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🆘 Support
 
 - Documentation: [docs/](docs/)
-- Issues: [GitHub Issues](https://github.com/your-org/campus-mesh/issues)
-- Discussions: [GitHub Discussions](https://github.com/your-org/campus-mesh/discussions)
+- Issues: [GitHub Issues](https://github.com/mufthakherul/college-communication-app/issues)
+- Discussions: [GitHub Discussions](https://github.com/mufthakherul/college-communication-app/discussions)
 
 ## 🙏 Acknowledgments
 

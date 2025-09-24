@@ -105,7 +105,6 @@ docs(api): update authentication endpoints documentation
 ### Code Organization
 
 ```
-campus-mesh/
 ├── apps/mobile/           # Flutter mobile app
 │   ├── lib/
 │   │   ├── main.dart     # App entry point
