@@ -23,6 +23,7 @@ flutter run
 - [Architecture Overview](docs/ARCHITECTURE.md)
 - [API Reference](docs/API.md)
 - [Deployment Guide](docs/DEPLOYMENT.md)
+- [Database Seeding Guide](docs/SEEDING.md)
 - [Contributing Guidelines](docs/CONTRIBUTING.md)
 - [Troubleshooting](docs/TROUBLESHOOTING.md)
 
@@ -30,6 +31,7 @@ flutter run
 
 ```
 ├── apps/mobile/          # Flutter mobile application
+├── backend/             # Backend utilities and scripts
 ├── functions/           # Firebase Cloud Functions (TypeScript)
 ├── infra/              # Infrastructure configuration
 ├── scripts/            # Build and deployment scripts
