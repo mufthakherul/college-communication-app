@@ -174,6 +174,83 @@ const SAMPLE_DATA = {
     }
   ],
 
+  approvalRequests: [
+    {
+      userId: 'student2',
+      type: 'role_change',
+      data: {
+        currentRole: 'student',
+        requestedRole: 'teacher',
+        reason: 'I have completed my PhD and would like to apply for a teaching position.'
+      },
+      status: 'pending',
+      createdAt: admin.firestore.Timestamp.now(),
+      updatedAt: admin.firestore.Timestamp.now()
+    },
+    {
+      userId: 'student1',
+      type: 'account_recovery',
+      data: {
+        reason: 'Lost access to my email account, need to update contact information.',
+        newEmail: 'alice.wilson.new@student.campus.edu'
+      },
+      status: 'approved',
+      createdAt: admin.firestore.Timestamp.fromDate(new Date(Date.now() - 2 * 24 * 60 * 60 * 1000)), // 2 days ago
+      updatedAt: admin.firestore.Timestamp.fromDate(new Date(Date.now() - 1 * 24 * 60 * 60 * 1000)), // 1 day ago
+      processedAt: admin.firestore.Timestamp.fromDate(new Date(Date.now() - 1 * 24 * 60 * 60 * 1000)),
+      processedBy: 'admin1',
+      reason: 'Verified identity and approved email update'
+    }
+  ],
+
+  userActivity: [
+    {
+      userId: 'student1',
+      action: 'login',
+      metadata: {
+        platform: 'mobile',
+        version: '1.0.0'
+      },
+      timestamp: admin.firestore.Timestamp.now(),
+      userAgent: 'Campus Mesh App/1.0.0 (iOS)',
+      ipAddress: '192.168.1.100'
+    },
+    {
+      userId: 'teacher1',
+      action: 'notice_created',
+      metadata: {
+        noticeId: 'notice_cs_meeting',
+        noticeTitle: 'Computer Science Department Meeting'
+      },
+      timestamp: admin.firestore.Timestamp.now(),
+      userAgent: 'Mozilla/5.0 (Web Browser)',
+      ipAddress: '192.168.1.101'
+    },
+    {
+      userId: 'student2',
+      action: 'message_sent',
+      metadata: {
+        recipientId: 'admin1',
+        messageType: 'text'
+      },
+      timestamp: admin.firestore.Timestamp.now(),
+      userAgent: 'Campus Mesh App/1.0.0 (Android)',
+      ipAddress: '192.168.1.102'
+    },
+    {
+      userId: 'admin1',
+      action: 'user_role_updated',
+      metadata: {
+        targetUserId: 'student1',
+        oldRole: 'student',
+        newRole: 'student'
+      },
+      timestamp: admin.firestore.Timestamp.now(),
+      userAgent: 'Mozilla/5.0 (Admin Dashboard)',
+      ipAddress: '192.168.1.103'
+    }
+  ],
+
   notifications: [
     {
       userId: 'student1',
@@ -232,7 +309,7 @@ const SAMPLE_DATA = {
 async function clearDatabase() {
   console.log('🧹 Clearing existing data from database...');
   
-  const collections = ['users', 'notices', 'messages', 'notifications'];
+  const collections = ['users', 'notices', 'messages', 'notifications', 'approvalRequests', 'userActivity'];
   
   for (const collectionName of collections) {
     console.log(`  - Clearing ${collectionName} collection...`);
@@ -304,6 +381,26 @@ async function seedDatabase() {
   await messageBatch.commit();
   console.log(`    ✅ Added ${SAMPLE_DATA.messages.length} messages`);
   
+  // Seed approval requests
+  console.log('  - Seeding approval requests...');
+  const approvalBatch = db.batch();
+  SAMPLE_DATA.approvalRequests.forEach(request => {
+    const requestRef = db.collection('approvalRequests').doc();
+    approvalBatch.set(requestRef, request);
+  });
+  await approvalBatch.commit();
+  console.log(`    ✅ Added ${SAMPLE_DATA.approvalRequests.length} approval requests`);
+  
+  // Seed user activity
+  console.log('  - Seeding user activity...');
+  const activityBatch = db.batch();
+  SAMPLE_DATA.userActivity.forEach(activity => {
+    const activityRef = db.collection('userActivity').doc();
+    activityBatch.set(activityRef, activity);
+  });
+  await activityBatch.commit();
+  console.log(`    ✅ Added ${SAMPLE_DATA.userActivity.length} user activity records`);
+  
   // Seed notifications
   console.log('  - Seeding notifications...');
   const notificationBatch = db.batch();
@@ -340,6 +437,8 @@ async function main() {
     console.log(`   - Users: ${SAMPLE_DATA.users.length}`);
     console.log(`   - Notices: ${SAMPLE_DATA.notices.length}`);
     console.log(`   - Messages: ${SAMPLE_DATA.messages.length}`);
+    console.log(`   - Approval Requests: ${SAMPLE_DATA.approvalRequests.length}`);
+    console.log(`   - User Activity Records: ${SAMPLE_DATA.userActivity.length}`);
     console.log(`   - Notifications: ${SAMPLE_DATA.notifications.length}`);
     
   } catch (error) {
