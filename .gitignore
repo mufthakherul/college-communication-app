@@ -37,6 +37,8 @@ google-services.json
 node_modules/
 functions/node_modules/
 functions/package-lock.json
+backend/node_modules/
+backend/package-lock.json
 
 # Firebase
 .firebase/
