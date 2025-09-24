@@ -1,0 +1,15 @@
+{
+  "name": "campus-mesh-backend",
+  "version": "1.0.0",
+  "description": "Backend utilities for Campus Mesh",
+  "main": "index.js",
+  "scripts": {
+    "seed": "node backend/scripts/seed.js"
+  },
+  "keywords": ["campus", "mesh", "backend", "seeding"],
+  "author": "Campus Mesh Team",
+  "license": "MIT",
+  "engines": {
+    "node": "18"
+  }
+}
