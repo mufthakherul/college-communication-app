@@ -9,6 +9,9 @@ import 'firebase_options.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/home_screen.dart';
 import 'services/theme_service.dart';
+import 'services/cache_service.dart';
+import 'services/offline_queue_service.dart';
+import 'services/background_sync_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +21,20 @@ void main() async {
 
   // Load theme preference
   await ThemeService().loadThemePreference();
+
+  // Initialize cache service
+  await CacheService().initialize();
+
+  // Load offline queue
+  final offlineQueueService = OfflineQueueService();
+  await offlineQueueService.loadQueue();
+  await offlineQueueService.loadAnalytics();
+
+  // Initialize background sync
+  final backgroundSyncService = BackgroundSyncService();
+  await backgroundSyncService.initialize();
+  await backgroundSyncService.registerOfflineQueueSync();
+  await backgroundSyncService.registerCacheCleanup();
 
   // Enable Crashlytics only in release mode to avoid debug crashes in production
   if (kReleaseMode) {
