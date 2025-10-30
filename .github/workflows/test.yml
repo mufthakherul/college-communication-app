@@ -1,0 +1,121 @@
+name: Run Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Run Flutter Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.16.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        working-directory: apps/mobile
+        run: flutter pub get
+
+      - name: Verify dependencies
+        working-directory: apps/mobile
+        run: flutter pub deps
+
+      - name: Run analyzer
+        working-directory: apps/mobile
+        run: flutter analyze --no-fatal-infos
+
+      - name: Run tests
+        working-directory: apps/mobile
+        run: flutter test --coverage --reporter expanded
+
+      - name: Check test coverage
+        working-directory: apps/mobile
+        run: |
+          echo "Test coverage report generated"
+          if [ -f coverage/lcov.info ]; then
+            echo "Coverage file found"
+            lcov --summary coverage/lcov.info
+          fi
+
+      - name: Upload coverage to artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-coverage
+          path: apps/mobile/coverage/lcov.info
+          retention-days: 30
+
+      - name: Comment test results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ All tests passed! Coverage report available in artifacts.'
+            });
+
+  lint:
+    name: Lint and Format Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.16.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        working-directory: apps/mobile
+        run: flutter pub get
+
+      - name: Check formatting
+        working-directory: apps/mobile
+        run: dart format --set-exit-if-changed .
+
+      - name: Analyze code
+        working-directory: apps/mobile
+        run: flutter analyze --fatal-infos
+
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run dependency vulnerability scan
+        working-directory: apps/mobile
+        run: |
+          echo "Checking for known vulnerabilities in dependencies..."
+          # This is a placeholder for future security scanning
+          # You can integrate tools like:
+          # - Snyk
+          # - OWASP Dependency Check
+          # - GitHub Security Advisories
