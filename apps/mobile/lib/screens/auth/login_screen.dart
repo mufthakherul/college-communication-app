@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../services/auth_service.dart';
 import '../home_screen.dart';
 import 'register_screen.dart';
@@ -74,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    'Campus Mesh',
+                    'RGPI Communication',
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -82,9 +83,28 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'College Communication Platform',
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    'Rangpur Government Polytechnic Institute',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
                     textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 4),
+                  InkWell(
+                    onTap: () async {
+                      final url = Uri.parse('https://rangpur.polytech.gov.bd');
+                      if (await canLaunchUrl(url)) {
+                        await launchUrl(url, mode: LaunchMode.externalApplication);
+                      }
+                    },
+                    child: Text(
+                      'rangpur.polytech.gov.bd',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Colors.blue,
+                            decoration: TextDecoration.underline,
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                   const SizedBox(height: 48),
                   TextFormField(
