@@ -77,6 +77,7 @@ class NoticeService {
   }
 
   // Update notice (direct Firestore write)
+  // Note: Authorization is enforced by Firestore Security Rules
   Future<void> updateNotice({
     required String noticeId,
     Map<String, dynamic>? updates,
@@ -87,7 +88,6 @@ class NoticeService {
         throw Exception('User must be authenticated to update notices');
       }
 
-      // Verify ownership or admin rights (basic check)
       final noticeDoc = await _firestore.collection('notices').doc(noticeId).get();
       if (!noticeDoc.exists) {
         throw Exception('Notice not found');

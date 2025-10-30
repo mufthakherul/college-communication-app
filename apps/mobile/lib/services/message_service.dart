@@ -77,8 +77,14 @@ class MessageService {
   }
 
   // Mark message as read (direct Firestore write)
+  // Note: Authorization check (recipient only) is enforced by Firestore Security Rules
   Future<void> markMessageAsRead(String messageId) async {
     try {
+      final currentUserId = _auth.currentUser?.uid;
+      if (currentUserId == null) {
+        throw Exception('User must be authenticated to mark messages as read');
+      }
+
       await _firestore.collection('messages').doc(messageId).update({
         'read': true,
         'readAt': FieldValue.serverTimestamp(),
