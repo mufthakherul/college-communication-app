@@ -9,6 +9,7 @@ import '../services/connectivity_service.dart';
 import '../services/offline_queue_service.dart';
 import '../models/user_model.dart';
 import '../widgets/connectivity_banner.dart';
+import '../widgets/network_status_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -83,6 +84,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: Column(
         children: [
+          // Network status widget (shown when offline or poor connection)
+          const NetworkStatusWidget(),
           // Connectivity banner (shown when offline or syncing)
           const ConnectivityBanner(),
           // Demo mode banner
