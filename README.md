@@ -5,6 +5,9 @@ A comprehensive college communication platform for **Rangpur Polytechnic Institu
 🌐 **College Website:** [rangpur.polytech.gov.bd](https://rangpur.polytech.gov.bd)  
 👨‍💻 **Developed by:** Mufthakherul
 
+> 📖 **For Teachers:** See [QUICK_START.md](QUICK_START.md) for immediate APK download and review  
+> 📖 **For Details:** See [TEACHER_GUIDE.md](TEACHER_GUIDE.md) for complete instructions
+
 ## 📱 Download APK
 
 **For Teachers/Students:** Download the latest APK to install on your Android device:
