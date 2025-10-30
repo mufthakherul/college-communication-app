@@ -24,6 +24,15 @@ dependencies:
   shared_preferences: ^2.2.2
   cupertino_icons: ^1.0.2
   flutter_markdown: ^0.6.18
+  # Network improvements
+  connectivity_plus: ^5.0.2
+  workmanager: ^0.5.2
+  # Mesh networking
+  flutter_nearby_connections: ^1.1.2
+  nearby_service: ^0.2.2
+  # Utilities
+  path_provider: ^2.1.1
+  archive: ^3.4.9
 
 dev_dependencies:
   flutter_test:
