@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../services/auth_service.dart';
+import '../../services/demo_mode_service.dart';
 import '../home_screen.dart';
 import 'register_screen.dart';
+import 'demo_login_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -15,6 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _authService = AuthService();
+  final _demoModeService = DemoModeService();
   bool _isLoading = false;
   bool _obscurePassword = true;
 
@@ -74,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    'Campus Mesh',
+                    'RPI Communication',
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -82,9 +86,28 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'College Communication Platform',
-                    style: Theme.of(context).textTheme.bodyMedium,
+                    'Rangpur Government Polytechnic Institute',
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
                     textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 4),
+                  InkWell(
+                    onTap: () async {
+                      final url = Uri.parse('https://rangpur.polytech.gov.bd');
+                      if (await canLaunchUrl(url)) {
+                        await launchUrl(url, mode: LaunchMode.externalApplication);
+                      }
+                    },
+                    child: Text(
+                      'rangpur.polytech.gov.bd',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Colors.blue,
+                            decoration: TextDecoration.underline,
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                   const SizedBox(height: 48),
                   TextFormField(
@@ -161,6 +184,37 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     child: const Text('Don\'t have an account? Register'),
                   ),
+                  const SizedBox(height: 24),
+                  const Divider(),
+                  const SizedBox(height: 16),
+                  // Only show demo mode if available
+                  if (_demoModeService.isDemoModeAvailable())
+                    OutlinedButton.icon(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const DemoLoginScreen(),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.preview),
+                      label: const Text('Try Demo Mode (No Firebase)'),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        side: BorderSide(color: Colors.blue[700]!),
+                      ),
+                    ),
+                  if (_demoModeService.isDemoModeAvailable())
+                    const SizedBox(height: 8),
+                  if (_demoModeService.isDemoModeAvailable())
+                    Text(
+                      'Demo mode: Local sample data only, no real data access',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Colors.grey,
+                            fontStyle: FontStyle.italic,
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
                 ],
               ),
             ),

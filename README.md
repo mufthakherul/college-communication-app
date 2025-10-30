@@ -1,6 +1,47 @@
-# Campus Mesh
+# RPI Communication App
 
-A comprehensive college communication platform built with Flutter and Firebase.
+A comprehensive college communication platform for **Rangpur Polytechnic Institute** built with Flutter and Firebase.
+
+🌐 **College Website:** [rangpur.polytech.gov.bd](https://rangpur.polytech.gov.bd)  
+👨‍💻 **Developed by:** Mufthakherul
+
+> ⚠️ **IMPORTANT:** The app code is complete, but requires Firebase setup to work. See [FIREBASE_SETUP_GUIDE.md](FIREBASE_SETUP_GUIDE.md) for connection instructions.
+
+> 💡 **NEW:** Try **Demo Mode** to explore the app without Firebase! See demo mode button on login screen.
+
+> 🔒 **Security:** Demo mode is safe and isolated. See [DEMO_MODE_SECURITY.md](DEMO_MODE_SECURITY.md) for details.
+
+> 📖 **For Teachers:** See [QUICK_START.md](QUICK_START.md) for immediate APK download and review  
+> 📖 **For Details:** See [TEACHER_GUIDE.md](TEACHER_GUIDE.md) for complete instructions
+
+## 🔥 Firebase Connection Required
+
+The app needs to be connected to Firebase to function. You have two options:
+
+**Option 1: Quick Setup (Recommended)**
+```bash
+./scripts/setup-firebase.sh
+```
+
+**Option 2: Manual Setup**
+Follow the step-by-step guide: [FIREBASE_SETUP_GUIDE.md](FIREBASE_SETUP_GUIDE.md)
+
+**What Firebase Provides:**
+- User authentication (login/register)
+- Real-time database for notices and messages
+- File storage for images and documents
+- Backend cloud functions
+- Push notifications
+
+## 📱 Download APK
+
+**For Teachers/Students:** Download the latest APK to install on your Android device:
+
+1. Go to [Actions → Latest Build](../../actions/workflows/build-apk.yml)
+2. Download the APK artifact from the latest successful run
+3. Or check the [Releases Page](../../releases) for stable versions
+
+See the complete [APK Build Guide](APK_BUILD_GUIDE.md) for detailed instructions.
 
 ## 🚀 Quick Start
 
@@ -19,6 +60,7 @@ flutter run
 
 ## 📖 Documentation
 
+- [APK Build Guide](APK_BUILD_GUIDE.md) - **Download and install the app**
 - [Full Documentation](docs/README.md)
 - [Architecture Overview](docs/ARCHITECTURE.md)
 - [API Reference](docs/API.md)
