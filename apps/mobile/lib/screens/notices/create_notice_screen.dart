@@ -99,33 +99,44 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            TextFormField(
-              controller: _titleController,
-              decoration: const InputDecoration(
-                labelText: 'Title',
-                border: OutlineInputBorder(),
+            Semantics(
+              label: 'Notice title input field',
+              hint: 'Enter a title for the notice',
+              textField: true,
+              child: TextFormField(
+                controller: _titleController,
+                decoration: const InputDecoration(
+                  labelText: 'Title',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a title';
+                  }
+                  return null;
+                },
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a title';
-                }
-                return null;
-              },
             ),
             const SizedBox(height: 16),
-            TextFormField(
-              controller: _contentController,
-              decoration: const InputDecoration(
-                labelText: 'Content',
-                border: OutlineInputBorder(),
+            Semantics(
+              label: 'Notice content input field',
+              hint: 'Enter the content of the notice',
+              textField: true,
+              multiline: true,
+              child: TextFormField(
+                controller: _contentController,
+                decoration: const InputDecoration(
+                  labelText: 'Content',
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 8,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter content';
+                  }
+                  return null;
+                },
               ),
-              maxLines: 8,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter content';
-                }
-                return null;
-              },
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<NoticeType>(

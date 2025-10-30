@@ -82,6 +82,7 @@ class _NoticesScreenState extends State<NoticesScreen> {
           if (_canCreateNotice)
             IconButton(
               icon: const Icon(Icons.add),
+              tooltip: 'Create new notice',
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
