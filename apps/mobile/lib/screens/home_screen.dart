@@ -5,7 +5,10 @@ import './messages/messages_screen.dart';
 import './profile/profile_screen.dart';
 import '../services/auth_service.dart';
 import '../services/demo_mode_service.dart';
+import '../services/connectivity_service.dart';
+import '../services/offline_queue_service.dart';
 import '../models/user_model.dart';
+import '../widgets/connectivity_banner.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,6 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   final _authService = AuthService();
   final _demoModeService = DemoModeService();
+  final _connectivityService = ConnectivityService();
+  final _offlineQueueService = OfflineQueueService();
   UserModel? _currentUser;
   bool _isDemoMode = false;
 
@@ -26,6 +31,17 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _loadUserProfile();
     _checkDemoMode();
+    _initializeOfflineSupport();
+  }
+
+  Future<void> _initializeOfflineSupport() async {
+    await _offlineQueueService.loadQueue();
+    // Listen for connectivity changes to process queue
+    _connectivityService.connectivityStream.listen((isOnline) {
+      if (isOnline && _offlineQueueService.pendingActionsCount > 0) {
+        _offlineQueueService.processQueue();
+      }
+    });
   }
 
   Future<void> _checkDemoMode() async {
@@ -67,6 +83,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: Column(
         children: [
+          // Connectivity banner (shown when offline or syncing)
+          const ConnectivityBanner(),
           // Demo mode banner
           if (_isDemoMode)
             Container(

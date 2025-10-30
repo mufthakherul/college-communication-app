@@ -16,13 +16,22 @@ class NoticesScreen extends StatefulWidget {
 class _NoticesScreenState extends State<NoticesScreen> {
   final _noticeService = NoticeService();
   final _authService = AuthService();
+  final _searchController = TextEditingController();
   UserModel? _currentUser;
   bool _isRefreshing = false;
+  bool _isSearching = false;
+  String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
     _loadCurrentUser();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   Future<void> _loadCurrentUser() async {
@@ -73,13 +82,50 @@ class _NoticesScreenState extends State<NoticesScreen> {
     }
   }
 
+  List<NoticeModel> _filterNotices(List<NoticeModel> notices) {
+    if (_searchQuery.isEmpty) {
+      return notices;
+    }
+    
+    return notices.where((notice) {
+      final titleMatch = notice.title.toLowerCase().contains(_searchQuery.toLowerCase());
+      final contentMatch = notice.content.toLowerCase().contains(_searchQuery.toLowerCase());
+      return titleMatch || contentMatch;
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Notices'),
+        title: _isSearching
+            ? TextField(
+                controller: _searchController,
+                autofocus: true,
+                decoration: const InputDecoration(
+                  hintText: 'Search notices...',
+                  border: InputBorder.none,
+                ),
+                onChanged: (value) {
+                  setState(() => _searchQuery = value);
+                },
+              )
+            : const Text('Notices'),
         actions: [
-          if (_canCreateNotice)
+          IconButton(
+            icon: Icon(_isSearching ? Icons.close : Icons.search),
+            tooltip: _isSearching ? 'Close search' : 'Search notices',
+            onPressed: () {
+              setState(() {
+                _isSearching = !_isSearching;
+                if (!_isSearching) {
+                  _searchController.clear();
+                  _searchQuery = '';
+                }
+              });
+            },
+          ),
+          if (_canCreateNotice && !_isSearching)
             IconButton(
               icon: const Icon(Icons.add),
               tooltip: 'Create new notice',
@@ -104,7 +150,8 @@ class _NoticesScreenState extends State<NoticesScreen> {
             return _buildErrorState(snapshot.error.toString());
           }
 
-          final notices = snapshot.data ?? [];
+          final allNotices = snapshot.data ?? [];
+          final notices = _filterNotices(allNotices);
 
           if (notices.isEmpty) {
             return RefreshIndicator(
