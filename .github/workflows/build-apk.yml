@@ -52,22 +52,22 @@ jobs:
         working-directory: apps/mobile
         run: |
           mkdir -p ../../build-output
-          cp build/app/outputs/flutter-apk/app-debug.apk ../../build-output/rgpi-communication-debug.apk
-          cp build/app/outputs/flutter-apk/app-release.apk ../../build-output/rgpi-communication-release.apk
+          cp build/app/outputs/flutter-apk/app-debug.apk ../../build-output/rpi-communication-debug.apk
+          cp build/app/outputs/flutter-apk/app-release.apk ../../build-output/rpi-communication-release.apk
           ls -lh ../../build-output/
 
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: rgpi-communication-debug-apk
-          path: build-output/rgpi-communication-debug.apk
+          name: rpi-communication-debug-apk
+          path: build-output/rpi-communication-debug.apk
           retention-days: 30
 
       - name: Upload Release APK
         uses: actions/upload-artifact@v4
         with:
-          name: rgpi-communication-release-apk
-          path: build-output/rgpi-communication-release.apk
+          name: rpi-communication-release-apk
+          path: build-output/rpi-communication-release.apk
           retention-days: 90
 
       - name: Create Release
@@ -75,8 +75,8 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            build-output/rgpi-communication-debug.apk
-            build-output/rgpi-communication-release.apk
+            build-output/rpi-communication-debug.apk
+            build-output/rpi-communication-release.apk
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
