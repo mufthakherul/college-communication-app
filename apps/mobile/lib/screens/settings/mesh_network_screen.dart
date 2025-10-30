@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../services/mesh_network_service.dart';
+import 'mesh_qr_pairing_screen.dart';
 
 /// Screen for mesh network settings and controls
 class MeshNetworkScreen extends StatefulWidget {
@@ -87,12 +88,63 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
         children: [
           _buildInfoCard(),
           const SizedBox(height: 16),
+          _buildQRPairingCard(),
+          const SizedBox(height: 16),
           _buildControlCard(),
           const SizedBox(height: 16),
           _buildStatisticsCard(),
           const SizedBox(height: 16),
           _buildConnectedNodesCard(),
         ],
+      ),
+    );
+  }
+
+  Widget _buildQRPairingCard() {
+    return Card(
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.qr_code_2,
+                  color: Theme.of(context).primaryColor,
+                ),
+                const SizedBox(width: 12),
+                const Expanded(
+                  child: Text(
+                    'QR Code Pairing',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            const Text(
+              'Securely pair with nearby devices using QR codes. Only devices with the scanned QR code will be visible in your connection list.',
+              style: TextStyle(fontSize: 14),
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: _openQRPairing,
+                icon: const Icon(Icons.qr_code_scanner),
+                label: const Text('Pair Device'),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -183,6 +235,19 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
                 ),
               ],
             ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                const Expanded(child: Text('Auto-Connect to Devices')),
+                Switch(
+                  value: _meshService.isActive,
+                  onChanged: (value) {
+                    _meshService.setAutoConnect(value);
+                    _updateStats();
+                  },
+                ),
+              ],
+            ),
             if (_isEnabled) ...[
               const Divider(),
               const SizedBox(height: 8),
@@ -210,6 +275,8 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
 
   Widget _buildStatisticsCard() {
     final connectedCount = _stats['connectedNodes'] ?? 0;
+    final hiddenCount = _stats['hiddenNodes'] ?? 0;
+    final visibleCount = _stats['visibleNodes'] ?? 0;
     final messageHistory = _stats['messageHistory'] ?? 0;
     final isAdvertising = _stats['isAdvertising'] ?? false;
     final isDiscovering = _stats['isDiscovering'] ?? false;
@@ -229,10 +296,16 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
             ),
             const SizedBox(height: 16),
             _buildStatRow(
-              'Connected Devices',
-              connectedCount.toString(),
+              'Visible Devices',
+              visibleCount.toString(),
               Icons.devices,
-              connectedCount > 0 ? Colors.green : Colors.grey,
+              visibleCount > 0 ? Colors.green : Colors.grey,
+            ),
+            _buildStatRow(
+              'Hidden Devices',
+              hiddenCount.toString(),
+              Icons.visibility_off,
+              hiddenCount > 0 ? Colors.orange : Colors.grey,
             ),
             _buildStatRow(
               'Messages Exchanged',
@@ -361,11 +434,14 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
     return ListTile(
       leading: CircleAvatar(
         backgroundColor: node.isActive ? Colors.green : Colors.grey,
-        child: const Icon(Icons.phone_android, color: Colors.white),
+        child: Icon(
+          _getConnectionIcon(node.connectionType),
+          color: Colors.white,
+        ),
       ),
       title: Text(node.name),
       subtitle: Text(
-        '${node.connectionType} • Connected $ageText',
+        '${node.getConnectionTypeDisplay()} • Connected $ageText',
         style: const TextStyle(fontSize: 12),
       ),
       trailing: IconButton(
@@ -373,6 +449,23 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
         onPressed: () => _disconnectNode(node.id),
       ),
     );
+  }
+
+  IconData _getConnectionIcon(MeshConnectionType type) {
+    switch (type) {
+      case MeshConnectionType.bluetooth:
+        return Icons.bluetooth;
+      case MeshConnectionType.wifiDirect:
+        return Icons.wifi;
+      case MeshConnectionType.wifiRouter:
+        return Icons.router;
+      case MeshConnectionType.lan:
+        return Icons.cable;
+      case MeshConnectionType.usb:
+        return Icons.usb;
+      case MeshConnectionType.auto:
+        return Icons.phone_android;
+    }
   }
 
   String _formatDuration(Duration duration) {
@@ -399,6 +492,19 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
       _updateStats();
     } catch (e) {
       _showMessage('Failed to toggle mesh network: $e');
+    }
+  }
+
+  Future<void> _openQRPairing() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const MeshQRPairingScreen(),
+      ),
+    );
+
+    if (result == true) {
+      _updateStats();
     }
   }
 
