@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import '../../models/notice_model.dart';
 import '../../services/notice_service.dart';
 
@@ -140,10 +141,16 @@ class NoticeDetailScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        notice.content,
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
+                      // Check if content contains markdown syntax
+                      _containsMarkdown(notice.content)
+                          ? MarkdownBody(
+                              data: notice.content,
+                              styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)),
+                            )
+                          : Text(
+                              notice.content,
+                              style: Theme.of(context).textTheme.bodyLarge,
+                            ),
                       const SizedBox(height: 16),
                       if (notice.expiresAt != null) ...[
                         const Divider(),
@@ -248,6 +255,16 @@ class NoticeDetailScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  bool _containsMarkdown(String text) {
+    // Simple check for common markdown patterns
+    return text.contains('**') || 
+           text.contains('*') || 
+           text.contains('[') && text.contains('](') ||
+           text.contains('- ') ||
+           text.contains('1. ') ||
+           text.contains('`');
   }
 
   String _formatDate(DateTime date) {

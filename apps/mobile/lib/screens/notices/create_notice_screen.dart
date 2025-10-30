@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/notice_model.dart';
 import '../../services/notice_service.dart';
+import '../../widgets/markdown_editor.dart';
 
 class CreateNoticeScreen extends StatefulWidget {
   const CreateNoticeScreen({super.key});
@@ -18,6 +19,7 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
   NoticeType _selectedType = NoticeType.announcement;
   String _selectedAudience = 'all';
   bool _isLoading = false;
+  bool _useMarkdown = true;
 
   @override
   void dispose() {
@@ -118,25 +120,56 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            Semantics(
-              label: 'Notice content input field',
-              hint: 'Enter the content of the notice',
-              textField: true,
-              multiline: true,
-              child: TextFormField(
-                controller: _contentController,
-                decoration: const InputDecoration(
-                  labelText: 'Content',
-                  border: OutlineInputBorder(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Content',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
                 ),
-                maxLines: 8,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter content';
-                  }
-                  return null;
-                },
-              ),
+                Row(
+                  children: [
+                    Text(
+                      'Rich text',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: _useMarkdown ? Colors.blue : Colors.grey,
+                      ),
+                    ),
+                    Switch(
+                      value: _useMarkdown,
+                      onChanged: (value) {
+                        setState(() => _useMarkdown = value);
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            SizedBox(
+              height: 300,
+              child: _useMarkdown
+                  ? MarkdownEditor(
+                      controller: _contentController,
+                      hintText: 'Enter notice content with formatting...',
+                    )
+                  : TextFormField(
+                      controller: _contentController,
+                      decoration: const InputDecoration(
+                        hintText: 'Enter notice content...',
+                        border: OutlineInputBorder(),
+                      ),
+                      maxLines: null,
+                      expands: true,
+                      textAlignVertical: TextAlignVertical.top,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter content';
+                        }
+                        return null;
+                      },
+                    ),
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<NoticeType>(
