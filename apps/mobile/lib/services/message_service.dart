@@ -1,12 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../models/message_model.dart';
+import '../repositories/chat_repository.dart';
 
 class MessageService {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseFunctions _functions = FirebaseFunctions.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final ChatRepository _chatRepository;
+
+  MessageService({ChatRepository? chatRepository})
+      : _chatRepository = chatRepository ?? FirestoreChatRepository();
 
   // Get messages between current user and another user
   Stream<List<MessageModel>> getMessages(String otherUserId) {
@@ -15,21 +16,7 @@ class MessageService {
       return Stream.value([]);
     }
 
-    return _firestore
-        .collection('messages')
-        .where('senderId', whereIn: [currentUserId, otherUserId])
-        .orderBy('createdAt', descending: false)
-        .snapshots()
-        .map((snapshot) {
-          return snapshot.docs
-              .map((doc) => MessageModel.fromFirestore(doc))
-              .where((msg) =>
-                  (msg.senderId == currentUserId &&
-                      msg.recipientId == otherUserId) ||
-                  (msg.senderId == otherUserId &&
-                      msg.recipientId == currentUserId))
-              .toList();
-        });
+    return _chatRepository.getMessages(currentUserId, otherUserId);
   }
 
   // Get recent conversations
@@ -39,41 +26,36 @@ class MessageService {
       return Stream.value([]);
     }
 
-    return _firestore
-        .collection('messages')
-        .where('senderId', isEqualTo: currentUserId)
-        .orderBy('createdAt', descending: true)
-        .limit(50)
-        .snapshots()
-        .map((snapshot) =>
-            snapshot.docs.map((doc) => MessageModel.fromFirestore(doc)).toList());
+    return _chatRepository.getRecentConversations(currentUserId);
   }
 
-  // Send message (using Cloud Function)
+  // Send message (direct Firestore write, no Cloud Functions)
   Future<String> sendMessage({
     required String recipientId,
     required String content,
     MessageType type = MessageType.text,
   }) async {
-    try {
-      final callable = _functions.httpsCallable('sendMessage');
-      final result = await callable.call({
-        'recipientId': recipientId,
-        'content': content,
-        'type': type.name,
-      });
+    final currentUserId = _auth.currentUser?.uid;
+    if (currentUserId == null) {
+      throw Exception('User must be authenticated to send messages');
+    }
 
-      return result.data['messageId'] as String;
+    try {
+      return await _chatRepository.sendMessage(
+        senderId: currentUserId,
+        recipientId: recipientId,
+        content: content,
+        type: type,
+      );
     } catch (e) {
       throw Exception('Failed to send message: $e');
     }
   }
 
-  // Mark message as read (using Cloud Function)
+  // Mark message as read (direct Firestore update, no Cloud Functions)
   Future<void> markMessageAsRead(String messageId) async {
     try {
-      final callable = _functions.httpsCallable('markMessageAsRead');
-      await callable.call({'messageId': messageId});
+      await _chatRepository.markMessageAsRead(messageId);
     } catch (e) {
       throw Exception('Failed to mark message as read: $e');
     }
@@ -86,11 +68,16 @@ class MessageService {
       return Stream.value(0);
     }
 
-    return _firestore
-        .collection('messages')
-        .where('recipientId', isEqualTo: currentUserId)
-        .where('read', isEqualTo: false)
-        .snapshots()
-        .map((snapshot) => snapshot.docs.length);
+    return _chatRepository.getUnreadCount(currentUserId);
+  }
+
+  // Get unread count for a specific conversation
+  Stream<int> getConversationUnreadCount(String otherUserId) {
+    final currentUserId = _auth.currentUser?.uid;
+    if (currentUserId == null) {
+      return Stream.value(0);
+    }
+
+    return _chatRepository.getConversationUnreadCount(currentUserId, otherUserId);
   }
 }
