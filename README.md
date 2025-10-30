@@ -30,8 +30,9 @@ Follow the step-by-step guide: [FIREBASE_SETUP_GUIDE.md](FIREBASE_SETUP_GUIDE.md
 - User authentication (login/register)
 - Real-time database for notices and messages
 - File storage for images and documents
-- Backend cloud functions
 - Push notifications
+
+> 💰 **100% FREE**: This app uses only free Firebase services (no Cloud Functions needed)! See [NO_CLOUD_FUNCTIONS_GUIDE.md](NO_CLOUD_FUNCTIONS_GUIDE.md) for details.
 
 ## 📱 Download APK
 

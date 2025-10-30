@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../models/message_model.dart';
 
 class MessageService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseFunctions _functions = FirebaseFunctions.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // Get messages between current user and another user
@@ -49,33 +47,80 @@ class MessageService {
             snapshot.docs.map((doc) => MessageModel.fromFirestore(doc)).toList());
   }
 
-  // Send message (using Cloud Function)
+  // Send message (direct Firestore operation)
   Future<String> sendMessage({
     required String recipientId,
     required String content,
     MessageType type = MessageType.text,
   }) async {
     try {
-      final callable = _functions.httpsCallable('sendMessage');
-      final result = await callable.call({
+      final currentUserId = _auth.currentUser?.uid;
+      if (currentUserId == null) {
+        throw Exception('User not authenticated');
+      }
+
+      final message = {
+        'senderId': currentUserId,
         'recipientId': recipientId,
         'content': content,
         'type': type.name,
-      });
+        'createdAt': FieldValue.serverTimestamp(),
+        'read': false,
+      };
 
-      return result.data['messageId'] as String;
+      final docRef = await _firestore.collection('messages').add(message);
+
+      // Create notification for recipient
+      await _createNotification(
+        userId: recipientId,
+        title: 'New Message',
+        body: content.length > 50 ? '${content.substring(0, 50)}...' : content,
+        type: 'message',
+        data: {
+          'messageId': docRef.id,
+          'senderId': currentUserId,
+        },
+      );
+
+      return docRef.id;
     } catch (e) {
       throw Exception('Failed to send message: $e');
     }
   }
 
-  // Mark message as read (using Cloud Function)
+  // Mark message as read (direct Firestore operation)
   Future<void> markMessageAsRead(String messageId) async {
     try {
-      final callable = _functions.httpsCallable('markMessageAsRead');
-      await callable.call({'messageId': messageId});
+      await _firestore.collection('messages').doc(messageId).update({
+        'read': true,
+        'readAt': FieldValue.serverTimestamp(),
+      });
     } catch (e) {
       throw Exception('Failed to mark message as read: $e');
+    }
+  }
+
+  // Helper to create notification
+  Future<void> _createNotification({
+    required String userId,
+    required String title,
+    required String body,
+    required String type,
+    Map<String, dynamic>? data,
+  }) async {
+    try {
+      await _firestore.collection('notifications').add({
+        'userId': userId,
+        'type': type,
+        'title': title,
+        'body': body,
+        'data': data ?? {},
+        'createdAt': FieldValue.serverTimestamp(),
+        'read': false,
+      });
+    } catch (e) {
+      // Don't throw error if notification creation fails
+      print('Failed to create notification: $e');
     }
   }
 

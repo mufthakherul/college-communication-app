@@ -2,50 +2,6 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Users collection
-    match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-      allow read: if request.auth != null && isAdmin();
-      allow write: if request.auth != null && isAdmin();
-    }
-    
-    // Notices collection
-    match /notices/{noticeId} {
-      allow read: if request.auth != null;
-      allow create: if request.auth != null && (isAdmin() || isTeacher());
-      allow update, delete: if request.auth != null && 
-        (resource.data.authorId == request.auth.uid || isAdmin());
-    }
-    
-    // Messages collection
-    match /messages/{messageId} {
-      allow read, write: if request.auth != null && 
-        (resource.data.senderId == request.auth.uid || 
-         resource.data.recipientId == request.auth.uid);
-      allow read: if request.auth != null && isAdmin();
-    }
-    
-    // Notifications collection
-    match /notifications/{notificationId} {
-      allow read, write: if request.auth != null && 
-        resource.data.userId == request.auth.uid;
-      allow create: if request.auth != null && isAdmin();
-    }
-    
-    // Approval requests collection
-    match /approvalRequests/{requestId} {
-      allow read, create: if request.auth != null;
-      allow update: if request.auth != null && 
-        (resource.data.userId == request.auth.uid || isAdmin());
-      allow read: if request.auth != null && isAdmin();
-    }
-    
-    // User activity collection (admin only)
-    match /userActivity/{activityId} {
-      allow read, write: if request.auth != null && isAdmin();
-      allow create: if request.auth != null;
-    }
-    
     // Helper functions
     function isAdmin() {
       return request.auth != null && 
@@ -63,6 +19,110 @@ service cloud.firestore {
       return request.auth != null && 
         exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'student';
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      // Anyone can read their own profile or any user profile when authenticated
+      allow read: if request.auth != null;
+      
+      // Users can create their own profile on first login
+      allow create: if request.auth != null && request.auth.uid == userId &&
+        request.resource.data.uid == userId &&
+        request.resource.data.role == 'student' && // Default role
+        request.resource.data.email == request.auth.token.email;
+      
+      // Users can update their own profile (except role)
+      allow update: if request.auth != null && request.auth.uid == userId &&
+        request.resource.data.role == resource.data.role; // Role can't be changed by user
+      
+      // Admins can update any user (including role changes)
+      allow update: if request.auth != null && isAdmin();
+      
+      // No one can delete users (handled by Firebase Auth)
+      allow delete: if false;
+    }
+    
+    // Notices collection
+    match /notices/{noticeId} {
+      allow read: if request.auth != null;
+      
+      // Teachers and admins can create notices
+      allow create: if request.auth != null && 
+        (isAdmin() || isTeacher()) &&
+        request.resource.data.authorId == request.auth.uid;
+      
+      // Author or admin can update/delete their notices
+      allow update, delete: if request.auth != null && 
+        (resource.data.authorId == request.auth.uid || isAdmin());
+    }
+    
+    // Messages collection
+    match /messages/{messageId} {
+      // Users can read messages they sent or received
+      allow read: if request.auth != null && 
+        (resource.data.senderId == request.auth.uid || 
+         resource.data.recipientId == request.auth.uid ||
+         isAdmin());
+      
+      // Users can create messages as sender
+      allow create: if request.auth != null && 
+        request.resource.data.senderId == request.auth.uid;
+      
+      // Recipient can mark message as read
+      allow update: if request.auth != null && 
+        resource.data.recipientId == request.auth.uid;
+      
+      // No one can delete messages
+      allow delete: if false;
+    }
+    
+    // Notifications collection
+    match /notifications/{notificationId} {
+      // Users can read their own notifications
+      allow read: if request.auth != null && 
+        resource.data.userId == request.auth.uid;
+      
+      // Anyone authenticated can create notifications for any user (system-generated)
+      allow create: if request.auth != null;
+      
+      // Users can update their own notifications (mark as read)
+      allow update: if request.auth != null && 
+        resource.data.userId == request.auth.uid;
+      
+      // No one can delete notifications
+      allow delete: if false;
+    }
+    
+    // Approval requests collection
+    match /approvalRequests/{requestId} {
+      // Users can read their own requests, admins can read all
+      allow read: if request.auth != null && 
+        (resource.data.userId == request.auth.uid || isAdmin());
+      
+      // Users can create approval requests
+      allow create: if request.auth != null && 
+        request.resource.data.userId == request.auth.uid &&
+        request.resource.data.status == 'pending';
+      
+      // Only admins can process (update) approval requests
+      allow update: if request.auth != null && isAdmin();
+      
+      // No one can delete approval requests
+      allow delete: if false;
+    }
+    
+    // User activity collection (for analytics)
+    match /userActivity/{activityId} {
+      // Admins can read all activity
+      allow read: if request.auth != null && isAdmin();
+      
+      // Any authenticated user can create activity logs
+      allow create: if request.auth != null && 
+        request.resource.data.userId == request.auth.uid;
+      
+      // No updates or deletes
+      allow update, delete: if false;
     }
   }
 }

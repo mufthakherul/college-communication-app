@@ -2,33 +2,36 @@
 
 ## Overview
 
-Campus Mesh follows a modern, cloud-native architecture designed for scalability, security, and maintainability. The system is built on Firebase, leveraging its managed services for authentication, database, storage, and serverless compute.
+Campus Mesh follows a modern, cloud-native architecture designed for scalability, security, and maintainability. The system is built on Firebase, leveraging its **FREE** managed services for authentication, database, storage, and messaging.
+
+> 💰 **100% Free Architecture**: This app uses NO paid services - all operations use free Firebase services with client-side business logic!
 
 ## System Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                        Client Layer                         │
+│              (All Business Logic Here)                      │
 ├─────────────────────────────────────────────────────────────┤
 │  Flutter Mobile App (iOS/Android)  │  Flutter Web App       │
 └─────────────────────────────────────────────────────────────┘
                                │
                                ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                    Firebase Services                        │
+│              Free Firebase Services                         │
 ├─────────────────────────────────────────────────────────────┤
 │  Firebase Auth  │  Cloud Firestore  │  Firebase Storage     │
+│  (Free)         │  (Free Tier)      │  (Free Tier)          │
 │                 │                    │                       │
-│  Cloud Functions (TypeScript)        │  Firebase Messaging  │
-└─────────────────────────────────────────────────────────────┘
-                               │
-                               ▼
-┌─────────────────────────────────────────────────────────────┐
-│                   External Services                         │
-├─────────────────────────────────────────────────────────────┤
-│  Push Notifications │  Analytics     │  Remote Config       │
+│  Firebase Messaging (Free)  │  Security Rules (Free)        │
 └─────────────────────────────────────────────────────────────┘
 ```
+
+**Key Architectural Decision:**
+- **No Cloud Functions**: All business logic runs client-side to avoid paid services
+- **Security Rules**: Firestore Security Rules enforce authorization and validation
+- **Direct Operations**: Flutter app writes directly to Firestore
+- **Free Forever**: Perfect for college/educational projects
 
 ## Core Components
 
@@ -48,16 +51,16 @@ The frontend application built with Flutter, providing:
 - Push notification handling
 - File upload/download with progress tracking
 
-### 2. Firebase Cloud Functions (`functions/`)
+### 2. Client-Side Business Logic
 
-Serverless backend functions written in TypeScript:
+> **Note**: The `functions/` directory contains reference implementation of Cloud Functions for those who want to use them. However, **the app works completely without Cloud Functions** using client-side operations and Firestore Security Rules.
 
-#### Function Categories:
+All business logic is implemented in Flutter services:
 
-**User Management (`userManagement.ts`)**
-- User profile creation and updates
-- Role management (Student, Teacher, Admin)
-- Account deletion and cleanup
+**User Management (`auth_service.dart`)**
+- User profile creation on registration
+- Profile updates with role validation
+- Authentication and session management
 
 **Messaging (`messaging.ts`)**
 - Message sending and delivery

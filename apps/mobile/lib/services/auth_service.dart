@@ -42,9 +42,36 @@ class AuthService {
       // Update display name
       await credential.user?.updateDisplayName(displayName);
 
+      // Create user profile in Firestore
+      if (credential.user != null) {
+        await createUserProfile(credential.user!);
+      }
+
       return credential;
     } catch (e) {
       throw Exception('Failed to register: $e');
+    }
+  }
+
+  // Create user profile (called after registration)
+  Future<void> createUserProfile(User user) async {
+    try {
+      final userProfile = {
+        'uid': user.uid,
+        'email': user.email,
+        'displayName': user.displayName ?? '',
+        'photoURL': user.photoURL ?? '',
+        'role': 'student', // default role
+        'department': '',
+        'year': '',
+        'isActive': true,
+        'createdAt': FieldValue.serverTimestamp(),
+        'updatedAt': FieldValue.serverTimestamp(),
+      };
+
+      await _firestore.collection('users').doc(user.uid).set(userProfile);
+    } catch (e) {
+      throw Exception('Failed to create user profile: $e');
     }
   }
 
