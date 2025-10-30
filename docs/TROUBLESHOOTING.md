@@ -1,6 +1,6 @@
 # Troubleshooting Guide
 
-This guide helps resolve common issues encountered while developing, deploying, or using Campus Mesh.
+This guide helps resolve common issues encountered while developing, deploying, or using College Communication App.
 
 ## Table of Contents
 
@@ -649,7 +649,7 @@ cat .firebaserc
 
 1. **GitHub Issues**: For bug reports and feature requests
 2. **GitHub Discussions**: For general questions
-3. **Stack Overflow**: Use tags `firebase`, `flutter`, `campus-mesh`
+3. **Stack Overflow**: Use tags `firebase`, `flutter`, `college-communication-app`
 4. **Firebase Support**: For Firebase-specific issues
 
 ### Emergency Procedures

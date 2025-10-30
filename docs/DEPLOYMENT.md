@@ -2,26 +2,26 @@
 
 ## Overview
 
-This guide covers the deployment process for Campus Mesh across different environments. The deployment strategy follows DevOps best practices with automated CI/CD pipelines and infrastructure as code.
+This guide covers the deployment process for College Communication App across different environments. The deployment strategy follows DevOps best practices with automated CI/CD pipelines and infrastructure as code.
 
 ## Environments
 
 ### Development
 - **Purpose**: Local development and testing
-- **Firebase Project**: `campus-mesh-dev`
+- **Firebase Project**: `college-communication-app-dev`
 - **Emulators**: All services run locally
 - **Data**: Test data only
 
 ### Staging
 - **Purpose**: Pre-production testing and validation
-- **Firebase Project**: `campus-mesh-staging`
-- **URL**: https://staging.campus-mesh.edu
+- **Firebase Project**: `college-communication-app-staging`
+- **URL**: https://staging.college-communication-app.edu
 - **Data**: Sanitized production-like data
 
 ### Production
 - **Purpose**: Live application serving users
-- **Firebase Project**: `campus-mesh-prod`
-- **URL**: https://campus-mesh.edu
+- **Firebase Project**: `college-communication-app-prod`
+- **URL**: https://college-communication-app.edu
 - **Data**: Live user data with full security
 
 ## Prerequisites
@@ -143,13 +143,13 @@ firebase functions:log --follow
 ### 3. Post-deployment Validation
 ```bash
 # Health check
-curl https://us-central1-campus-mesh-prod.cloudfunctions.net/healthCheck
+curl https://us-central1-college-communication-app-prod.cloudfunctions.net/healthCheck
 
 # Smoke tests
 npm run test:smoke
 
 # Monitor metrics
-firebase projects:describe campus-mesh-prod
+firebase projects:describe college-communication-app-prod
 ```
 
 ## Mobile App Deployment
@@ -170,7 +170,7 @@ flutter build appbundle --release
 #### 2. Code Signing
 ```bash
 # Generate keystore (first time only)
-keytool -genkey -v -keystore campus-mesh-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias campus-mesh
+keytool -genkey -v -keystore college-communication-app-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias college-communication-app
 
 # Configure signing in android/app/build.gradle
 signingConfigs {
@@ -218,7 +218,7 @@ open ios/Runner.xcworkspace
 ### GitHub Actions Workflow
 ```yaml
 # .github/workflows/deploy.yml
-name: Deploy Campus Mesh
+name: Deploy College Communication App
 
 on:
   push:

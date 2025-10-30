@@ -1,8 +1,8 @@
-# Campus Mesh API Reference
+# College Communication App API Reference
 
 ## Overview
 
-Campus Mesh provides a comprehensive API built on Firebase Cloud Functions. All endpoints are secured with Firebase Authentication and follow RESTful principles.
+College Communication App provides a comprehensive API built on Firebase Cloud Functions. All endpoints are secured with Firebase Authentication and follow RESTful principles.
 
 ## Authentication
 
@@ -16,9 +16,9 @@ All API calls require a valid Firebase ID token in the request headers:
 
 ## Base URL
 
-- **Development**: `http://localhost:5001/campus-mesh-dev/us-central1`
-- **Staging**: `https://us-central1-campus-mesh-staging.cloudfunctions.net`
-- **Production**: `https://us-central1-campus-mesh-prod.cloudfunctions.net`
+- **Development**: `http://localhost:5001/college-communication-app-dev/us-central1`
+- **Staging**: `https://us-central1-college-communication-app-staging.cloudfunctions.net`
+- **Production**: `https://us-central1-college-communication-app-prod.cloudfunctions.net`
 
 ## User Management
 
@@ -239,7 +239,7 @@ All API calls require a valid Firebase ID token in the request headers:
 {
   "status": "ok",
   "timestamp": "2024-01-15T10:30:00Z",
-  "service": "campus-mesh-functions"
+  "service": "college-communication-app-functions"
 }
 ```
 
@@ -407,7 +407,7 @@ firebase emulators:start
 
 # Test endpoint
 curl -X POST \
-  http://localhost:5001/campus-mesh-dev/us-central1/sendMessage \
+  http://localhost:5001/college-communication-app-dev/us-central1/sendMessage \
   -H "Authorization: Bearer <test_token>" \
   -H "Content-Type: application/json" \
   -d '{"recipientId": "test", "content": "Hello", "type": "text"}'

@@ -1,6 +1,6 @@
-# Contributing to Campus Mesh
+# Contributing to College Communication App
 
-Thank you for your interest in contributing to Campus Mesh! This document provides guidelines for contributing to the project and helps ensure a smooth collaboration process.
+Thank you for your interest in contributing to College Communication App! This document provides guidelines for contributing to the project and helps ensure a smooth collaboration process.
 
 ## Table of Contents
 
@@ -15,7 +15,7 @@ Thank you for your interest in contributing to Campus Mesh! This document provid
 
 ## Code of Conduct
 
-Campus Mesh is committed to providing a welcoming and inclusive environment for all contributors. By participating in this project, you agree to abide by our Code of Conduct:
+College Communication App is committed to providing a welcoming and inclusive environment for all contributors. By participating in this project, you agree to abide by our Code of Conduct:
 
 ### Our Standards
 
@@ -48,8 +48,8 @@ Before contributing, ensure you have the following installed:
 1. **Fork the repository**
    ```bash
    # Fork the repo on GitHub, then clone your fork
-   git clone https://github.com/YOUR_USERNAME/campus-mesh.git
-   cd campus-mesh
+   git clone https://github.com/YOUR_USERNAME/college-communication-app.git
+   cd college-communication-app
    ```
 
 2. **Set up the development environment**
@@ -352,12 +352,12 @@ import 'package:campus_mesh/main.dart' as app;
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   
-  group('Campus Mesh App', () {
+  group('College Communication App App', () {
     testWidgets('should navigate to login screen', (tester) async {
       app.main();
       await tester.pumpAndSettle();
       
-      expect(find.text('Welcome to Campus Mesh'), findsOneWidget);
+      expect(find.text('Welcome to College Communication App'), findsOneWidget);
       expect(find.byType(ElevatedButton), findsWidgets);
     });
   });
@@ -488,7 +488,7 @@ Any other context or screenshots about the feature request.
 
 - **GitHub Discussions**: General questions and discussions
 - **Issues**: Bug reports and feature requests
-- **Email**: security@campus-mesh.edu for security issues
+- **Email**: security@college-communication-app.edu for security issues
 
 ### Getting Help
 
@@ -529,4 +529,4 @@ Contributors will be recognized in:
   - Chrome DevTools
   - Flipper (for React Native debugging)
 
-Thank you for contributing to Campus Mesh! 🚀
+Thank you for contributing to College Communication App! 🚀

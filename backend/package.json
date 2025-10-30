@@ -1,13 +1,13 @@
 {
-  "name": "campus-mesh-backend",
+  "name": "college-communication-app-backend",
   "version": "1.0.0",
-  "description": "Backend utilities for Campus Mesh",
+  "description": "Backend utilities for College Communication App",
   "main": "index.js",
   "scripts": {
     "seed": "node backend/scripts/seed.js"
   },
-  "keywords": ["campus", "mesh", "backend", "seeding"],
-  "author": "Campus Mesh Team",
+  "keywords": ["college", "communication", "backend", "seeding"],
+  "author": "Mufthakherul",
   "license": "MIT",
   "engines": {
     "node": "18"

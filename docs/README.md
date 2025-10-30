@@ -1,4 +1,4 @@
-# Campus Mesh
+# College Communication App
 
 A comprehensive college communication platform built with Flutter and Firebase, designed to streamline communication between students, teachers, and administrators.
 
@@ -14,7 +14,7 @@ A comprehensive college communication platform built with Flutter and Firebase, 
 
 ## 🏗️ Architecture
 
-Campus Mesh follows a modern, scalable architecture:
+College Communication App follows a modern, scalable architecture:
 
 - **Frontend**: Flutter (Dart) - Cross-platform mobile and web app
 - **Backend**: Firebase Cloud Functions (TypeScript) - Serverless functions
@@ -114,7 +114,7 @@ npm run serve
 
 ## 🔒 Security
 
-Campus Mesh implements comprehensive security measures:
+College Communication App implements comprehensive security measures:
 
 - Role-based access control
 - Secure file upload validation

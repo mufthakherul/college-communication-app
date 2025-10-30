@@ -15,6 +15,6 @@ export const healthCheck = functions.https.onRequest((request, response) => {
   response.json({
     status: "ok",
     timestamp: new Date().toISOString(),
-    service: "campus-mesh-functions"
+    service: "college-communication-app-functions"
   });
 });

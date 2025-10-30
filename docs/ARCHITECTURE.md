@@ -1,8 +1,8 @@
-# Campus Mesh Architecture
+# College Communication App Architecture
 
 ## Overview
 
-Campus Mesh follows a modern, cloud-native architecture designed for scalability, security, and maintainability. The system is built on Firebase, leveraging its managed services for authentication, database, storage, and serverless compute.
+College Communication App follows a modern, cloud-native architecture designed for scalability, security, and maintainability. The system is built on Firebase, leveraging its managed services for authentication, database, storage, and serverless compute.
 
 ## System Architecture
 

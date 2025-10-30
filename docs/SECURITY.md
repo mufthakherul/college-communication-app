@@ -2,7 +2,7 @@
 
 ## Overview
 
-Campus Mesh implements comprehensive security measures to protect user data and ensure secure communication within the college community. This document outlines the security architecture, best practices, and compliance measures.
+College Communication App implements comprehensive security measures to protect user data and ensure secure communication within the college community. This document outlines the security architecture, best practices, and compliance measures.
 
 ## Authentication & Authorization
 
@@ -279,9 +279,9 @@ export const auditLog = async (action: string, userId: string, details: any) => 
 ## Contact Information
 
 ### Security Team
-- **Security Email**: security@campus-mesh.edu
-- **Incident Reporting**: incidents@campus-mesh.edu
-- **Bug Bounty**: bounty@campus-mesh.edu
+- **Security Email**: security@college-communication-app.edu
+- **Incident Reporting**: incidents@college-communication-app.edu
+- **Bug Bounty**: bounty@college-communication-app.edu
 
 ### Emergency Response
 - **24/7 Hotline**: +1-800-CAMPUS-SEC
