@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../models/message_model.dart';
 
 class MessageService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseFunctions _functions = FirebaseFunctions.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // Get messages between current user and another user
@@ -49,31 +47,48 @@ class MessageService {
             snapshot.docs.map((doc) => MessageModel.fromFirestore(doc)).toList());
   }
 
-  // Send message (using Cloud Function)
+  // Send message (direct Firestore write)
   Future<String> sendMessage({
     required String recipientId,
     required String content,
     MessageType type = MessageType.text,
   }) async {
     try {
-      final callable = _functions.httpsCallable('sendMessage');
-      final result = await callable.call({
-        'recipientId': recipientId,
-        'content': content,
-        'type': type.name,
-      });
+      final currentUserId = _auth.currentUser?.uid;
+      if (currentUserId == null) {
+        throw Exception('User must be authenticated to send messages');
+      }
 
-      return result.data['messageId'] as String;
+      final message = MessageModel(
+        id: '', // Will be set by Firestore
+        senderId: currentUserId,
+        recipientId: recipientId,
+        content: content,
+        type: type,
+        createdAt: DateTime.now(),
+        read: false,
+      );
+
+      final docRef = await _firestore.collection('messages').add(message.toMap());
+      return docRef.id;
     } catch (e) {
       throw Exception('Failed to send message: $e');
     }
   }
 
-  // Mark message as read (using Cloud Function)
+  // Mark message as read (direct Firestore write)
+  // Note: Authorization check (recipient only) is enforced by Firestore Security Rules
   Future<void> markMessageAsRead(String messageId) async {
     try {
-      final callable = _functions.httpsCallable('markMessageAsRead');
-      await callable.call({'messageId': messageId});
+      final currentUserId = _auth.currentUser?.uid;
+      if (currentUserId == null) {
+        throw Exception('User must be authenticated to mark messages as read');
+      }
+
+      await _firestore.collection('messages').doc(messageId).update({
+        'read': true,
+        'readAt': FieldValue.serverTimestamp(),
+      });
     } catch (e) {
       throw Exception('Failed to mark message as read: $e');
     }

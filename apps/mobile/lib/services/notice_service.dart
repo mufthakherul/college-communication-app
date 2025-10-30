@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cloud_functions/cloud_functions.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../models/notice_model.dart';
 
 class NoticeService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseFunctions _functions = FirebaseFunctions.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // Get all active notices
   Stream<List<NoticeModel>> getNotices() {
@@ -42,7 +42,7 @@ class NoticeService {
     }
   }
 
-  // Create notice (using Cloud Function)
+  // Create notice (direct Firestore write)
   Future<String> createNotice({
     required String title,
     required String content,
@@ -51,32 +51,54 @@ class NoticeService {
     DateTime? expiresAt,
   }) async {
     try {
-      final callable = _functions.httpsCallable('createNotice');
-      final result = await callable.call({
-        'title': title,
-        'content': content,
-        'type': type.name,
-        'targetAudience': targetAudience,
-        'expiresAt': expiresAt?.toIso8601String(),
-      });
+      final currentUserId = _auth.currentUser?.uid;
+      if (currentUserId == null) {
+        throw Exception('User must be authenticated to create notices');
+      }
 
-      return result.data['noticeId'] as String;
+      final notice = NoticeModel(
+        id: '', // Will be set by Firestore
+        title: title,
+        content: content,
+        type: type,
+        targetAudience: targetAudience,
+        authorId: currentUserId,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        expiresAt: expiresAt,
+        isActive: true,
+      );
+
+      final docRef = await _firestore.collection('notices').add(notice.toMap());
+      return docRef.id;
     } catch (e) {
       throw Exception('Failed to create notice: $e');
     }
   }
 
-  // Update notice (using Cloud Function)
+  // Update notice (direct Firestore write)
+  // Note: Authorization is enforced by Firestore Security Rules
   Future<void> updateNotice({
     required String noticeId,
     Map<String, dynamic>? updates,
   }) async {
     try {
-      final callable = _functions.httpsCallable('updateNotice');
-      await callable.call({
-        'noticeId': noticeId,
-        'updates': updates,
-      });
+      final currentUserId = _auth.currentUser?.uid;
+      if (currentUserId == null) {
+        throw Exception('User must be authenticated to update notices');
+      }
+
+      final noticeDoc = await _firestore.collection('notices').doc(noticeId).get();
+      if (!noticeDoc.exists) {
+        throw Exception('Notice not found');
+      }
+
+      final updateData = {
+        ...?updates,
+        'updatedAt': FieldValue.serverTimestamp(),
+      };
+
+      await _firestore.collection('notices').doc(noticeId).update(updateData);
     } catch (e) {
       throw Exception('Failed to update notice: $e');
     }
