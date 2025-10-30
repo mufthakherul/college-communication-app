@@ -30,6 +30,11 @@ dependencies:
   # Mesh networking
   flutter_nearby_connections: ^1.1.2
   nearby_service: ^0.2.2
+  # QR code support
+  qr_flutter: ^4.1.0
+  qr_code_scanner: ^1.0.1
+  # Network utilities
+  network_info_plus: ^5.0.0
   # Utilities
   path_provider: ^2.1.1
   archive: ^3.4.9
