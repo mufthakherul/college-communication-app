@@ -88,6 +88,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                     textAlign: TextAlign.center,
                   ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Rangpur Government Polytechnic Institute',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    textAlign: TextAlign.center,
+                  ),
                   const SizedBox(height: 32),
                   TextFormField(
                     controller: _nameController,
