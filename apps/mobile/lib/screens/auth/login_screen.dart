@@ -47,8 +47,36 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to sign in: ${e.toString()}')),
+        String errorMessage = 'Failed to sign in';
+        String errorDetails = e.toString();
+        
+        // Provide more helpful error messages
+        if (errorDetails.contains('user-not-found')) {
+          errorMessage = 'No account found with this email';
+          errorDetails = 'Please check your email address or register for a new account.';
+        } else if (errorDetails.contains('wrong-password')) {
+          errorMessage = 'Incorrect password';
+          errorDetails = 'Please check your password and try again.';
+        } else if (errorDetails.contains('invalid-email')) {
+          errorMessage = 'Invalid email address';
+          errorDetails = 'Please enter a valid email address.';
+        } else if (errorDetails.contains('network')) {
+          errorMessage = 'Connection error';
+          errorDetails = 'Please check your internet connection and try again.';
+        }
+        
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(errorMessage),
+            content: Text(errorDetails),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
         );
       }
     } finally {
