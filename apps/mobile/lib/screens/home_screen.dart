@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import './notices/notices_screen.dart';
 import './messages/messages_screen.dart';
 import './profile/profile_screen.dart';
@@ -47,9 +46,9 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     
     // Otherwise load from Firebase
-    final user = _authService.currentUser;
-    if (user != null) {
-      final profile = await _authService.getUserProfile(user.uid);
+    final userId = _authService.currentUserId;
+    if (userId != null) {
+      final profile = await _authService.getUserProfile(userId);
       if (mounted) {
         setState(() => _currentUser = profile);
       }

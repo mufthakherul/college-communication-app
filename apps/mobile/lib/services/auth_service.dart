@@ -1,96 +1,117 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/user_model.dart';
+import '../repositories/auth_repository.dart';
+import '../repositories/firebase_auth_repository.dart';
 
+/// Service layer for authentication operations.
+/// 
+/// This service uses the repository pattern to abstract away the
+/// authentication implementation details. By default, it uses Firebase
+/// Authentication, but can be configured to use any [AuthRepository]
+/// implementation (e.g., mock repository for testing).
+/// 
+/// Benefits of this approach:
+/// - Easy to switch authentication providers
+/// - Easy to test with mock implementations
+/// - Decouples UI from authentication backend
+/// - Single source of truth for auth operations
 class AuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final AuthRepository _repository;
 
-  // Get current user
-  User? get currentUser => _auth.currentUser;
+  /// Create an AuthService with a specific repository.
+  /// 
+  /// If no repository is provided, uses [FirebaseAuthRepository] by default.
+  AuthService({AuthRepository? repository})
+      : _repository = repository ?? FirebaseAuthRepository();
 
-  // Auth state stream
-  Stream<User?> get authStateChanges => _auth.authStateChanges();
+  /// Get the current user ID.
+  /// Returns null if no user is authenticated.
+  String? get currentUserId => _repository.currentUserId;
 
-  // Sign in with email and password
-  Future<UserCredential> signInWithEmailAndPassword(
+  /// Stream that emits the current user ID whenever auth state changes.
+  /// Emits null when user signs out.
+  Stream<String?> get authStateChanges => _repository.authStateChanges;
+
+  /// Sign in with email and password.
+  /// 
+  /// Returns the user ID on success.
+  /// Throws [AuthException] on failure.
+  Future<String> signInWithEmailAndPassword(
     String email,
     String password,
   ) async {
-    try {
-      return await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-    } catch (e) {
-      throw Exception('Failed to sign in: $e');
-    }
+    return await _repository.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
   }
 
-  // Register with email and password
-  Future<UserCredential> registerWithEmailAndPassword(
+  /// Register a new user with email and password.
+  /// 
+  /// Returns the user ID on success.
+  /// Throws [AuthException] on failure.
+  Future<String> registerWithEmailAndPassword(
     String email,
     String password,
     String displayName,
   ) async {
-    try {
-      final credential = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-
-      // Update display name
-      await credential.user?.updateDisplayName(displayName);
-
-      return credential;
-    } catch (e) {
-      throw Exception('Failed to register: $e');
-    }
+    return await _repository.registerWithEmailAndPassword(
+      email: email,
+      password: password,
+      displayName: displayName,
+    );
   }
 
-  // Sign out
+  /// Sign out the current user.
+  /// 
+  /// Throws [AuthException] on failure.
   Future<void> signOut() async {
-    try {
-      await _auth.signOut();
-    } catch (e) {
-      throw Exception('Failed to sign out: $e');
-    }
+    await _repository.signOut();
   }
 
-  // Get user profile
+  /// Get user profile data.
+  /// 
+  /// Returns null if user profile doesn't exist.
+  /// Throws [AuthException] on failure.
   Future<UserModel?> getUserProfile(String uid) async {
-    try {
-      final doc = await _firestore.collection('users').doc(uid).get();
-      if (doc.exists) {
-        return UserModel.fromFirestore(doc);
-      }
-      return null;
-    } catch (e) {
-      throw Exception('Failed to get user profile: $e');
-    }
+    return await _repository.getUserProfile(uid);
   }
 
-  // Update user profile
+  /// Get the current user's profile.
+  /// 
+  /// Returns null if no user is signed in or profile doesn't exist.
+  /// Throws [AuthException] on failure.
+  Future<UserModel?> getCurrentUserProfile() async {
+    final uid = currentUserId;
+    if (uid == null) return null;
+    return await getUserProfile(uid);
+  }
+
+  /// Update specific fields in the current user's profile.
+  /// 
+  /// Throws [AuthException] if no user is signed in or update fails.
   Future<void> updateUserProfile(Map<String, dynamic> updates) async {
-    try {
-      final user = currentUser;
-      if (user == null) throw Exception('No user signed in');
-
-      await _firestore.collection('users').doc(user.uid).update({
-        ...updates,
-        'updatedAt': FieldValue.serverTimestamp(),
-      });
-    } catch (e) {
-      throw Exception('Failed to update user profile: $e');
+    final uid = currentUserId;
+    if (uid == null) {
+      throw AuthException('No user signed in');
     }
+    await _repository.updateUserProfile(uid, updates);
   }
 
-  // Reset password
+  /// Send password reset email.
+  /// 
+  /// Throws [AuthException] on failure.
   Future<void> resetPassword(String email) async {
-    try {
-      await _auth.sendPasswordResetEmail(email: email);
-    } catch (e) {
-      throw Exception('Failed to send password reset email: $e');
+    await _repository.sendPasswordResetEmail(email);
+  }
+
+  /// Delete the current user's account and all associated data.
+  /// 
+  /// Throws [AuthException] if no user is signed in or deletion fails.
+  Future<void> deleteAccount() async {
+    final uid = currentUserId;
+    if (uid == null) {
+      throw AuthException('No user signed in');
     }
+    await _repository.deleteUserAccount(uid);
   }
 }
