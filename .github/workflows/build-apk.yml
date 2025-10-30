@@ -1,0 +1,82 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main, develop ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.16.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        working-directory: apps/mobile
+        run: flutter pub get
+
+      - name: Run analyzer
+        working-directory: apps/mobile
+        run: flutter analyze
+
+      - name: Build APK (Debug)
+        working-directory: apps/mobile
+        run: flutter build apk --debug
+        
+      - name: Build APK (Release)
+        working-directory: apps/mobile
+        run: flutter build apk --release
+
+      - name: Rename APKs
+        working-directory: apps/mobile
+        run: |
+          mkdir -p ../../build-output
+          cp build/app/outputs/flutter-apk/app-debug.apk ../../build-output/rgpi-communication-debug.apk
+          cp build/app/outputs/flutter-apk/app-release.apk ../../build-output/rgpi-communication-release.apk
+          ls -lh ../../build-output/
+
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: rgpi-communication-debug-apk
+          path: build-output/rgpi-communication-debug.apk
+          retention-days: 30
+
+      - name: Upload Release APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: rgpi-communication-release-apk
+          path: build-output/rgpi-communication-release.apk
+          retention-days: 90
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            build-output/rgpi-communication-debug.apk
+            build-output/rgpi-communication-release.apk
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -29,9 +29,20 @@ render.experimental.xml
 
 # Google Services (e.g. APIs or Firebase)
 google-services.json
+GoogleService-Info.plist
 
 # Android Profiling
 *.hprof
+
+# Flutter/Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+*.g.dart
+*.freezed.dart
 
 # Node.js dependencies
 node_modules/

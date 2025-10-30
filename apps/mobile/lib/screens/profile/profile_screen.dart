@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../models/user_model.dart';
 import '../../services/auth_service.dart';
 import '../auth/login_screen.dart';
@@ -153,6 +154,72 @@ class ProfileScreen extends StatelessWidget {
                         label: const Text('Sign Out'),
                         style: OutlinedButton.styleFrom(
                           minimumSize: const Size(double.infinity, 48),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Divider(height: 32),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'About',
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      const SizedBox(height: 8),
+                      Card(
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Rangpur Government Polytechnic Institute',
+                                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'A comprehensive college communication platform for connecting students, teachers, and administration.',
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
+                              const SizedBox(height: 12),
+                              InkWell(
+                                onTap: () async {
+                                  final url = Uri.parse('https://rangpur.polytech.gov.bd');
+                                  if (await canLaunchUrl(url)) {
+                                    await launchUrl(url, mode: LaunchMode.externalApplication);
+                                  }
+                                },
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.language, size: 20, color: Colors.blue),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      'rangpur.polytech.gov.bd',
+                                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                            color: Colors.blue,
+                                            decoration: TextDecoration.underline,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Version: 1.0.0',
+                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      color: Colors.grey,
+                                    ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],

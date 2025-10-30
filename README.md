@@ -1,6 +1,18 @@
-# Campus Mesh
+# RGPI Communication App
 
-A comprehensive college communication platform built with Flutter and Firebase.
+A comprehensive college communication platform for **Rangpur Government Polytechnic Institute** built with Flutter and Firebase.
+
+🌐 **College Website:** [rangpur.polytech.gov.bd](https://rangpur.polytech.gov.bd)
+
+## 📱 Download APK
+
+**For Teachers/Students:** Download the latest APK to install on your Android device:
+
+1. Go to [Actions → Latest Build](../../actions/workflows/build-apk.yml)
+2. Download the APK artifact from the latest successful run
+3. Or check the [Releases Page](../../releases) for stable versions
+
+See the complete [APK Build Guide](APK_BUILD_GUIDE.md) for detailed instructions.
 
 ## 🚀 Quick Start
 
@@ -19,6 +31,7 @@ flutter run
 
 ## 📖 Documentation
 
+- [APK Build Guide](APK_BUILD_GUIDE.md) - **Download and install the app**
 - [Full Documentation](docs/README.md)
 - [Architecture Overview](docs/ARCHITECTURE.md)
 - [API Reference](docs/API.md)
