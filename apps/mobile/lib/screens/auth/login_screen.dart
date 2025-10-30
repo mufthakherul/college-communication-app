@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../services/auth_service.dart';
+import '../../services/demo_mode_service.dart';
 import '../home_screen.dart';
 import 'register_screen.dart';
 import 'demo_login_screen.dart';
@@ -17,6 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _authService = AuthService();
+  final _demoModeService = DemoModeService();
   bool _isLoading = false;
   bool _obscurePassword = true;
 
@@ -185,30 +187,34 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 24),
                   const Divider(),
                   const SizedBox(height: 16),
-                  OutlinedButton.icon(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const DemoLoginScreen(),
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.preview),
-                    label: const Text('Try Demo Mode (No Firebase)'),
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      side: BorderSide(color: Colors.blue[700]!),
+                  // Only show demo mode if available
+                  if (_demoModeService.isDemoModeAvailable())
+                    OutlinedButton.icon(
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const DemoLoginScreen(),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.preview),
+                      label: const Text('Try Demo Mode (No Firebase)'),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        side: BorderSide(color: Colors.blue[700]!),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Demo mode allows you to explore the app without Firebase',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.grey,
-                          fontStyle: FontStyle.italic,
-                        ),
-                    textAlign: TextAlign.center,
-                  ),
+                  if (_demoModeService.isDemoModeAvailable())
+                    const SizedBox(height: 8),
+                  if (_demoModeService.isDemoModeAvailable())
+                    Text(
+                      'Demo mode: Local sample data only, no real data access',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Colors.grey,
+                            fontStyle: FontStyle.italic,
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
                 ],
               ),
             ),
