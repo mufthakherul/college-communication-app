@@ -48,8 +48,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to register: ${e.toString()}')),
+        String errorMessage = 'Failed to register';
+        String errorDetails = e.toString();
+        
+        // Provide more helpful error messages
+        if (errorDetails.contains('email-already-in-use')) {
+          errorMessage = 'Email already registered';
+          errorDetails = 'An account with this email already exists. Please sign in instead.';
+        } else if (errorDetails.contains('invalid-email')) {
+          errorMessage = 'Invalid email address';
+          errorDetails = 'Please enter a valid email address.';
+        } else if (errorDetails.contains('weak-password')) {
+          errorMessage = 'Weak password';
+          errorDetails = 'Please choose a stronger password (at least 6 characters).';
+        } else if (errorDetails.contains('network')) {
+          errorMessage = 'Connection error';
+          errorDetails = 'Please check your internet connection and try again.';
+        }
+        
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(errorMessage),
+            content: Text(errorDetails),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
         );
       }
     } finally {
