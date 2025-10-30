@@ -16,7 +16,9 @@ A comprehensive college communication platform for **Rangpur Polytechnic Institu
 
 ## 🔥 Firebase Connection Required
 
-The app needs to be connected to Firebase to function. You have two options:
+The app needs to be connected to Firebase to function. **This project uses only FREE Firebase services** - no paid Cloud Functions required!
+
+### Quick Setup Options:
 
 **Option 1: Quick Setup (Recommended)**
 ```bash
@@ -26,12 +28,15 @@ The app needs to be connected to Firebase to function. You have two options:
 **Option 2: Manual Setup**
 Follow the step-by-step guide: [FIREBASE_SETUP_GUIDE.md](FIREBASE_SETUP_GUIDE.md)
 
-**What Firebase Provides:**
-- User authentication (login/register)
-- Real-time database for notices and messages
-- File storage for images and documents
-- Backend cloud functions
-- Push notifications
+### 💰 100% Free Firebase Services:
+- ✅ **Authentication** - User login/register (Unlimited users)
+- ✅ **Firestore Database** - Real-time notices and messages (50K reads/day)
+- ✅ **Cloud Storage** - File storage for images and documents (5GB free)
+- ✅ **Push Notifications** - Firebase Cloud Messaging (Unlimited)
+- ✅ **No Cloud Functions needed!** - See [CLOUD_FUNCTIONS_FREE_ALTERNATIVE.md](CLOUD_FUNCTIONS_FREE_ALTERNATIVE.md)
+
+### 🎓 Perfect for College Projects:
+This app stays within Firebase's free tier, supporting 100-500 active users with **zero cost**. No credit card required!
 
 ## 📱 Download APK
 

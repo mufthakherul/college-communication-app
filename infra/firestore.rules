@@ -2,67 +2,203 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Users collection
-    match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-      allow read: if request.auth != null && isAdmin();
-      allow write: if request.auth != null && isAdmin();
+    
+    // ============================================
+    // HELPER FUNCTIONS (Cloud Functions Replacement)
+    // These functions replace server-side validation
+    // ============================================
+    
+    function isAuthenticated() {
+      return request.auth != null;
     }
     
-    // Notices collection
-    match /notices/{noticeId} {
-      allow read: if request.auth != null;
-      allow create: if request.auth != null && (isAdmin() || isTeacher());
-      allow update, delete: if request.auth != null && 
-        (resource.data.authorId == request.auth.uid || isAdmin());
-    }
-    
-    // Messages collection
-    match /messages/{messageId} {
-      allow read, write: if request.auth != null && 
-        (resource.data.senderId == request.auth.uid || 
-         resource.data.recipientId == request.auth.uid);
-      allow read: if request.auth != null && isAdmin();
-    }
-    
-    // Notifications collection
-    match /notifications/{notificationId} {
-      allow read, write: if request.auth != null && 
-        resource.data.userId == request.auth.uid;
-      allow create: if request.auth != null && isAdmin();
-    }
-    
-    // Approval requests collection
-    match /approvalRequests/{requestId} {
-      allow read, create: if request.auth != null;
-      allow update: if request.auth != null && 
-        (resource.data.userId == request.auth.uid || isAdmin());
-      allow read: if request.auth != null && isAdmin();
-    }
-    
-    // User activity collection (admin only)
-    match /userActivity/{activityId} {
-      allow read, write: if request.auth != null && isAdmin();
-      allow create: if request.auth != null;
-    }
-    
-    // Helper functions
     function isAdmin() {
-      return request.auth != null && 
+      return isAuthenticated() && 
         exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
     
     function isTeacher() {
-      return request.auth != null && 
+      return isAuthenticated() && 
         exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'teacher';
     }
     
     function isStudent() {
-      return request.auth != null && 
+      return isAuthenticated() && 
         exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'student';
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function hasValidRole() {
+      return isAuthenticated() && 
+        request.resource.data.role in ['student', 'teacher', 'admin'];
+    }
+    
+    // ============================================
+    // USERS COLLECTION
+    // Replaces: functions/src/userManagement.ts
+    // ============================================
+    
+    match /users/{userId} {
+      // Users can create their own profile on signup
+      allow create: if isAuthenticated() 
+        && request.auth.uid == userId
+        && hasValidRole()
+        && request.resource.data.keys().hasAll(['name', 'email', 'role']);
+      
+      // Users can read their own profile, admins can read any
+      allow read: if isAuthenticated() 
+        && (request.auth.uid == userId || isAdmin());
+      
+      // Users can update their own profile (except role), admins can update any
+      allow update: if isAuthenticated() && (
+        (request.auth.uid == userId && 
+         (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['role']))) ||
+        isAdmin()
+      );
+      
+      // Only admins can delete users
+      allow delete: if isAdmin();
+    }
+    
+    // ============================================
+    // NOTICES COLLECTION
+    // Replaces: functions/src/notices.ts
+    // ============================================
+    
+    match /notices/{noticeId} {
+      // Only teachers and admins can create notices
+      allow create: if isAuthenticated() 
+        && (isTeacher() || isAdmin())
+        && request.resource.data.authorId == request.auth.uid
+        && request.resource.data.keys().hasAll(['title', 'content', 'type', 'targetAudience', 'authorId']);
+      
+      // Everyone authenticated can read active notices
+      allow read: if isAuthenticated();
+      
+      // Author or admin can update their own notices
+      allow update: if isAuthenticated() && (
+        resource.data.authorId == request.auth.uid || isAdmin()
+      );
+      
+      // Author or admin can delete notices
+      allow delete: if isAuthenticated() && (
+        resource.data.authorId == request.auth.uid || isAdmin()
+      );
+    }
+    
+    // ============================================
+    // MESSAGES COLLECTION
+    // Replaces: functions/src/messaging.ts
+    // ============================================
+    
+    match /messages/{messageId} {
+      // Users can create messages with themselves as sender
+      allow create: if isAuthenticated() 
+        && request.resource.data.senderId == request.auth.uid
+        && request.resource.data.keys().hasAll(['senderId', 'receiverId', 'content']);
+      
+      // Users can read messages where they are sender or receiver
+      allow read: if isAuthenticated() && (
+        resource.data.senderId == request.auth.uid || 
+        resource.data.receiverId == request.auth.uid ||
+        isAdmin()
+      );
+      
+      // Only sender can update their messages (e.g., mark as edited)
+      allow update: if isAuthenticated() && 
+        resource.data.senderId == request.auth.uid;
+      
+      // Sender or admin can delete messages
+      allow delete: if isAuthenticated() && (
+        resource.data.senderId == request.auth.uid || isAdmin()
+      );
+    }
+    
+    // ============================================
+    // NOTIFICATIONS COLLECTION
+    // Client-side notification creation allowed
+    // ============================================
+    
+    match /notifications/{notificationId} {
+      // Any authenticated user can create notifications
+      // (for client-side notification distribution)
+      allow create: if isAuthenticated();
+      
+      // Users can read their own notifications
+      allow read: if isAuthenticated() && 
+        resource.data.userId == request.auth.uid;
+      
+      // Users can update their own notifications (e.g., mark as read)
+      allow update: if isAuthenticated() && 
+        resource.data.userId == request.auth.uid;
+      
+      // Users or admin can delete notifications
+      allow delete: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid || isAdmin()
+      );
+    }
+    
+    // ============================================
+    // APPROVAL REQUESTS COLLECTION
+    // Replaces: functions/src/adminApproval.ts
+    // ============================================
+    
+    match /approvalRequests/{requestId} {
+      // Users can create their own approval requests
+      allow create: if isAuthenticated() 
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.keys().hasAll(['userId', 'type', 'data', 'status']);
+      
+      // Users can read their own requests, admins can read all
+      allow read: if isAuthenticated() && (
+        resource.data.userId == request.auth.uid || isAdmin()
+      );
+      
+      // Only admins can update approval requests (approve/reject)
+      allow update: if isAuthenticated() && isAdmin()
+        && request.resource.data.status in ['approved', 'rejected', 'pending'];
+      
+      // Only admins can delete approval requests
+      allow delete: if isAdmin();
+    }
+    
+    // ============================================
+    // USER ACTIVITY COLLECTION
+    // For analytics and audit logs
+    // ============================================
+    
+    match /userActivity/{activityId} {
+      // Any authenticated user can log their activity
+      allow create: if isAuthenticated();
+      
+      // Only admins can read activity logs
+      allow read: if isAdmin();
+      
+      // No one can update or delete activity logs (immutable audit trail)
+      allow update, delete: if false;
+    }
+    
+    // ============================================
+    // ANNOUNCEMENTS COLLECTION
+    // System-wide announcements (admin only)
+    // ============================================
+    
+    match /announcements/{announcementId} {
+      // Only admins can create announcements
+      allow create: if isAdmin();
+      
+      // Everyone can read announcements
+      allow read: if isAuthenticated();
+      
+      // Only admins can update/delete announcements
+      allow update, delete: if isAdmin();
     }
   }
 }
