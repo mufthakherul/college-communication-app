@@ -14,3 +14,9 @@
 -keepclassmembers class ** {
     @com.google.gson.annotations.SerializedName <fields>;
 }
+
+# Google Play Core (for deferred components)
+# These classes are referenced by Flutter but may not be present if deferred components aren't used
+-dontwarn com.google.android.play.core.splitcompat.**
+-dontwarn com.google.android.play.core.splitinstall.**
+-dontwarn com.google.android.play.core.tasks.**
