@@ -3,6 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../services/auth_service.dart';
 import '../home_screen.dart';
 import 'register_screen.dart';
+import 'demo_login_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -180,6 +181,33 @@ class _LoginScreenState extends State<LoginScreen> {
                       );
                     },
                     child: const Text('Don\'t have an account? Register'),
+                  ),
+                  const SizedBox(height: 24),
+                  const Divider(),
+                  const SizedBox(height: 16),
+                  OutlinedButton.icon(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const DemoLoginScreen(),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.preview),
+                    label: const Text('Try Demo Mode (No Firebase)'),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      side: BorderSide(color: Colors.blue[700]!),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Demo mode allows you to explore the app without Firebase',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.grey,
+                          fontStyle: FontStyle.italic,
+                        ),
+                    textAlign: TextAlign.center,
                   ),
                 ],
               ),

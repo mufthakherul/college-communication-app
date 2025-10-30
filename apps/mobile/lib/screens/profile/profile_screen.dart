@@ -3,6 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../models/user_model.dart';
 import '../../services/auth_service.dart';
 import '../auth/login_screen.dart';
+import '../developer/developer_info_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   final UserModel? user;
@@ -219,6 +220,60 @@ class ProfileScreen extends StatelessWidget {
                                     ),
                               ),
                             ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Card(
+                        color: Colors.purple.shade50,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const DeveloperInfoScreen(),
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.code,
+                                  color: Colors.purple[700],
+                                  size: 32,
+                                ),
+                                const SizedBox(width: 16),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Developer Info',
+                                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.purple[900],
+                                            ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        'View portfolio & connect with developer',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.purple[700],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  size: 16,
+                                  color: Colors.purple[700],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
