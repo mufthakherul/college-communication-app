@@ -16,7 +16,6 @@ dependencies:
   cloud_firestore: ^4.8.4
   firebase_storage: ^11.2.5
   firebase_messaging: ^14.6.5
-  cloud_functions: ^4.3.3
   url_launcher: ^6.2.1
   webview_flutter: ^4.4.2
   shared_preferences: ^2.2.2
