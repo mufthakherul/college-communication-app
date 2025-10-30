@@ -4,6 +4,7 @@ import './notices/notices_screen.dart';
 import './messages/messages_screen.dart';
 import './profile/profile_screen.dart';
 import '../services/auth_service.dart';
+import '../services/demo_mode_service.dart';
 import '../models/user_model.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,15 +17,36 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   final _authService = AuthService();
+  final _demoModeService = DemoModeService();
   UserModel? _currentUser;
+  bool _isDemoMode = false;
 
   @override
   void initState() {
     super.initState();
     _loadUserProfile();
+    _checkDemoMode();
+  }
+
+  Future<void> _checkDemoMode() async {
+    final isDemo = await _demoModeService.isDemoModeEnabled();
+    if (mounted) {
+      setState(() => _isDemoMode = isDemo);
+    }
   }
 
   Future<void> _loadUserProfile() async {
+    // Check if in demo mode first
+    final isDemo = await _demoModeService.isDemoModeEnabled();
+    if (isDemo) {
+      final demoUser = await _demoModeService.getDemoUser();
+      if (mounted) {
+        setState(() => _currentUser = demoUser);
+      }
+      return;
+    }
+    
+    // Otherwise load from Firebase
     final user = _authService.currentUser;
     if (user != null) {
       final profile = await _authService.getUserProfile(user.uid);
@@ -43,7 +65,55 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_currentIndex],
+      body: Column(
+        children: [
+          // Demo mode banner
+          if (_isDemoMode)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              color: Colors.orange[700],
+              child: SafeArea(
+                bottom: false,
+                child: Row(
+                  children: [
+                    const Icon(Icons.info_outline, color: Colors.white, size: 20),
+                    const SizedBox(width: 8),
+                    const Expanded(
+                      child: Text(
+                        'DEMO MODE - Using sample data only',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        await _demoModeService.disableDemoMode();
+                        if (mounted) {
+                          Navigator.of(context).pushReplacementNamed('/');
+                        }
+                      },
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      child: const Text(
+                        'Exit',
+                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          Expanded(child: _screens[_currentIndex]),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) => setState(() => _currentIndex = index),

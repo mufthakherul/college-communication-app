@@ -16,6 +16,25 @@ class _DemoLoginScreenState extends State<DemoLoginScreen> {
   bool _isLoading = false;
 
   @override
+  void initState() {
+    super.initState();
+    // Check if demo mode is available
+    if (!_demoModeService.isDemoModeAvailable()) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Demo mode is disabled in this build'),
+              backgroundColor: Colors.red,
+            ),
+          );
+          Navigator.of(context).pop();
+        }
+      });
+    }
+  }
+
+  @override
   void dispose() {
     _githubUsernameController.dispose();
     super.dispose();
@@ -44,7 +63,10 @@ class _DemoLoginScreenState extends State<DemoLoginScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Login failed: ${e.toString()}')),
+          SnackBar(
+            content: Text('Login failed: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     } finally {

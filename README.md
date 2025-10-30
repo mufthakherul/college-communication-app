@@ -7,6 +7,10 @@ A comprehensive college communication platform for **Rangpur Polytechnic Institu
 
 > ⚠️ **IMPORTANT:** The app code is complete, but requires Firebase setup to work. See [FIREBASE_SETUP_GUIDE.md](FIREBASE_SETUP_GUIDE.md) for connection instructions.
 
+> 💡 **NEW:** Try **Demo Mode** to explore the app without Firebase! See demo mode button on login screen.
+
+> 🔒 **Security:** Demo mode is safe and isolated. See [DEMO_MODE_SECURITY.md](DEMO_MODE_SECURITY.md) for details.
+
 > 📖 **For Teachers:** See [QUICK_START.md](QUICK_START.md) for immediate APK download and review  
 > 📖 **For Details:** See [TEACHER_GUIDE.md](TEACHER_GUIDE.md) for complete instructions
 

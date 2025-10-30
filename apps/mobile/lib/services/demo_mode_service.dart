@@ -1,12 +1,31 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart';
 import '../models/user_model.dart';
 
 class DemoModeService {
   static const String _demoModeKey = 'demo_mode_enabled';
   static const String _demoUserKey = 'demo_user_data';
+  
+  // Security: Demo mode can be disabled in production by setting this to false
+  // Change to false before releasing to production for enhanced security
+  static const bool _allowDemoMode = true;
+
+  // Check if demo mode is available (respects production setting)
+  bool isDemoModeAvailable() {
+    // In release mode with demo disabled, return false
+    if (kReleaseMode && !_allowDemoMode) {
+      return false;
+    }
+    return true;
+  }
 
   // Check if demo mode is enabled
   Future<bool> isDemoModeEnabled() async {
+    // Check if demo mode is even available
+    if (!isDemoModeAvailable()) {
+      return false;
+    }
+    
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_demoModeKey) ?? false;
   }
@@ -47,8 +66,17 @@ class DemoModeService {
 
   // Create demo user with GitHub-style verification
   Future<UserModel> createDemoUserWithGitHub(String githubUsername) async {
+    // Security check: Ensure demo mode is available
+    if (!isDemoModeAvailable()) {
+      throw Exception('Demo mode is not available in this build');
+    }
+    
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_demoModeKey, true);
+    
+    // SECURITY NOTE: Demo users ONLY access local sample data
+    // They CANNOT access real Firebase data or make actual API calls
+    // All demo data is stored locally and isolated from production
     
     // Create a demo user with GitHub username
     return UserModel(
