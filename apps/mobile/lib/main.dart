@@ -8,12 +8,16 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'firebase_options.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/home_screen.dart';
+import 'services/theme_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Load theme preference
+  await ThemeService().loadThemePreference();
 
   // Enable Crashlytics only in release mode to avoid debug crashes in production
   if (kReleaseMode) {
@@ -30,7 +34,7 @@ void main() async {
   runApp(const CampusMeshApp());
 }
 
-class CampusMeshApp extends StatelessWidget {
+class CampusMeshApp extends StatefulWidget {
   const CampusMeshApp({super.key});
 
   static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
@@ -38,40 +42,37 @@ class CampusMeshApp extends StatelessWidget {
       FirebaseAnalyticsObserver(analytics: analytics);
 
   @override
+  State<CampusMeshApp> createState() => _CampusMeshAppState();
+}
+
+class _CampusMeshAppState extends State<CampusMeshApp> {
+  final _themeService = ThemeService();
+
+  @override
+  void initState() {
+    super.initState();
+    _themeService.addListener(_onThemeChanged);
+  }
+
+  @override
+  void dispose() {
+    _themeService.removeListener(_onThemeChanged);
+    super.dispose();
+  }
+
+  void _onThemeChanged() {
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'RPI Communication',
       debugShowCheckedModeBanner: false,
-      navigatorObservers: [observer],
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue,
-          brightness: Brightness.light,
-        ),
-        cardTheme: CardTheme(
-          elevation: 2,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-          filled: true,
-          fillColor: Colors.grey[50],
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            elevation: 2,
-          ),
-        ),
-      ),
+      navigatorObservers: [CampusMeshApp.observer],
+      theme: ThemeService.lightTheme,
+      darkTheme: ThemeService.darkTheme,
+      themeMode: _themeService.themeMode,
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {

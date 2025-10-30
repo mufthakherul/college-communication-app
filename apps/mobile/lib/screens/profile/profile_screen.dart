@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../models/user_model.dart';
 import '../../services/auth_service.dart';
+import '../../services/theme_service.dart';
 import '../auth/login_screen.dart';
 import '../developer/developer_info_screen.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   final UserModel? user;
 
   const ProfileScreen({
@@ -14,8 +15,15 @@ class ProfileScreen extends StatelessWidget {
   });
 
   @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+
+  @override
   Widget build(BuildContext context) {
     final authService = AuthService();
+    final themeService = ThemeService();
 
     return Scaffold(
       appBar: AppBar(
@@ -38,7 +46,7 @@ class ProfileScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: user == null
+      body: widget.user == null
           ? const Center(child: CircularProgressIndicator())
           : ListView(
               children: [
@@ -46,18 +54,18 @@ class ProfileScreen extends StatelessWidget {
                 CircleAvatar(
                   radius: 60,
                   backgroundColor: Theme.of(context).primaryColor.withOpacity(0.2),
-                  child: user!.photoURL.isNotEmpty
+                  child: widget.user!.photoURL.isNotEmpty
                       ? ClipOval(
                           child: Image.network(
-                            user!.photoURL,
+                            widget.user!.photoURL,
                             width: 120,
                             height: 120,
                             fit: BoxFit.cover,
                           ),
                         )
                       : Text(
-                          user!.displayName.isNotEmpty
-                              ? user!.displayName[0].toUpperCase()
+                          widget.user!.displayName.isNotEmpty
+                              ? widget.user!.displayName[0].toUpperCase()
                               : 'U',
                           style: const TextStyle(
                             fontSize: 48,
@@ -67,7 +75,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  user!.displayName,
+                  widget.user!.displayName,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
@@ -75,7 +83,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  user!.email,
+                  widget.user!.email,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: Colors.grey,
@@ -84,25 +92,52 @@ class ProfileScreen extends StatelessWidget {
                 const SizedBox(height: 8),
                 Chip(
                   label: Text(
-                    user!.role.name.toUpperCase(),
+                    widget.user!.role.name.toUpperCase(),
                     style: const TextStyle(color: Colors.white),
                   ),
-                  backgroundColor: _getRoleColor(user!.role),
+                  backgroundColor: _getRoleColor(widget.user!.role),
                 ),
                 const Divider(height: 32),
                 _buildInfoTile(
                   context,
                   Icons.business,
                   'Department',
-                  user!.department.isEmpty ? 'Not specified' : user!.department,
+                  widget.user!.department.isEmpty ? 'Not specified' : widget.user!.department,
                 ),
-                if (user!.year.isNotEmpty)
-                  _buildInfoTile(context, Icons.calendar_today, 'Year', user!.year),
+                if (widget.user!.year.isNotEmpty)
+                  _buildInfoTile(context, Icons.calendar_today, 'Year', widget.user!.year),
                 _buildInfoTile(
                   context,
                   Icons.check_circle,
                   'Status',
-                  user!.isActive ? 'Active' : 'Inactive',
+                  widget.user!.isActive ? 'Active' : 'Inactive',
+                ),
+                const Divider(height: 32),
+                // Theme Settings Section
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    'Settings',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                SwitchListTile(
+                  secondary: Icon(
+                    themeService.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  title: const Text('Dark Mode'),
+                  subtitle: Text(
+                    themeService.isDarkMode ? 'Dark theme enabled' : 'Light theme enabled',
+                  ),
+                  value: themeService.isDarkMode,
+                  onChanged: (value) {
+                    themeService.toggleTheme();
+                    setState(() {});
+                  },
                 ),
                 const Divider(height: 32),
                 Padding(
