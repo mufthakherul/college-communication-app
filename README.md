@@ -5,8 +5,29 @@ A comprehensive college communication platform for **Rangpur Polytechnic Institu
 🌐 **College Website:** [rangpur.polytech.gov.bd](https://rangpur.polytech.gov.bd)  
 👨‍💻 **Developed by:** Mufthakherul
 
+> ⚠️ **IMPORTANT:** The app code is complete, but requires Firebase setup to work. See [FIREBASE_SETUP_GUIDE.md](FIREBASE_SETUP_GUIDE.md) for connection instructions.
+
 > 📖 **For Teachers:** See [QUICK_START.md](QUICK_START.md) for immediate APK download and review  
 > 📖 **For Details:** See [TEACHER_GUIDE.md](TEACHER_GUIDE.md) for complete instructions
+
+## 🔥 Firebase Connection Required
+
+The app needs to be connected to Firebase to function. You have two options:
+
+**Option 1: Quick Setup (Recommended)**
+```bash
+./scripts/setup-firebase.sh
+```
+
+**Option 2: Manual Setup**
+Follow the step-by-step guide: [FIREBASE_SETUP_GUIDE.md](FIREBASE_SETUP_GUIDE.md)
+
+**What Firebase Provides:**
+- User authentication (login/register)
+- Real-time database for notices and messages
+- File storage for images and documents
+- Backend cloud functions
+- Push notifications
 
 ## 📱 Download APK
 
