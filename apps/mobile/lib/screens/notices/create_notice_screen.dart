@@ -47,8 +47,38 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to create notice: ${e.toString()}')),
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Failed to Create Notice'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Unable to create the notice. Please try the following:',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 12),
+                const Text('• Check your internet connection'),
+                const Text('• Verify you have permission to create notices'),
+                const Text('• Try again in a few moments'),
+                const SizedBox(height: 12),
+                const Divider(),
+                const SizedBox(height: 8),
+                Text(
+                  'Error details: ${e.toString()}',
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
         );
       }
     } finally {
@@ -69,33 +99,44 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            TextFormField(
-              controller: _titleController,
-              decoration: const InputDecoration(
-                labelText: 'Title',
-                border: OutlineInputBorder(),
+            Semantics(
+              label: 'Notice title input field',
+              hint: 'Enter a title for the notice',
+              textField: true,
+              child: TextFormField(
+                controller: _titleController,
+                decoration: const InputDecoration(
+                  labelText: 'Title',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a title';
+                  }
+                  return null;
+                },
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a title';
-                }
-                return null;
-              },
             ),
             const SizedBox(height: 16),
-            TextFormField(
-              controller: _contentController,
-              decoration: const InputDecoration(
-                labelText: 'Content',
-                border: OutlineInputBorder(),
+            Semantics(
+              label: 'Notice content input field',
+              hint: 'Enter the content of the notice',
+              textField: true,
+              multiline: true,
+              child: TextFormField(
+                controller: _contentController,
+                decoration: const InputDecoration(
+                  labelText: 'Content',
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 8,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter content';
+                  }
+                  return null;
+                },
               ),
-              maxLines: 8,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter content';
-                }
-                return null;
-              },
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<NoticeType>(

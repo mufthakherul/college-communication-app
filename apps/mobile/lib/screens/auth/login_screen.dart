@@ -47,8 +47,36 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to sign in: ${e.toString()}')),
+        String errorMessage = 'Failed to sign in';
+        String errorDetails = e.toString();
+        
+        // Provide more helpful error messages
+        if (errorDetails.contains('user-not-found')) {
+          errorMessage = 'No account found with this email';
+          errorDetails = 'Please check your email address or register for a new account.';
+        } else if (errorDetails.contains('wrong-password')) {
+          errorMessage = 'Incorrect password';
+          errorDetails = 'Please check your password and try again.';
+        } else if (errorDetails.contains('invalid-email')) {
+          errorMessage = 'Invalid email address';
+          errorDetails = 'Please enter a valid email address.';
+        } else if (errorDetails.contains('network')) {
+          errorMessage = 'Connection error';
+          errorDetails = 'Please check your internet connection and try again.';
+        }
+        
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(errorMessage),
+            content: Text(errorDetails),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
         );
       }
     } finally {
@@ -110,46 +138,59 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 48),
-                  TextFormField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      prefixIcon: Icon(Icons.email),
-                      border: OutlineInputBorder(),
+                  Semantics(
+                    label: 'Email address input field',
+                    hint: 'Enter your email address',
+                    textField: true,
+                    child: TextFormField(
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      autofillHints: const [AutofillHints.email],
+                      decoration: const InputDecoration(
+                        labelText: 'Email',
+                        prefixIcon: Icon(Icons.email),
+                        border: OutlineInputBorder(),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your email';
+                        }
+                        if (!value.contains('@')) {
+                          return 'Please enter a valid email';
+                        }
+                        return null;
+                      },
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your email';
-                      }
-                      if (!value.contains('@')) {
-                        return 'Please enter a valid email';
-                      }
-                      return null;
-                    },
                   ),
                   const SizedBox(height: 16),
-                  TextFormField(
-                    controller: _passwordController,
-                    obscureText: _obscurePassword,
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      prefixIcon: const Icon(Icons.lock),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscurePassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
+                  Semantics(
+                    label: 'Password input field',
+                    hint: 'Enter your password',
+                    textField: true,
+                    obscured: _obscurePassword,
+                    child: TextFormField(
+                      controller: _passwordController,
+                      obscureText: _obscurePassword,
+                      autofillHints: const [AutofillHints.password],
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        prefixIcon: const Icon(Icons.lock),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                          ),
+                          tooltip: _obscurePassword ? 'Show password' : 'Hide password',
+                          onPressed: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
                         ),
-                        onPressed: () {
-                          setState(() {
-                            _obscurePassword = !_obscurePassword;
-                          });
-                        },
+                        border: const OutlineInputBorder(),
                       ),
-                      border: const OutlineInputBorder(),
-                    ),
-                    validator: (value) {
+                      validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter your password';
                       }

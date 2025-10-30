@@ -23,6 +23,7 @@ class ProfileScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
+            tooltip: 'Sign out',
             onPressed: () async {
               await authService.signOut();
               if (context.mounted) {
@@ -212,12 +213,29 @@ class ProfileScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              const SizedBox(height: 8),
-                              Text(
-                                'Version: 1.0.0',
-                                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: Colors.grey,
+                              const SizedBox(height: 12),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      _showPrivacyPolicy(context);
+                                    },
+                                    child: Text(
+                                      'Privacy Policy',
+                                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                            color: Colors.blue,
+                                            decoration: TextDecoration.underline,
+                                          ),
                                     ),
+                                  ),
+                                  Text(
+                                    'Version: 1.0.0',
+                                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                          color: Colors.grey,
+                                        ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -308,5 +326,94 @@ class ProfileScreen extends StatelessWidget {
       default:
         return Colors.green;
     }
+  }
+
+  void _showPrivacyPolicy(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Privacy Policy'),
+        content: const SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'RPI Communication App Privacy Policy',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+              SizedBox(height: 12),
+              Text(
+                'Data Collection',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 4),
+              Text(
+                'We collect and store the following information:\n'
+                '• Your name, email, and department\n'
+                '• Messages and notices you create\n'
+                '• Profile information you provide',
+                style: TextStyle(fontSize: 14),
+              ),
+              SizedBox(height: 12),
+              Text(
+                'Data Usage',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 4),
+              Text(
+                'Your data is used to:\n'
+                '• Facilitate communication within the institution\n'
+                '• Provide notices and announcements\n'
+                '• Enable messaging between users',
+                style: TextStyle(fontSize: 14),
+              ),
+              SizedBox(height: 12),
+              Text(
+                'Data Security',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 4),
+              Text(
+                'We implement security measures to protect your data:\n'
+                '• Encrypted data transmission\n'
+                '• Secure authentication\n'
+                '• Role-based access control',
+                style: TextStyle(fontSize: 14),
+              ),
+              SizedBox(height: 12),
+              Text(
+                'Your Rights',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 4),
+              Text(
+                'You have the right to:\n'
+                '• Access your personal data\n'
+                '• Request data correction\n'
+                '• Request account deletion',
+                style: TextStyle(fontSize: 14),
+              ),
+              SizedBox(height: 12),
+              Text(
+                'Contact',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 4),
+              Text(
+                'For privacy concerns, contact the system administrator at Rangpur Polytechnic Institute.',
+                style: TextStyle(fontSize: 14),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
+    );
   }
 }
