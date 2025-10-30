@@ -51,7 +51,8 @@ jobs:
           echo "Test coverage report generated"
           if [ -f coverage/lcov.info ]; then
             echo "Coverage file found"
-            lcov --summary coverage/lcov.info
+            echo "Coverage summary:"
+            head -n 20 coverage/lcov.info
           fi
 
       - name: Upload coverage to artifacts
