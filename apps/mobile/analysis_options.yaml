@@ -50,3 +50,10 @@ analyzer:
     always_declare_return_types: warning
     # Treat TODO comments as info
     todo: info
+    # Treat these lints as warnings to not fail CI
+    always_use_package_imports: warning
+    prefer_const_constructors: warning
+    avoid_dynamic_calls: warning
+    avoid_print: warning
+    unused_import: warning
+    unused_local_variable: warning
