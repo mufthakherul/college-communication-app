@@ -17,6 +17,7 @@ class _NoticesScreenState extends State<NoticesScreen> {
   final _noticeService = NoticeService();
   final _authService = AuthService();
   UserModel? _currentUser;
+  bool _isRefreshing = false;
 
   @override
   void initState() {
@@ -31,6 +32,15 @@ class _NoticesScreenState extends State<NoticesScreen> {
       if (mounted) {
         setState(() => _currentUser = profile);
       }
+    }
+  }
+
+  Future<void> _handleRefresh() async {
+    setState(() => _isRefreshing = true);
+    // Wait for the stream to update (simulate refresh)
+    await Future.delayed(const Duration(milliseconds: 500));
+    if (mounted) {
+      setState(() => _isRefreshing = false);
     }
   }
 
@@ -72,6 +82,7 @@ class _NoticesScreenState extends State<NoticesScreen> {
           if (_canCreateNotice)
             IconButton(
               icon: const Icon(Icons.add),
+              tooltip: 'Create new notice',
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
@@ -86,37 +97,51 @@ class _NoticesScreenState extends State<NoticesScreen> {
         stream: _noticeService.getNotices(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return _buildLoadingSkeleton();
           }
 
           if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
+            return _buildErrorState(snapshot.error.toString());
           }
 
           final notices = snapshot.data ?? [];
 
           if (notices.isEmpty) {
-            return const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.inbox, size: 64, color: Colors.grey),
-                  SizedBox(height: 16),
-                  Text(
-                    'No notices yet',
-                    style: TextStyle(fontSize: 18, color: Colors.grey),
+            return RefreshIndicator(
+              onRefresh: _handleRefresh,
+              child: SingleChildScrollView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height - 200,
+                  child: const Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.inbox, size: 64, color: Colors.grey),
+                        SizedBox(height: 16),
+                        Text(
+                          'No notices yet',
+                          style: TextStyle(fontSize: 18, color: Colors.grey),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          'Pull down to refresh',
+                          style: TextStyle(fontSize: 14, color: Colors.grey),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
+                ),
               ),
             );
           }
 
-          return ListView.builder(
-            padding: const EdgeInsets.all(8),
-            itemCount: notices.length,
-            itemBuilder: (context, index) {
+          return RefreshIndicator(
+            onRefresh: _handleRefresh,
+            child: ListView.builder(
+              padding: const EdgeInsets.all(8),
+              itemCount: notices.length,
+              itemBuilder: (context, index) {
               final notice = notices[index];
               final color = _getNoticeColor(notice.type);
               final icon = _getNoticeIcon(notice.type);
@@ -163,8 +188,117 @@ class _NoticesScreenState extends State<NoticesScreen> {
                 ),
               );
             },
+            ),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildLoadingSkeleton() {
+    return ListView.builder(
+      padding: const EdgeInsets.all(8),
+      itemCount: 5,
+      itemBuilder: (context, index) {
+        return Card(
+          margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: Colors.grey[300],
+              child: const SizedBox(),
+            ),
+            title: Container(
+              height: 16,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 8),
+                Container(
+                  height: 12,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Container(
+                  height: 12,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildErrorState(String error) {
+    return RefreshIndicator(
+      onRefresh: _handleRefresh,
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height - 200,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error_outline, size: 64, color: Colors.red),
+                const SizedBox(height: 16),
+                const Text(
+                  'Failed to load notices',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  child: Text(
+                    'Please check your internet connection and try again.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton.icon(
+                  onPressed: _handleRefresh,
+                  icon: const Icon(Icons.refresh),
+                  label: const Text('Retry'),
+                ),
+                const SizedBox(height: 8),
+                TextButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Error Details'),
+                        content: Text(error),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text('Close'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  child: const Text('View Details'),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
