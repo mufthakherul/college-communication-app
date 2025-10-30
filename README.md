@@ -1,8 +1,9 @@
-# RGPI Communication App
+# RPI Communication App
 
-A comprehensive college communication platform for **Rangpur Government Polytechnic Institute** built with Flutter and Firebase.
+A comprehensive college communication platform for **Rangpur Polytechnic Institute** built with Flutter and Firebase.
 
-🌐 **College Website:** [rangpur.polytech.gov.bd](https://rangpur.polytech.gov.bd)
+🌐 **College Website:** [rangpur.polytech.gov.bd](https://rangpur.polytech.gov.bd)  
+👨‍💻 **Developed by:** Mufthakherul
 
 ## 📱 Download APK
 

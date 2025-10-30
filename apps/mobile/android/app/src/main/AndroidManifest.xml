@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="gov.bd.polytech.rgpi.communication">
+    package="gov.bd.polytech.rgpi.communication.develop.by.mufthakherul">
     
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -14,7 +14,7 @@
     </queries>
     
     <application
-        android:label="RGPI Communication"
+        android:label="RPI Communication"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">

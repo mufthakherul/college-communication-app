@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Build APK Script for RGPI Communication App
+# Build APK Script for RPI Communication App
 # This script builds both debug and release APK files
 
 set -e
 
-echo "🚀 RGPI Communication App - APK Builder"
+echo "🚀 RPI Communication App - APK Builder"
 echo "=========================================="
 echo ""
 
@@ -49,15 +49,15 @@ RELEASE_APK="build/app/outputs/flutter-apk/app-release.apk"
 echo ""
 echo "✨ Organizing output files..."
 mkdir -p ../../build-output
-cp "$DEBUG_APK" "../../build-output/rgpi-communication-debug.apk"
-cp "$RELEASE_APK" "../../build-output/rgpi-communication-release.apk"
+cp "$DEBUG_APK" "../../build-output/rpi-communication-debug.apk"
+cp "$RELEASE_APK" "../../build-output/rpi-communication-release.apk"
 
 echo ""
 echo -e "${GREEN}✅ Build completed successfully!${NC}"
 echo ""
 echo "📱 APK files are located at:"
-echo "   Debug:   $(pwd)/../../build-output/rgpi-communication-debug.apk"
-echo "   Release: $(pwd)/../../build-output/rgpi-communication-release.apk"
+echo "   Debug:   $(pwd)/../../build-output/rpi-communication-debug.apk"
+echo "   Release: $(pwd)/../../build-output/rpi-communication-release.apk"
 echo ""
 
 # Show file sizes
@@ -70,5 +70,6 @@ echo "   1. Transfer APK to your Android device"
 echo "   2. Enable 'Install from Unknown Sources' in device settings"
 echo "   3. Open the APK file to install"
 echo ""
-echo "🎓 For Rangpur Government Polytechnic Institute"
+echo "🎓 For Rangpur Polytechnic Institute"
 echo "   Website: https://rangpur.polytech.gov.bd"
+echo "   Developed by: Mufthakherul"

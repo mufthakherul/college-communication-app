@@ -1,6 +1,6 @@
-# APK Build Guide for RGPI Communication App
+# APK Build Guide for RPI Communication App
 
-This guide explains how to build and download APK files for the Rangpur Government Polytechnic Institute Communication App.
+This guide explains how to build and download APK files for the Rangpur Polytechnic Institute Communication App.
 
 ## 🚀 Automated APK Builds
 
@@ -13,8 +13,8 @@ The project uses GitHub Actions to automatically build APK files on every push t
    - Click on the latest successful workflow run
    - Scroll down to "Artifacts" section
    - Download either:
-     - `rgpi-communication-debug-apk` (for testing)
-     - `rgpi-communication-release-apk` (for production use)
+     - `rpi-communication-debug-apk` (for testing)
+     - `rpi-communication-release-apk` (for production use)
 
 2. **From Releases (for tagged versions):**
    - Go to the [Releases page](../../releases)
@@ -35,7 +35,7 @@ The project uses GitHub Actions to automatically build APK files on every push t
    - Tap "Install" and follow the prompts
 
 3. **Open the App:**
-   - Find "RGPI Communication" in your app drawer
+   - Find "RPI Communication" in your app drawer
    - Open and log in with your credentials
 
 ## 🛠️ Building APK Locally
@@ -90,8 +90,8 @@ For production release on Google Play Store or official distribution:
 
 1. **Generate a keystore:**
 ```bash
-keytool -genkey -v -keystore rgpi-release-key.keystore \
-  -alias rgpi-key -keyalg RSA -keysize 2048 -validity 10000
+keytool -genkey -v -keystore rpi-release-key.keystore \
+  -alias rpi-key -keyalg RSA -keysize 2048 -validity 10000
 ```
 
 2. **Update signing configuration:**
