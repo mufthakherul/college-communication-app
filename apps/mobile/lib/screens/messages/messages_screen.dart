@@ -11,7 +11,16 @@ class MessagesScreen extends StatefulWidget {
 
 class _MessagesScreenState extends State<MessagesScreen> {
   final _messageService = MessageService();
+  final _searchController = TextEditingController();
   bool _isRefreshing = false;
+  bool _isSearching = false;
+  String _searchQuery = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   Future<void> _handleRefresh() async {
     setState(() => _isRefreshing = true);
@@ -22,29 +31,67 @@ class _MessagesScreenState extends State<MessagesScreen> {
     }
   }
 
+  List<MessageModel> _filterMessages(List<MessageModel> messages) {
+    if (_searchQuery.isEmpty) {
+      return messages;
+    }
+    
+    return messages.where((message) {
+      final contentMatch = message.content.toLowerCase().contains(_searchQuery.toLowerCase());
+      final recipientMatch = message.recipientId.toLowerCase().contains(_searchQuery.toLowerCase());
+      return contentMatch || recipientMatch;
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Messages'),
-        actions: [
-          StreamBuilder<int>(
-            stream: _messageService.getUnreadCount(),
-            builder: (context, snapshot) {
-              final unreadCount = snapshot.data ?? 0;
-              if (unreadCount == 0) return const SizedBox.shrink();
-
-              return Padding(
-                padding: const EdgeInsets.only(right: 16),
-                child: Center(
-                  child: Badge(
-                    label: Text('$unreadCount'),
-                    child: const Icon(Icons.mail),
-                  ),
+        title: _isSearching
+            ? TextField(
+                controller: _searchController,
+                autofocus: true,
+                decoration: const InputDecoration(
+                  hintText: 'Search messages...',
+                  border: InputBorder.none,
                 ),
-              );
+                onChanged: (value) {
+                  setState(() => _searchQuery = value);
+                },
+              )
+            : const Text('Messages'),
+        actions: [
+          IconButton(
+            icon: Icon(_isSearching ? Icons.close : Icons.search),
+            tooltip: _isSearching ? 'Close search' : 'Search messages',
+            onPressed: () {
+              setState(() {
+                _isSearching = !_isSearching;
+                if (!_isSearching) {
+                  _searchController.clear();
+                  _searchQuery = '';
+                }
+              });
             },
           ),
+          if (!_isSearching)
+            StreamBuilder<int>(
+              stream: _messageService.getUnreadCount(),
+              builder: (context, snapshot) {
+                final unreadCount = snapshot.data ?? 0;
+                if (unreadCount == 0) return const SizedBox.shrink();
+
+                return Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: Center(
+                    child: Badge(
+                      label: Text('$unreadCount'),
+                      child: const Icon(Icons.mail),
+                    ),
+                  ),
+                );
+              },
+            ),
         ],
       ),
       body: StreamBuilder<List<MessageModel>>(
@@ -58,7 +105,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
             return _buildErrorState(snapshot.error.toString());
           }
 
-          final messages = snapshot.data ?? [];
+          final allMessages = snapshot.data ?? [];
+          final messages = _filterMessages(allMessages);
 
           if (messages.isEmpty) {
             return RefreshIndicator(
