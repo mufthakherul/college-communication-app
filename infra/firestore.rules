@@ -19,10 +19,16 @@ service cloud.firestore {
     
     // Messages collection
     match /messages/{messageId} {
-      allow read, write: if request.auth != null && 
+      allow read: if request.auth != null && 
+        (resource.data.senderId == request.auth.uid || 
+         resource.data.recipientId == request.auth.uid ||
+         isAdmin());
+      allow create: if request.auth != null && 
+        request.resource.data.senderId == request.auth.uid;
+      allow update: if request.auth != null && 
         (resource.data.senderId == request.auth.uid || 
          resource.data.recipientId == request.auth.uid);
-      allow read: if request.auth != null && isAdmin();
+      allow delete: if request.auth != null && isAdmin();
     }
     
     // Notifications collection
