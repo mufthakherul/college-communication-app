@@ -24,14 +24,20 @@ dependencies:
   # Mesh networking
   flutter_nearby_connections: ^1.1.2
   nearby_service: ^0.2.1
+  flutter_webrtc: ^0.9.48
   # QR code support
   qr_flutter: ^4.1.0
   qr_code_scanner: ^1.0.1
   # Network utilities
   network_info_plus: ^5.0.0
+  permission_handler: ^11.0.1
   # Utilities
   path_provider: ^2.1.1
+  path: ^1.8.3
   archive: ^3.4.9
+  # File handling
+  file_picker: ^6.1.1
+  image_picker: ^1.0.7
   # Monitoring & Analytics
   sentry_flutter: ^7.14.0
   onesignal_flutter: ^5.0.0
