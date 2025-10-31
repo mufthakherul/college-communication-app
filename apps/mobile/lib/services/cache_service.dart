@@ -256,6 +256,7 @@ class CacheService {
       await for (final file in _cacheDirectory!.list(recursive: true)) {
         if (file is File) {
           try {
+            // ignore: avoid_slow_async_io
             final stat = await file.stat();
             totalSize += stat.size;
           } catch (e) {
