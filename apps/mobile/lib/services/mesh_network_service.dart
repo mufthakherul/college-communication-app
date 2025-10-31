@@ -171,7 +171,6 @@ class MeshNetworkService {
   MeshNetworkService._internal();
 
   final _connectivityService = ConnectivityService();
-  NearbyConnections? _nearbyConnections;
   
   final Map<String, MeshNode> _connectedNodes = {};
   final Map<String, MeshNode> _hiddenNodes = {}; // Auto-connected but not authenticated
@@ -213,8 +212,6 @@ class MeshNetworkService {
     try {
       _deviceId = deviceId;
       _deviceName = deviceName;
-
-      _nearbyConnections = NearbyConnections();
       
       // Initialize the nearby connections
       // Note: Actual initialization is handled by the flutter_nearby_connections plugin

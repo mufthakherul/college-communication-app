@@ -117,11 +117,10 @@ void main() {
         id: 'msg1',
         senderId: 'sender123',
         recipientId: 'recipient123',
-        content: 'Check this file',
+        content: 'https://example.com/file.pdf',
         type: MessageType.file,
         createdAt: DateTime.now(),
         read: false,
-        content: 'https://example.com/file.pdf',
       );
 
       expect(messageWithFile.content, 'https://example.com/file.pdf');
