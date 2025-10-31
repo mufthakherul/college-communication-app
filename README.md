@@ -18,9 +18,13 @@ A comprehensive college communication platform for **Rangpur Polytechnic Institu
 > 📖 **For Teachers:** See [QUICK_START.md](QUICK_START.md) for immediate APK download and review  
 > 📖 **For Details:** See [TEACHER_GUIDE.md](TEACHER_GUIDE.md) for complete instructions
 
-## 🚀 Supabase Connection Required
+> 🎓 **NEW OPPORTUNITY:** Appwrite has offered educational benefits! See [APPWRITE_EDUCATIONAL_BENEFITS.md](APPWRITE_EDUCATIONAL_BENEFITS.md) to learn about free Pro plan, higher quotas, and migration options. Compare with Supabase in [BACKEND_COMPARISON.md](BACKEND_COMPARISON.md).
 
-The app needs to be connected to Supabase to function. Follow the step-by-step guide: [SUPABASE_SETUP_GUIDE.md](SUPABASE_SETUP_GUIDE.md)
+## 🚀 Backend Setup (Choose One)
+
+### Option A: Supabase (Current - 100% Free)
+
+The app is currently configured to use Supabase. Follow the step-by-step guide: [SUPABASE_SETUP_GUIDE.md](SUPABASE_SETUP_GUIDE.md)
 
 **What Supabase Provides (100% Free):**
 - User authentication (login/register) - 50,000 monthly active users
@@ -34,6 +38,32 @@ The app needs to be connected to Supabase to function. Follow the step-by-step g
 - More generous free tier than Firebase
 - Open source and self-hostable
 - PostgreSQL instead of NoSQL (more powerful queries)
+
+### Option B: Appwrite (Educational Benefits - Recommended for Students) 🎓
+
+**NEW:** Appwrite offers free Pro plan access for educational projects!
+
+**What Appwrite Provides (Educational Program):**
+- User authentication - Unlimited users
+- NoSQL database - 10 GB storage
+- File storage - 100 GB storage
+- Serverless functions - 1.5M invocations/month
+- Real-time subscriptions - Native WebSocket support
+- **Priority support** from Appwrite team
+- **Learning resources** and workshops
+
+**Why Appwrite for Education?**
+- ✅ **Free Pro Plan** ($15/month value) for students
+- ✅ **10x more storage** than Supabase free tier
+- ✅ **Unlimited users** (vs 50K on Supabase free)
+- ✅ **Priority support** for educational projects
+- ✅ Easy self-hosting option if needed
+
+**Get Started:**
+1. 📚 Learn about benefits: [APPWRITE_EDUCATIONAL_BENEFITS.md](APPWRITE_EDUCATIONAL_BENEFITS.md)
+2. 📊 Compare backends: [BACKEND_COMPARISON.md](BACKEND_COMPARISON.md)
+3. 🚀 Migration guide: [APPWRITE_MIGRATION_GUIDE.md](APPWRITE_MIGRATION_GUIDE.md)
+4. 🎓 Apply now: https://appwrite.io/education
 
 ## 📱 Download APK
 
@@ -118,8 +148,13 @@ flutter run
 
 ## 📖 Documentation
 
+### Backend Setup & Migration 🎓
+- [**Appwrite Educational Benefits**](APPWRITE_EDUCATIONAL_BENEFITS.md) - **🆕 Get free Pro plan for students!**
+- [**Backend Comparison**](BACKEND_COMPARISON.md) - **🆕 Supabase vs Appwrite analysis**
+- [**Appwrite Migration Guide**](APPWRITE_MIGRATION_GUIDE.md) - **🆕 Step-by-step migration**
+- [Supabase Setup Guide](SUPABASE_SETUP_GUIDE.md) - **Current backend setup**
+
 ### Setup & Getting Started
-- [Supabase Setup Guide](SUPABASE_SETUP_GUIDE.md) - **🆕 Connect to Supabase (start here!)**
 - [APK Build Guide](APK_BUILD_GUIDE.md) - **Download and install the app**
 - [Quick Start](QUICK_START.md) - **For teachers/immediate use**
 
