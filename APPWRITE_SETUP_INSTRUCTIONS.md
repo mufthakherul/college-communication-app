@@ -50,14 +50,23 @@ You need to create 6 collections. For each collection:
 | is_active | Boolean | - | ✅ Yes | true | No |
 | created_at | DateTime | - | ✅ Yes | - | No |
 | updated_at | DateTime | - | ✅ Yes | - | No |
+| shift | String | 50 | No | - | No |
+| group | String | 10 | No | - | No |
+| class_roll | String | 20 | No | - | No |
+| academic_session | String | 50 | No | - | No |
+| phone_number | String | 20 | No | - | No |
 
 **For role enum, add values:** `student`, `teacher`, `admin`
+
+**Note on Student Fields:** The fields `shift`, `group`, `class_roll`, `academic_session`, and `phone_number` are student-specific and contain private information. These fields are only visible to the student themselves and teachers/admins for proper academic management.
 
 7. Click **Settings** tab → **Permissions**
 8. Add permissions:
    - **Any**: Read
    - **Users**: Create, Update
    - **Role:admin**: Delete, Update
+
+**Privacy Note:** While the collection has "Read" permission for "Any", the application implements additional privacy controls at the UI level. Private student information (shift, group, class roll, academic session, phone number) is only displayed to the student themselves or to teachers/admins, ensuring sensitive academic data remains protected.
 
 #### Collection 2: notices
 
@@ -264,8 +273,28 @@ After completing the database setup, you'll be able to:
 - Register new users
 - Create and view notices
 - Send and receive messages
-- Manage user profiles
+- Manage user profiles with extended student information
+- Edit profile with private student details (shift, group, class roll, academic session, phone number)
+- View student information with proper privacy controls (students see their own data, teachers see all student data)
 - All with your Appwrite educational benefits!
+
+## 🔒 Privacy & Security Features
+
+The app implements privacy controls for sensitive student information:
+
+### Student Information Privacy
+- **Private Fields**: Shift, Group, Class Roll, Academic Session, and Phone Number are private by default
+- **Visibility Rules**:
+  - Students can view and edit their own private information
+  - Teachers and admins can view all students' private information for academic management
+  - Other students cannot see each other's private information
+- **UI-Level Protection**: While database permissions allow read access, the app enforces privacy at the UI level
+
+### How It Works
+1. When a student views their own profile, all fields are visible and editable
+2. When a teacher views a student's profile, all fields are visible (read-only from another user's perspective)
+3. When a student views another student's profile, private fields are hidden
+4. The Edit Profile screen only allows users to edit their own profile
 
 ---
 
