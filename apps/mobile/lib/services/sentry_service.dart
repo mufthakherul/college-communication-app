@@ -31,7 +31,7 @@ class SentryService {
         options.debug = kDebugMode;
         
         // Filter events before sending
-        options.beforeSend = (event, hint) {
+        options.beforeSend = (event, {hint}) {
           // Filter out demo mode errors
           if (event.tags?['demo_mode'] == 'true') {
             return null;

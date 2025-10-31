@@ -24,11 +24,19 @@ class NoticeService {
     return _supabase
         .from('notices')
         .stream(primaryKey: ['id'])
-        .eq('is_active', true)
-        .eq('type', type.name)
         .order('created_at', ascending: false)
         .map(
-          (data) => data.map((item) => NoticeModel.fromJson(item)).toList(),
+          (data) {
+            // Filter in memory for active notices of the specified type
+            return data
+                .where((item) {
+                  final isActive = item['is_active'] as bool? ?? false;
+                  final noticeType = item['type'] as String?;
+                  return isActive && noticeType == type.name;
+                })
+                .map((item) => NoticeModel.fromJson(item))
+                .toList();
+          },
         );
   }
 

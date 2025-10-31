@@ -249,7 +249,6 @@ class WebRTCSignalingService {
       // Setup data channel handler
       peerConnection.onDataChannel = (channel) {
         _setupDataChannelHandlers(channel, peerId);
-        _connections[peerId]!.dataChannel;
       };
 
       // Set remote description
