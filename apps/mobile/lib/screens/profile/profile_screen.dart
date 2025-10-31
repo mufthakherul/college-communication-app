@@ -5,6 +5,8 @@ import '../../services/auth_service.dart';
 import '../../services/theme_service.dart';
 import '../auth/login_screen.dart';
 import '../developer/developer_info_screen.dart';
+import '../settings/sync_settings_screen.dart';
+import '../settings/mesh_network_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final UserModel? user;
@@ -137,6 +139,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onChanged: (value) {
                     themeService.toggleTheme();
                     setState(() {});
+                  },
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.sync,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  title: const Text('Sync Settings'),
+                  subtitle: const Text('Manage offline queue and cache'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SyncSettingsScreen(),
+                      ),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.hub,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  title: const Text('Mesh Network'),
+                  subtitle: const Text('Peer-to-peer communication'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MeshNetworkScreen(),
+                      ),
+                    );
                   },
                 ),
                 const Divider(height: 32),
