@@ -61,9 +61,9 @@ class _MeshQRPairingScreenState extends State<MeshQRPairingScreen> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    final expiresIn = _pairingData!.expiresAt.difference(DateTime.now());
-    final minutesLeft = expiresIn.inMinutes;
-    final secondsLeft = expiresIn.inSeconds % 60;
+    final expiresIn = _pairingData!.expiresAt?.difference(DateTime.now());
+    final minutesLeft = expiresIn?.inMinutes ?? 0;
+    final secondsLeft = (expiresIn?.inSeconds ?? 0) % 60;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),

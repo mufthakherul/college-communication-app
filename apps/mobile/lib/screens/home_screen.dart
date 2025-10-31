@@ -63,10 +63,10 @@ class _HomeScreenState extends State<HomeScreen> {
       return;
     }
 
-    // Otherwise load from Firebase
+    // Otherwise load from Supabase
     final user = _authService.currentUser;
     if (user != null) {
-      final profile = await _authService.getUserProfile(user.uid);
+      final profile = await _authService.getUserProfile(user.id);
       if (mounted) {
         setState(() => _currentUser = profile);
       }

@@ -46,9 +46,16 @@ class NotificationService {
     return _supabase
         .from('notifications')
         .stream(primaryKey: ['id'])
-        .eq('user_id', userId)
-        .eq('read', false)
-        .map((data) => data.length);
+        .map((data) {
+          // Filter in memory for unread notifications for current user
+          return data
+              .where((item) {
+                final notificationUserId = item['user_id'] as String?;
+                final read = item['read'] as bool? ?? false;
+                return notificationUserId == userId && !read;
+              })
+              .length;
+        });
   }
 
   // Mark notification as read
