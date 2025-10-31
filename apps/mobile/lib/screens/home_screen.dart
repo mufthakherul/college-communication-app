@@ -63,10 +63,11 @@ class _HomeScreenState extends State<HomeScreen> {
       return;
     }
 
-    // Otherwise load from Supabase
-    final user = _authService.currentUser;
-    if (user != null) {
-      final profile = await _authService.getUserProfile(user.id);
+    // Otherwise load from Appwrite
+    await _authService.initialize();
+    final userId = _authService.currentUserId;
+    if (userId != null) {
+      final profile = await _authService.getUserProfile(userId);
       if (mounted) {
         setState(() => _currentUser = profile);
       }
@@ -76,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> get _screens => [
     const NoticesScreen(),
     const MessagesScreen(),
-    ProfileScreen(user: _currentUser),
+    ProfileScreen(user: _currentUser, currentUser: _currentUser),
   ];
 
   @override
