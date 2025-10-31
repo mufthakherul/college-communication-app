@@ -1,93 +1,62 @@
 import 'package:flutter/foundation.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:campus_mesh/models/notification_model.dart';
 
 class NotificationService {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseMessaging _messaging = FirebaseMessaging.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final SupabaseClient _supabase = Supabase.instance.client;
+
+  // Get current user ID
+  String? get _currentUserId => _supabase.auth.currentUser?.id;
 
   // Initialize notifications
+  // Note: Push notifications via FCM need to be set up separately
+  // Consider using services like OneSignal, Pusher, or a custom solution
   Future<void> initialize() async {
-    // Request permission
-    await _requestPermission();
-
-    // Get FCM token
-    final token = await _messaging.getToken();
-    if (token != null) {
-      await _saveFCMToken(token);
-    }
-
-    // Listen to token refresh
-    _messaging.onTokenRefresh.listen(_saveFCMToken);
-  }
-
-  Future<void> _requestPermission() async {
-    final settings = await _messaging.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
-
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      if (kDebugMode) {
-        debugPrint('User granted notification permission');
-      }
-    }
-  }
-
-  Future<void> _saveFCMToken(String token) async {
-    final user = _auth.currentUser;
-    if (user != null) {
-      await _firestore.collection('users').doc(user.uid).update({
-        'fcmToken': token,
-      });
+    if (kDebugMode) {
+      debugPrint('Notification service initialized');
+      debugPrint('Note: Push notifications require third-party service integration');
     }
   }
 
   // Get notifications for current user
   Stream<List<NotificationModel>> getNotifications() {
-    final userId = _auth.currentUser?.uid;
+    final userId = _currentUserId;
     if (userId == null) {
       return Stream.value([]);
     }
 
-    return _firestore
-        .collection('notifications')
-        .where('userId', isEqualTo: userId)
-        .orderBy('createdAt', descending: true)
+    return _supabase
+        .from('notifications')
+        .stream(primaryKey: ['id'])
+        .eq('user_id', userId)
+        .order('created_at', ascending: false)
         .limit(50)
-        .snapshots()
         .map(
-          (snapshot) => snapshot.docs
-              .map((doc) => NotificationModel.fromFirestore(doc))
-              .toList(),
+          (data) => data.map((item) => NotificationModel.fromJson(item)).toList(),
         );
   }
 
   // Get unread notification count
   Stream<int> getUnreadCount() {
-    final userId = _auth.currentUser?.uid;
+    final userId = _currentUserId;
     if (userId == null) {
       return Stream.value(0);
     }
 
-    return _firestore
-        .collection('notifications')
-        .where('userId', isEqualTo: userId)
-        .where('read', isEqualTo: false)
-        .snapshots()
-        .map((snapshot) => snapshot.docs.length);
+    return _supabase
+        .from('notifications')
+        .stream(primaryKey: ['id'])
+        .eq('user_id', userId)
+        .eq('read', false)
+        .map((data) => data.length);
   }
 
   // Mark notification as read
   Future<void> markAsRead(String notificationId) async {
     try {
-      await _firestore.collection('notifications').doc(notificationId).update({
+      await _supabase.from('notifications').update({
         'read': true,
-      });
+      }).eq('id', notificationId);
     } catch (e) {
       throw Exception('Failed to mark notification as read: $e');
     }
@@ -95,22 +64,13 @@ class NotificationService {
 
   // Mark all notifications as read
   Future<void> markAllAsRead() async {
-    final userId = _auth.currentUser?.uid;
+    final userId = _currentUserId;
     if (userId == null) return;
 
     try {
-      final snapshot = await _firestore
-          .collection('notifications')
-          .where('userId', isEqualTo: userId)
-          .where('read', isEqualTo: false)
-          .get();
-
-      final batch = _firestore.batch();
-      for (final doc in snapshot.docs) {
-        batch.update(doc.reference, {'read': true});
-      }
-
-      await batch.commit();
+      await _supabase.from('notifications').update({
+        'read': true,
+      }).eq('user_id', userId).eq('read', false);
     } catch (e) {
       throw Exception('Failed to mark all notifications as read: $e');
     }
