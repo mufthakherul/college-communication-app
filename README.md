@@ -18,7 +18,11 @@ A comprehensive college communication platform for **Rangpur Polytechnic Institu
 > 📖 **For Teachers:** See [QUICK_START.md](QUICK_START.md) for immediate APK download and review  
 > 📖 **For Details:** See [TEACHER_GUIDE.md](TEACHER_GUIDE.md) for complete instructions
 
-> 🎓 **NEW OPPORTUNITY:** Appwrite has offered educational benefits! See [APPWRITE_EDUCATIONAL_BENEFITS.md](APPWRITE_EDUCATIONAL_BENEFITS.md) to learn about free Pro plan, higher quotas, and migration options. Compare with Supabase in [BACKEND_COMPARISON.md](BACKEND_COMPARISON.md).
+> 🎓 **NEW OPPORTUNITY:** Appwrite has offered educational benefits! 
+> - 📊 **Quick Decision**: See [APPWRITE_DECISION_GUIDE.md](APPWRITE_DECISION_GUIDE.md) for TL;DR and recommendation
+> - 🎓 **Educational Benefits**: [APPWRITE_EDUCATIONAL_BENEFITS.md](APPWRITE_EDUCATIONAL_BENEFITS.md) - Free Pro plan, 100GB storage, unlimited users
+> - 📊 **Compare Backends**: [BACKEND_COMPARISON.md](BACKEND_COMPARISON.md) - Detailed Supabase vs Appwrite analysis
+> - 🚀 **Ready to Migrate?**: [APPWRITE_MIGRATION_GUIDE.md](APPWRITE_MIGRATION_GUIDE.md) - Step-by-step migration guide
 
 ## 🚀 Backend Setup (Choose One)
 
