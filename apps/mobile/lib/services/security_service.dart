@@ -47,15 +47,25 @@ class SecurityService {
   }
 
   /// Validates that the package name hasn't been changed (app repackaging detection)
+  /// 
+  /// LIMITATION: Currently not fully implemented. Returns true as a placeholder.
+  /// For production deployment, this should be enhanced with platform channels.
+  /// 
+  /// To implement properly:
+  /// 1. Create Android native method to get package name
+  /// 2. Create iOS native method to get bundle ID
+  /// 3. Compare against expected values
+  /// 
+  /// For now, this check relies on ProGuard obfuscation and other security measures.
   Future<bool> _validatePackageName() async {
     try {
       if (Platform.isAndroid) {
-        // In a real implementation, you'd use platform channels to get the actual package name
-        // For now, we'll implement a basic check
-        // TODO: Implement native Android method to get package name
-        return true; // Assume valid for now
+        // TODO: Implement native Android method to get package name via platform channels
+        // Expected: gov.bd.polytech.rgpi.communication.develop.by.mufthakherul
+        // For now, ProGuard obfuscation provides primary anti-repackaging protection
+        return true; // Placeholder - returns true to avoid blocking legitimate users
       }
-      return true; // iOS bundle ID check would go here
+      return true; // iOS bundle ID check would be implemented similarly
     } catch (e) {
       debugPrint('Package name validation error: $e');
       return false;
@@ -112,8 +122,11 @@ class SecurityService {
       
       return true; // Device appears secure
     } catch (e) {
+      // NOTE: This fails open (returns true) to avoid blocking legitimate users
+      // In high-security scenarios, consider failing closed (return false)
+      // Current approach: Show warning but allow app usage
       debugPrint('Device security check error: $e');
-      return true; // Assume secure on error (fail open for better UX)
+      return true; // Fail open for better UX - legitimate users not blocked
     }
   }
 
@@ -141,15 +154,24 @@ class SecurityService {
   }
 
   /// Checks if debugger is attached
+  /// 
+  /// LIMITATION: Basic implementation - always returns false in release mode.
+  /// Flutter makes it difficult to reliably detect debuggers without native code.
+  /// For enhanced security, implement platform-specific debugger detection.
+  /// 
+  /// This is a placeholder check. Real debugger detection would require:
+  /// - Android: Check for JDWP or ptrace
+  /// - iOS: Check for PT_DENY_ATTACH or debugger process
   bool _checkDebugger() {
     // In debug mode, debugger is expected
     if (kDebugMode) {
-      return false; // Not a security issue in debug
+      return false; // Not a security issue in debug mode
     }
 
     // In release mode, debugger should not be attached
-    // This is a basic check - more sophisticated checks would use platform channels
-    return false; // Assume no debugger in release
+    // TODO: Implement actual debugger detection via platform channels
+    // For now, return false (no debugger detected)
+    return false; // Placeholder - assumes no debugger in release builds
   }
 
   /// Basic build integrity check
