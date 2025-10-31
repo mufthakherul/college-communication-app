@@ -1,13 +1,15 @@
 # RPI Communication App
 
-A comprehensive college communication platform for **Rangpur Polytechnic Institute** built with Flutter and Firebase.
+A comprehensive college communication platform for **Rangpur Polytechnic Institute** built with Flutter and Supabase.
 
 🌐 **College Website:** [rangpur.polytech.gov.bd](https://rangpur.polytech.gov.bd)  
 👨‍💻 **Developed by:** Mufthakherul
 
-> ⚠️ **IMPORTANT:** The app code is complete, but requires Firebase setup to work. See [FIREBASE_SETUP_GUIDE.md](FIREBASE_SETUP_GUIDE.md) for connection instructions.
+> ⚠️ **IMPORTANT:** The app code is complete, but requires Supabase setup to work. See [SUPABASE_SETUP_GUIDE.md](SUPABASE_SETUP_GUIDE.md) for connection instructions.
 
-> 💡 **NEW:** Try **Demo Mode** to explore the app without Firebase! See demo mode button on login screen.
+> 💰 **COST-FREE:** Migrated from Firebase to Supabase to eliminate monthly charges! Supabase free tier is generous enough for college use.
+
+> 💡 **NEW:** Try **Demo Mode** to explore the app without Supabase! See demo mode button on login screen.
 
 > 🌐 **NEW:** **Mesh Network** feature enables peer-to-peer communication via Bluetooth/WiFi Direct - works even without internet! See [MESH_NETWORK_GUIDE.md](MESH_NETWORK_GUIDE.md) for details.
 
@@ -16,24 +18,22 @@ A comprehensive college communication platform for **Rangpur Polytechnic Institu
 > 📖 **For Teachers:** See [QUICK_START.md](QUICK_START.md) for immediate APK download and review  
 > 📖 **For Details:** See [TEACHER_GUIDE.md](TEACHER_GUIDE.md) for complete instructions
 
-## 🔥 Firebase Connection Required
+## 🚀 Supabase Connection Required
 
-The app needs to be connected to Firebase to function. You have two options:
+The app needs to be connected to Supabase to function. Follow the step-by-step guide: [SUPABASE_SETUP_GUIDE.md](SUPABASE_SETUP_GUIDE.md)
 
-**Option 1: Quick Setup (Recommended)**
-```bash
-./scripts/setup-firebase.sh
-```
+**What Supabase Provides (100% Free):**
+- User authentication (login/register) - 50,000 monthly active users
+- PostgreSQL database for notices and messages - 500 MB storage
+- File storage for images and documents - 1 GB storage
+- Edge functions for backend logic - 500,000 invocations/month
+- Real-time subscriptions - Unlimited connections
 
-**Option 2: Manual Setup**
-Follow the step-by-step guide: [FIREBASE_SETUP_GUIDE.md](FIREBASE_SETUP_GUIDE.md)
-
-**What Firebase Provides:**
-- User authentication (login/register)
-- Real-time database for notices and messages
-- File storage for images and documents
-- Backend cloud functions
-- Push notifications
+**Why Supabase?**
+- **Zero cost** for typical college usage
+- More generous free tier than Firebase
+- Open source and self-hostable
+- PostgreSQL instead of NoSQL (more powerful queries)
 
 ## 📱 Download APK
 
@@ -95,6 +95,7 @@ flutter run
 
 ## 📖 Documentation
 
+- [Supabase Setup Guide](SUPABASE_SETUP_GUIDE.md) - **🆕 Connect to Supabase (start here!)**
 - [APK Build Guide](APK_BUILD_GUIDE.md) - **Download and install the app**
 - [Mesh Network Guide](MESH_NETWORK_GUIDE.md) - **NEW: Peer-to-peer communication**
 - [Network Improvements Summary](NETWORK_IMPROVEMENTS_SUMMARY.md) - **NEW: Technical details**
@@ -106,16 +107,21 @@ flutter run
 - [Contributing Guidelines](docs/CONTRIBUTING.md)
 - [Troubleshooting](docs/TROUBLESHOOTING.md)
 
+### Migration Notes
+- **Migrated from Firebase to Supabase** to reduce costs to zero
+- See [SUPABASE_SETUP_GUIDE.md](SUPABASE_SETUP_GUIDE.md) for setup instructions
+- Old Firebase documentation retained for reference: [FIREBASE_SETUP_GUIDE.md](FIREBASE_SETUP_GUIDE.md)
+
 ## 🏗️ Project Structure
 
 ```
 ├── apps/mobile/          # Flutter mobile application
 ├── backend/             # Backend utilities and scripts
-├── functions/           # Firebase Cloud Functions (TypeScript)
-├── infra/              # Infrastructure configuration
+├── functions/           # Cloud Functions (legacy Firebase, can be migrated to Supabase Edge Functions)
+├── infra/              # Infrastructure configuration (includes Supabase SQL schema)
 ├── scripts/            # Build and deployment scripts
 ├── docs/              # Documentation
-├── firebase.json      # Firebase configuration
+├── firebase.json      # Firebase configuration (legacy, for reference)
 └── README.md         # This file
 ```
 

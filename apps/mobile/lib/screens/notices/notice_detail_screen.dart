@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:campus_mesh/models/notice_model.dart';
 import 'package:campus_mesh/services/notice_service.dart';
 import 'package:campus_mesh/services/qr_data_service.dart';
@@ -286,14 +286,14 @@ class NoticeDetailScreen extends StatelessWidget {
 
   void _shareNoticeViaQR(BuildContext context, NoticeModel notice) {
     final qrDataService = QRDataService();
-    final currentUser = FirebaseAuth.instance.currentUser;
+    final currentUser = Supabase.instance.client.auth.currentUser;
 
     final qrData = qrDataService.generateNoticeQR(
       noticeId: notice.id,
       title: notice.title,
       content: notice.content,
       type: notice.type.name,
-      senderId: currentUser?.uid,
+      senderId: currentUser?.id,
       senderName: currentUser?.email?.split('@').first ?? 'Unknown',
       expiry: const Duration(hours: 24), // QR code valid for 24 hours
     );
