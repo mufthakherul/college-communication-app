@@ -28,7 +28,9 @@ class ThemeService extends ChangeNotifier {
 
   /// Toggle between light and dark mode
   Future<void> toggleTheme() async {
-    _themeMode = _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    _themeMode = _themeMode == ThemeMode.light
+        ? ThemeMode.dark
+        : ThemeMode.light;
     await _saveThemePreference();
     notifyListeners();
   }
@@ -67,30 +69,21 @@ class ThemeService extends ChangeNotifier {
       ),
       cardTheme: CardTheme(
         elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
       inputDecorationTheme: InputDecorationTheme(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         filled: true,
         fillColor: Colors.grey[50],
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           elevation: 2,
         ),
       ),
       scaffoldBackgroundColor: Colors.grey[50],
-      appBarTheme: const AppBarTheme(
-        elevation: 0,
-        centerTitle: false,
-      ),
+      appBarTheme: const AppBarTheme(elevation: 0, centerTitle: false),
     );
   }
 
@@ -106,30 +99,21 @@ class ThemeService extends ChangeNotifier {
       ),
       cardTheme: CardTheme(
         elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
       inputDecorationTheme: InputDecorationTheme(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         filled: true,
         fillColor: Colors.grey[900],
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
           elevation: 2,
         ),
       ),
       scaffoldBackgroundColor: Colors.grey[900],
-      appBarTheme: const AppBarTheme(
-        elevation: 0,
-        centerTitle: false,
-      ),
+      appBarTheme: const AppBarTheme(elevation: 0, centerTitle: false),
     );
   }
 }

@@ -49,11 +49,12 @@ class _LoginScreenState extends State<LoginScreen> {
       if (mounted) {
         String errorMessage = 'Failed to sign in';
         String errorDetails = e.toString();
-        
+
         // Provide more helpful error messages
         if (errorDetails.contains('user-not-found')) {
           errorMessage = 'No account found with this email';
-          errorDetails = 'Please check your email address or register for a new account.';
+          errorDetails =
+              'Please check your email address or register for a new account.';
         } else if (errorDetails.contains('wrong-password')) {
           errorMessage = 'Incorrect password';
           errorDetails = 'Please check your password and try again.';
@@ -64,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
           errorMessage = 'Connection error';
           errorDetails = 'Please check your internet connection and try again.';
         }
-        
+
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -99,25 +100,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Icon(
-                    Icons.school,
-                    size: 80,
-                    color: Colors.blue,
-                  ),
+                  const Icon(Icons.school, size: 80, color: Colors.blue),
                   const SizedBox(height: 24),
                   Text(
                     'RPI Communication',
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                      fontWeight: FontWeight.bold,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'Rangpur Government Polytechnic Institute',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
+                      fontWeight: FontWeight.w500,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 4),
@@ -125,15 +122,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     onTap: () async {
                       final url = Uri.parse('https://rangpur.polytech.gov.bd');
                       if (await canLaunchUrl(url)) {
-                        await launchUrl(url, mode: LaunchMode.externalApplication);
+                        await launchUrl(
+                          url,
+                          mode: LaunchMode.externalApplication,
+                        );
                       }
                     },
                     child: Text(
                       'rangpur.polytech.gov.bd',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.blue,
-                            decoration: TextDecoration.underline,
-                          ),
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -181,7 +181,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ? Icons.visibility_off
                                 : Icons.visibility,
                           ),
-                          tooltip: _obscurePassword ? 'Show password' : 'Hide password',
+                          tooltip: _obscurePassword
+                              ? 'Show password'
+                              : 'Hide password',
                           onPressed: () {
                             setState(() {
                               _obscurePassword = !_obscurePassword;
@@ -252,9 +254,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     Text(
                       'Demo mode: Local sample data only, no real data access',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.grey,
-                            fontStyle: FontStyle.italic,
-                          ),
+                        color: Colors.grey,
+                        fontStyle: FontStyle.italic,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                 ],

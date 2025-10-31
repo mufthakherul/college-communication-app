@@ -60,9 +60,11 @@ class NotificationService {
         .orderBy('createdAt', descending: true)
         .limit(50)
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => NotificationModel.fromFirestore(doc))
-            .toList());
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => NotificationModel.fromFirestore(doc))
+              .toList(),
+        );
   }
 
   // Get unread notification count

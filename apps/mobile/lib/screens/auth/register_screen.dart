@@ -50,22 +50,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
       if (mounted) {
         String errorMessage = 'Failed to register';
         String errorDetails = e.toString();
-        
+
         // Provide more helpful error messages
         if (errorDetails.contains('email-already-in-use')) {
           errorMessage = 'Email already registered';
-          errorDetails = 'An account with this email already exists. Please sign in instead.';
+          errorDetails =
+              'An account with this email already exists. Please sign in instead.';
         } else if (errorDetails.contains('invalid-email')) {
           errorMessage = 'Invalid email address';
           errorDetails = 'Please enter a valid email address.';
         } else if (errorDetails.contains('weak-password')) {
           errorMessage = 'Weak password';
-          errorDetails = 'Please choose a stronger password (at least 6 characters).';
+          errorDetails =
+              'Please choose a stronger password (at least 6 characters).';
         } else if (errorDetails.contains('network')) {
           errorMessage = 'Connection error';
           errorDetails = 'Please check your internet connection and try again.';
         }
-        
+
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -90,9 +92,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Register'),
-      ),
+      appBar: AppBar(title: const Text('Register')),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -103,17 +103,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Icon(
-                    Icons.person_add,
-                    size: 80,
-                    color: Colors.blue,
-                  ),
+                  const Icon(Icons.person_add, size: 80, color: Colors.blue),
                   const SizedBox(height: 24),
                   Text(
                     'Create Account',
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                      fontWeight: FontWeight.bold,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
@@ -187,7 +183,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ? Icons.visibility_off
                                 : Icons.visibility,
                           ),
-                          tooltip: _obscurePassword ? 'Show password' : 'Hide password',
+                          tooltip: _obscurePassword
+                              ? 'Show password'
+                              : 'Hide password',
                           onPressed: () {
                             setState(() {
                               _obscurePassword = !_obscurePassword;
@@ -226,10 +224,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 ? Icons.visibility_off
                                 : Icons.visibility,
                           ),
-                          tooltip: _obscureConfirmPassword ? 'Show password' : 'Hide password',
+                          tooltip: _obscureConfirmPassword
+                              ? 'Show password'
+                              : 'Hide password',
                           onPressed: () {
                             setState(() {
-                              _obscureConfirmPassword = !_obscureConfirmPassword;
+                              _obscureConfirmPassword =
+                                  !_obscureConfirmPassword;
                             });
                           },
                         ),
@@ -258,7 +259,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             width: 20,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
-                        : const Text('Register', style: TextStyle(fontSize: 16)),
+                        : const Text(
+                            'Register',
+                            style: TextStyle(fontSize: 16),
+                          ),
                   ),
                 ],
               ),

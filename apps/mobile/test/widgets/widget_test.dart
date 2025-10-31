@@ -3,7 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:campus_mesh/main.dart';
 
 void main() {
-  testWidgets('App should display login screen on startup', (WidgetTester tester) async {
+  testWidgets('App should display login screen on startup', (
+    WidgetTester tester,
+  ) async {
     // Build the app
     await tester.pumpWidget(const CampusMeshApp());
 
@@ -12,10 +14,15 @@ void main() {
 
     // Verify that login screen elements are present
     expect(find.text('RPI Communication'), findsOneWidget);
-    expect(find.text('Rangpur Government Polytechnic Institute'), findsOneWidget);
+    expect(
+      find.text('Rangpur Government Polytechnic Institute'),
+      findsOneWidget,
+    );
   });
 
-  testWidgets('App should show loading indicator initially', (WidgetTester tester) async {
+  testWidgets('App should show loading indicator initially', (
+    WidgetTester tester,
+  ) async {
     // Build the app
     await tester.pumpWidget(const CampusMeshApp());
 

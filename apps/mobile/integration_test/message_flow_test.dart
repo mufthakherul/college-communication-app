@@ -36,15 +36,17 @@ void main() {
       expect(true, isTrue);
     });
 
-    testWidgets('Messages should be sorted by time',
-        (WidgetTester tester) async {
+    testWidgets('Messages should be sorted by time', (
+      WidgetTester tester,
+    ) async {
       expect(true, isTrue);
     });
   });
 
   group('Message Real-time Updates', () {
-    testWidgets('New messages should appear instantly',
-        (WidgetTester tester) async {
+    testWidgets('New messages should appear instantly', (
+      WidgetTester tester,
+    ) async {
       expect(true, isTrue);
     });
 
@@ -58,13 +60,15 @@ void main() {
   });
 
   group('Message Privacy', () {
-    testWidgets('Users should only see their messages',
-        (WidgetTester tester) async {
+    testWidgets('Users should only see their messages', (
+      WidgetTester tester,
+    ) async {
       expect(true, isTrue);
     });
 
-    testWidgets('Unauthorized access should be prevented',
-        (WidgetTester tester) async {
+    testWidgets('Unauthorized access should be prevented', (
+      WidgetTester tester,
+    ) async {
       expect(true, isTrue);
     });
   });

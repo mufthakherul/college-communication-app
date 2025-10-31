@@ -81,10 +81,14 @@ class _NoticesScreenState extends State<NoticesScreen> {
     if (_searchQuery.isEmpty) {
       return notices;
     }
-    
+
     return notices.where((notice) {
-      final titleMatch = notice.title.toLowerCase().contains(_searchQuery.toLowerCase());
-      final contentMatch = notice.content.toLowerCase().contains(_searchQuery.toLowerCase());
+      final titleMatch = notice.title.toLowerCase().contains(
+        _searchQuery.toLowerCase(),
+      );
+      final contentMatch = notice.content.toLowerCase().contains(
+        _searchQuery.toLowerCase(),
+      );
       return titleMatch || contentMatch;
     }).toList();
   }
@@ -184,52 +188,55 @@ class _NoticesScreenState extends State<NoticesScreen> {
               padding: const EdgeInsets.all(8),
               itemCount: notices.length,
               itemBuilder: (context, index) {
-              final notice = notices[index];
-              final color = _getNoticeColor(notice.type);
-              final icon = _getNoticeIcon(notice.type);
+                final notice = notices[index];
+                final color = _getNoticeColor(notice.type);
+                final icon = _getNoticeIcon(notice.type);
 
-              return Card(
-                margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: color.withOpacity(0.2),
-                    child: Icon(icon, color: color),
+                return Card(
+                  margin: const EdgeInsets.symmetric(
+                    vertical: 4,
+                    horizontal: 8,
                   ),
-                  title: Text(
-                    notice.title,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 4),
-                      Text(
-                        notice.content,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 4),
-                      if (notice.createdAt != null)
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: color.withOpacity(0.2),
+                      child: Icon(icon, color: color),
+                    ),
+                    title: Text(
+                      notice.title,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 4),
                         Text(
-                          _formatDate(notice.createdAt!),
-                          style: Theme.of(context).textTheme.bodySmall,
+                          notice.content,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                    ],
+                        const SizedBox(height: 4),
+                        if (notice.createdAt != null)
+                          Text(
+                            _formatDate(notice.createdAt!),
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                      ],
+                    ),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              NoticeDetailScreen(noticeId: notice.id),
+                        ),
+                      );
+                    },
                   ),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            NoticeDetailScreen(noticeId: notice.id),
-                      ),
-                    );
-                  },
-                ),
-              );
-            },
+                );
+              },
             ),
           );
         },

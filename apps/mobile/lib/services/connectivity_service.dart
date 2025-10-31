@@ -5,9 +5,9 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 /// Network quality levels
 enum NetworkQuality {
   excellent, // High speed, low latency
-  good,      // Normal speed
-  poor,      // Slow connection
-  offline    // No connection
+  good, // Normal speed
+  poor, // Slow connection
+  offline, // No connection
 }
 
 /// Service to monitor network connectivity status with automatic detection
@@ -20,8 +20,9 @@ class ConnectivityService {
 
   final _connectivity = Connectivity();
   final _connectivityController = StreamController<bool>.broadcast();
-  final _networkQualityController = StreamController<NetworkQuality>.broadcast();
-  
+  final _networkQualityController =
+      StreamController<NetworkQuality>.broadcast();
+
   bool _isOnline = true;
   DateTime? _lastSyncTime;
   NetworkQuality _networkQuality = NetworkQuality.good;
@@ -31,7 +32,8 @@ class ConnectivityService {
   Stream<bool> get connectivityStream => _connectivityController.stream;
 
   /// Stream of network quality changes
-  Stream<NetworkQuality> get networkQualityStream => _networkQualityController.stream;
+  Stream<NetworkQuality> get networkQualityStream =>
+      _networkQualityController.stream;
 
   /// Current connectivity status
   bool get isOnline => _isOnline;
@@ -61,13 +63,16 @@ class ConnectivityService {
   }
 
   /// Handle connectivity changes
-  Future<void> _handleConnectivityChange(List<ConnectivityResult> results) async {
-    final hasConnection = results.isNotEmpty && 
+  Future<void> _handleConnectivityChange(
+    List<ConnectivityResult> results,
+  ) async {
+    final hasConnection =
+        results.isNotEmpty &&
         results.any((result) => result != ConnectivityResult.none);
-    
+
     final wasOnline = _isOnline;
     _isOnline = hasConnection;
-    
+
     if (wasOnline != _isOnline) {
       _connectivityController.add(_isOnline);
       if (kDebugMode) {
@@ -110,7 +115,7 @@ class ConnectivityService {
       // Mobile data - assume good quality (could be enhanced with speed test)
       quality = NetworkQuality.good;
     } else if (results.contains(ConnectivityResult.bluetooth) ||
-               results.contains(ConnectivityResult.vpn)) {
+        results.contains(ConnectivityResult.vpn)) {
       // Bluetooth or VPN might be slower
       quality = NetworkQuality.poor;
     }
@@ -135,7 +140,7 @@ class ConnectivityService {
       _isOnline = isOnline;
       _connectivityController.add(_isOnline);
       _updateNetworkQualityValue(
-        isOnline ? NetworkQuality.good : NetworkQuality.offline
+        isOnline ? NetworkQuality.good : NetworkQuality.offline,
       );
       if (kDebugMode) {
         print('Connectivity manually set: ${_isOnline ? "Online" : "Offline"}');
@@ -183,8 +188,8 @@ class ConnectivityService {
   }
 
   /// Check if network quality is sufficient for operation
-  bool get isNetworkQualitySufficient => 
-      _networkQuality != NetworkQuality.offline && 
+  bool get isNetworkQualitySufficient =>
+      _networkQuality != NetworkQuality.offline &&
       _networkQuality != NetworkQuality.poor;
 
   void dispose() {

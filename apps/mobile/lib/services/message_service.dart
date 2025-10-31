@@ -21,11 +21,13 @@ class MessageService {
         .map((snapshot) {
           return snapshot.docs
               .map((doc) => MessageModel.fromFirestore(doc))
-              .where((msg) =>
-                  (msg.senderId == currentUserId &&
-                      msg.recipientId == otherUserId) ||
-                  (msg.senderId == otherUserId &&
-                      msg.recipientId == currentUserId))
+              .where(
+                (msg) =>
+                    (msg.senderId == currentUserId &&
+                        msg.recipientId == otherUserId) ||
+                    (msg.senderId == otherUserId &&
+                        msg.recipientId == currentUserId),
+              )
               .toList();
         });
   }
@@ -43,8 +45,11 @@ class MessageService {
         .orderBy('createdAt', descending: true)
         .limit(50)
         .snapshots()
-        .map((snapshot) =>
-            snapshot.docs.map((doc) => MessageModel.fromFirestore(doc)).toList());
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => MessageModel.fromFirestore(doc))
+              .toList(),
+        );
   }
 
   // Send message (direct Firestore write)
@@ -69,7 +74,9 @@ class MessageService {
         read: false,
       );
 
-      final docRef = await _firestore.collection('messages').add(message.toMap());
+      final docRef = await _firestore
+          .collection('messages')
+          .add(message.toMap());
       return docRef.id;
     } catch (e) {
       throw Exception('Failed to send message: $e');
