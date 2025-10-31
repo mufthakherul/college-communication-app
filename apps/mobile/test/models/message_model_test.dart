@@ -10,8 +10,8 @@ void main() {
         recipientId: 'recipient123',
         content: 'Hello!',
         type: MessageType.text,
-        timestamp: DateTime(2024, 1, 1),
-        isRead: false,
+        createdAt: DateTime(2024, 1, 1),
+        read: false,
       );
 
       expect(message.id, 'msg123');
@@ -19,7 +19,7 @@ void main() {
       expect(message.recipientId, 'recipient123');
       expect(message.content, 'Hello!');
       expect(message.type, MessageType.text);
-      expect(message.isRead, false);
+      expect(message.read, false);
     });
 
     test('should convert MessageModel to Map', () {
@@ -29,8 +29,8 @@ void main() {
         recipientId: 'recipient123',
         content: 'Test message',
         type: MessageType.text,
-        timestamp: DateTime(2024, 1, 1),
-        isRead: false,
+        createdAt: DateTime(2024, 1, 1),
+        read: false,
       );
 
       final map = message.toMap();
@@ -55,11 +55,11 @@ void main() {
         recipientId: 'recipient123',
         content: 'Unread message',
         type: MessageType.text,
-        timestamp: DateTime.now(),
-        isRead: false,
+        createdAt: DateTime.now(),
+        read: false,
       );
 
-      expect(unreadMessage.isRead, false);
+      expect(unreadMessage.read, false);
 
       final readMessage = MessageModel(
         id: 'msg2',
@@ -67,11 +67,11 @@ void main() {
         recipientId: 'recipient123',
         content: 'Read message',
         type: MessageType.text,
-        timestamp: DateTime.now(),
-        isRead: true,
+        createdAt: DateTime.now(),
+        read: true,
       );
 
-      expect(readMessage.isRead, true);
+      expect(readMessage.read, true);
     });
 
     test('should support different message types', () {
@@ -81,8 +81,8 @@ void main() {
         recipientId: 'recipient123',
         content: 'Text content',
         type: MessageType.text,
-        timestamp: DateTime.now(),
-        isRead: false,
+        createdAt: DateTime.now(),
+        read: false,
       );
 
       expect(textMessage.type, MessageType.text);
@@ -93,8 +93,8 @@ void main() {
         recipientId: 'recipient123',
         content: 'https://example.com/image.jpg',
         type: MessageType.image,
-        timestamp: DateTime.now(),
-        isRead: false,
+        createdAt: DateTime.now(),
+        read: false,
       );
 
       expect(imageMessage.type, MessageType.image);
@@ -105,8 +105,8 @@ void main() {
         recipientId: 'recipient123',
         content: 'https://example.com/document.pdf',
         type: MessageType.file,
-        timestamp: DateTime.now(),
-        isRead: false,
+        createdAt: DateTime.now(),
+        read: false,
       );
 
       expect(fileMessage.type, MessageType.file);
@@ -119,12 +119,12 @@ void main() {
         recipientId: 'recipient123',
         content: 'Check this file',
         type: MessageType.file,
-        timestamp: DateTime.now(),
-        isRead: false,
-        fileUrl: 'https://example.com/file.pdf',
+        createdAt: DateTime.now(),
+        read: false,
+        content: 'https://example.com/file.pdf',
       );
 
-      expect(messageWithFile.fileUrl, 'https://example.com/file.pdf');
+      expect(messageWithFile.content, 'https://example.com/file.pdf');
 
       final messageWithoutFile = MessageModel(
         id: 'msg2',
@@ -132,11 +132,11 @@ void main() {
         recipientId: 'recipient123',
         content: 'Just text',
         type: MessageType.text,
-        timestamp: DateTime.now(),
-        isRead: false,
+        createdAt: DateTime.now(),
+        read: false,
       );
 
-      expect(messageWithoutFile.fileUrl, null);
+      expect(messageWithoutFile.content, null);
     });
   });
 }

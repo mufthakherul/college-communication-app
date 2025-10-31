@@ -152,6 +152,7 @@ class BackgroundSyncService {
         'cleanupCache',
         frequency: frequency,
         constraints: Constraints(
+          networkType: NetworkType.not_required,
           requiresCharging: false,
         ),
         existingWorkPolicy: ExistingWorkPolicy.keep,
