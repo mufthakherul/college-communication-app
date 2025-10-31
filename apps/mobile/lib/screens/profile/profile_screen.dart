@@ -11,17 +11,13 @@ import 'package:campus_mesh/screens/settings/mesh_network_screen.dart';
 class ProfileScreen extends StatefulWidget {
   final UserModel? user;
 
-  const ProfileScreen({
-    super.key,
-    this.user,
-  });
+  const ProfileScreen({super.key, this.user});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
   @override
   Widget build(BuildContext context) {
     final authService = AuthService();
@@ -38,9 +34,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               await authService.signOut();
               if (context.mounted) {
                 Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (context) => const LoginScreen(),
-                  ),
+                  MaterialPageRoute(builder: (context) => const LoginScreen()),
                   (route) => false,
                 );
               }
@@ -55,7 +49,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: 32),
                 CircleAvatar(
                   radius: 60,
-                  backgroundColor: Theme.of(context).primaryColor.withOpacity(0.2),
+                  backgroundColor: Theme.of(
+                    context,
+                  ).primaryColor.withOpacity(0.2),
                   child: widget.user!.photoURL.isNotEmpty
                       ? ClipOval(
                           child: Image.network(
@@ -80,16 +76,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   widget.user!.displayName,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   widget.user!.email,
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Colors.grey,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
                 ),
                 const SizedBox(height: 8),
                 Chip(
@@ -104,10 +100,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   context,
                   Icons.business,
                   'Department',
-                  widget.user!.department.isEmpty ? 'Not specified' : widget.user!.department,
+                  widget.user!.department.isEmpty
+                      ? 'Not specified'
+                      : widget.user!.department,
                 ),
                 if (widget.user!.year.isNotEmpty)
-                  _buildInfoTile(context, Icons.calendar_today, 'Year', widget.user!.year),
+                  _buildInfoTile(
+                    context,
+                    Icons.calendar_today,
+                    'Year',
+                    widget.user!.year,
+                  ),
                 _buildInfoTile(
                   context,
                   Icons.check_circle,
@@ -121,19 +124,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Text(
                     'Settings',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 8),
                 SwitchListTile(
                   secondary: Icon(
-                    themeService.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                    themeService.isDarkMode
+                        ? Icons.dark_mode
+                        : Icons.light_mode,
                     color: Theme.of(context).primaryColor,
                   ),
                   title: const Text('Dark Mode'),
                   subtitle: Text(
-                    themeService.isDarkMode ? 'Dark theme enabled' : 'Light theme enabled',
+                    themeService.isDarkMode
+                        ? 'Dark theme enabled'
+                        : 'Light theme enabled',
                   ),
                   value: themeService.isDarkMode,
                   onChanged: (value) {
@@ -197,14 +204,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             context: context,
                             builder: (context) => AlertDialog(
                               title: const Text('Sign Out'),
-                              content: const Text('Are you sure you want to sign out?'),
+                              content: const Text(
+                                'Are you sure you want to sign out?',
+                              ),
                               actions: [
                                 TextButton(
-                                  onPressed: () => Navigator.of(context).pop(false),
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(false),
                                   child: const Text('Cancel'),
                                 ),
                                 TextButton(
-                                  onPressed: () => Navigator.of(context).pop(true),
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
                                   child: const Text('Sign Out'),
                                 ),
                               ],
@@ -240,9 +251,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       Text(
                         'About',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
                       Card(
@@ -253,9 +263,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             children: [
                               Text(
                                 'Rangpur Government Polytechnic Institute',
-                                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                style: Theme.of(context).textTheme.titleSmall
+                                    ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 8),
                               Text(
@@ -265,20 +274,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               const SizedBox(height: 12),
                               InkWell(
                                 onTap: () async {
-                                  final url = Uri.parse('https://rangpur.polytech.gov.bd');
+                                  final url = Uri.parse(
+                                    'https://rangpur.polytech.gov.bd',
+                                  );
                                   if (await canLaunchUrl(url)) {
-                                    await launchUrl(url, mode: LaunchMode.externalApplication);
+                                    await launchUrl(
+                                      url,
+                                      mode: LaunchMode.externalApplication,
+                                    );
                                   }
                                 },
                                 child: Row(
                                   children: [
-                                    const Icon(Icons.language, size: 20, color: Colors.blue),
+                                    const Icon(
+                                      Icons.language,
+                                      size: 20,
+                                      color: Colors.blue,
+                                    ),
                                     const SizedBox(width: 8),
                                     Text(
                                       'rangpur.polytech.gov.bd',
-                                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
                                             color: Colors.blue,
-                                            decoration: TextDecoration.underline,
+                                            decoration:
+                                                TextDecoration.underline,
                                           ),
                                     ),
                                   ],
@@ -286,7 +308,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                               const SizedBox(height: 12),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   InkWell(
                                     onTap: () {
@@ -294,17 +317,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     },
                                     child: Text(
                                       'Privacy Policy',
-                                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall
+                                          ?.copyWith(
                                             color: Colors.blue,
-                                            decoration: TextDecoration.underline,
+                                            decoration:
+                                                TextDecoration.underline,
                                           ),
                                     ),
                                   ),
                                   Text(
                                     'Version: 1.0.0',
-                                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                          color: Colors.grey,
-                                        ),
+                                    style: Theme.of(context).textTheme.bodySmall
+                                        ?.copyWith(color: Colors.grey),
                                   ),
                                 ],
                               ),
@@ -320,7 +346,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const DeveloperInfoScreen(),
+                                builder: (context) =>
+                                    const DeveloperInfoScreen(),
                               ),
                             );
                           },
@@ -336,11 +363,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 const SizedBox(width: 16),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         'Developer Info',
-                                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall
+                                            ?.copyWith(
                                               fontWeight: FontWeight.bold,
                                               color: Colors.purple[900],
                                             ),
@@ -427,10 +458,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 style: TextStyle(fontSize: 14),
               ),
               SizedBox(height: 12),
-              Text(
-                'Data Usage',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+              Text('Data Usage', style: TextStyle(fontWeight: FontWeight.bold)),
               SizedBox(height: 4),
               Text(
                 'Your data is used to:\n'
@@ -466,10 +494,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 style: TextStyle(fontSize: 14),
               ),
               SizedBox(height: 12),
-              Text(
-                'Contact',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+              Text('Contact', style: TextStyle(fontWeight: FontWeight.bold)),
               SizedBox(height: 4),
               Text(
                 'For privacy concerns, contact the system administrator at Rangpur Polytechnic Institute.',

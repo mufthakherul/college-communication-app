@@ -32,7 +32,7 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
           deviceId: user.uid,
           deviceName: user.email?.split('@').first ?? 'Unknown',
         );
-        
+
         setState(() {
           _isInitialized = true;
         });
@@ -64,12 +64,8 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
   Widget build(BuildContext context) {
     if (!_isInitialized) {
       return Scaffold(
-        appBar: AppBar(
-          title: const Text('Mesh Network'),
-        ),
-        body: const Center(
-          child: CircularProgressIndicator(),
-        ),
+        appBar: AppBar(title: const Text('Mesh Network')),
+        body: const Center(child: CircularProgressIndicator()),
       );
     }
 
@@ -77,10 +73,7 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
       appBar: AppBar(
         title: const Text('Mesh Network'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _updateStats,
-          ),
+          IconButton(icon: const Icon(Icons.refresh), onPressed: _updateStats),
         ],
       ),
       body: ListView(
@@ -110,18 +103,12 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
           children: [
             Row(
               children: [
-                Icon(
-                  Icons.qr_code_2,
-                  color: Theme.of(context).primaryColor,
-                ),
+                Icon(Icons.qr_code_2, color: Theme.of(context).primaryColor),
                 const SizedBox(width: 12),
                 const Expanded(
                   child: Text(
                     'QR Code Pairing',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
@@ -167,10 +154,7 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
                 const Expanded(
                   child: Text(
                     'Mesh Network',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
@@ -220,19 +204,13 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
           children: [
             const Text(
               'Control',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             Row(
               children: [
                 const Expanded(child: Text('Enable Mesh Network')),
-                Switch(
-                  value: _isEnabled,
-                  onChanged: _toggleMeshNetwork,
-                ),
+                Switch(value: _isEnabled, onChanged: _toggleMeshNetwork),
               ],
             ),
             const SizedBox(height: 8),
@@ -261,10 +239,7 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
               const SizedBox(height: 4),
               Text(
                 'Your device is discoverable and can connect to nearby devices.',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey.shade600,
-                ),
+                style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
               ),
             ],
           ],
@@ -288,10 +263,7 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
           children: [
             const Text(
               'Statistics',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             _buildStatRow(
@@ -338,10 +310,7 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
           Icon(icon, size: 20, color: color),
           const SizedBox(width: 12),
           Expanded(child: Text(label)),
-          Text(
-            value,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
+          Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
         ],
       ),
     );
@@ -359,10 +328,7 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
                 const Expanded(
                   child: Text(
                     'Connected Devices',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
                 if (_connectedNodes.isNotEmpty)
@@ -497,9 +463,7 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
   Future<void> _openQRPairing() async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => const MeshQRPairingScreen(),
-      ),
+      MaterialPageRoute(builder: (context) => const MeshQRPairingScreen()),
     );
 
     if (result == true) {
@@ -518,8 +482,8 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
 
   void _showMessage(String message) {
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 }

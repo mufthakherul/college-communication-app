@@ -19,12 +19,12 @@ class OfflineQueueService {
   static const int _maxQueueSize = 100;
   static const int _maxRetries = 3;
   static const Duration _queueExpiry = Duration(days: 7);
-  
+
   final List<OfflineAction> _queue = [];
   final _connectivityService = ConnectivityService();
   final _noticeService = NoticeService();
   final _messageService = MessageService();
-  
+
   // Analytics
   int _totalSynced = 0;
   int _totalFailed = 0;
@@ -34,7 +34,7 @@ class OfflineQueueService {
   Future<void> addAction(OfflineAction action) async {
     // Remove expired actions
     _removeExpiredActions();
-    
+
     // Check queue size limit
     if (_queue.length >= _maxQueueSize) {
       if (kDebugMode) {
@@ -42,11 +42,11 @@ class OfflineQueueService {
       }
       _removeOldestLowPriorityAction();
     }
-    
+
     _queue.add(action);
     _sortQueueByPriority();
     await _saveQueue();
-    
+
     if (kDebugMode) {
       print('Action queued: ${action.type} (priority: ${action.priority})');
     }
@@ -64,14 +64,14 @@ class OfflineQueueService {
   /// Remove oldest low-priority action
   void _removeOldestLowPriorityAction() {
     if (_queue.isEmpty) return;
-    
+
     // Sort by priority (ascending) and timestamp (ascending)
     _queue.sort((a, b) {
       final priorityCompare = a.priority.compareTo(b.priority);
       if (priorityCompare != 0) return priorityCompare;
       return a.timestamp.compareTo(b.timestamp);
     });
-    
+
     // Remove the first (lowest priority, oldest)
     if (_queue.isNotEmpty) {
       _queue.removeAt(0);
@@ -132,7 +132,7 @@ class OfflineQueueService {
     }
 
     _lastSyncAttempt = DateTime.now();
-    
+
     if (kDebugMode) {
       print('Processing ${_queue.length} queued actions');
     }
@@ -149,13 +149,19 @@ class OfflineQueueService {
       Exception? lastError;
 
       // Retry with exponential backoff
-      for (int attempt = 0; attempt <= action.retryCount && attempt < _maxRetries; attempt++) {
+      for (
+        int attempt = 0;
+        attempt <= action.retryCount && attempt < _maxRetries;
+        attempt++
+      ) {
         try {
           if (attempt > 0) {
             // Exponential backoff: 1s, 2s, 4s
             final delaySeconds = pow(2, attempt - 1).toInt();
             if (kDebugMode) {
-              print('Retrying action ${action.type} after ${delaySeconds}s (attempt ${attempt + 1})');
+              print(
+                'Retrying action ${action.type} after ${delaySeconds}s (attempt ${attempt + 1})',
+              );
             }
             await Future.delayed(Duration(seconds: delaySeconds));
           }
@@ -163,7 +169,7 @@ class OfflineQueueService {
           await _executeAction(action);
           success = true;
           successCount++;
-          
+
           if (kDebugMode) {
             print('✓ Processed action: ${action.type}');
           }
@@ -171,7 +177,9 @@ class OfflineQueueService {
         } catch (e) {
           lastError = e is Exception ? e : Exception(e.toString());
           if (kDebugMode) {
-            print('✗ Error processing action ${action.type} (attempt ${attempt + 1}): $e');
+            print(
+              '✗ Error processing action ${action.type} (attempt ${attempt + 1}): $e',
+            );
           }
         }
       }
@@ -189,9 +197,11 @@ class OfflineQueueService {
             lastError: lastError?.toString(),
           );
           _queue.add(updatedAction);
-          
+
           if (kDebugMode) {
-            print('Re-queued failed action: ${action.type} (retry ${updatedAction.retryCount}/$_maxRetries)');
+            print(
+              'Re-queued failed action: ${action.type} (retry ${updatedAction.retryCount}/$_maxRetries)',
+            );
           }
         } else {
           if (kDebugMode) {
@@ -210,9 +220,11 @@ class OfflineQueueService {
     await _saveQueue();
 
     if (kDebugMode) {
-      print('Queue processing complete: $successCount succeeded, $failureCount failed');
+      print(
+        'Queue processing complete: $successCount succeeded, $failureCount failed',
+      );
     }
-    
+
     // Update last sync time if any action succeeded
     if (successCount > 0) {
       _connectivityService.updateLastSyncTime();
@@ -252,7 +264,7 @@ class OfflineQueueService {
         orElse: () => NoticeType.announcement,
       ),
       targetAudience: data['targetAudience'] as String,
-      expiresAt: data['expiresAt'] != null 
+      expiresAt: data['expiresAt'] != null
           ? DateTime.parse(data['expiresAt'] as String)
           : null,
     );
@@ -262,11 +274,8 @@ class OfflineQueueService {
   Future<void> _executeUpdateNotice(Map<String, dynamic> data) async {
     final updates = Map<String, dynamic>.from(data);
     final noticeId = updates.remove('noticeId') as String;
-    
-    await _noticeService.updateNotice(
-      noticeId: noticeId,
-      updates: updates,
-    );
+
+    await _noticeService.updateNotice(noticeId: noticeId, updates: updates);
   }
 
   /// Execute delete notice action
@@ -366,20 +375,20 @@ class OfflineAction {
   }) : timestamp = timestamp ?? DateTime.now();
 
   Map<String, dynamic> toJson() => {
-        'type': type,
-        'data': data,
-        'timestamp': timestamp.toIso8601String(),
-        'retryCount': retryCount,
-        'priority': priority,
-        'lastError': lastError,
-      };
+    'type': type,
+    'data': data,
+    'timestamp': timestamp.toIso8601String(),
+    'retryCount': retryCount,
+    'priority': priority,
+    'lastError': lastError,
+  };
 
   factory OfflineAction.fromJson(Map<String, dynamic> json) => OfflineAction(
-        type: json['type'] as String,
-        data: json['data'] as Map<String, dynamic>,
-        timestamp: DateTime.parse(json['timestamp'] as String),
-        retryCount: json['retryCount'] ?? 0,
-        priority: json['priority'] ?? 5,
-        lastError: json['lastError'] as String?,
-      );
+    type: json['type'] as String,
+    data: json['data'] as Map<String, dynamic>,
+    timestamp: DateTime.parse(json['timestamp'] as String),
+    retryCount: json['retryCount'] ?? 0,
+    priority: json['priority'] ?? 5,
+    lastError: json['lastError'] as String?,
+  );
 }

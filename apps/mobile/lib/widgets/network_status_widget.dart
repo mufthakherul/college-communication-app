@@ -51,19 +51,12 @@ class _NetworkStatusWidgetState extends State<NetworkStatusWidget> {
       color: _getBackgroundColor(),
       child: Row(
         children: [
-          Icon(
-            _getIcon(),
-            color: Colors.white,
-            size: 16,
-          ),
+          Icon(_getIcon(), color: Colors.white, size: 16),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
               _getMessage(),
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 12,
-              ),
+              style: const TextStyle(color: Colors.white, fontSize: 12),
             ),
           ),
           if (!_isOnline)
@@ -72,10 +65,7 @@ class _NetworkStatusWidgetState extends State<NetworkStatusWidget> {
                 // Trigger sync attempt
                 _showSyncDialog(context);
               },
-              child: const Text(
-                'Retry',
-                style: TextStyle(color: Colors.white),
-              ),
+              child: const Text('Retry', style: TextStyle(color: Colors.white)),
             ),
         ],
       ),

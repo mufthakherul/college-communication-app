@@ -15,7 +15,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
   final GlobalKey _qrKey = GlobalKey(debugLabel: 'QR');
   final _qrDataService = QRDataService();
   final _meshService = MeshNetworkService();
-  
+
   QRViewController? _controller;
   bool _isProcessing = false;
 
@@ -117,7 +117,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
     try {
       // Try to parse as QR data
       final qrData = _qrDataService.parseQRCode(qrString);
-      
+
       if (qrData != null) {
         if (qrData.isExpired) {
           _showError('This QR code has expired');
@@ -156,12 +156,9 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
   Future<void> _handleDevicePairing(String qrString) async {
     try {
       final success = await _meshService.pairWithQRCode(qrString);
-      
+
       if (success && mounted) {
-        Navigator.pop(context, {
-          'success': true,
-          'type': 'device_pairing',
-        });
+        Navigator.pop(context, {'success': true, 'type': 'device_pairing'});
         _showSuccess('Device paired successfully!');
       } else {
         _showError('Failed to pair device');
@@ -184,10 +181,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
           children: [
             Text(
               qrData.data['title'] ?? 'Untitled',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
@@ -199,10 +193,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
               const SizedBox(height: 12),
               Text(
                 'Shared by: ${qrData.senderName}',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey.shade600,
-                ),
+                style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
               ),
             ],
           ],
@@ -245,10 +236,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
               const SizedBox(height: 12),
               Text(
                 'From: ${qrData.senderName}',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey.shade600,
-                ),
+                style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
               ),
             ],
           ],
@@ -277,7 +265,11 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
             _buildContactRow(Icons.person, 'Name', qrData.data['name']),
             _buildContactRow(Icons.email, 'Email', qrData.data['email']),
             if (qrData.data['department'] != null)
-              _buildContactRow(Icons.business, 'Department', qrData.data['department']),
+              _buildContactRow(
+                Icons.business,
+                'Department',
+                qrData.data['department'],
+              ),
             if (qrData.data['role'] != null)
               _buildContactRow(Icons.badge, 'Role', qrData.data['role']),
           ],
@@ -311,7 +303,11 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildContactRow(Icons.attach_file, 'File', qrData.data['fileName']),
+            _buildContactRow(
+              Icons.attach_file,
+              'File',
+              qrData.data['fileName'],
+            ),
             _buildContactRow(Icons.category, 'Type', qrData.data['fileType']),
             _buildContactRow(
               Icons.data_usage,
@@ -368,15 +364,9 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
         children: [
           Icon(icon, size: 16, color: Colors.grey.shade600),
           const SizedBox(width: 8),
-          Text(
-            '$label: ',
-            style: const TextStyle(fontWeight: FontWeight.w500),
-          ),
+          Text('$label: ', style: const TextStyle(fontWeight: FontWeight.w500)),
           Expanded(
-            child: Text(
-              value,
-              style: TextStyle(color: Colors.grey.shade700),
-            ),
+            child: Text(value, style: TextStyle(color: Colors.grey.shade700)),
           ),
         ],
       ),
@@ -398,20 +388,14 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
   void _showSuccess(String message) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.green,
-      ),
+      SnackBar(content: Text(message), backgroundColor: Colors.green),
     );
   }
 
   void _showError(String message) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.red,
-      ),
+      SnackBar(content: Text(message), backgroundColor: Colors.red),
     );
   }
 

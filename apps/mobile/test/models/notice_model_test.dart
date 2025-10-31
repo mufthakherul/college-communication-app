@@ -56,7 +56,7 @@ void main() {
 
     test('should handle optional expiresAt field', () {
       final expiry = DateTime(2024, 12, 31);
-      
+
       final noticeWithExpiry = NoticeModel(
         id: 'notice1',
         title: 'Test',
@@ -89,7 +89,7 @@ void main() {
 
     test('should support different target audiences', () {
       final audiences = ['all', 'students', 'teachers', 'admin'];
-      
+
       for (final audience in audiences) {
         final notice = NoticeModel(
           id: 'notice123',
@@ -102,7 +102,7 @@ void main() {
           updatedAt: DateTime.now(),
           isActive: true,
         );
-        
+
         expect(notice.targetAudience, audience);
       }
     });

@@ -16,18 +16,21 @@ void main() {
       expect(true, isTrue);
     });
 
-    testWidgets('Notice form validation should work',
-        (WidgetTester tester) async {
+    testWidgets('Notice form validation should work', (
+      WidgetTester tester,
+    ) async {
       expect(true, isTrue);
     });
 
-    testWidgets('Different notice types should be selectable',
-        (WidgetTester tester) async {
+    testWidgets('Different notice types should be selectable', (
+      WidgetTester tester,
+    ) async {
       expect(true, isTrue);
     });
 
-    testWidgets('Target audience should be configurable',
-        (WidgetTester tester) async {
+    testWidgets('Target audience should be configurable', (
+      WidgetTester tester,
+    ) async {
       expect(true, isTrue);
     });
   });
@@ -45,42 +48,47 @@ void main() {
       expect(true, isTrue);
     });
 
-    testWidgets('Empty state should show correctly',
-        (WidgetTester tester) async {
+    testWidgets('Empty state should show correctly', (
+      WidgetTester tester,
+    ) async {
       expect(true, isTrue);
     });
   });
 
   group('Notice Filtering and Sorting', () {
-    testWidgets('Notices should be sorted by date',
-        (WidgetTester tester) async {
+    testWidgets('Notices should be sorted by date', (
+      WidgetTester tester,
+    ) async {
       expect(true, isTrue);
     });
 
-    testWidgets('Urgent notices should be highlighted',
-        (WidgetTester tester) async {
+    testWidgets('Urgent notices should be highlighted', (
+      WidgetTester tester,
+    ) async {
       expect(true, isTrue);
     });
 
-    testWidgets('Expired notices should not appear',
-        (WidgetTester tester) async {
+    testWidgets('Expired notices should not appear', (
+      WidgetTester tester,
+    ) async {
       expect(true, isTrue);
     });
   });
 
   group('Notice Permissions', () {
-    testWidgets('Students should not see create button',
-        (WidgetTester tester) async {
+    testWidgets('Students should not see create button', (
+      WidgetTester tester,
+    ) async {
       expect(true, isTrue);
     });
 
-    testWidgets('Teachers should see create button',
-        (WidgetTester tester) async {
+    testWidgets('Teachers should see create button', (
+      WidgetTester tester,
+    ) async {
       expect(true, isTrue);
     });
 
-    testWidgets('Admins should see create button',
-        (WidgetTester tester) async {
+    testWidgets('Admins should see create button', (WidgetTester tester) async {
       expect(true, isTrue);
     });
   });

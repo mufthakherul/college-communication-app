@@ -13,8 +13,11 @@ class NoticeService {
         .where('isActive', isEqualTo: true)
         .orderBy('createdAt', descending: true)
         .snapshots()
-        .map((snapshot) =>
-            snapshot.docs.map((doc) => NoticeModel.fromFirestore(doc)).toList());
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => NoticeModel.fromFirestore(doc))
+              .toList(),
+        );
   }
 
   // Get notices by type
@@ -25,8 +28,11 @@ class NoticeService {
         .where('type', isEqualTo: type.name)
         .orderBy('createdAt', descending: true)
         .snapshots()
-        .map((snapshot) =>
-            snapshot.docs.map((doc) => NoticeModel.fromFirestore(doc)).toList());
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => NoticeModel.fromFirestore(doc))
+              .toList(),
+        );
   }
 
   // Get single notice
@@ -88,7 +94,10 @@ class NoticeService {
         throw Exception('User must be authenticated to update notices');
       }
 
-      final noticeDoc = await _firestore.collection('notices').doc(noticeId).get();
+      final noticeDoc = await _firestore
+          .collection('notices')
+          .doc(noticeId)
+          .get();
       if (!noticeDoc.exists) {
         throw Exception('Notice not found');
       }
@@ -107,10 +116,7 @@ class NoticeService {
   // Delete notice
   Future<void> deleteNotice(String noticeId) async {
     try {
-      await updateNotice(
-        noticeId: noticeId,
-        updates: {'isActive': false},
-      );
+      await updateNotice(noticeId: noticeId, updates: {'isActive': false});
     } catch (e) {
       throw Exception('Failed to delete notice: $e');
     }

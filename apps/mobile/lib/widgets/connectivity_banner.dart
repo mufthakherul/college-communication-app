@@ -49,7 +49,8 @@ class ConnectivityBanner extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      if (!isOnline && offlineQueueService.pendingActionsCount > 0)
+                      if (!isOnline &&
+                          offlineQueueService.pendingActionsCount > 0)
                         Text(
                           '${offlineQueueService.pendingActionsCount} action(s) queued',
                           style: const TextStyle(
@@ -57,7 +58,8 @@ class ConnectivityBanner extends StatelessWidget {
                             fontSize: 10,
                           ),
                         ),
-                      if (isOnline && offlineQueueService.pendingActionsCount > 0)
+                      if (isOnline &&
+                          offlineQueueService.pendingActionsCount > 0)
                         Text(
                           'Syncing ${offlineQueueService.pendingActionsCount} action(s)...',
                           style: const TextStyle(

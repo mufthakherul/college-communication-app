@@ -43,7 +43,9 @@ class MessageModel {
       'recipientId': recipientId,
       'content': content,
       'type': type.name,
-      'createdAt': createdAt != null ? Timestamp.fromDate(createdAt!) : FieldValue.serverTimestamp(),
+      'createdAt': createdAt != null
+          ? Timestamp.fromDate(createdAt!)
+          : FieldValue.serverTimestamp(),
       'read': read,
       'readAt': readAt != null ? Timestamp.fromDate(readAt!) : null,
     };
