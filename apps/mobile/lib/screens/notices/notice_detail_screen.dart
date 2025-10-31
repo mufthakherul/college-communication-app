@@ -9,10 +9,7 @@ import 'package:campus_mesh/screens/qr/qr_share_screen.dart';
 class NoticeDetailScreen extends StatelessWidget {
   final String noticeId;
 
-  const NoticeDetailScreen({
-    super.key,
-    required this.noticeId,
-  });
+  const NoticeDetailScreen({super.key, required this.noticeId});
 
   Color _getNoticeColor(NoticeType type) {
     switch (type) {
@@ -138,9 +135,8 @@ class NoticeDetailScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       Text(
                         notice.title,
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                        style: Theme.of(context).textTheme.headlineSmall
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
                       if (notice.createdAt != null)
@@ -160,7 +156,9 @@ class NoticeDetailScreen extends StatelessWidget {
                       _containsMarkdown(notice.content)
                           ? MarkdownBody(
                               data: notice.content,
-                              styleSheet: MarkdownStyleSheet.fromTheme(Theme.of(context)),
+                              styleSheet: MarkdownStyleSheet.fromTheme(
+                                Theme.of(context),
+                              ),
                             )
                           : Text(
                               notice.content,
@@ -274,12 +272,12 @@ class NoticeDetailScreen extends StatelessWidget {
 
   bool _containsMarkdown(String text) {
     // Simple check for common markdown patterns
-    return text.contains('**') || 
-           text.contains('*') || 
-           text.contains('[') && text.contains('](') ||
-           text.contains('- ') ||
-           text.contains('1. ') ||
-           text.contains('`');
+    return text.contains('**') ||
+        text.contains('*') ||
+        text.contains('[') && text.contains('](') ||
+        text.contains('- ') ||
+        text.contains('1. ') ||
+        text.contains('`');
   }
 
   String _formatDate(DateTime date) {
@@ -302,9 +300,7 @@ class NoticeDetailScreen extends StatelessWidget {
 
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => QRShareScreen(qrData: qrData),
-      ),
+      MaterialPageRoute(builder: (context) => QRShareScreen(qrData: qrData)),
     );
   }
 }

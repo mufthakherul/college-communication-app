@@ -17,58 +17,63 @@ void main() {
       expect(true, isTrue);
     });
 
-    testWidgets('Login with invalid credentials should show error',
-        (WidgetTester tester) async {
+    testWidgets('Login with invalid credentials should show error', (
+      WidgetTester tester,
+    ) async {
       // Test invalid login flow
       expect(true, isTrue);
     });
 
-    testWidgets('Login form validation should work',
-        (WidgetTester tester) async {
+    testWidgets('Login form validation should work', (
+      WidgetTester tester,
+    ) async {
       // Test form validation
       expect(true, isTrue);
     });
 
-    testWidgets('Password visibility toggle should work',
-        (WidgetTester tester) async {
+    testWidgets('Password visibility toggle should work', (
+      WidgetTester tester,
+    ) async {
       // Test password visibility toggle
       expect(true, isTrue);
     });
   });
 
   group('Register Flow Integration Test', () {
-    testWidgets('Complete registration flow test',
-        (WidgetTester tester) async {
+    testWidgets('Complete registration flow test', (WidgetTester tester) async {
       // Test complete registration
       expect(true, isTrue);
     });
 
-    testWidgets('Registration with existing email should show error',
-        (WidgetTester tester) async {
+    testWidgets('Registration with existing email should show error', (
+      WidgetTester tester,
+    ) async {
       // Test duplicate email handling
       expect(true, isTrue);
     });
 
-    testWidgets('Password confirmation validation should work',
-        (WidgetTester tester) async {
+    testWidgets('Password confirmation validation should work', (
+      WidgetTester tester,
+    ) async {
       // Test password confirmation
       expect(true, isTrue);
     });
   });
 
   group('Auth State Management', () {
-    testWidgets('App should redirect to home after login',
-        (WidgetTester tester) async {
+    testWidgets('App should redirect to home after login', (
+      WidgetTester tester,
+    ) async {
       expect(true, isTrue);
     });
 
-    testWidgets('App should redirect to login after logout',
-        (WidgetTester tester) async {
+    testWidgets('App should redirect to login after logout', (
+      WidgetTester tester,
+    ) async {
       expect(true, isTrue);
     });
 
-    testWidgets('App should persist login state',
-        (WidgetTester tester) async {
+    testWidgets('App should persist login state', (WidgetTester tester) async {
       expect(true, isTrue);
     });
   });

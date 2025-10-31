@@ -45,9 +45,7 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sync Settings'),
-      ),
+      appBar: AppBar(title: const Text('Sync Settings')),
       body: RefreshIndicator(
         onRefresh: _loadStatistics,
         child: ListView(
@@ -81,10 +79,7 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
           children: [
             const Text(
               'Network Status',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             _buildInfoRow(
@@ -99,11 +94,7 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
               icon: _getQualityIcon(quality),
               iconColor: _getQualityColor(quality),
             ),
-            _buildInfoRow(
-              'Last Sync',
-              lastSync,
-              icon: Icons.sync,
-            ),
+            _buildInfoRow('Last Sync', lastSync, icon: Icons.sync),
           ],
         ),
       ),
@@ -123,10 +114,7 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
           children: [
             const Text(
               'Offline Queue',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             _buildInfoRow(
@@ -154,8 +142,10 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
   }
 
   Widget _buildCacheSection() {
-    final sizeMB = ((_cacheStats['totalSizeMB'] as num?) ?? 0.0).toStringAsFixed(2);
-    final usagePercent = ((_cacheStats['usagePercent'] as num?) ?? 0.0).toStringAsFixed(1);
+    final sizeMB = ((_cacheStats['totalSizeMB'] as num?) ?? 0.0)
+        .toStringAsFixed(2);
+    final usagePercent = ((_cacheStats['usagePercent'] as num?) ?? 0.0)
+        .toStringAsFixed(1);
     final diskSize = (_cacheStats['diskCacheSize'] as int?) ?? 0;
 
     return Card(
@@ -166,22 +156,11 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
           children: [
             const Text(
               'Cache',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            _buildInfoRow(
-              'Cache Size',
-              '$sizeMB MB',
-              icon: Icons.storage,
-            ),
-            _buildInfoRow(
-              'Usage',
-              '$usagePercent%',
-              icon: Icons.pie_chart,
-            ),
+            _buildInfoRow('Cache Size', '$sizeMB MB', icon: Icons.storage),
+            _buildInfoRow('Usage', '$usagePercent%', icon: Icons.pie_chart),
             _buildInfoRow(
               'Cached Items',
               diskSize.toString(),
@@ -200,7 +179,8 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
 
   Widget _buildConflictSection() {
     final unresolvedCount = (_conflictStats['unresolvedCount'] as int?) ?? 0;
-    final strategy = (_conflictStats['defaultStrategy'] as String?) ?? 'unknown';
+    final strategy =
+        (_conflictStats['defaultStrategy'] as String?) ?? 'unknown';
 
     return Card(
       child: Padding(
@@ -210,10 +190,7 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
           children: [
             const Text(
               'Conflict Resolution',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             _buildInfoRow(
@@ -242,10 +219,7 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
           children: [
             const Text(
               'Actions',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             SizedBox(
@@ -300,13 +274,8 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
             Icon(icon, size: 20, color: iconColor ?? Colors.grey),
             const SizedBox(width: 8),
           ],
-          Expanded(
-            child: Text(label),
-          ),
-          Text(
-            value,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
+          Expanded(child: Text(label)),
+          Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
         ],
       ),
     );
@@ -339,10 +308,9 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
   }
 
   String _formatStrategyName(String strategy) {
-    return strategy.replaceAllMapped(
-      RegExp(r'([A-Z])'),
-      (match) => ' ${match.group(0)}',
-    ).trim();
+    return strategy
+        .replaceAllMapped(RegExp(r'([A-Z])'), (match) => ' ${match.group(0)}')
+        .trim();
   }
 
   Future<void> _syncNow() async {
@@ -404,9 +372,9 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
 
   void _showMessage(String message) {
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   Future<bool?> _showConfirmDialog(String title, String message) {

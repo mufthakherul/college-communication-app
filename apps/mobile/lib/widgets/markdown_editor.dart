@@ -50,7 +50,9 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.5),
+            color: Theme.of(
+              context,
+            ).colorScheme.surfaceVariant.withOpacity(0.5),
             borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
           ),
           child: SingleChildScrollView(
@@ -60,34 +62,40 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
                 _buildToolbarButton(
                   icon: Icons.format_bold,
                   tooltip: 'Bold',
-                  onPressed: () => _insertMarkdown('**', '**', placeholder: 'bold text'),
+                  onPressed: () =>
+                      _insertMarkdown('**', '**', placeholder: 'bold text'),
                 ),
                 _buildToolbarButton(
                   icon: Icons.format_italic,
                   tooltip: 'Italic',
-                  onPressed: () => _insertMarkdown('*', '*', placeholder: 'italic text'),
+                  onPressed: () =>
+                      _insertMarkdown('*', '*', placeholder: 'italic text'),
                 ),
                 const VerticalDivider(width: 16),
                 _buildToolbarButton(
                   icon: Icons.format_list_bulleted,
                   tooltip: 'Bullet list',
-                  onPressed: () => _insertMarkdown('- ', '\n', placeholder: 'list item'),
+                  onPressed: () =>
+                      _insertMarkdown('- ', '\n', placeholder: 'list item'),
                 ),
                 _buildToolbarButton(
                   icon: Icons.format_list_numbered,
                   tooltip: 'Numbered list',
-                  onPressed: () => _insertMarkdown('1. ', '\n', placeholder: 'list item'),
+                  onPressed: () =>
+                      _insertMarkdown('1. ', '\n', placeholder: 'list item'),
                 ),
                 const VerticalDivider(width: 16),
                 _buildToolbarButton(
                   icon: Icons.link,
                   tooltip: 'Link',
-                  onPressed: () => _insertMarkdown('[', '](url)', placeholder: 'link text'),
+                  onPressed: () =>
+                      _insertMarkdown('[', '](url)', placeholder: 'link text'),
                 ),
                 _buildToolbarButton(
                   icon: Icons.code,
                   tooltip: 'Code',
-                  onPressed: () => _insertMarkdown('`', '`', placeholder: 'code'),
+                  onPressed: () =>
+                      _insertMarkdown('`', '`', placeholder: 'code'),
                 ),
                 const VerticalDivider(width: 16),
                 if (widget.showPreview)
@@ -107,19 +115,19 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(color: Colors.grey.shade300),
-              borderRadius: const BorderRadius.vertical(bottom: Radius.circular(8)),
+              borderRadius: const BorderRadius.vertical(
+                bottom: Radius.circular(8),
+              ),
             ),
-            child: _isPreviewMode
-                ? _buildPreview()
-                : _buildEditor(),
+            child: _isPreviewMode ? _buildPreview() : _buildEditor(),
           ),
         ),
         const SizedBox(height: 8),
         Text(
           'Supports: **bold**, *italic*, [links](url), - lists, 1. numbered lists, `code`',
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Colors.grey,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: Colors.grey),
         ),
       ],
     );

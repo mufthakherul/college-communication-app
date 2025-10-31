@@ -6,15 +6,12 @@ import 'package:campus_mesh/services/qr_data_service.dart';
 class QRShareScreen extends StatelessWidget {
   final QRCodeData qrData;
 
-  const QRShareScreen({
-    super.key,
-    required this.qrData,
-  });
+  const QRShareScreen({super.key, required this.qrData});
 
   @override
   Widget build(BuildContext context) {
     final hasExpiry = qrData.expiresAt != null;
-    final expiresIn = hasExpiry 
+    final expiresIn = hasExpiry
         ? qrData.expiresAt!.difference(DateTime.now())
         : null;
 
@@ -41,19 +38,13 @@ class QRShareScreen extends StatelessWidget {
             const SizedBox(height: 16),
             Text(
               'Share ${qrData.getDescription()}',
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Text(
               'Others can scan this code with the app to view the content',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey.shade600,
-              ),
+              style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),
@@ -112,7 +103,11 @@ class QRShareScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(Icons.error_outline, size: 20, color: Colors.red.shade700),
+                    Icon(
+                      Icons.error_outline,
+                      size: 20,
+                      color: Colors.red.shade700,
+                    ),
                     const SizedBox(width: 8),
                     Text(
                       'This QR code has expired',
@@ -156,7 +151,11 @@ class QRShareScreen extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.security, size: 20, color: Colors.blue.shade700),
+                      Icon(
+                        Icons.security,
+                        size: 20,
+                        color: Colors.blue.shade700,
+                      ),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
@@ -173,10 +172,7 @@ class QRShareScreen extends StatelessWidget {
                   const SizedBox(height: 8),
                   Text(
                     'This QR code can only be scanned and read within the RPI Communication App',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.blue.shade600,
-                    ),
+                    style: TextStyle(fontSize: 12, color: Colors.blue.shade600),
                   ),
                 ],
               ),
@@ -226,7 +222,10 @@ class QRShareScreen extends StatelessWidget {
           children: [
             _buildInfoRow('File', qrData.data['fileName'] ?? 'N/A'),
             _buildInfoRow('Type', qrData.data['fileType'] ?? 'N/A'),
-            _buildInfoRow('Size', _formatFileSize(qrData.data['fileSize'] ?? 0)),
+            _buildInfoRow(
+              'Size',
+              _formatFileSize(qrData.data['fileSize'] ?? 0),
+            ),
             if (qrData.senderName != null)
               _buildInfoRow('Shared by', qrData.senderName!),
           ],
@@ -244,15 +243,9 @@ class QRShareScreen extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            '$label: ',
-            style: const TextStyle(fontWeight: FontWeight.w500),
-          ),
+          Text('$label: ', style: const TextStyle(fontWeight: FontWeight.w500)),
           Expanded(
-            child: Text(
-              value,
-              style: TextStyle(color: Colors.grey.shade700),
-            ),
+            child: Text(value, style: TextStyle(color: Colors.grey.shade700)),
           ),
         ],
       ),
@@ -327,10 +320,7 @@ class QRShareScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 14),
               ),
               SizedBox(height: 12),
-              Text(
-                'Security:',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
+              Text('Security:', style: TextStyle(fontWeight: FontWeight.bold)),
               SizedBox(height: 4),
               Text(
                 '• QR codes are app-specific\n'

@@ -37,14 +37,14 @@ class QRCodeData {
 
   /// Convert to JSON
   Map<String, dynamic> toJson() => {
-        'type': type.name,
-        'data': data,
-        'createdAt': createdAt.toIso8601String(),
-        'expiresAt': expiresAt?.toIso8601String(),
-        'senderId': senderId,
-        'senderName': senderName,
-        'appSignature': 'campus_mesh_v1', // App-specific signature
-      };
+    'type': type.name,
+    'data': data,
+    'createdAt': createdAt.toIso8601String(),
+    'expiresAt': expiresAt?.toIso8601String(),
+    'senderId': senderId,
+    'senderName': senderName,
+    'appSignature': 'campus_mesh_v1', // App-specific signature
+  };
 
   /// Create from JSON
   factory QRCodeData.fromJson(Map<String, dynamic> json) {
@@ -80,12 +80,12 @@ class QRCodeData {
   factory QRCodeData.fromQRString(String qrString) {
     try {
       final json = jsonDecode(qrString) as Map<String, dynamic>;
-      
+
       // Verify app signature
       if (json['appSignature'] != 'campus_mesh_v1') {
         throw Exception('Invalid QR code format');
       }
-      
+
       return QRCodeData.fromJson(json);
     } catch (e) {
       if (kDebugMode) {
@@ -154,10 +154,7 @@ class QRDataService {
   }) {
     return QRCodeData(
       type: QRDataType.messageShare,
-      data: {
-        'messageId': messageId,
-        'content': content,
-      },
+      data: {'messageId': messageId, 'content': content},
       senderId: senderId,
       senderName: senderName,
       expiresAt: expiry != null ? DateTime.now().add(expiry) : null,

@@ -47,7 +47,7 @@ Future<void> _syncOfflineQueue() async {
     // Only sync if online
     if (connectivityService.isOnline) {
       await offlineQueueService.processQueue();
-      
+
       if (kDebugMode) {
         print('Background queue sync completed');
       }
@@ -80,7 +80,8 @@ Future<void> _cleanupCache() async {
 
 /// Service to manage background synchronization
 class BackgroundSyncService {
-  static final BackgroundSyncService _instance = BackgroundSyncService._internal();
+  static final BackgroundSyncService _instance =
+      BackgroundSyncService._internal();
   factory BackgroundSyncService() => _instance;
   BackgroundSyncService._internal();
 
@@ -129,7 +130,9 @@ class BackgroundSyncService {
       );
 
       if (kDebugMode) {
-        print('Registered periodic offline queue sync: ${frequency.inMinutes}min');
+        print(
+          'Registered periodic offline queue sync: ${frequency.inMinutes}min',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
@@ -169,9 +172,7 @@ class BackgroundSyncService {
   }
 
   /// Register one-time sync task
-  Future<void> registerOneTimeSync({
-    Duration delay = Duration.zero,
-  }) async {
+  Future<void> registerOneTimeSync({Duration delay = Duration.zero}) async {
     if (!_isInitialized) {
       await initialize();
     }
@@ -181,9 +182,7 @@ class BackgroundSyncService {
         'oneTimeSync-${DateTime.now().millisecondsSinceEpoch}',
         'syncOfflineQueue',
         initialDelay: delay,
-        constraints: Constraints(
-          networkType: NetworkType.connected,
-        ),
+        constraints: Constraints(networkType: NetworkType.connected),
       );
 
       if (kDebugMode) {

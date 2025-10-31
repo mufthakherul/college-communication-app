@@ -30,10 +30,14 @@ class _MessagesScreenState extends State<MessagesScreen> {
     if (_searchQuery.isEmpty) {
       return messages;
     }
-    
+
     return messages.where((message) {
-      final contentMatch = message.content.toLowerCase().contains(_searchQuery.toLowerCase());
-      final recipientMatch = message.recipientId.toLowerCase().contains(_searchQuery.toLowerCase());
+      final contentMatch = message.content.toLowerCase().contains(
+        _searchQuery.toLowerCase(),
+      );
+      final recipientMatch = message.recipientId.toLowerCase().contains(
+        _searchQuery.toLowerCase(),
+      );
       return contentMatch || recipientMatch;
     }).toList();
   }
@@ -138,8 +142,9 @@ class _MessagesScreenState extends State<MessagesScreen> {
           for (final message in messages) {
             final otherUserId = message.recipientId;
             if (!conversations.containsKey(otherUserId) ||
-                (conversations[otherUserId]!.createdAt!
-                    .isBefore(message.createdAt!))) {
+                (conversations[otherUserId]!.createdAt!.isBefore(
+                  message.createdAt!,
+                ))) {
               conversations[otherUserId] = message;
             }
           }
@@ -152,41 +157,45 @@ class _MessagesScreenState extends State<MessagesScreen> {
             child: ListView.builder(
               itemCount: conversationList.length,
               itemBuilder: (context, index) {
-              final message = conversationList[index];
+                final message = conversationList[index];
 
-              return ListTile(
-                leading: CircleAvatar(
-                  child: Text(message.recipientId.substring(0, 2).toUpperCase()),
-                ),
-                title: Text(
-                  message.recipientId,
-                  style: TextStyle(
-                    fontWeight: message.read ? FontWeight.normal : FontWeight.bold,
+                return ListTile(
+                  leading: CircleAvatar(
+                    child: Text(
+                      message.recipientId.substring(0, 2).toUpperCase(),
+                    ),
                   ),
-                ),
-                subtitle: Text(
-                  message.content,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                trailing: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (message.createdAt != null)
-                      Text(
-                        _formatTime(message.createdAt!),
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                    if (!message.read)
-                      const Icon(Icons.circle, size: 8, color: Colors.blue),
-                  ],
-                ),
-                onTap: () {
-                  // Navigate to chat screen
-                  // TODO: Implement chat screen navigation
-                },
-              );
-            },
+                  title: Text(
+                    message.recipientId,
+                    style: TextStyle(
+                      fontWeight: message.read
+                          ? FontWeight.normal
+                          : FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Text(
+                    message.content,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  trailing: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (message.createdAt != null)
+                        Text(
+                          _formatTime(message.createdAt!),
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      if (!message.read)
+                        const Icon(Icons.circle, size: 8, color: Colors.blue),
+                    ],
+                  ),
+                  onTap: () {
+                    // Navigate to chat screen
+                    // TODO: Implement chat screen navigation
+                  },
+                );
+              },
             ),
           );
         },

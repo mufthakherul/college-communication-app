@@ -8,10 +8,7 @@ class DeveloperInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Developer Info'),
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text('Developer Info'), elevation: 0),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -40,11 +37,7 @@ class DeveloperInfoScreen extends StatelessWidget {
                     child: const CircleAvatar(
                       radius: 60,
                       backgroundColor: Colors.white,
-                      child: Icon(
-                        Icons.person,
-                        size: 60,
-                        color: Colors.blue,
-                      ),
+                      child: Icon(Icons.person, size: 60, color: Colors.blue),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -59,17 +52,14 @@ class DeveloperInfoScreen extends StatelessWidget {
                   const SizedBox(height: 8),
                   const Text(
                     'Full Stack Developer',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white70,
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.white70),
                   ),
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 24),
-            
+
             // About Section
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -81,13 +71,15 @@ class DeveloperInfoScreen extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.info_outline, color: Theme.of(context).primaryColor),
+                          Icon(
+                            Icons.info_outline,
+                            color: Theme.of(context).primaryColor,
+                          ),
                           const SizedBox(width: 8),
                           Text(
                             'About Developer',
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -101,9 +93,9 @@ class DeveloperInfoScreen extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Website Section
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -118,7 +110,10 @@ class DeveloperInfoScreen extends StatelessWidget {
                       onTap: () async {
                         final url = Uri.parse('https://www.mufthakherul.me');
                         if (await canLaunchUrl(url)) {
-                          await launchUrl(url, mode: LaunchMode.externalApplication);
+                          await launchUrl(
+                            url,
+                            mode: LaunchMode.externalApplication,
+                          );
                         }
                       },
                     ),
@@ -132,7 +127,8 @@ class DeveloperInfoScreen extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const DeveloperWebsiteScreen(),
+                            builder: (context) =>
+                                const DeveloperWebsiteScreen(),
                           ),
                         );
                       },
@@ -141,9 +137,9 @@ class DeveloperInfoScreen extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Contact Section
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -155,13 +151,15 @@ class DeveloperInfoScreen extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.contact_mail, color: Theme.of(context).primaryColor),
+                          Icon(
+                            Icons.contact_mail,
+                            color: Theme.of(context).primaryColor,
+                          ),
                           const SizedBox(width: 8),
                           Text(
                             'Connect',
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -186,9 +184,9 @@ class DeveloperInfoScreen extends StatelessWidget {
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 16),
-            
+
             // Project Info
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -201,13 +199,15 @@ class DeveloperInfoScreen extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Icon(Icons.laptop_mac, color: Theme.of(context).primaryColor),
+                          Icon(
+                            Icons.laptop_mac,
+                            color: Theme.of(context).primaryColor,
+                          ),
                           const SizedBox(width: 8),
                           Text(
                             'This App',
-                            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -227,17 +227,14 @@ class DeveloperInfoScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       const Text(
                         'Version: 1.0.0',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.black54,
-                        ),
+                        style: TextStyle(fontSize: 12, color: Colors.black54),
                       ),
                     ],
                   ),
                 ),
               ),
             ),
-            
+
             const SizedBox(height: 32),
           ],
         ),
@@ -269,10 +266,7 @@ class DeveloperInfoScreen extends StatelessWidget {
               children: [
                 Text(
                   label,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey,
-                  ),
+                  style: const TextStyle(fontSize: 12, color: Colors.grey),
                 ),
                 const SizedBox(height: 2),
                 Text(

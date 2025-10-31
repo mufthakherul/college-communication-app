@@ -56,10 +56,7 @@ class _DeveloperWebsiteScreenState extends State<DeveloperWebsiteScreen> {
         title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Developer Portfolio',
-              style: TextStyle(fontSize: 16),
-            ),
+            Text('Developer Portfolio', style: TextStyle(fontSize: 16)),
             Text(
               'mufthakherul.me',
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.normal),
@@ -78,7 +75,9 @@ class _DeveloperWebsiteScreenState extends State<DeveloperWebsiteScreen> {
             onSelected: (value) {
               switch (value) {
                 case 'home':
-                  _controller.loadRequest(Uri.parse('https://www.mufthakherul.me'));
+                  _controller.loadRequest(
+                    Uri.parse('https://www.mufthakherul.me'),
+                  );
                   break;
                 case 'forward':
                   _controller.goForward();
@@ -137,10 +136,7 @@ class _DeveloperWebsiteScreenState extends State<DeveloperWebsiteScreen> {
                     const SizedBox(height: 16),
                     Text(
                       'Loading...',
-                      style: TextStyle(
-                        color: Colors.grey[600],
-                        fontSize: 14,
-                      ),
+                      style: TextStyle(color: Colors.grey[600], fontSize: 14),
                     ),
                   ],
                 ),
@@ -152,9 +148,7 @@ class _DeveloperWebsiteScreenState extends State<DeveloperWebsiteScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color: Colors.grey[100],
-          border: Border(
-            top: BorderSide(color: Colors.grey[300]!),
-          ),
+          border: Border(top: BorderSide(color: Colors.grey[300]!)),
         ),
         child: Row(
           children: [
@@ -176,7 +170,10 @@ class _DeveloperWebsiteScreenState extends State<DeveloperWebsiteScreen> {
             ),
             Expanded(
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),

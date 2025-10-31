@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }
       return;
     }
-    
+
     // Otherwise load from Firebase
     final user = _authService.currentUser;
     if (user != null) {
@@ -74,10 +74,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List<Widget> get _screens => [
-        const NoticesScreen(),
-        const MessagesScreen(),
-        ProfileScreen(user: _currentUser),
-      ];
+    const NoticesScreen(),
+    const MessagesScreen(),
+    ProfileScreen(user: _currentUser),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +98,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 bottom: false,
                 child: Row(
                   children: [
-                    const Icon(Icons.info_outline, color: Colors.white, size: 20),
+                    const Icon(
+                      Icons.info_outline,
+                      color: Colors.white,
+                      size: 20,
+                    ),
                     const SizedBox(width: 8),
                     const Expanded(
                       child: Text(
@@ -125,7 +129,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       child: const Text(
                         'Exit',
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ],
@@ -143,23 +150,15 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.notifications),
             label: 'Notices',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.message),
-            label: 'Messages',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Messages'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => const QRScannerScreen(),
-            ),
+            MaterialPageRoute(builder: (context) => const QRScannerScreen()),
           );
         },
         tooltip: 'Scan QR Code',

@@ -58,9 +58,7 @@ class _MeshQRPairingScreenState extends State<MeshQRPairingScreen> {
 
   Widget _buildQRDisplay() {
     if (_pairingData == null) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     final expiresIn = _pairingData!.expiresAt.difference(DateTime.now());
@@ -74,19 +72,13 @@ class _MeshQRPairingScreenState extends State<MeshQRPairingScreen> {
         children: [
           const Text(
             'Show this QR code to pair',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 8),
           Text(
             'Scan this code with the other device to establish a secure connection',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey.shade600,
-            ),
+            style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 32),
@@ -142,10 +134,7 @@ class _MeshQRPairingScreenState extends State<MeshQRPairingScreen> {
                 const SizedBox(height: 8),
                 Text(
                   'This QR code is unique and will expire automatically',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.blue.shade600,
-                  ),
+                  style: TextStyle(fontSize: 12, color: Colors.blue.shade600),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -160,10 +149,7 @@ class _MeshQRPairingScreenState extends State<MeshQRPairingScreen> {
                 children: [
                   const Text(
                     'Device Information',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 12),
                   _buildInfoRow('Device Name', _pairingData!.deviceName),
@@ -212,18 +198,12 @@ class _MeshQRPairingScreenState extends State<MeshQRPairingScreen> {
             children: [
               const Text(
                 'Scan QR Code',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               Text(
                 'Point your camera at the QR code to pair with another device',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey.shade600,
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
@@ -254,20 +234,10 @@ class _MeshQRPairingScreenState extends State<MeshQRPairingScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            '$label:',
-            style: const TextStyle(
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+          Text('$label:', style: const TextStyle(fontWeight: FontWeight.w500)),
           const SizedBox(width: 8),
           Expanded(
-            child: Text(
-              value,
-              style: TextStyle(
-                color: Colors.grey.shade700,
-              ),
-            ),
+            child: Text(value, style: TextStyle(color: Colors.grey.shade700)),
           ),
         ],
       ),
@@ -301,9 +271,9 @@ class _MeshQRPairingScreenState extends State<MeshQRPairingScreen> {
 
   void _showMessage(String message) {
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
