@@ -424,10 +424,16 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
         return Icons.wifi;
       case MeshConnectionType.wifiRouter:
         return Icons.router;
+      case MeshConnectionType.wifiHotspot:
+        return Icons.wifi_tethering;
       case MeshConnectionType.lan:
         return Icons.cable;
       case MeshConnectionType.usb:
         return Icons.usb;
+      case MeshConnectionType.nfc:
+        return Icons.nfc;
+      case MeshConnectionType.ethernet:
+        return Icons.settings_ethernet;
       case MeshConnectionType.auto:
         return Icons.phone_android;
     }

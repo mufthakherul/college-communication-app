@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Conflict resolution strategy
 enum ConflictStrategy {
@@ -36,7 +36,7 @@ class ConflictResolutionService {
   factory ConflictResolutionService() => _instance;
   ConflictResolutionService._internal();
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final SupabaseClient _supabase = Supabase.instance.client;
   final List<DataConflict> _unresolvedConflicts = [];
 
   /// Default conflict resolution strategy
@@ -64,22 +64,28 @@ class ConflictResolutionService {
   }) async {
     try {
       // Get current server version
-      final docRef = _firestore.collection(collection).doc(documentId);
-      final docSnapshot = await docRef.get();
+      final response = await _supabase
+          .from(collection)
+          .select()
+          .eq('id', documentId)
+          .maybeSingle();
 
-      if (!docSnapshot.exists) {
+      if (response == null) {
         // Document doesn't exist, create it
-        await docRef.set({
+        await _supabase.from(collection).insert({
+          'id': documentId,
           ...updates,
-          'updatedAt': FieldValue.serverTimestamp(),
-          'conflictVersion': 0,
+          'updated_at': DateTime.now().toIso8601String(),
+          'conflict_version': 0,
         });
         return;
       }
 
-      final serverData = docSnapshot.data()!;
-      final serverTimestamp = (serverData['updatedAt'] as Timestamp?)?.toDate();
-      final conflictVersion = (serverData['conflictVersion'] as int?) ?? 0;
+      final serverData = response as Map<String, dynamic>;
+      final serverTimestamp = serverData['updated_at'] != null 
+          ? DateTime.parse(serverData['updated_at'] as String)
+          : null;
+      final conflictVersion = (serverData['conflict_version'] as int?) ?? 0;
 
       // Check for conflicts
       if (serverTimestamp != null && serverTimestamp.isAfter(clientTimestamp)) {
@@ -102,11 +108,11 @@ class ConflictResolutionService {
 
         if (resolvedUpdates != null) {
           // Apply resolved updates
-          await docRef.update({
+          await _supabase.from(collection).update({
             ...resolvedUpdates,
-            'updatedAt': FieldValue.serverTimestamp(),
-            'conflictVersion': conflictVersion + 1,
-          });
+            'updated_at': DateTime.now().toIso8601String(),
+            'conflict_version': conflictVersion + 1,
+          }).eq('id', documentId);
 
           if (kDebugMode) {
             print(
@@ -132,11 +138,11 @@ class ConflictResolutionService {
         }
       } else {
         // No conflict, update normally
-        await docRef.update({
+        await _supabase.from(collection).update({
           ...updates,
-          'updatedAt': FieldValue.serverTimestamp(),
-          'conflictVersion': conflictVersion,
-        });
+          'updated_at': DateTime.now().toIso8601String(),
+          'conflict_version': conflictVersion,
+        }).eq('id', documentId);
       }
     } catch (e) {
       if (kDebugMode) {
@@ -275,29 +281,31 @@ class ConflictResolutionService {
     required int expectedVersion,
   }) async {
     try {
-      final docRef = _firestore.collection(collection).doc(documentId);
+      // Get current version
+      final response = await _supabase
+          .from(collection)
+          .select('version')
+          .eq('id', documentId)
+          .maybeSingle();
 
-      await _firestore.runTransaction((transaction) async {
-        final snapshot = await transaction.get(docRef);
+      if (response == null) {
+        throw Exception('Document not found');
+      }
 
-        if (!snapshot.exists) {
-          throw Exception('Document not found');
-        }
+      final currentVersion = (response['version'] as int?) ?? 0;
 
-        final currentVersion = (snapshot.data()?['version'] as int?) ?? 0;
+      if (currentVersion != expectedVersion) {
+        throw Exception(
+          'Version mismatch: expected $expectedVersion, got $currentVersion',
+        );
+      }
 
-        if (currentVersion != expectedVersion) {
-          throw Exception(
-            'Version mismatch: expected $expectedVersion, got $currentVersion',
-          );
-        }
-
-        transaction.update(docRef, {
-          ...updates,
-          'version': currentVersion + 1,
-          'updatedAt': FieldValue.serverTimestamp(),
-        });
-      });
+      // Update with new version
+      await _supabase.from(collection).update({
+        ...updates,
+        'version': currentVersion + 1,
+        'updated_at': DateTime.now().toIso8601String(),
+      }).eq('id', documentId);
 
       if (kDebugMode) {
         print('Versioned update successful for $documentId');

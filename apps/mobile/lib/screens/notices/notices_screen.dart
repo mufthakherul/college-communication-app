@@ -36,7 +36,7 @@ class _NoticesScreenState extends State<NoticesScreen> {
   Future<void> _loadCurrentUser() async {
     final user = _authService.currentUser;
     if (user != null) {
-      final profile = await _authService.getUserProfile(user.uid);
+      final profile = await _authService.getUserProfile(user.id);
       if (mounted) {
         setState(() => _currentUser = profile);
       }

@@ -26,9 +26,19 @@ class MessageService {
     return _supabase
         .from('messages')
         .stream(primaryKey: ['id'])
-        .or('and(sender_id.eq.$currentUserId,recipient_id.eq.$otherUserId),and(sender_id.eq.$otherUserId,recipient_id.eq.$currentUserId)')
         .order('created_at', ascending: true)
-        .map((data) => data.map((item) => MessageModel.fromJson(item)).toList());
+        .map((data) {
+          // Filter in memory for messages between the two users
+          return data
+              .where((item) {
+                final senderId = item['sender_id'] as String?;
+                final recipientId = item['recipient_id'] as String?;
+                return (senderId == currentUserId && recipientId == otherUserId) ||
+                    (senderId == otherUserId && recipientId == currentUserId);
+              })
+              .map((item) => MessageModel.fromJson(item))
+              .toList();
+        });
   }
 
   // Get recent conversations
@@ -41,11 +51,20 @@ class MessageService {
     return _supabase
         .from('messages')
         .stream(primaryKey: ['id'])
-        .or('sender_id.eq.$currentUserId,recipient_id.eq.$currentUserId')
         .order('created_at', ascending: false)
-        .limit(50)
         .map(
-          (data) => data.map((item) => MessageModel.fromJson(item)).toList(),
+          (data) {
+            // Filter in memory for messages involving current user
+            return data
+                .where((item) {
+                  final senderId = item['sender_id'] as String?;
+                  final recipientId = item['recipient_id'] as String?;
+                  return senderId == currentUserId || recipientId == currentUserId;
+                })
+                .take(50)
+                .map((item) => MessageModel.fromJson(item))
+                .toList();
+          },
         );
   }
 
@@ -114,8 +133,15 @@ class MessageService {
     return _supabase
         .from('messages')
         .stream(primaryKey: ['id'])
-        .eq('recipient_id', currentUserId)
-        .eq('read', false)
-        .map((data) => data.length);
+        .map((data) {
+          // Filter in memory for unread messages to current user
+          return data
+              .where((item) {
+                final recipientId = item['recipient_id'] as String?;
+                final read = item['read'] as bool? ?? false;
+                return recipientId == currentUserId && !read;
+              })
+              .length;
+        });
   }
 }

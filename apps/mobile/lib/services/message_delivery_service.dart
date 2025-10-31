@@ -326,7 +326,7 @@ class MessageDeliveryService {
       final response = await _supabase
           .from('message_delivery_status')
           .select()
-          .in_('message_id', pendingMessages);
+          .inFilter('message_id', pendingMessages);
 
       for (final row in response) {
         final tracking = _parseDeliveryStatus(row);
