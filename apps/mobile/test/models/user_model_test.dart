@@ -25,7 +25,7 @@ void main() {
       expect(user.isActive, true);
     });
 
-    test('should convert UserModel to Map', () {
+    test('should convert UserModel to JSON', () {
       final user = UserModel(
         uid: 'user123',
         email: 'test@example.com',
@@ -38,14 +38,14 @@ void main() {
         createdAt: DateTime(2024, 1, 1),
       );
 
-      final map = user.toMap();
+      final json = user.toJson();
 
-      expect(map['uid'], 'user123');
-      expect(map['email'], 'test@example.com');
-      expect(map['displayName'], 'Test User');
-      expect(map['role'], 'teacher');
-      expect(map['department'], 'Mathematics');
-      expect(map['isActive'], true);
+      expect(json['id'], 'user123');
+      expect(json['email'], 'test@example.com');
+      expect(json['display_name'], 'Test User');
+      expect(json['role'], 'teacher');
+      expect(json['department'], 'Mathematics');
+      expect(json['is_active'], true);
     });
 
     test('should parse UserRole enum correctly', () {

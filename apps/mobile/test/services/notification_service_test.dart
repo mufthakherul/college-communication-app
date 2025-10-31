@@ -1,5 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 
+// TODO: Update tests to use Supabase mocks
+// Note: Push notifications will require third-party service integration
+
 void main() {
   group('NotificationService Tests', () {
     test('should initialize notification service', () {

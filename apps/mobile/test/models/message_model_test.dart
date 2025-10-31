@@ -22,7 +22,7 @@ void main() {
       expect(message.read, false);
     });
 
-    test('should convert MessageModel to Map', () {
+    test('should convert MessageModel to JSON', () {
       final message = MessageModel(
         id: 'msg123',
         senderId: 'sender123',
@@ -33,13 +33,13 @@ void main() {
         read: false,
       );
 
-      final map = message.toMap();
+      final json = message.toJson();
 
-      expect(map['senderId'], 'sender123');
-      expect(map['recipientId'], 'recipient123');
-      expect(map['content'], 'Test message');
-      expect(map['type'], 'text');
-      expect(map['isRead'], false);
+      expect(json['sender_id'], 'sender123');
+      expect(json['recipient_id'], 'recipient123');
+      expect(json['content'], 'Test message');
+      expect(json['type'], 'text');
+      expect(json['read'], false);
     });
 
     test('should handle all MessageType enum values', () {
@@ -112,7 +112,7 @@ void main() {
       expect(fileMessage.type, MessageType.file);
     });
 
-    test('should handle optional fileUrl field', () {
+    test('should handle content field for different message types', () {
       final messageWithFile = MessageModel(
         id: 'msg1',
         senderId: 'sender123',
@@ -125,7 +125,7 @@ void main() {
 
       expect(messageWithFile.content, 'https://example.com/file.pdf');
 
-      final messageWithoutFile = MessageModel(
+      final messageWithText = MessageModel(
         id: 'msg2',
         senderId: 'sender123',
         recipientId: 'recipient123',
@@ -135,7 +135,7 @@ void main() {
         read: false,
       );
 
-      expect(messageWithoutFile.content, null);
+      expect(messageWithText.content, 'Just text');
     });
   });
 }
