@@ -177,26 +177,6 @@ class MessageDeliveryService {
     }
   }
 
-  /// Parse delivery status from database row
-  MessageDeliveryTracking _parseDeliveryStatus(Map<String, dynamic> row) {
-    return MessageDeliveryTracking(
-      messageId: row['message_id'] as String,
-      status: MessageDeliveryStatus.values.firstWhere(
-        (s) => s.name == row['status'],
-        orElse: () => MessageDeliveryStatus.sending,
-      ),
-      sentAt: row['sent_at'] != null
-          ? DateTime.parse(row['sent_at'] as String)
-          : null,
-      deliveredAt: row['delivered_at'] != null
-          ? DateTime.parse(row['delivered_at'] as String)
-          : null,
-      readAt: row['read_at'] != null
-          ? DateTime.parse(row['read_at'] as String)
-          : null,
-    );
-  }
-
   /// Track message delivery
   Future<void> trackMessageDelivery(
     String messageId, {
@@ -271,12 +251,6 @@ class MessageDeliveryService {
     }
   }
 
-  /// Update internal tracking
-  void _updateDeliveryStatus(MessageDeliveryTracking tracking) {
-    _deliveryTracking[tracking.messageId] = tracking;
-    _deliveryStatusController.add(tracking);
-  }
-
   /// Get delivery status
   MessageDeliveryTracking? getDeliveryStatus(String messageId) {
     return _deliveryTracking[messageId];
@@ -320,12 +294,6 @@ class MessageDeliveryService {
     if (!_isInitialized || _currentUserId == null) return;
 
     try {
-      final indicator = TypingIndicator(
-        userId: _currentUserId!,
-        conversationId: conversationId,
-        status: status,
-      );
-
       // Stub implementation - would update Appwrite database
       if (kDebugMode) {
         print(
@@ -337,13 +305,6 @@ class MessageDeliveryService {
         print('Error sending typing indicator: $e');
       }
     }
-  }
-
-  /// Update typing indicator
-  void _updateTypingIndicator(TypingIndicator indicator) {
-    final key = '${indicator.userId}_${indicator.conversationId}';
-    _typingIndicators[key] = indicator;
-    _typingController.add(indicator);
   }
 
   /// Get typing users in conversation

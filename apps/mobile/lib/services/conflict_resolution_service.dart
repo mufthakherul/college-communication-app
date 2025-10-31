@@ -76,42 +76,6 @@ class ConflictResolutionService {
     }
   }
 
-  /// Resolve conflict based on strategy
-  Future<Map<String, dynamic>?> _resolveConflict({
-    required String documentId,
-    required Map<String, dynamic> serverData,
-    required Map<String, dynamic> clientUpdates,
-    required DateTime serverTimestamp,
-    required DateTime clientTimestamp,
-    required ConflictStrategy strategy,
-  }) async {
-    switch (strategy) {
-      case ConflictStrategy.serverWins:
-        // Keep server version, discard client updates
-        return null; // No updates needed
-
-      case ConflictStrategy.clientWins:
-        // Use client updates
-        return clientUpdates;
-
-      case ConflictStrategy.newerWins:
-        // Use newer timestamp
-        if (clientTimestamp.isAfter(serverTimestamp)) {
-          return clientUpdates;
-        } else {
-          return null; // Server is newer
-        }
-
-      case ConflictStrategy.merge:
-        // Merge both versions (field-level merge)
-        return _mergeUpdates(serverData, clientUpdates);
-
-      case ConflictStrategy.manual:
-        // Require manual resolution
-        return null;
-    }
-  }
-
   /// Merge updates at field level
   Map<String, dynamic> _mergeUpdates(
     Map<String, dynamic> serverData,
