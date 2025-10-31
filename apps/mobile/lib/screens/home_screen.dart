@@ -75,10 +75,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List<Widget> get _screens => [
-    const NoticesScreen(),
-    const MessagesScreen(),
-    ProfileScreen(user: _currentUser, currentUser: _currentUser),
-  ];
+        const NoticesScreen(),
+        const MessagesScreen(),
+        ProfileScreen(user: _currentUser, currentUser: _currentUser),
+      ];
 
   @override
   Widget build(BuildContext context) {

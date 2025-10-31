@@ -30,10 +30,10 @@ class CacheEntry<T> {
   }
 
   Map<String, dynamic> toJson() => {
-    'data': data,
-    'timestamp': timestamp.toIso8601String(),
-    'ttl': ttl.inMilliseconds,
-  };
+        'data': data,
+        'timestamp': timestamp.toIso8601String(),
+        'ttl': ttl.inMilliseconds,
+      };
 
   factory CacheEntry.fromJson(
     Map<String, dynamic> json,

@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 /// Note: This is a stub implementation. In production, integrate with
 /// analytics services like Firebase Analytics, Sentry, or custom Appwrite Functions
 class AnalyticsService {
-
   // Track generic activity
   Future<void> trackActivity(
     String action,

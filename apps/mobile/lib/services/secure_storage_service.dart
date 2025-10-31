@@ -5,30 +5,31 @@ import 'package:crypto/crypto.dart';
 
 /// Secure storage service for sensitive data
 /// Provides basic obfuscation for stored data
-/// 
+///
 /// ⚠️ SECURITY NOTE: This implementation uses XOR encryption which provides
 /// only basic obfuscation, NOT strong encryption. For production applications
 /// handling highly sensitive data, use flutter_secure_storage package instead,
 /// which uses:
 /// - Android: KeyStore (hardware-backed encryption)
 /// - iOS: Keychain (hardware-backed encryption)
-/// 
+///
 /// Current implementation is suitable for:
 /// - Non-critical data obfuscation
 /// - Development/testing
 /// - Low-security requirements
-/// 
+///
 /// NOT suitable for:
 /// - Payment information
 /// - Personal identification numbers
 /// - Highly sensitive credentials
-/// 
+///
 /// To upgrade to flutter_secure_storage:
 /// 1. Add dependency: flutter_secure_storage: ^9.0.0
 /// 2. Replace this service with FlutterSecureStorage
 /// 3. Use await secureStorage.write(key: key, value: value)
 class SecureStorageService {
-  static final SecureStorageService _instance = SecureStorageService._internal();
+  static final SecureStorageService _instance =
+      SecureStorageService._internal();
   factory SecureStorageService() => _instance;
   SecureStorageService._internal();
 
@@ -55,9 +56,9 @@ class SecureStorageService {
       final prefs = await SharedPreferences.getInstance();
       final obfuscatedKey = _obfuscateKey(key);
       final encryptedValue = prefs.getString(obfuscatedKey);
-      
+
       if (encryptedValue == null) return null;
-      
+
       return _decryptValue(encryptedValue);
     } catch (e) {
       debugPrint('Secure storage read error: $e');
@@ -108,27 +109,27 @@ class SecureStorageService {
   }
 
   /// Basic obfuscation using XOR with derived key
-  /// 
+  ///
   /// ⚠️ WARNING: This is NOT cryptographically secure encryption!
   /// XOR encryption is easily reversible and provides only obfuscation.
-  /// 
+  ///
   /// For production with sensitive data, use:
   /// - flutter_secure_storage package (hardware-backed encryption)
   /// - or implement AES-256-GCM with proper key derivation (PBKDF2/Argon2)
-  /// 
+  ///
   /// Current implementation prevents casual inspection but not determined attacks.
   String _encryptValue(String value) {
     try {
       // Generate a derived key from the seed
       final keyBytes = _getDerivedKey();
       final valueBytes = utf8.encode(value);
-      
+
       // XOR encryption (basic obfuscation)
       final encryptedBytes = List<int>.generate(
         valueBytes.length,
         (i) => valueBytes[i] ^ keyBytes[i % keyBytes.length],
       );
-      
+
       // Base64 encode the result
       return base64Encode(encryptedBytes);
     } catch (e) {
@@ -142,16 +143,16 @@ class SecureStorageService {
     try {
       // Generate the same derived key
       final keyBytes = _getDerivedKey();
-      
+
       // Base64 decode
       final encryptedBytes = base64Decode(encryptedValue);
-      
+
       // XOR decryption (reverse of encryption)
       final decryptedBytes = List<int>.generate(
         encryptedBytes.length,
         (i) => encryptedBytes[i] ^ keyBytes[i % keyBytes.length],
       );
-      
+
       return utf8.decode(decryptedBytes);
     } catch (e) {
       debugPrint('Decryption error: $e');

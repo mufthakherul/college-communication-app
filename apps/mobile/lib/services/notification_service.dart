@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:campus_mesh/models/notification_model.dart';
 import 'package:campus_mesh/services/auth_service.dart';
-import 'package:campus_mesh/services/appwrite_service.dart';
 import 'dart:async';
 
 class NotificationService {

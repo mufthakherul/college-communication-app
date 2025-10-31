@@ -8,7 +8,7 @@ import 'package:campus_mesh/appwrite_config.dart';
 class MessageService {
   final _appwrite = AppwriteService();
   final _authService = AuthService();
-  
+
   StreamController<List<MessageModel>>? _messagesController;
   StreamController<int>? _unreadCountController;
 
@@ -35,29 +35,29 @@ class MessageService {
       onListen: () => _startMessagesPolling(otherUserId),
       onCancel: () => _stopMessagesPolling(),
     );
-    
+
     return _messagesController!.stream;
   }
 
   Timer? _messagesPollingTimer;
-  
+
   void _startMessagesPolling(String otherUserId) {
     _fetchMessages(otherUserId);
     _messagesPollingTimer = Timer.periodic(
-      const Duration(seconds: 3), 
+      const Duration(seconds: 3),
       (_) => _fetchMessages(otherUserId),
     );
   }
-  
+
   void _stopMessagesPolling() {
     _messagesPollingTimer?.cancel();
     _messagesPollingTimer = null;
   }
-  
+
   Future<void> _fetchMessages(String otherUserId) async {
     final currentUserId = _currentUserId;
     if (currentUserId == null) return;
-    
+
     try {
       // Fetch messages sent by current user to other user
       final sentDocs = await _appwrite.databases.listDocuments(
@@ -69,7 +69,7 @@ class MessageService {
           Query.limit(100),
         ],
       );
-      
+
       // Fetch messages received by current user from other user
       final receivedDocs = await _appwrite.databases.listDocuments(
         databaseId: AppwriteConfig.databaseId,
@@ -80,20 +80,22 @@ class MessageService {
           Query.limit(100),
         ],
       );
-      
+
       // Combine and sort by created_at
       final allMessages = [
         ...sentDocs.documents.map((doc) => MessageModel.fromJson(doc.data)),
         ...receivedDocs.documents.map((doc) => MessageModel.fromJson(doc.data)),
       ];
-      
+
       allMessages.sort((a, b) {
-        if (a.createdAt == null && b.createdAt == null) return 0;
-        if (a.createdAt == null) return 1;
-        if (b.createdAt == null) return -1;
-        return a.createdAt!.compareTo(b.createdAt!);
+        final aTime = a.createdAt;
+        final bTime = b.createdAt;
+        if (aTime == null && bTime == null) return 0;
+        if (aTime == null) return 1;
+        if (bTime == null) return -1;
+        return aTime.compareTo(bTime);
       });
-      
+
       _messagesController?.add(allMessages);
     } catch (e) {
       _messagesController?.addError(e);
@@ -120,7 +122,7 @@ class MessageService {
             Query.limit(50),
           ],
         );
-        
+
         // Fetch messages received by current user
         final receivedDocs = await _appwrite.databases.listDocuments(
           databaseId: AppwriteConfig.databaseId,
@@ -131,27 +133,30 @@ class MessageService {
             Query.limit(50),
           ],
         );
-        
+
         // Combine and sort
         final allMessages = [
           ...sentDocs.documents.map((doc) => MessageModel.fromJson(doc.data)),
-          ...receivedDocs.documents.map((doc) => MessageModel.fromJson(doc.data)),
+          ...receivedDocs.documents
+              .map((doc) => MessageModel.fromJson(doc.data)),
         ];
-        
+
         allMessages.sort((a, b) {
-          if (a.createdAt == null && b.createdAt == null) return 0;
-          if (a.createdAt == null) return 1;
-          if (b.createdAt == null) return -1;
-          return b.createdAt!.compareTo(a.createdAt!);
+          final aTime = a.createdAt;
+          final bTime = b.createdAt;
+          if (aTime == null && bTime == null) return 0;
+          if (aTime == null) return 1;
+          if (bTime == null) return -1;
+          return bTime.compareTo(aTime);
         });
-        
+
         final messages = allMessages.take(50).toList();
-        
+
         yield messages;
       } catch (e) {
         yield [];
       }
-      
+
       await Future.delayed(const Duration(seconds: 5));
     }
   }
@@ -230,32 +235,32 @@ class MessageService {
       onListen: () => _startUnreadCountPolling(),
       onCancel: () => _stopUnreadCountPolling(),
     );
-    
+
     return _unreadCountController!.stream;
   }
 
   Timer? _unreadCountPollingTimer;
-  
+
   void _startUnreadCountPolling() {
     _fetchUnreadCount();
     _unreadCountPollingTimer = Timer.periodic(
-      const Duration(seconds: 5), 
+      const Duration(seconds: 5),
       (_) => _fetchUnreadCount(),
     );
   }
-  
+
   void _stopUnreadCountPolling() {
     _unreadCountPollingTimer?.cancel();
     _unreadCountPollingTimer = null;
   }
-  
+
   Future<void> _fetchUnreadCount() async {
     final currentUserId = _currentUserId;
     if (currentUserId == null) {
       _unreadCountController?.add(0);
       return;
     }
-    
+
     try {
       final docs = await _appwrite.databases.listDocuments(
         databaseId: AppwriteConfig.databaseId,
@@ -265,13 +270,13 @@ class MessageService {
           Query.equal('read', false),
         ],
       );
-      
+
       _unreadCountController?.add(docs.total);
     } catch (e) {
       _unreadCountController?.add(0);
     }
   }
-  
+
   // Clean up
   void dispose() {
     _stopMessagesPolling();

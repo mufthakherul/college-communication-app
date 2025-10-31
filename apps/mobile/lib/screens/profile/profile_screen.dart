@@ -28,7 +28,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     // User can view their own private info or teachers can view student info
     if (widget.currentUser == null || widget.user == null) return false;
     if (widget.currentUser!.uid == widget.user!.uid) return true; // Own profile
-    if (_isTeacherOrAdmin(widget.currentUser!.role)) return true; // Teacher/Admin viewing
+    if (_isTeacherOrAdmin(widget.currentUser!.role)) {
+      return true; // Teacher/Admin viewing
+    }
     return false;
   }
 
@@ -90,8 +92,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   widget.user!.displayName,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 const SizedBox(height: 4),
                 Text(
@@ -132,27 +134,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   widget.user!.isActive ? 'Active' : 'Inactive',
                 ),
                 // Student-specific information (private - only visible to self and teachers)
-                if (widget.user!.role == UserRole.student && _canViewPrivateInfo()) ...[
+                if (widget.user!.role == UserRole.student &&
+                    _canViewPrivateInfo()) ...[
                   const Divider(height: 32),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: Row(
                       children: [
                         Icon(Icons.lock, size: 16, color: Colors.grey[600]),
                         const SizedBox(width: 8),
                         Text(
                           'Student Details',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                         const Spacer(),
                         Text(
                           'Private',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.grey[600],
-                            fontStyle: FontStyle.italic,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Colors.grey[600],
+                                    fontStyle: FontStyle.italic,
+                                  ),
                         ),
                       ],
                     ),
@@ -200,8 +206,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Text(
                     'Settings',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -338,7 +344,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       Text(
                         'About',
-                        style: Theme.of(context).textTheme.titleMedium
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
@@ -350,7 +358,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             children: [
                               Text(
                                 'Rangpur Government Polytechnic Institute',
-                                style: Theme.of(context).textTheme.titleSmall
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall
                                     ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 8),
@@ -416,7 +426,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   Text(
                                     'Version: 1.0.0',
-                                    style: Theme.of(context).textTheme.bodySmall
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
                                         ?.copyWith(color: Colors.grey),
                                   ),
                                 ],
