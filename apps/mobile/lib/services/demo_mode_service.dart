@@ -7,8 +7,9 @@ class DemoModeService {
   static const String _demoUserKey = 'demo_user_data';
 
   // Security: Demo mode can be disabled in production by setting this to false
-  // Change to false before releasing to production for enhanced security
-  static const bool _allowDemoMode = true;
+  // IMPORTANT: Set to false before releasing to production for enhanced security
+  // Demo mode is only for development and demonstration purposes
+  static const bool _allowDemoMode = false; // DISABLED FOR PRODUCTION
 
   // Check if demo mode is available (respects production setting)
   bool isDemoModeAvailable() {

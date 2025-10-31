@@ -10,9 +10,29 @@ import 'package:campus_mesh/services/sentry_service.dart';
 import 'package:campus_mesh/services/onesignal_service.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
+import 'package:campus_mesh/services/security_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // SECURITY: Perform security checks on startup
+  if (kReleaseMode) {
+    final securityService = SecurityService();
+    final securityResult = await securityService.performSecurityChecks();
+    
+    if (!securityService.shouldAllowAppExecution(securityResult)) {
+      // Critical security issue detected - show error and exit
+      runApp(SecurityBlockedApp(
+        message: securityService.getSecurityWarningMessage(securityResult),
+      ));
+      return;
+    }
+    
+    // Log security warnings but allow execution
+    if (!securityResult.allChecksPassed) {
+      debugPrint('Security warning: ${securityService.getSecurityWarningMessage(securityResult)}');
+    }
+  }
 
   // Initialize Sentry (crash reporting)
   // Replace 'YOUR_SENTRY_DSN' with your actual Sentry DSN
@@ -119,6 +139,65 @@ class _CampusMeshAppState extends State<CampusMeshApp> {
 
           return const LoginScreen();
         },
+      ),
+    );
+  }
+}
+
+/// Security blocked app - shown when critical security checks fail
+class SecurityBlockedApp extends StatelessWidget {
+  final String message;
+
+  const SecurityBlockedApp({
+    super.key,
+    required this.message,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Security Alert',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeService.lightTheme,
+      home: Scaffold(
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.security,
+                  size: 80,
+                  color: Colors.red,
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  'Security Alert',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 16),
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  'Please download the official app from trusted sources.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

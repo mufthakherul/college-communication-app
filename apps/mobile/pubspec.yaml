@@ -41,6 +41,8 @@ dependencies:
   # Monitoring & Analytics
   sentry_flutter: ^7.14.0
   onesignal_flutter: ^5.0.0
+  # Security
+  crypto: ^3.0.3
 
 dev_dependencies:
   flutter_test:
