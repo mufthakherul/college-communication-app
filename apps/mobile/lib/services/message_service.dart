@@ -7,10 +7,19 @@ class MessageService {
   // Get current user ID
   String? get _currentUserId => _supabase.auth.currentUser?.id;
 
+  // Validate UUID format to prevent injection
+  bool _isValidUuid(String uuid) {
+    final uuidRegex = RegExp(
+      r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$',
+      caseSensitive: false,
+    );
+    return uuidRegex.hasMatch(uuid);
+  }
+
   // Get messages between current user and another user
   Stream<List<MessageModel>> getMessages(String otherUserId) {
     final currentUserId = _currentUserId;
-    if (currentUserId == null) {
+    if (currentUserId == null || !_isValidUuid(otherUserId)) {
       return Stream.value([]);
     }
 
@@ -50,6 +59,11 @@ class MessageService {
       final currentUserId = _currentUserId;
       if (currentUserId == null) {
         throw Exception('User must be authenticated to send messages');
+      }
+
+      // Validate recipient ID format
+      if (!_isValidUuid(recipientId)) {
+        throw Exception('Invalid recipient ID format');
       }
 
       final message = {
