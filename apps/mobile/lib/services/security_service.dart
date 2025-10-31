@@ -91,6 +91,9 @@ class SecurityService {
 
         for (final path in rootIndicators) {
           final file = File(path);
+          // ignore: avoid_slow_async_io
+          // Note: Using async file.exists() is acceptable here for security checks
+          // as this is a one-time check during app initialization
           if (await file.exists()) {
             debugPrint('Root indicator found: $path');
             // Don't block in debug mode
@@ -111,6 +114,9 @@ class SecurityService {
 
         for (final path in jailbreakIndicators) {
           final file = File(path);
+          // ignore: avoid_slow_async_io
+          // Note: Using async file.exists() is acceptable here for security checks
+          // as this is a one-time check during app initialization
           if (await file.exists()) {
             debugPrint('Jailbreak indicator found: $path');
             if (kReleaseMode) {

@@ -1,8 +1,6 @@
 /// Network configuration for the College Communication App
 /// Centralized configuration for all networking components
 
-import 'dart:io';
-
 /// Network configuration class
 class NetworkConfig {
   /// Connectivity settings

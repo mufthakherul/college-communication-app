@@ -87,7 +87,12 @@ class MessageService {
         ...receivedDocs.documents.map((doc) => MessageModel.fromJson(doc.data)),
       ];
       
-      allMessages.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+      allMessages.sort((a, b) {
+        if (a.createdAt == null && b.createdAt == null) return 0;
+        if (a.createdAt == null) return 1;
+        if (b.createdAt == null) return -1;
+        return a.createdAt!.compareTo(b.createdAt!);
+      });
       
       _messagesController?.add(allMessages);
     } catch (e) {
@@ -133,7 +138,12 @@ class MessageService {
           ...receivedDocs.documents.map((doc) => MessageModel.fromJson(doc.data)),
         ];
         
-        allMessages.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+        allMessages.sort((a, b) {
+          if (a.createdAt == null && b.createdAt == null) return 0;
+          if (a.createdAt == null) return 1;
+          if (b.createdAt == null) return -1;
+          return b.createdAt!.compareTo(a.createdAt!);
+        });
         
         final messages = allMessages.take(50).toList();
         
