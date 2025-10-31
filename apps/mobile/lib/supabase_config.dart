@@ -15,8 +15,14 @@
 /// ```
 
 class SupabaseConfig {
-  // Replace these with your actual Supabase project credentials
+  // ⚠️ IMPORTANT: Replace these with your actual Supabase project credentials
   // Get them from: https://app.supabase.com/project/YOUR_PROJECT_ID/settings/api
+  // 
+  // 🔒 SECURITY: Do NOT commit real credentials to version control!
+  // Consider using:
+  // 1. Environment variables (.env file with flutter_dotenv)
+  // 2. Build-time configuration (--dart-define)
+  // 3. Add this file to .gitignore after adding real credentials
   
   static const String supabaseUrl = 'YOUR_SUPABASE_PROJECT_URL';
   static const String supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY';

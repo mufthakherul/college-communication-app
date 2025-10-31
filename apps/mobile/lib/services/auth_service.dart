@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:campus_mesh/models/user_model.dart';
 
@@ -57,7 +58,11 @@ class AuthService {
           // If profile creation fails, we should sign out the user
           // to prevent having an authenticated user without a profile
           await _supabase.auth.signOut();
-          throw Exception('Failed to create user profile: $dbError');
+          // Log the specific error for debugging but show generic message to user
+          if (kDebugMode) {
+            debugPrint('Profile creation error: $dbError');
+          }
+          throw Exception('Failed to create user profile. Please try again or contact support.');
         }
       }
 
