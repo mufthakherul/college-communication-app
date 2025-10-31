@@ -1,72 +1,107 @@
 import 'package:flutter/foundation.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:appwrite/appwrite.dart';
+import 'package:appwrite/models.dart' as models;
 import 'package:campus_mesh/models/user_model.dart';
+import 'package:campus_mesh/services/appwrite_service.dart';
+import 'package:campus_mesh/appwrite_config.dart';
 
 class AuthService {
-  final SupabaseClient _supabase = Supabase.instance.client;
-
-  // Get current user
-  User? get currentUser => _supabase.auth.currentUser;
+  final _appwrite = AppwriteService();
 
   // Get current user ID
-  String? get currentUserId => _supabase.auth.currentUser?.id;
+  String? _currentUserId;
+  String? get currentUserId => _currentUserId;
 
-  // Auth state stream
-  Stream<AuthState> get authStateChanges => _supabase.auth.onAuthStateChange;
+  // Initialize and get current user
+  Future<void> initialize() async {
+    try {
+      final user = await _appwrite.account.get();
+      _currentUserId = user.$id;
+    } catch (e) {
+      _currentUserId = null;
+    }
+  }
+
+  // Check if user is authenticated
+  Future<bool> isAuthenticated() async {
+    return await _appwrite.isAuthenticated();
+  }
 
   // Sign in with email and password
-  Future<AuthResponse> signInWithEmailAndPassword(
+  Future<String> signInWithEmailAndPassword(
     String email,
     String password,
   ) async {
     try {
-      return await _supabase.auth.signInWithPassword(
+      final session = await _appwrite.account.createEmailSession(
         email: email,
         password: password,
       );
+      _currentUserId = session.userId;
+      return session.userId;
+    } on AppwriteException catch (e) {
+      throw Exception('Failed to sign in: ${e.message}');
     } catch (e) {
       throw Exception('Failed to sign in: $e');
     }
   }
 
   // Register with email and password
-  Future<AuthResponse> registerWithEmailAndPassword(
+  Future<String> registerWithEmailAndPassword(
     String email,
     String password,
     String displayName,
   ) async {
     try {
-      final response = await _supabase.auth.signUp(
+      // Create account
+      final user = await _appwrite.account.create(
+        userId: ID.unique(),
         email: email,
         password: password,
-        data: {'display_name': displayName},
+        name: displayName,
       );
 
+      // Create session
+      await _appwrite.account.createEmailSession(
+        email: email,
+        password: password,
+      );
+
+      _currentUserId = user.$id;
+
       // Create user profile in database
-      if (response.user != null) {
-        try {
-          await _supabase.from('users').insert({
-            'id': response.user!.id,
+      try {
+        await _appwrite.databases.createDocument(
+          databaseId: AppwriteConfig.databaseId,
+          collectionId: AppwriteConfig.usersCollectionId,
+          documentId: user.$id,
+          data: {
             'email': email,
             'display_name': displayName,
             'role': 'student', // Default role
             'is_active': true,
-          });
-        } catch (dbError) {
-          // If profile creation fails, we should sign out the user
-          // to prevent having an authenticated user without a profile
-          await _supabase.auth.signOut();
-          // Log the specific error for debugging but show generic message to user
-          if (kDebugMode) {
-            debugPrint('Profile creation error: $dbError');
-          }
-          throw Exception(
-            'Failed to create user profile. Please try again or contact support.',
-          );
+            'created_at': DateTime.now().toIso8601String(),
+            'updated_at': DateTime.now().toIso8601String(),
+          },
+        );
+      } catch (dbError) {
+        // If profile creation fails, delete the account
+        try {
+          await _appwrite.account.deleteSession(sessionId: 'current');
+        } catch (_) {}
+        
+        // Log the specific error for debugging but show generic message to user
+        if (kDebugMode) {
+          debugPrint('Profile creation error: $dbError');
         }
+        throw Exception(
+          'Failed to create user profile. Please try again or contact support.',
+        );
       }
 
-      return response;
+      return user.$id;
+    } on AppwriteException catch (e) {
+      throw Exception('Failed to register: ${e.message}');
     } catch (e) {
       throw Exception('Failed to register: $e');
     }
@@ -75,7 +110,10 @@ class AuthService {
   // Sign out
   Future<void> signOut() async {
     try {
-      await _supabase.auth.signOut();
+      await _appwrite.account.deleteSession(sessionId: 'current');
+      _currentUserId = null;
+    } on AppwriteException catch (e) {
+      throw Exception('Failed to sign out: ${e.message}');
     } catch (e) {
       throw Exception('Failed to sign out: $e');
     }
@@ -84,13 +122,15 @@ class AuthService {
   // Get user profile
   Future<UserModel?> getUserProfile(String uid) async {
     try {
-      final response = await _supabase
-          .from('users')
-          .select()
-          .eq('id', uid)
-          .single();
+      final document = await _appwrite.databases.getDocument(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.usersCollectionId,
+        documentId: uid,
+      );
 
-      return UserModel.fromJson(response);
+      return UserModel.fromJson(document.data);
+    } on AppwriteException catch (e) {
+      throw Exception('Failed to get user profile: ${e.message}');
     } catch (e) {
       throw Exception('Failed to get user profile: $e');
     }
@@ -99,13 +139,19 @@ class AuthService {
   // Update user profile
   Future<void> updateUserProfile(Map<String, dynamic> updates) async {
     try {
-      final user = currentUser;
-      if (user == null) throw Exception('No user signed in');
+      if (_currentUserId == null) throw Exception('No user signed in');
 
-      await _supabase
-          .from('users')
-          .update({...updates, 'updated_at': DateTime.now().toIso8601String()})
-          .eq('id', user.id);
+      await _appwrite.databases.updateDocument(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.usersCollectionId,
+        documentId: _currentUserId!,
+        data: {
+          ...updates,
+          'updated_at': DateTime.now().toIso8601String(),
+        },
+      );
+    } on AppwriteException catch (e) {
+      throw Exception('Failed to update user profile: ${e.message}');
     } catch (e) {
       throw Exception('Failed to update user profile: $e');
     }
@@ -114,7 +160,12 @@ class AuthService {
   // Reset password
   Future<void> resetPassword(String email) async {
     try {
-      await _supabase.auth.resetPasswordForEmail(email);
+      await _appwrite.account.createRecovery(
+        email: email,
+        url: 'https://rpi-communication.app/reset-password', // Update with your app URL
+      );
+    } on AppwriteException catch (e) {
+      throw Exception('Failed to send password reset email: ${e.message}');
     } catch (e) {
       throw Exception('Failed to send password reset email: $e');
     }
