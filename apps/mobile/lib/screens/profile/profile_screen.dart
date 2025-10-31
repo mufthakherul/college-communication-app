@@ -7,17 +7,27 @@ import 'package:campus_mesh/screens/auth/login_screen.dart';
 import 'package:campus_mesh/screens/developer/developer_info_screen.dart';
 import 'package:campus_mesh/screens/settings/sync_settings_screen.dart';
 import 'package:campus_mesh/screens/settings/mesh_network_screen.dart';
+import 'package:campus_mesh/screens/profile/edit_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final UserModel? user;
+  final UserModel? currentUser; // Current logged-in user to check permissions
 
-  const ProfileScreen({super.key, this.user});
+  const ProfileScreen({super.key, this.user, this.currentUser});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  bool _canViewPrivateInfo() {
+    // User can view their own private info or teachers can view student info
+    if (widget.currentUser == null || widget.user == null) return false;
+    if (widget.currentUser!.uid == widget.user!.uid) return true; // Own profile
+    if (widget.currentUser!.role == UserRole.teacher || 
+        widget.currentUser!.role == UserRole.admin) return true; // Teacher/Admin viewing
+    return false;
+  }
   @override
   Widget build(BuildContext context) {
     final authService = AuthService();
@@ -117,6 +127,68 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   'Status',
                   widget.user!.isActive ? 'Active' : 'Inactive',
                 ),
+                // Student-specific information (private - only visible to self and teachers)
+                if (widget.user!.role == UserRole.student && _canViewPrivateInfo()) ...[
+                  const Divider(height: 32),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      children: [
+                        Icon(Icons.lock, size: 16, color: Colors.grey[600]),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Student Details',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const Spacer(),
+                        Text(
+                          'Private',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Colors.grey[600],
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (widget.user!.shift.isNotEmpty)
+                    _buildInfoTile(
+                      context,
+                      Icons.schedule,
+                      'Shift',
+                      widget.user!.shift,
+                    ),
+                  if (widget.user!.group.isNotEmpty)
+                    _buildInfoTile(
+                      context,
+                      Icons.groups,
+                      'Group',
+                      widget.user!.group,
+                    ),
+                  if (widget.user!.classRoll.isNotEmpty)
+                    _buildInfoTile(
+                      context,
+                      Icons.confirmation_number,
+                      'Class Roll',
+                      widget.user!.classRoll,
+                    ),
+                  if (widget.user!.academicSession.isNotEmpty)
+                    _buildInfoTile(
+                      context,
+                      Icons.event,
+                      'Academic Session',
+                      widget.user!.academicSession,
+                    ),
+                  if (widget.user!.phoneNumber.isNotEmpty)
+                    _buildInfoTile(
+                      context,
+                      Icons.phone,
+                      'Phone Number',
+                      widget.user!.phoneNumber,
+                    ),
+                ],
                 const Divider(height: 32),
                 // Theme Settings Section
                 Padding(
@@ -188,8 +260,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Column(
                     children: [
                       ElevatedButton.icon(
-                        onPressed: () {
-                          // TODO: Implement edit profile
+                        onPressed: () async {
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditProfileScreen(
+                                user: widget.user!,
+                              ),
+                            ),
+                          );
+                          // Refresh profile if updated
+                          if (result == true && mounted) {
+                            setState(() {});
+                          }
                         },
                         icon: const Icon(Icons.edit),
                         label: const Text('Edit Profile'),
@@ -454,7 +537,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 'We collect and store the following information:\n'
                 '• Your name, email, and department\n'
                 '• Messages and notices you create\n'
-                '• Profile information you provide',
+                '• Profile information you provide\n'
+                '• Student details: shift, group, class roll, academic session, phone number (for students only)',
                 style: TextStyle(fontSize: 14),
               ),
               SizedBox(height: 12),
@@ -477,7 +561,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 'We implement security measures to protect your data:\n'
                 '• Encrypted data transmission\n'
                 '• Secure authentication\n'
-                '• Role-based access control',
+                '• Role-based access control\n'
+                '• Private student information (shift, group, roll, session, phone) is only visible to the student and teachers',
                 style: TextStyle(fontSize: 14),
               ),
               SizedBox(height: 12),

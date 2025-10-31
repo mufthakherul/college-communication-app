@@ -50,14 +50,23 @@ You need to create 6 collections. For each collection:
 | is_active | Boolean | - | ✅ Yes | true | No |
 | created_at | DateTime | - | ✅ Yes | - | No |
 | updated_at | DateTime | - | ✅ Yes | - | No |
+| shift | String | 50 | No | - | No |
+| group | String | 10 | No | - | No |
+| class_roll | String | 20 | No | - | No |
+| academic_session | String | 50 | No | - | No |
+| phone_number | String | 20 | No | - | No |
 
 **For role enum, add values:** `student`, `teacher`, `admin`
+
+**Note on Student Fields:** The fields `shift`, `group`, `class_roll`, `academic_session`, and `phone_number` are student-specific and contain private information. These fields are only visible to the student themselves and teachers/admins for proper academic management.
 
 7. Click **Settings** tab → **Permissions**
 8. Add permissions:
    - **Any**: Read
    - **Users**: Create, Update
    - **Role:admin**: Delete, Update
+
+**Privacy Note:** While the collection has "Read" permission for "Any", the application implements additional privacy controls at the UI level. Private student information (shift, group, class roll, academic session, phone number) is only displayed to the student themselves or to teachers/admins, ensuring sensitive academic data remains protected.
 
 #### Collection 2: notices
 
