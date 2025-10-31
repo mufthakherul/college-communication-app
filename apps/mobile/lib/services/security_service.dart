@@ -10,7 +10,7 @@ class SecurityService {
 
   /// Expected package name - validates app hasn't been repackaged
   // Note: This field is reserved for future use
-  // static const String _expectedPackageName = 
+  // static const String _expectedPackageName =
   //     'gov.bd.polytech.rgpi.communication.develop.by.mufthakherul';
 
   /// Expected Appwrite project ID - validates backend connection
@@ -24,19 +24,18 @@ class SecurityService {
     try {
       // Check 1: Validate package name
       result.packageNameValid = await _validatePackageName();
-      
+
       // Check 2: Check for root/jailbreak (basic check)
       result.deviceSecure = await _checkDeviceSecurity();
-      
+
       // Check 3: Validate Appwrite configuration
       result.backendConfigValid = _validateBackendConfig();
-      
+
       // Check 4: Check for debugger (development builds)
       result.debuggerDetected = _checkDebugger();
-      
+
       // Check 5: Validate build signature (basic integrity check)
       result.buildIntegrityValid = await _validateBuildIntegrity();
-
     } catch (e) {
       debugPrint('Security check error: $e');
       result.hasError = true;
@@ -47,15 +46,15 @@ class SecurityService {
   }
 
   /// Validates that the package name hasn't been changed (app repackaging detection)
-  /// 
+  ///
   /// LIMITATION: Currently not fully implemented. Returns true as a placeholder.
   /// For production deployment, this should be enhanced with platform channels.
-  /// 
+  ///
   /// To implement properly:
   /// 1. Create Android native method to get package name
   /// 2. Create iOS native method to get bundle ID
   /// 3. Compare against expected values
-  /// 
+  ///
   /// For now, this check relies on ProGuard obfuscation and other security measures.
   Future<bool> _validatePackageName() async {
     try {
@@ -91,9 +90,9 @@ class SecurityService {
 
         for (final path in rootIndicators) {
           final file = File(path);
-          // ignore: avoid_slow_async_io
           // Note: Using async file.exists() is acceptable here for security checks
           // as this is a one-time check during app initialization
+          // ignore: avoid_slow_async_io
           if (await file.exists()) {
             debugPrint('Root indicator found: $path');
             // Don't block in debug mode
@@ -114,9 +113,9 @@ class SecurityService {
 
         for (final path in jailbreakIndicators) {
           final file = File(path);
-          // ignore: avoid_slow_async_io
           // Note: Using async file.exists() is acceptable here for security checks
           // as this is a one-time check during app initialization
+          // ignore: avoid_slow_async_io
           if (await file.exists()) {
             debugPrint('Jailbreak indicator found: $path');
             if (kReleaseMode) {
@@ -125,7 +124,7 @@ class SecurityService {
           }
         }
       }
-      
+
       return true; // Device appears secure
     } catch (e) {
       // NOTE: This fails open (returns true) to avoid blocking legitimate users
@@ -160,11 +159,11 @@ class SecurityService {
   }
 
   /// Checks if debugger is attached
-  /// 
+  ///
   /// LIMITATION: Basic implementation - always returns false in release mode.
   /// Flutter makes it difficult to reliably detect debuggers without native code.
   /// For enhanced security, implement platform-specific debugger detection.
-  /// 
+  ///
   /// This is a placeholder check. Real debugger detection would require:
   /// - Android: Check for JDWP or ptrace
   /// - iOS: Check for PT_DENY_ATTACH or debugger process
@@ -185,7 +184,7 @@ class SecurityService {
     try {
       // In production, you could verify APK signature here
       // For now, we'll do a basic check that critical files are present
-      
+
       // Check that Appwrite config is loaded
       if (AppwriteConfig.projectId.isEmpty) {
         return false;
@@ -208,15 +207,15 @@ class SecurityService {
     if (!result.packageNameValid) {
       return 'Security Alert: This app may have been modified. Please download from official sources only.';
     }
-    
+
     if (!result.deviceSecure) {
       return 'Security Warning: Your device appears to be rooted/jailbroken. This may compromise app security.';
     }
-    
+
     if (!result.backendConfigValid) {
       return 'Security Alert: Backend configuration has been tampered with. Please reinstall the app.';
     }
-    
+
     if (!result.buildIntegrityValid) {
       return 'Security Alert: App integrity check failed. Please reinstall from official sources.';
     }
@@ -232,10 +231,12 @@ class SecurityService {
   bool shouldAllowAppExecution(SecurityCheckResult result) {
     // In release mode, block execution if critical security checks fail
     if (kReleaseMode) {
-      if (!result.packageNameValid || !result.backendConfigValid || !result.buildIntegrityValid) {
+      if (!result.packageNameValid ||
+          !result.backendConfigValid ||
+          !result.buildIntegrityValid) {
         return false;
       }
-      
+
       // For rooted devices, show warning but allow execution
       // (blocking rooted devices entirely may impact legitimate users)
     }

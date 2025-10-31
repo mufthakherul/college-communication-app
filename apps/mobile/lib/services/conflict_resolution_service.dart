@@ -65,7 +65,8 @@ class ConflictResolutionService {
     try {
       // Stub implementation - would implement with Appwrite
       if (kDebugMode) {
-        print('Updating document with conflict detection (stub): $collection/$documentId');
+        print(
+            'Updating document with conflict detection (stub): $collection/$documentId');
         print('Strategy: ${(strategy ?? _defaultStrategy).name}');
       }
     } catch (e) {
@@ -74,40 +75,6 @@ class ConflictResolutionService {
       }
       rethrow;
     }
-  }
-
-  /// Merge updates at field level
-  Map<String, dynamic> _mergeUpdates(
-    Map<String, dynamic> serverData,
-    Map<String, dynamic> clientUpdates,
-  ) {
-    final merged = <String, dynamic>{...serverData};
-
-    for (final entry in clientUpdates.entries) {
-      final key = entry.key;
-      final clientValue = entry.value;
-
-      if (!merged.containsKey(key)) {
-        // New field from client
-        merged[key] = clientValue;
-      } else if (clientValue is Map && merged[key] is Map) {
-        // Recursively merge nested maps
-        merged[key] = _mergeUpdates(
-          merged[key] as Map<String, dynamic>,
-          clientValue as Map<String, dynamic>,
-        );
-      } else if (clientValue is List && merged[key] is List) {
-        // Merge lists (combine and deduplicate)
-        final serverList = merged[key] as List;
-        final clientList = clientValue;
-        merged[key] = {...serverList, ...clientList}.toList();
-      } else {
-        // Use client value for scalar fields
-        merged[key] = clientValue;
-      }
-    }
-
-    return merged;
   }
 
   /// Manually resolve a conflict
@@ -171,7 +138,8 @@ class ConflictResolutionService {
     try {
       // Stub implementation - would implement with Appwrite
       if (kDebugMode) {
-        print('Versioned update (stub) for $documentId, expected version: $expectedVersion');
+        print(
+            'Versioned update (stub) for $documentId, expected version: $expectedVersion');
       }
     } catch (e) {
       if (kDebugMode) {
