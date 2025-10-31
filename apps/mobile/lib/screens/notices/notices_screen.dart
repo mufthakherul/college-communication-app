@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../models/notice_model.dart';
-import '../../models/user_model.dart';
-import '../../services/notice_service.dart';
-import '../../services/auth_service.dart';
-import 'notice_detail_screen.dart';
-import 'create_notice_screen.dart';
+import 'package:campus_mesh/models/notice_model.dart';
+import 'package:campus_mesh/models/user_model.dart';
+import 'package:campus_mesh/services/notice_service.dart';
+import 'package:campus_mesh/services/auth_service.dart';
+import 'package:campus_mesh/screens/notices/notice_detail_screen.dart';
+import 'package:campus_mesh/screens/notices/create_notice_screen.dart';
 
 class NoticesScreen extends StatefulWidget {
   const NoticesScreen({super.key});
@@ -18,7 +18,6 @@ class _NoticesScreenState extends State<NoticesScreen> {
   final _authService = AuthService();
   final _searchController = TextEditingController();
   UserModel? _currentUser;
-  bool _isRefreshing = false;
   bool _isSearching = false;
   String _searchQuery = '';
 
@@ -45,12 +44,8 @@ class _NoticesScreenState extends State<NoticesScreen> {
   }
 
   Future<void> _handleRefresh() async {
-    setState(() => _isRefreshing = true);
     // Wait for the stream to update (simulate refresh)
     await Future.delayed(const Duration(milliseconds: 500));
-    if (mounted) {
-      setState(() => _isRefreshing = false);
-    }
   }
 
   bool get _canCreateNotice {

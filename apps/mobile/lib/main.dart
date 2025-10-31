@@ -3,15 +3,14 @@ import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_performance/firebase_performance.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'firebase_options.dart';
-import 'screens/auth/login_screen.dart';
-import 'screens/home_screen.dart';
-import 'services/theme_service.dart';
-import 'services/cache_service.dart';
-import 'services/offline_queue_service.dart';
-import 'services/background_sync_service.dart';
+import 'package:campus_mesh/firebase_options.dart';
+import 'package:campus_mesh/screens/auth/login_screen.dart';
+import 'package:campus_mesh/screens/home_screen.dart';
+import 'package:campus_mesh/services/theme_service.dart';
+import 'package:campus_mesh/services/cache_service.dart';
+import 'package:campus_mesh/services/offline_queue_service.dart';
+import 'package:campus_mesh/services/background_sync_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -77,7 +77,7 @@ class ConflictResolutionService {
 
       final serverData = docSnapshot.data()!;
       final serverTimestamp = (serverData['updatedAt'] as Timestamp?)?.toDate();
-      final conflictVersion = serverData['conflictVersion'] ?? 0;
+      final conflictVersion = (serverData['conflictVersion'] as int?) ?? 0;
 
       // Check for conflicts
       if (serverTimestamp != null && serverTimestamp.isAfter(clientTimestamp)) {
@@ -181,7 +181,7 @@ class ConflictResolutionService {
     Map<String, dynamic> serverData,
     Map<String, dynamic> clientUpdates,
   ) {
-    final merged = Map<String, dynamic>.from(serverData);
+    final merged = <String, dynamic>{...serverData};
 
     for (final entry in clientUpdates.entries) {
       final key = entry.key;
@@ -224,8 +224,6 @@ class ConflictResolutionService {
       if (conflictIndex == -1) {
         throw Exception('Conflict not found: $documentId');
       }
-
-      final conflict = _unresolvedConflicts[conflictIndex];
 
       // Apply resolved data
       // Note: The collection would need to be tracked in DataConflict for this to work
@@ -280,7 +278,7 @@ class ConflictResolutionService {
           throw Exception('Document not found');
         }
 
-        final currentVersion = snapshot.data()?['version'] ?? 0;
+        final currentVersion = (snapshot.data()?['version'] as int?) ?? 0;
 
         if (currentVersion != expectedVersion) {
           throw Exception(

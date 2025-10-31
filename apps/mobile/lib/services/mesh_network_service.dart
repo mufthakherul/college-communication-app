@@ -2,8 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_nearby_connections/flutter_nearby_connections.dart';
-import 'package:nearby_service/nearby_service.dart';
-import 'connectivity_service.dart';
+import 'package:campus_mesh/services/connectivity_service.dart';
 
 /// Connection type for mesh network
 enum MeshConnectionType {
@@ -169,8 +168,6 @@ class MeshNetworkService {
   static final MeshNetworkService _instance = MeshNetworkService._internal();
   factory MeshNetworkService() => _instance;
   MeshNetworkService._internal();
-
-  final _connectivityService = ConnectivityService();
   
   final Map<String, MeshNode> _connectedNodes = {};
   final Map<String, MeshNode> _hiddenNodes = {}; // Auto-connected but not authenticated
@@ -510,16 +507,6 @@ class MeshNetworkService {
     }
   }
 
-  /// Handle discovered device
-  void _handleDeviceDiscovered(Device device) {
-    if (kDebugMode) {
-      print('Discovered device: ${device.deviceName} (${device.deviceId})');
-    }
-
-    // Try to connect to the device
-    _connectToDevice(device);
-  }
-
   /// Connect to a discovered device
   Future<void> _connectToDevice(Device device) async {
     try {
@@ -527,7 +514,7 @@ class MeshNetworkService {
       // Note: This is a placeholder - actual implementation depends on platform-specific requirements
 
       // Determine connection type based on discovery method
-      final connectionType = MeshConnectionType.bluetooth; // Auto-detect in real implementation
+      const connectionType = MeshConnectionType.bluetooth; // Auto-detect in real implementation
 
       // Add to nodes (hidden if auto-connect enabled)
       final node = MeshNode(
@@ -585,10 +572,9 @@ class MeshNetworkService {
         throw Exception('Node not connected: $recipientId');
       }
 
-      final jsonStr = jsonEncode(message.toJson());
       // Send message using flutter_nearby_connections
       // Note: This is a placeholder - actual implementation depends on platform-specific requirements
-      // await _nearbyConnections?.sendMessage(recipientId, jsonStr);
+      // await _nearbyConnections?.sendMessage(recipientId, jsonEncode(message.toJson()));
 
       if (kDebugMode) {
         print('Sent message to ${node.name}: ${message.type}');
@@ -615,44 +601,6 @@ class MeshNetworkService {
             print('Failed to send to ${node.name}: $e');
           }
         }
-      }
-    }
-  }
-
-  /// Handle received message
-  void _handleReceivedMessage(String senderId, String data) {
-    try {
-      final json = jsonDecode(data) as Map<String, dynamic>;
-      final message = MeshMessage.fromJson(json);
-
-      // Check if we've already seen this message (prevent loops)
-      if (_messageHistory.any((m) => m.id == message.id)) {
-        if (kDebugMode) {
-          print('Ignoring duplicate message: ${message.id}');
-        }
-        return;
-      }
-
-      // Add to history
-      _messageHistory.add(message);
-      if (_messageHistory.length > _maxMessageHistory) {
-        _messageHistory.removeAt(0);
-      }
-
-      // Notify listeners
-      _messageController.add(message);
-
-      if (kDebugMode) {
-        print('Received message from $senderId: ${message.type}');
-      }
-
-      // Forward message to other nodes if not already in route
-      if (!message.routePath.contains(_deviceId)) {
-        _forwardMessage(message, excludeNodeId: senderId);
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error handling message: $e');
       }
     }
   }

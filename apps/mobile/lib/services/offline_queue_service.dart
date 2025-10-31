@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/foundation.dart';
-import 'connectivity_service.dart';
-import 'notice_service.dart';
-import 'message_service.dart';
-import '../models/notice_model.dart';
-import '../models/message_model.dart';
+import 'package:campus_mesh/services/connectivity_service.dart';
+import 'package:campus_mesh/services/notice_service.dart';
+import 'package:campus_mesh/services/message_service.dart';
+import 'package:campus_mesh/models/notice_model.dart';
+import 'package:campus_mesh/models/message_model.dart';
 
 /// Service to queue actions when offline and sync when online with retry logic
 class OfflineQueueService {
@@ -332,11 +332,11 @@ class OfflineQueueService {
       final prefs = await SharedPreferences.getInstance();
       final analyticsJson = prefs.getString(_analyticsKey);
       if (analyticsJson != null) {
-        final decoded = jsonDecode(analyticsJson);
-        _totalSynced = decoded['totalSynced'] ?? 0;
-        _totalFailed = decoded['totalFailed'] ?? 0;
+        final decoded = jsonDecode(analyticsJson) as Map<String, dynamic>;
+        _totalSynced = (decoded['totalSynced'] as int?) ?? 0;
+        _totalFailed = (decoded['totalFailed'] as int?) ?? 0;
         _lastSyncAttempt = decoded['lastSyncAttempt'] != null
-            ? DateTime.parse(decoded['lastSyncAttempt'])
+            ? DateTime.parse(decoded['lastSyncAttempt'] as String)
             : null;
       }
     } catch (e) {

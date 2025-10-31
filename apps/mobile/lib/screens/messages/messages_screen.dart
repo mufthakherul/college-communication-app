@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../models/message_model.dart';
-import '../../services/message_service.dart';
+import 'package:campus_mesh/models/message_model.dart';
+import 'package:campus_mesh/services/message_service.dart';
 
 class MessagesScreen extends StatefulWidget {
   const MessagesScreen({super.key});
@@ -12,7 +12,6 @@ class MessagesScreen extends StatefulWidget {
 class _MessagesScreenState extends State<MessagesScreen> {
   final _messageService = MessageService();
   final _searchController = TextEditingController();
-  bool _isRefreshing = false;
   bool _isSearching = false;
   String _searchQuery = '';
 
@@ -23,12 +22,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
   }
 
   Future<void> _handleRefresh() async {
-    setState(() => _isRefreshing = true);
     // Wait for the stream to update (simulate refresh)
     await Future.delayed(const Duration(milliseconds: 500));
-    if (mounted) {
-      setState(() => _isRefreshing = false);
-    }
   }
 
   List<MessageModel> _filterMessages(List<MessageModel> messages) {
