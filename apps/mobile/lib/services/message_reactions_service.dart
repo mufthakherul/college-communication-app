@@ -98,12 +98,12 @@ class ReactionData {
   }
 
   Map<String, dynamic> toJson() => {
-        'message_id': messageId,
-        'user_id': userId,
-        'user_name': userName,
-        'reaction': reaction.name,
-        'created_at': createdAt.toIso8601String(),
-      };
+    'message_id': messageId,
+    'user_id': userId,
+    'user_name': userName,
+    'reaction': reaction.name,
+    'created_at': createdAt.toIso8601String(),
+  };
 }
 
 /// Service to handle message reactions (emojis)
@@ -181,9 +181,7 @@ class MessageReactionsService {
   }
 
   /// Remove reaction from a message
-  Future<void> removeReaction({
-    required String messageId,
-  }) async {
+  Future<void> removeReaction({required String messageId}) async {
     try {
       final userId = _currentUserId;
       if (userId == null) {
@@ -213,7 +211,9 @@ class MessageReactionsService {
         .from('message_reactions')
         .stream(primaryKey: ['message_id', 'user_id'])
         .eq('message_id', messageId)
-        .map((data) => data.map((item) => ReactionData.fromJson(item)).toList());
+        .map(
+          (data) => data.map((item) => ReactionData.fromJson(item)).toList(),
+        );
   }
 
   /// Get reaction summary for a message (count by reaction type)

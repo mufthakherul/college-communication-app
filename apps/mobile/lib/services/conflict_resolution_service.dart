@@ -82,7 +82,7 @@ class ConflictResolutionService {
       }
 
       final serverData = response as Map<String, dynamic>;
-      final serverTimestamp = serverData['updated_at'] != null 
+      final serverTimestamp = serverData['updated_at'] != null
           ? DateTime.parse(serverData['updated_at'] as String)
           : null;
       final conflictVersion = (serverData['conflict_version'] as int?) ?? 0;
@@ -108,11 +108,14 @@ class ConflictResolutionService {
 
         if (resolvedUpdates != null) {
           // Apply resolved updates
-          await _supabase.from(collection).update({
-            ...resolvedUpdates,
-            'updated_at': DateTime.now().toIso8601String(),
-            'conflict_version': conflictVersion + 1,
-          }).eq('id', documentId);
+          await _supabase
+              .from(collection)
+              .update({
+                ...resolvedUpdates,
+                'updated_at': DateTime.now().toIso8601String(),
+                'conflict_version': conflictVersion + 1,
+              })
+              .eq('id', documentId);
 
           if (kDebugMode) {
             print(
@@ -138,11 +141,14 @@ class ConflictResolutionService {
         }
       } else {
         // No conflict, update normally
-        await _supabase.from(collection).update({
-          ...updates,
-          'updated_at': DateTime.now().toIso8601String(),
-          'conflict_version': conflictVersion,
-        }).eq('id', documentId);
+        await _supabase
+            .from(collection)
+            .update({
+              ...updates,
+              'updated_at': DateTime.now().toIso8601String(),
+              'conflict_version': conflictVersion,
+            })
+            .eq('id', documentId);
       }
     } catch (e) {
       if (kDebugMode) {
@@ -302,11 +308,14 @@ class ConflictResolutionService {
       }
 
       // Update with new version
-      await _supabase.from(collection).update({
-        ...updates,
-        'version': currentVersion + 1,
-        'updated_at': DateTime.now().toIso8601String(),
-      }).eq('id', documentId);
+      await _supabase
+          .from(collection)
+          .update({
+            ...updates,
+            'version': currentVersion + 1,
+            'updated_at': DateTime.now().toIso8601String(),
+          })
+          .eq('id', documentId);
 
       if (kDebugMode) {
         print('Versioned update successful for $documentId');

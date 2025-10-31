@@ -14,9 +14,7 @@ class NoticeService {
         .stream(primaryKey: ['id'])
         .eq('is_active', true)
         .order('created_at', ascending: false)
-        .map(
-          (data) => data.map((item) => NoticeModel.fromJson(item)).toList(),
-        );
+        .map((data) => data.map((item) => NoticeModel.fromJson(item)).toList());
   }
 
   // Get notices by type
@@ -25,19 +23,17 @@ class NoticeService {
         .from('notices')
         .stream(primaryKey: ['id'])
         .order('created_at', ascending: false)
-        .map(
-          (data) {
-            // Filter in memory for active notices of the specified type
-            return data
-                .where((item) {
-                  final isActive = item['is_active'] as bool? ?? false;
-                  final noticeType = item['type'] as String?;
-                  return isActive && noticeType == type.name;
-                })
-                .map((item) => NoticeModel.fromJson(item))
-                .toList();
-          },
-        );
+        .map((data) {
+          // Filter in memory for active notices of the specified type
+          return data
+              .where((item) {
+                final isActive = item['is_active'] as bool? ?? false;
+                final noticeType = item['type'] as String?;
+                return isActive && noticeType == type.name;
+              })
+              .map((item) => NoticeModel.fromJson(item))
+              .toList();
+        });
   }
 
   // Get single notice
@@ -48,7 +44,7 @@ class NoticeService {
           .select()
           .eq('id', noticeId)
           .single();
-      
+
       return NoticeModel.fromJson(response);
     } catch (e) {
       throw Exception('Failed to get notice: $e');
@@ -84,7 +80,7 @@ class NoticeService {
           .insert(notice)
           .select()
           .single();
-      
+
       return response['id'] as String;
     } catch (e) {
       throw Exception('Failed to create notice: $e');
@@ -108,10 +104,7 @@ class NoticeService {
         'updated_at': DateTime.now().toIso8601String(),
       };
 
-      await _supabase
-          .from('notices')
-          .update(updateData)
-          .eq('id', noticeId);
+      await _supabase.from('notices').update(updateData).eq('id', noticeId);
     } catch (e) {
       throw Exception('Failed to update notice: $e');
     }
