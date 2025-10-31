@@ -292,7 +292,8 @@ class ConflictResolutionService {
         throw Exception('Document not found');
       }
 
-      final currentVersion = (response['version'] as int?) ?? 0;
+      final responseMap = response as Map<String, dynamic>;
+      final currentVersion = (responseMap['version'] as int?) ?? 0;
 
       if (currentVersion != expectedVersion) {
         throw Exception(

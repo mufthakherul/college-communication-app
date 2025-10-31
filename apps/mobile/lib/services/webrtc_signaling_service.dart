@@ -338,15 +338,13 @@ class WebRTCSignalingService {
   /// Setup connection handlers
   void _setupConnectionHandlers(RTCPeerConnection connection, String peerId) {
     connection.onIceCandidate = (candidate) {
-      if (candidate != null) {
-        // Send ICE candidate via signaling
-        _signalingController.add(SignalingMessage(
-          from: _localPeerId!,
-          to: peerId,
-          type: SignalingMessageType.candidate,
-          payload: {'candidate': candidate.toMap()},
-        ));
-      }
+      // Send ICE candidate via signaling
+      _signalingController.add(SignalingMessage(
+        from: _localPeerId!,
+        to: peerId,
+        type: SignalingMessageType.candidate,
+        payload: {'candidate': candidate.toMap()},
+      ));
     };
 
     connection.onIceConnectionState = (state) {
