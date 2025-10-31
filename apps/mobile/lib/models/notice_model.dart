@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 enum NoticeType { announcement, event, urgent }
 
 class NoticeModel {
@@ -27,35 +25,38 @@ class NoticeModel {
     this.isActive = true,
   });
 
-  factory NoticeModel.fromFirestore(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
+  factory NoticeModel.fromJson(Map<String, dynamic> data) {
     return NoticeModel(
-      id: doc.id,
+      id: data['id'] ?? '',
       title: data['title'] ?? '',
       content: data['content'] ?? '',
       type: _parseType(data['type']),
-      targetAudience: data['targetAudience'] ?? 'all',
-      authorId: data['authorId'] ?? '',
-      createdAt: (data['createdAt'] as Timestamp?)?.toDate(),
-      updatedAt: (data['updatedAt'] as Timestamp?)?.toDate(),
-      expiresAt: (data['expiresAt'] as Timestamp?)?.toDate(),
-      isActive: data['isActive'] ?? true,
+      targetAudience: data['target_audience'] ?? data['targetAudience'] ?? 'all',
+      authorId: data['author_id'] ?? data['authorId'] ?? '',
+      createdAt: data['created_at'] != null
+          ? DateTime.parse(data['created_at'])
+          : null,
+      updatedAt: data['updated_at'] != null
+          ? DateTime.parse(data['updated_at'])
+          : null,
+      expiresAt: data['expires_at'] != null
+          ? DateTime.parse(data['expires_at'])
+          : null,
+      isActive: data['is_active'] ?? data['isActive'] ?? true,
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'title': title,
       'content': content,
       'type': type.name,
-      'targetAudience': targetAudience,
-      'authorId': authorId,
-      'createdAt': createdAt != null
-          ? Timestamp.fromDate(createdAt!)
-          : FieldValue.serverTimestamp(),
-      'updatedAt': FieldValue.serverTimestamp(),
-      'expiresAt': expiresAt != null ? Timestamp.fromDate(expiresAt!) : null,
-      'isActive': isActive,
+      'target_audience': targetAudience,
+      'author_id': authorId,
+      'created_at': createdAt?.toIso8601String(),
+      'updated_at': updatedAt?.toIso8601String(),
+      'expires_at': expiresAt?.toIso8601String(),
+      'is_active': isActive,
     };
   }
 

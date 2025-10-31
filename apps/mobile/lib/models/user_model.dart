@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 enum UserRole { student, teacher, admin }
 
 class UserModel {
@@ -27,36 +25,37 @@ class UserModel {
     this.updatedAt,
   });
 
-  factory UserModel.fromFirestore(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
+  factory UserModel.fromJson(Map<String, dynamic> data) {
     return UserModel(
-      uid: doc.id,
+      uid: data['id'] ?? data['uid'] ?? '',
       email: data['email'] ?? '',
-      displayName: data['displayName'] ?? '',
-      photoURL: data['photoURL'] ?? '',
+      displayName: data['display_name'] ?? data['displayName'] ?? '',
+      photoURL: data['photo_url'] ?? data['photoURL'] ?? '',
       role: _parseRole(data['role']),
       department: data['department'] ?? '',
       year: data['year'] ?? '',
-      isActive: data['isActive'] ?? true,
-      createdAt: (data['createdAt'] as Timestamp?)?.toDate(),
-      updatedAt: (data['updatedAt'] as Timestamp?)?.toDate(),
+      isActive: data['is_active'] ?? data['isActive'] ?? true,
+      createdAt: data['created_at'] != null 
+          ? DateTime.parse(data['created_at'])
+          : null,
+      updatedAt: data['updated_at'] != null
+          ? DateTime.parse(data['updated_at'])
+          : null,
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
-      'uid': uid,
+      'id': uid,
       'email': email,
-      'displayName': displayName,
-      'photoURL': photoURL,
+      'display_name': displayName,
+      'photo_url': photoURL,
       'role': role.name,
       'department': department,
       'year': year,
-      'isActive': isActive,
-      'createdAt': createdAt != null
-          ? Timestamp.fromDate(createdAt!)
-          : FieldValue.serverTimestamp(),
-      'updatedAt': FieldValue.serverTimestamp(),
+      'is_active': isActive,
+      'created_at': createdAt?.toIso8601String(),
+      'updated_at': updatedAt?.toIso8601String(),
     };
   }
 

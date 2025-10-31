@@ -1,24 +1,25 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:campus_mesh/models/user_model.dart';
 
 class AuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final SupabaseClient _supabase = Supabase.instance.client;
 
   // Get current user
-  User? get currentUser => _auth.currentUser;
+  User? get currentUser => _supabase.auth.currentUser;
+
+  // Get current user ID
+  String? get currentUserId => _supabase.auth.currentUser?.id;
 
   // Auth state stream
-  Stream<User?> get authStateChanges => _auth.authStateChanges();
+  Stream<AuthState> get authStateChanges => _supabase.auth.onAuthStateChange;
 
   // Sign in with email and password
-  Future<UserCredential> signInWithEmailAndPassword(
+  Future<AuthResponse> signInWithEmailAndPassword(
     String email,
     String password,
   ) async {
     try {
-      return await _auth.signInWithEmailAndPassword(
+      return await _supabase.auth.signInWithPassword(
         email: email,
         password: password,
       );
@@ -28,21 +29,32 @@ class AuthService {
   }
 
   // Register with email and password
-  Future<UserCredential> registerWithEmailAndPassword(
+  Future<AuthResponse> registerWithEmailAndPassword(
     String email,
     String password,
     String displayName,
   ) async {
     try {
-      final credential = await _auth.createUserWithEmailAndPassword(
+      final response = await _supabase.auth.signUp(
         email: email,
         password: password,
+        data: {
+          'display_name': displayName,
+        },
       );
 
-      // Update display name
-      await credential.user?.updateDisplayName(displayName);
+      // Create user profile in database
+      if (response.user != null) {
+        await _supabase.from('users').insert({
+          'id': response.user!.id,
+          'email': email,
+          'display_name': displayName,
+          'role': 'student', // Default role
+          'is_active': true,
+        });
+      }
 
-      return credential;
+      return response;
     } catch (e) {
       throw Exception('Failed to register: $e');
     }
@@ -51,7 +63,7 @@ class AuthService {
   // Sign out
   Future<void> signOut() async {
     try {
-      await _auth.signOut();
+      await _supabase.auth.signOut();
     } catch (e) {
       throw Exception('Failed to sign out: $e');
     }
@@ -60,11 +72,13 @@ class AuthService {
   // Get user profile
   Future<UserModel?> getUserProfile(String uid) async {
     try {
-      final doc = await _firestore.collection('users').doc(uid).get();
-      if (doc.exists) {
-        return UserModel.fromFirestore(doc);
-      }
-      return null;
+      final response = await _supabase
+          .from('users')
+          .select()
+          .eq('id', uid)
+          .single();
+      
+      return UserModel.fromJson(response);
     } catch (e) {
       throw Exception('Failed to get user profile: $e');
     }
@@ -76,10 +90,10 @@ class AuthService {
       final user = currentUser;
       if (user == null) throw Exception('No user signed in');
 
-      await _firestore.collection('users').doc(user.uid).update({
+      await _supabase.from('users').update({
         ...updates,
-        'updatedAt': FieldValue.serverTimestamp(),
-      });
+        'updated_at': DateTime.now().toIso8601String(),
+      }).eq('id', user.id);
     } catch (e) {
       throw Exception('Failed to update user profile: $e');
     }
@@ -88,7 +102,7 @@ class AuthService {
   // Reset password
   Future<void> resetPassword(String email) async {
     try {
-      await _auth.sendPasswordResetEmail(email: email);
+      await _supabase.auth.resetPasswordForEmail(email);
     } catch (e) {
       throw Exception('Failed to send password reset email: $e');
     }

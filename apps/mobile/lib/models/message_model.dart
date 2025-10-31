@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 enum MessageType { text, image, file }
 
 class MessageModel {
@@ -23,31 +21,32 @@ class MessageModel {
     this.readAt,
   });
 
-  factory MessageModel.fromFirestore(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
+  factory MessageModel.fromJson(Map<String, dynamic> data) {
     return MessageModel(
-      id: doc.id,
-      senderId: data['senderId'] ?? '',
-      recipientId: data['recipientId'] ?? '',
+      id: data['id'] ?? '',
+      senderId: data['sender_id'] ?? data['senderId'] ?? '',
+      recipientId: data['recipient_id'] ?? data['recipientId'] ?? '',
       content: data['content'] ?? '',
       type: _parseType(data['type']),
-      createdAt: (data['createdAt'] as Timestamp?)?.toDate(),
+      createdAt: data['created_at'] != null
+          ? DateTime.parse(data['created_at'])
+          : null,
       read: data['read'] ?? false,
-      readAt: (data['readAt'] as Timestamp?)?.toDate(),
+      readAt: data['read_at'] != null
+          ? DateTime.parse(data['read_at'])
+          : null,
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
-      'senderId': senderId,
-      'recipientId': recipientId,
+      'sender_id': senderId,
+      'recipient_id': recipientId,
       'content': content,
       'type': type.name,
-      'createdAt': createdAt != null
-          ? Timestamp.fromDate(createdAt!)
-          : FieldValue.serverTimestamp(),
+      'created_at': createdAt?.toIso8601String(),
       'read': read,
-      'readAt': readAt != null ? Timestamp.fromDate(readAt!) : null,
+      'read_at': readAt?.toIso8601String(),
     };
   }
 
