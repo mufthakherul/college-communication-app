@@ -199,6 +199,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                         return null;
                       },
+                    ),
                   ),
                   const SizedBox(height: 24),
                   ElevatedButton(
