@@ -77,7 +77,7 @@ class ConflictResolutionService {
 
       final serverData = docSnapshot.data()!;
       final serverTimestamp = (serverData['updatedAt'] as Timestamp?)?.toDate();
-      final conflictVersion = serverData['conflictVersion'] ?? 0;
+      final conflictVersion = (serverData['conflictVersion'] as int?) ?? 0;
 
       // Check for conflicts
       if (serverTimestamp != null && serverTimestamp.isAfter(clientTimestamp)) {
@@ -278,7 +278,7 @@ class ConflictResolutionService {
           throw Exception('Document not found');
         }
 
-        final currentVersion = snapshot.data()?['version'] ?? 0;
+        final currentVersion = (snapshot.data()?['version'] as int?) ?? 0;
 
         if (currentVersion != expectedVersion) {
           throw Exception(

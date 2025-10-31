@@ -332,11 +332,11 @@ class OfflineQueueService {
       final prefs = await SharedPreferences.getInstance();
       final analyticsJson = prefs.getString(_analyticsKey);
       if (analyticsJson != null) {
-        final decoded = jsonDecode(analyticsJson);
-        _totalSynced = decoded['totalSynced'] ?? 0;
-        _totalFailed = decoded['totalFailed'] ?? 0;
+        final decoded = jsonDecode(analyticsJson) as Map<String, dynamic>;
+        _totalSynced = (decoded['totalSynced'] as int?) ?? 0;
+        _totalFailed = (decoded['totalFailed'] as int?) ?? 0;
         _lastSyncAttempt = decoded['lastSyncAttempt'] != null
-            ? DateTime.parse(decoded['lastSyncAttempt'])
+            ? DateTime.parse(decoded['lastSyncAttempt'] as String)
             : null;
       }
     } catch (e) {

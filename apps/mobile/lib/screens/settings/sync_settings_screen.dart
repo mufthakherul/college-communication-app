@@ -111,9 +111,9 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
   }
 
   Widget _buildQueueSection() {
-    final pendingCount = _queueAnalytics['queueSize'] ?? 0;
-    final totalSynced = _queueAnalytics['totalSynced'] ?? 0;
-    final totalFailed = _queueAnalytics['totalFailed'] ?? 0;
+    final pendingCount = (_queueAnalytics['queueSize'] as int?) ?? 0;
+    final totalSynced = (_queueAnalytics['totalSynced'] as int?) ?? 0;
+    final totalFailed = (_queueAnalytics['totalFailed'] as int?) ?? 0;
 
     return Card(
       child: Padding(
@@ -154,9 +154,9 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
   }
 
   Widget _buildCacheSection() {
-    final sizeMB = (_cacheStats['totalSizeMB'] ?? 0.0).toStringAsFixed(2);
-    final usagePercent = (_cacheStats['usagePercent'] ?? 0.0).toStringAsFixed(1);
-    final diskSize = _cacheStats['diskCacheSize'] ?? 0;
+    final sizeMB = ((_cacheStats['totalSizeMB'] as num?) ?? 0.0).toStringAsFixed(2);
+    final usagePercent = ((_cacheStats['usagePercent'] as num?) ?? 0.0).toStringAsFixed(1);
+    final diskSize = (_cacheStats['diskCacheSize'] as int?) ?? 0;
 
     return Card(
       child: Padding(
@@ -199,8 +199,8 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
   }
 
   Widget _buildConflictSection() {
-    final unresolvedCount = _conflictStats['unresolvedCount'] ?? 0;
-    final strategy = _conflictStats['defaultStrategy'] ?? 'unknown';
+    final unresolvedCount = (_conflictStats['unresolvedCount'] as int?) ?? 0;
+    final strategy = (_conflictStats['defaultStrategy'] as String?) ?? 'unknown';
 
     return Card(
       child: Padding(
