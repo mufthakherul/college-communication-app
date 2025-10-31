@@ -33,7 +33,8 @@ class MessageService {
               .where((item) {
                 final senderId = item['sender_id'] as String?;
                 final recipientId = item['recipient_id'] as String?;
-                return (senderId == currentUserId && recipientId == otherUserId) ||
+                return (senderId == currentUserId &&
+                        recipientId == otherUserId) ||
                     (senderId == otherUserId && recipientId == currentUserId);
               })
               .map((item) => MessageModel.fromJson(item))
@@ -52,20 +53,19 @@ class MessageService {
         .from('messages')
         .stream(primaryKey: ['id'])
         .order('created_at', ascending: false)
-        .map(
-          (data) {
-            // Filter in memory for messages involving current user
-            return data
-                .where((item) {
-                  final senderId = item['sender_id'] as String?;
-                  final recipientId = item['recipient_id'] as String?;
-                  return senderId == currentUserId || recipientId == currentUserId;
-                })
-                .take(50)
-                .map((item) => MessageModel.fromJson(item))
-                .toList();
-          },
-        );
+        .map((data) {
+          // Filter in memory for messages involving current user
+          return data
+              .where((item) {
+                final senderId = item['sender_id'] as String?;
+                final recipientId = item['recipient_id'] as String?;
+                return senderId == currentUserId ||
+                    recipientId == currentUserId;
+              })
+              .take(50)
+              .map((item) => MessageModel.fromJson(item))
+              .toList();
+        });
   }
 
   // Send message
@@ -98,7 +98,7 @@ class MessageService {
           .insert(message)
           .select()
           .single();
-      
+
       return response['id'] as String;
     } catch (e) {
       throw Exception('Failed to send message: $e');
@@ -114,10 +114,10 @@ class MessageService {
         throw Exception('User must be authenticated to mark messages as read');
       }
 
-      await _supabase.from('messages').update({
-        'read': true,
-        'read_at': DateTime.now().toIso8601String(),
-      }).eq('id', messageId);
+      await _supabase
+          .from('messages')
+          .update({'read': true, 'read_at': DateTime.now().toIso8601String()})
+          .eq('id', messageId);
     } catch (e) {
       throw Exception('Failed to mark message as read: $e');
     }
@@ -130,18 +130,13 @@ class MessageService {
       return Stream.value(0);
     }
 
-    return _supabase
-        .from('messages')
-        .stream(primaryKey: ['id'])
-        .map((data) {
-          // Filter in memory for unread messages to current user
-          return data
-              .where((item) {
-                final recipientId = item['recipient_id'] as String?;
-                final read = item['read'] as bool? ?? false;
-                return recipientId == currentUserId && !read;
-              })
-              .length;
-        });
+    return _supabase.from('messages').stream(primaryKey: ['id']).map((data) {
+      // Filter in memory for unread messages to current user
+      return data.where((item) {
+        final recipientId = item['recipient_id'] as String?;
+        final read = item['read'] as bool? ?? false;
+        return recipientId == currentUserId && !read;
+      }).length;
+    });
   }
 }

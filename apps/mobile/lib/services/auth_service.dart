@@ -39,9 +39,7 @@ class AuthService {
       final response = await _supabase.auth.signUp(
         email: email,
         password: password,
-        data: {
-          'display_name': displayName,
-        },
+        data: {'display_name': displayName},
       );
 
       // Create user profile in database
@@ -62,7 +60,9 @@ class AuthService {
           if (kDebugMode) {
             debugPrint('Profile creation error: $dbError');
           }
-          throw Exception('Failed to create user profile. Please try again or contact support.');
+          throw Exception(
+            'Failed to create user profile. Please try again or contact support.',
+          );
         }
       }
 
@@ -89,7 +89,7 @@ class AuthService {
           .select()
           .eq('id', uid)
           .single();
-      
+
       return UserModel.fromJson(response);
     } catch (e) {
       throw Exception('Failed to get user profile: $e');
@@ -102,10 +102,10 @@ class AuthService {
       final user = currentUser;
       if (user == null) throw Exception('No user signed in');
 
-      await _supabase.from('users').update({
-        ...updates,
-        'updated_at': DateTime.now().toIso8601String(),
-      }).eq('id', user.id);
+      await _supabase
+          .from('users')
+          .update({...updates, 'updated_at': DateTime.now().toIso8601String()})
+          .eq('id', user.id);
     } catch (e) {
       throw Exception('Failed to update user profile: $e');
     }

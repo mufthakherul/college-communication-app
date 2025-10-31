@@ -31,7 +31,8 @@ class NoticeModel {
       title: data['title'] ?? '',
       content: data['content'] ?? '',
       type: _parseType(data['type']),
-      targetAudience: data['target_audience'] ?? data['targetAudience'] ?? 'all',
+      targetAudience:
+          data['target_audience'] ?? data['targetAudience'] ?? 'all',
       authorId: data['author_id'] ?? data['authorId'] ?? '',
       createdAt: data['created_at'] != null
           ? DateTime.parse(data['created_at'])

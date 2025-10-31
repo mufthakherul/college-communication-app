@@ -35,7 +35,7 @@ class UserModel {
       department: data['department'] ?? '',
       year: data['year'] ?? '',
       isActive: data['is_active'] ?? data['isActive'] ?? true,
-      createdAt: data['created_at'] != null 
+      createdAt: data['created_at'] != null
           ? DateTime.parse(data['created_at'])
           : null,
       updatedAt: data['updated_at'] != null
