@@ -206,7 +206,7 @@ class ConflictResolutionService {
         // Merge lists (combine and deduplicate)
         final serverList = merged[key] as List;
         final clientList = clientValue;
-        merged[key] = [...serverList, ...clientList].toSet().toList();
+        merged[key] = {...serverList, ...clientList}.toList();
       } else {
         // Use client value for scalar fields
         merged[key] = clientValue;

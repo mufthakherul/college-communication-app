@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:campus_mesh/services/offline_queue_service.dart';
 import 'package:campus_mesh/services/connectivity_service.dart';
 import 'package:campus_mesh/services/cache_service.dart';
-import 'package:campus_mesh/services/background_sync_service.dart';
 import 'package:campus_mesh/services/conflict_resolution_service.dart';
 
 /// Screen for sync and network settings

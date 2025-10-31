@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_nearby_connections/flutter_nearby_connections.dart';
-import 'package:campus_mesh/services/connectivity_service.dart';
 
 /// Connection type for mesh network
 enum MeshConnectionType {
@@ -187,7 +186,6 @@ class MeshNetworkService {
   String? _deviceId;
   String? _deviceName;
 
-  static const int _maxMessageHistory = 1000;
   static const Duration _nodeTimeout = Duration(minutes: 5);
   static const Duration _pairingTimeout = Duration(minutes: 5);
 
@@ -517,44 +515,6 @@ class MeshNetworkService {
     }
   }
 
-  /// Connect to a discovered device
-  Future<void> _connectToDevice(Device device) async {
-    try {
-      // Connect to device using flutter_nearby_connections
-      // Note: This is a placeholder - actual implementation depends on platform-specific requirements
-
-      // Determine connection type based on discovery method
-      const connectionType =
-          MeshConnectionType.bluetooth; // Auto-detect in real implementation
-
-      // Add to nodes (hidden if auto-connect enabled)
-      final node = MeshNode(
-        id: device.deviceId,
-        name: device.deviceName,
-        connectedAt: DateTime.now(),
-        connectionType: connectionType,
-        isVisible: !_autoConnectEnabled, // Hidden if auto-connect is on
-      );
-
-      if (_autoConnectEnabled) {
-        _hiddenNodes[device.deviceId] = node;
-        if (kDebugMode) {
-          print('Auto-connected to device (hidden): ${device.deviceName}');
-        }
-      } else {
-        _connectedNodes[device.deviceId] = node;
-        _nodeController.add(connectedNodes);
-        if (kDebugMode) {
-          print('Connected to device: ${device.deviceName}');
-        }
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print('Error connecting to device: $e');
-      }
-    }
-  }
-
   /// Disconnect from a device
   Future<void> disconnectFromDevice(String deviceId) async {
     try {
@@ -610,31 +570,6 @@ class MeshNetworkService {
         } catch (e) {
           if (kDebugMode) {
             print('Failed to send to ${node.name}: $e');
-          }
-        }
-      }
-    }
-  }
-
-  /// Forward message to other nodes (mesh routing)
-  Future<void> _forwardMessage(
-    MeshMessage message, {
-    String? excludeNodeId,
-  }) async {
-    final routedMessage = message.copyWithRoute(_deviceId!);
-
-    for (final node in _connectedNodes.values) {
-      if (node.isActive &&
-          node.id != excludeNodeId &&
-          !routedMessage.routePath.contains(node.id)) {
-        try {
-          await sendMessage(node.id, routedMessage);
-          if (kDebugMode) {
-            print('Forwarded message to ${node.name}');
-          }
-        } catch (e) {
-          if (kDebugMode) {
-            print('Failed to forward to ${node.name}: $e');
           }
         }
       }
