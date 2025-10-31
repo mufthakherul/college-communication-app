@@ -25,13 +25,14 @@ class SearchService {
         return [];
       }
 
-      final List<dynamic> data = response as List<dynamic>;
+      final data = response as List<dynamic>;
       return data.map((item) {
+        final itemMap = item as Map<String, dynamic>;
         final Map<String, dynamic> noticeData = {
-          'id': item['id'],
-          'title': item['title'],
-          'content': item['content'],
-          'type': item['type'],
+          'id': itemMap['id'],
+          'title': itemMap['title'],
+          'content': itemMap['content'],
+          'type': itemMap['type'],
           'is_active': true,
           // Other fields will use defaults
         };
@@ -59,7 +60,7 @@ class SearchService {
           .order('created_at', ascending: false)
           .limit(50);
 
-      return (response as List<dynamic>)
+      return response
           .map((item) => NoticeModel.fromJson(item as Map<String, dynamic>))
           .toList();
     } catch (e) {
@@ -88,7 +89,7 @@ class SearchService {
           .order('created_at', ascending: false)
           .limit(50);
 
-      return (response as List<dynamic>)
+      return response
           .map((item) => NoticeModel.fromJson(item as Map<String, dynamic>))
           .toList();
     } catch (e) {
@@ -114,8 +115,8 @@ class SearchService {
           .order('created_at', ascending: false)
           .limit(10);
 
-      return (response as List<dynamic>)
-          .map((item) => item['title'] as String)
+      return response
+          .map((item) => (item as Map<String, dynamic>)['title'] as String)
           .toSet() // Remove duplicates
           .toList();
     } catch (e) {
@@ -146,7 +147,7 @@ class SearchService {
           .order('created_at', ascending: false)
           .limit(50);
 
-      return (response as List<dynamic>)
+      return response
           .map((item) => MessageModel.fromJson(item as Map<String, dynamic>))
           .toList();
     } catch (e) {
@@ -180,7 +181,7 @@ class SearchService {
           .order('created_at', ascending: false)
           .limit(50);
 
-      return (response as List<dynamic>)
+      return response
           .map((item) => MessageModel.fromJson(item as Map<String, dynamic>))
           .toList();
     } catch (e) {
@@ -220,7 +221,7 @@ class SearchService {
           .order('created_at', ascending: false)
           .limit(50);
 
-      return (response as List<dynamic>)
+      return response
           .map((item) => MessageModel.fromJson(item as Map<String, dynamic>))
           .toList();
     } catch (e) {
@@ -250,7 +251,7 @@ class SearchService {
           .order('created_at', ascending: false)
           .limit(20);
 
-      final notices = (noticesResponse as List<dynamic>)
+      final notices = noticesResponse
           .map((item) => NoticeModel.fromJson(item as Map<String, dynamic>))
           .toList();
 
@@ -265,7 +266,7 @@ class SearchService {
           .eq('is_active', true)
           .limit(10);
 
-      final users = usersResponse as List<dynamic>;
+      final users = usersResponse;
 
       return {
         'notices': notices,

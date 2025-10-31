@@ -108,7 +108,11 @@ class AdminAnalyticsService {
         throw Exception('Failed to generate report');
       }
 
-      return response.data['report'] as Map<String, dynamic>;
+      final data = response.data as Map<String, dynamic>?;
+      if (data == null || !data.containsKey('report')) {
+        throw Exception('Invalid report response');
+      }
+      return data['report'] as Map<String, dynamic>;
     } catch (e) {
       throw Exception('Failed to generate user activity report: $e');
     }
@@ -132,7 +136,11 @@ class AdminAnalyticsService {
         throw Exception('Failed to generate report');
       }
 
-      return response.data['report'] as Map<String, dynamic>;
+      final data = response.data as Map<String, dynamic>?;
+      if (data == null || !data.containsKey('report')) {
+        throw Exception('Invalid report response');
+      }
+      return data['report'] as Map<String, dynamic>;
     } catch (e) {
       throw Exception('Failed to generate notices report: $e');
     }
@@ -156,7 +164,11 @@ class AdminAnalyticsService {
         throw Exception('Failed to generate report');
       }
 
-      return response.data['report'] as Map<String, dynamic>;
+      final data = response.data as Map<String, dynamic>?;
+      if (data == null || !data.containsKey('report')) {
+        throw Exception('Invalid report response');
+      }
+      return data['report'] as Map<String, dynamic>;
     } catch (e) {
       throw Exception('Failed to generate messages report: $e');
     }

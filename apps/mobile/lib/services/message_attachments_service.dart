@@ -51,7 +51,7 @@ class MessageAttachmentsService {
       }
 
       // Upload to Supabase storage
-      final uploadResponse = await _supabase.storage
+      await _supabase.storage
           .from(_bucketName)
           .upload(filePath, file);
 
