@@ -20,14 +20,18 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  bool _isTeacherOrAdmin(UserRole role) {
+    return role == UserRole.teacher || role == UserRole.admin;
+  }
+
   bool _canViewPrivateInfo() {
     // User can view their own private info or teachers can view student info
     if (widget.currentUser == null || widget.user == null) return false;
     if (widget.currentUser!.uid == widget.user!.uid) return true; // Own profile
-    if (widget.currentUser!.role == UserRole.teacher || 
-        widget.currentUser!.role == UserRole.admin) return true; // Teacher/Admin viewing
+    if (_isTeacherOrAdmin(widget.currentUser!.role)) return true; // Teacher/Admin viewing
     return false;
   }
+
   @override
   Widget build(BuildContext context) {
     final authService = AuthService();

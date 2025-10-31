@@ -40,7 +40,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _academicSessionController = TextEditingController(text: widget.user.academicSession);
     _phoneNumberController = TextEditingController(text: widget.user.phoneNumber);
     
-    _selectedShift = widget.user.shift.isNotEmpty ? widget.user.shift : null;
+    _selectedShift = widget.user.shift.isEmpty ? null : widget.user.shift;
   }
 
   @override
@@ -208,7 +208,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   border: OutlineInputBorder(),
                   hintText: 'e.g., A, B, C',
                 ),
-                textCapitalization: TextCapitalization.characters,
               ),
               const SizedBox(height: 16),
               TextFormField(
@@ -243,8 +242,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 keyboardType: TextInputType.phone,
                 validator: (value) {
                   if (value != null && value.isNotEmpty) {
-                    if (value.length < 10) {
-                      return 'Please enter a valid phone number';
+                    // Basic validation for phone number format
+                    // Accepts formats: +8801234567890, 01234567890, or 8801234567890
+                    final phoneRegex = RegExp(r'^\+?[0-9]{10,15}$');
+                    if (!phoneRegex.hasMatch(value.replaceAll(RegExp(r'[\s-]'), ''))) {
+                      return 'Please enter a valid phone number (10-15 digits)';
                     }
                   }
                   return null;
