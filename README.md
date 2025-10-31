@@ -159,6 +159,7 @@ flutter run
 - [Supabase Setup Guide](SUPABASE_SETUP_GUIDE.md) - **Current backend setup**
 
 ### Setup & Getting Started
+- [Supabase Setup Guide](SUPABASE_SETUP_GUIDE.md) - **Connect to Supabase (current backend)**
 - [APK Build Guide](APK_BUILD_GUIDE.md) - **Download and install the app**
 - [Quick Start](QUICK_START.md) - **For teachers/immediate use**
 

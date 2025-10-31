@@ -168,6 +168,8 @@ This document provides a comprehensive comparison between **Supabase** (current)
 | **Caching** | Good | Excellent |
 | **CDN Performance** | Good | Excellent |
 
+> **Note:** Performance metrics are approximate and can vary significantly based on network conditions, geographic location, server load, query complexity, and specific implementation. Always benchmark with your actual use case and data volume.
+
 **Winner: Appwrite** - Slightly better performance, especially for simple queries.
 
 ## 🔄 Migration Effort
