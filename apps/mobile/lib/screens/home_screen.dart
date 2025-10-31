@@ -10,6 +10,7 @@ import '../services/offline_queue_service.dart';
 import '../models/user_model.dart';
 import '../widgets/connectivity_banner.dart';
 import '../widgets/network_status_widget.dart';
+import 'qr/qr_scanner_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -152,6 +153,18 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Profile',
           ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const QRScannerScreen(),
+            ),
+          );
+        },
+        child: const Icon(Icons.qr_code_scanner),
+        tooltip: 'Scan QR Code',
       ),
     );
   }
