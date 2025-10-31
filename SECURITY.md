@@ -123,17 +123,39 @@ The RPI Communication App implements multiple layers of security to protect user
 
 ## Known Limitations
 
-### 1. Root/Jailbreak Detection
+### 1. Secure Storage Implementation
+- **Status**: Basic XOR obfuscation
+- **Impact**: Provides obfuscation, not cryptographic security
+- **Recommendation**: For high-security needs, upgrade to flutter_secure_storage
+- **Current Use**: Suitable for session tokens and non-critical data
+- **Upgrade Path**: Replace with hardware-backed storage (Android KeyStore/iOS Keychain)
+
+### 2. Package Name Validation
+- **Status**: Placeholder implementation
+- **Impact**: Cannot detect repackaged apps programmatically
+- **Mitigation**: ProGuard obfuscation provides primary anti-repackaging protection
+- **Recommendation**: Implement platform channels for full validation
+- **Current Protection**: Code obfuscation makes repackaging difficult
+
+### 3. Debugger Detection
+- **Status**: Basic implementation
+- **Impact**: May not detect sophisticated debuggers
+- **Mitigation**: ProGuard obfuscation and root detection provide defense
+- **Recommendation**: Implement platform-specific detection if needed
+- **Current Protection**: Release mode disables most debugging features
+
+### 4. Root/Jailbreak Detection
 - **Status**: Warning only, not blocking
 - **Reason**: Avoid false positives and UX issues
-- **Recommendation**: Users warned of risks
+- **Recommendation**: Users warned of risks but can proceed
 
-### 2. Certificate Pinning
+### 5. Certificate Pinning
 - **Status**: Not implemented
 - **Reason**: Adds complexity, Appwrite uses valid certs
 - **Future**: Can be added for advanced security
+- **Current Protection**: HTTPS with certificate validation
 
-### 3. Biometric Authentication
+### 6. Biometric Authentication
 - **Status**: Not implemented
 - **Reason**: Focus on MVP features first
 - **Future**: Planned for future release
