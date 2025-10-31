@@ -159,13 +159,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                        return 'Please enter your email';
-                      }
-                      if (!value.contains('@')) {
-                        return 'Please enter a valid email';
-                      }
-                      return null;
-                    },
+                          return 'Please enter your email';
+                        }
+                        if (!value.contains('@')) {
+                          return 'Please enter a valid email';
+                        }
+                        return null;
+                      },
                   ),
                   const SizedBox(height: 16),
                   Semantics(
@@ -233,8 +233,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           },
                         ),
                         border: const OutlineInputBorder(),
-                    ),
-                    validator: (value) {
+                      ),
+                      validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please confirm your password';
                       }

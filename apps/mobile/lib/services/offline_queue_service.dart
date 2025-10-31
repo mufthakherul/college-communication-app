@@ -249,7 +249,7 @@ class OfflineQueueService {
       content: data['content'] as String,
       type: NoticeType.values.firstWhere(
         (t) => t.name == data['type'],
-        orElse: () => NoticeType.general,
+        orElse: () => NoticeType.announcement,
       ),
       targetAudience: data['targetAudience'] as String,
       expiresAt: data['expiresAt'] != null 
