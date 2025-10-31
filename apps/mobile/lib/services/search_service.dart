@@ -209,25 +209,26 @@ class SearchService {
     }
 
     try {
-      final searchTerm = '%${query.toLowerCase()}%';
-
-      var queryBuilder = _supabase
-          .from('messages')
-          .select()
-          .or('sender_id.eq.$userId,recipient_id.eq.$userId')
-          .eq('type', type.name);
+      final queries = <String>[
+        Query.equal('sender_id', userId),
+        Query.equal('type', type.name),
+        Query.orderDesc('created_at'),
+        Query.limit(50),
+      ];
 
       // Only apply content filter if query is provided
       if (query.trim().isNotEmpty) {
-        queryBuilder = queryBuilder.ilike('content', searchTerm);
+        queries.insert(0, Query.search('content', query));
       }
 
-      final response = await queryBuilder
-          .order('created_at', ascending: false)
-          .limit(50);
+      final response = await _appwrite.databases.listDocuments(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.messagesCollectionId,
+        queries: queries,
+      );
 
-      return response
-          .map((item) => MessageModel.fromJson(item as Map<String, dynamic>))
+      return response.documents
+          .map((doc) => MessageModel.fromJson(doc.data))
           .toList();
     } catch (e) {
       throw Exception('Failed to search messages by type: $e');
@@ -241,33 +242,37 @@ class SearchService {
     }
 
     try {
-      final searchTerm = '%${query.toLowerCase()}%';
-
       // Search notices
-      final noticesResponse = await _supabase
-          .from('notices')
-          .select()
-          .eq('is_active', true)
-          .or('title.ilike.$searchTerm,content.ilike.$searchTerm')
-          .order('created_at', ascending: false)
-          .limit(20);
+      final noticesResponse = await _appwrite.databases.listDocuments(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.noticesCollectionId,
+        queries: [
+          Query.search('title', query),
+          Query.equal('is_active', true),
+          Query.orderDesc('created_at'),
+          Query.limit(20),
+        ],
+      );
 
-      final notices = noticesResponse
-          .map((item) => NoticeModel.fromJson(item as Map<String, dynamic>))
+      final notices = noticesResponse.documents
+          .map((doc) => NoticeModel.fromJson(doc.data))
           .toList();
 
       // Search messages
       final messages = await searchMessages(query);
 
       // Search users (for admins/teachers to find students)
-      final usersResponse = await _supabase
-          .from('users')
-          .select('id, display_name, email, role')
-          .or('display_name.ilike.$searchTerm,email.ilike.$searchTerm')
-          .eq('is_active', true)
-          .limit(10);
+      final usersResponse = await _appwrite.databases.listDocuments(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.usersCollectionId,
+        queries: [
+          Query.search('display_name', query),
+          Query.equal('is_active', true),
+          Query.limit(10),
+        ],
+      );
 
-      final users = usersResponse;
+      final users = usersResponse.documents.map((doc) => doc.data).toList();
 
       return {'notices': notices, 'messages': messages, 'users': users};
     } catch (e) {
