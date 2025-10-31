@@ -62,3 +62,20 @@ storage-debug.log
 # Environment files
 .env
 .env.local
+.env.production
+.env.*.local
+
+# Security and secrets
+*.pem
+*.p12
+*.mobileprovision
+secrets.json
+api-keys.json
+
+# Build outputs
+*.aab
+*.apk
+*.ipa
+build/
+dist/
+release/
