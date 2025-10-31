@@ -273,8 +273,28 @@ After completing the database setup, you'll be able to:
 - Register new users
 - Create and view notices
 - Send and receive messages
-- Manage user profiles
+- Manage user profiles with extended student information
+- Edit profile with private student details (shift, group, class roll, academic session, phone number)
+- View student information with proper privacy controls (students see their own data, teachers see all student data)
 - All with your Appwrite educational benefits!
+
+## 🔒 Privacy & Security Features
+
+The app implements privacy controls for sensitive student information:
+
+### Student Information Privacy
+- **Private Fields**: Shift, Group, Class Roll, Academic Session, and Phone Number are private by default
+- **Visibility Rules**:
+  - Students can view and edit their own private information
+  - Teachers and admins can view all students' private information for academic management
+  - Other students cannot see each other's private information
+- **UI-Level Protection**: While database permissions allow read access, the app enforces privacy at the UI level
+
+### How It Works
+1. When a student views their own profile, all fields are visible and editable
+2. When a teacher views a student's profile, all fields are visible (read-only from another user's perspective)
+3. When a student views another student's profile, private fields are hidden
+4. The Edit Profile screen only allows users to edit their own profile
 
 ---
 
