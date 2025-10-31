@@ -9,6 +9,8 @@ A comprehensive college communication platform for **Rangpur Polytechnic Institu
 
 > 💡 **NEW:** Try **Demo Mode** to explore the app without Firebase! See demo mode button on login screen.
 
+> 🌐 **NEW:** **Mesh Network** feature enables peer-to-peer communication via Bluetooth/WiFi Direct - works even without internet! See [MESH_NETWORK_GUIDE.md](MESH_NETWORK_GUIDE.md) for details.
+
 > 🔒 **Security:** Demo mode is safe and isolated. See [DEMO_MODE_SECURITY.md](DEMO_MODE_SECURITY.md) for details.
 
 > 📖 **For Teachers:** See [QUICK_START.md](QUICK_START.md) for immediate APK download and review  
@@ -58,9 +60,44 @@ cd apps/mobile
 flutter run
 ```
 
+## ✨ Key Features
+
+### Core Features
+- 📢 **Notices & Announcements** - Share important information with students and faculty
+- 💬 **Direct Messaging** - Real-time communication between users
+- 👤 **Role-Based Access** - Admin, Teacher, and Student roles
+- 🔐 **Secure Authentication** - Firebase Authentication with email/password
+- 🌙 **Dark Mode** - Eye-friendly theme support
+- 🔍 **Search** - Find notices and messages quickly
+- 📝 **Markdown Support** - Rich text formatting in notices
+
+### Advanced Features (NEW!)
+- 🌐 **Mesh Network** - Peer-to-peer communication via Bluetooth/WiFi Direct
+  - Works without internet or cellular service
+  - Automatic peer discovery and connection
+  - Emergency communication mode
+- 📡 **Smart Offline Mode** - Automatic queue and sync
+  - Retry logic with exponential backoff
+  - Priority-based action queue (max 100)
+  - Background sync every 15 minutes
+- 💾 **Intelligent Caching** - Fast and efficient data access
+  - Time-based expiry (5min, 1hr, 1day)
+  - 50MB cache limit with auto-cleanup
+  - GZip compression support
+- 🔄 **Conflict Resolution** - Handle simultaneous edits
+  - Multiple resolution strategies
+  - Optimistic locking
+  - Version tracking
+- 📊 **Network Monitoring** - Real-time connection status
+  - Network quality detection
+  - Connectivity indicators
+  - Sync statistics
+
 ## 📖 Documentation
 
 - [APK Build Guide](APK_BUILD_GUIDE.md) - **Download and install the app**
+- [Mesh Network Guide](MESH_NETWORK_GUIDE.md) - **NEW: Peer-to-peer communication**
+- [Network Improvements Summary](NETWORK_IMPROVEMENTS_SUMMARY.md) - **NEW: Technical details**
 - [Full Documentation](docs/README.md)
 - [Architecture Overview](docs/ARCHITECTURE.md)
 - [API Reference](docs/API.md)

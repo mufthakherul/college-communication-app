@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../models/notice_model.dart';
 import '../../services/notice_service.dart';
+import '../../services/qr_data_service.dart';
+import '../qr/qr_share_screen.dart';
 
 class NoticeDetailScreen extends StatelessWidget {
   final String noticeId;
@@ -30,6 +33,18 @@ class NoticeDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Notice Details'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.qr_code),
+            onPressed: () async {
+              final notice = await noticeService.getNotice(noticeId);
+              if (notice != null && context.mounted) {
+                _shareNoticeViaQR(context, notice);
+              }
+            },
+            tooltip: 'Share via QR Code',
+          ),
+        ],
       ),
       body: FutureBuilder<NoticeModel?>(
         future: noticeService.getNotice(noticeId),
@@ -269,5 +284,27 @@ class NoticeDetailScreen extends StatelessWidget {
 
   String _formatDate(DateTime date) {
     return '${date.day}/${date.month}/${date.year} at ${date.hour}:${date.minute.toString().padLeft(2, '0')}';
+  }
+
+  void _shareNoticeViaQR(BuildContext context, NoticeModel notice) {
+    final qrDataService = QRDataService();
+    final currentUser = FirebaseAuth.instance.currentUser;
+
+    final qrData = qrDataService.generateNoticeQR(
+      noticeId: notice.id,
+      title: notice.title,
+      content: notice.content,
+      type: notice.type.name,
+      senderId: currentUser?.uid,
+      senderName: currentUser?.email?.split('@').first ?? 'Unknown',
+      expiry: const Duration(hours: 24), // QR code valid for 24 hours
+    );
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => QRShareScreen(qrData: qrData),
+      ),
+    );
   }
 }
