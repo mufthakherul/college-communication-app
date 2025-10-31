@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Message delivery status
 enum MessageDeliveryStatus {
@@ -100,13 +99,14 @@ class TypingIndicator {
 }
 
 /// Service to track message delivery and typing indicators
+/// Note: This is a simplified implementation. Real-time features would require
+/// Appwrite Realtime subscriptions or custom implementation
 class MessageDeliveryService {
   static final MessageDeliveryService _instance =
       MessageDeliveryService._internal();
   factory MessageDeliveryService() => _instance;
   MessageDeliveryService._internal();
 
-  final _supabase = Supabase.instance.client;
   final Map<String, MessageDeliveryTracking> _deliveryTracking = {};
   final Map<String, TypingIndicator> _typingIndicators = {};
   final _deliveryStatusController =
@@ -163,30 +163,18 @@ class MessageDeliveryService {
 
   /// Subscribe to real-time delivery updates
   void _subscribeToDeliveryUpdates() {
-    _supabase
-        .from('message_delivery_status')
-        .stream(primaryKey: ['message_id'])
-        .eq('recipient_id', _currentUserId!)
-        .listen((List<Map<String, dynamic>> data) {
-          for (final row in data) {
-            final tracking = _parseDeliveryStatus(row);
-            _updateDeliveryStatus(tracking);
-          }
-        });
+    // Stub implementation - would use Appwrite Realtime
+    if (kDebugMode) {
+      print('Subscribing to delivery updates (stub implementation)');
+    }
   }
 
   /// Subscribe to typing indicators
   void _subscribeToTypingIndicators() {
-    _supabase
-        .from('typing_indicators')
-        .stream(primaryKey: ['user_id', 'conversation_id'])
-        .neq('user_id', _currentUserId!)
-        .listen((List<Map<String, dynamic>> data) {
-          for (final row in data) {
-            final indicator = TypingIndicator.fromJson(row);
-            _updateTypingIndicator(indicator);
-          }
-        });
+    // Stub implementation - would use Appwrite Realtime
+    if (kDebugMode) {
+      print('Subscribing to typing indicators (stub implementation)');
+    }
   }
 
   /// Parse delivery status from database row
@@ -270,16 +258,7 @@ class MessageDeliveryService {
     MessageDeliveryTracking tracking,
   ) async {
     try {
-      await _supabase.from('message_delivery_status').upsert({
-        'message_id': tracking.messageId,
-        'status': tracking.status.name,
-        'sent_at': tracking.sentAt?.toIso8601String(),
-        'delivered_at': tracking.deliveredAt?.toIso8601String(),
-        'read_at': tracking.readAt?.toIso8601String(),
-        'error_message': tracking.errorMessage,
-        'updated_at': DateTime.now().toIso8601String(),
-      });
-
+      // Stub implementation - would update Appwrite database
       if (kDebugMode) {
         print(
           'Updated delivery status for ${tracking.messageId}: ${tracking.status.name}',
@@ -322,14 +301,9 @@ class MessageDeliveryService {
     if (pendingMessages.isEmpty) return;
 
     try {
-      final response = await _supabase
-          .from('message_delivery_status')
-          .select()
-          .inFilter('message_id', pendingMessages);
-
-      for (final row in response) {
-        final tracking = _parseDeliveryStatus(row);
-        _updateDeliveryStatus(tracking);
+      // Stub implementation - would query Appwrite database
+      if (kDebugMode) {
+        print('Polling delivery status for ${pendingMessages.length} messages');
       }
     } catch (e) {
       if (kDebugMode) {
@@ -352,14 +326,7 @@ class MessageDeliveryService {
         status: status,
       );
 
-      // Update database
-      await _supabase.from('typing_indicators').upsert({
-        'user_id': indicator.userId,
-        'conversation_id': indicator.conversationId,
-        'status': indicator.status.name,
-        'timestamp': indicator.timestamp.toIso8601String(),
-      });
-
+      // Stub implementation - would update Appwrite database
       if (kDebugMode) {
         print(
           'Sent typing indicator for conversation $conversationId: ${status.name}',

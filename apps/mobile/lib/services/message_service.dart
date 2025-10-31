@@ -40,10 +40,8 @@ class MessageService {
   }
 
   Timer? _messagesPollingTimer;
-  String? _currentOtherUserId;
   
   void _startMessagesPolling(String otherUserId) {
-    _currentOtherUserId = otherUserId;
     _fetchMessages(otherUserId);
     _messagesPollingTimer = Timer.periodic(
       const Duration(seconds: 3), 
@@ -54,7 +52,6 @@ class MessageService {
   void _stopMessagesPolling() {
     _messagesPollingTimer?.cancel();
     _messagesPollingTimer = null;
-    _currentOtherUserId = null;
   }
   
   Future<void> _fetchMessages(String otherUserId) async {
@@ -62,30 +59,37 @@ class MessageService {
     if (currentUserId == null) return;
     
     try {
-      final docs = await _appwrite.databases.listDocuments(
+      // Fetch messages sent by current user to other user
+      final sentDocs = await _appwrite.databases.listDocuments(
         databaseId: AppwriteConfig.databaseId,
         collectionId: AppwriteConfig.messagesCollectionId,
         queries: [
-          Query.or([
-            Query.and([
-              Query.equal('sender_id', currentUserId),
-              Query.equal('recipient_id', otherUserId),
-            ]),
-            Query.and([
-              Query.equal('sender_id', otherUserId),
-              Query.equal('recipient_id', currentUserId),
-            ]),
-          ]),
-          Query.orderAsc('created_at'),
+          Query.equal('sender_id', currentUserId),
+          Query.equal('recipient_id', otherUserId),
           Query.limit(100),
         ],
       );
       
-      final messages = docs.documents
-          .map((doc) => MessageModel.fromJson(doc.data))
-          .toList();
+      // Fetch messages received by current user from other user
+      final receivedDocs = await _appwrite.databases.listDocuments(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.messagesCollectionId,
+        queries: [
+          Query.equal('sender_id', otherUserId),
+          Query.equal('recipient_id', currentUserId),
+          Query.limit(100),
+        ],
+      );
       
-      _messagesController?.add(messages);
+      // Combine and sort by created_at
+      final allMessages = [
+        ...sentDocs.documents.map((doc) => MessageModel.fromJson(doc.data)),
+        ...receivedDocs.documents.map((doc) => MessageModel.fromJson(doc.data)),
+      ];
+      
+      allMessages.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+      
+      _messagesController?.add(allMessages);
     } catch (e) {
       _messagesController?.addError(e);
     }
@@ -101,22 +105,37 @@ class MessageService {
 
     while (true) {
       try {
-        final docs = await _appwrite.databases.listDocuments(
+        // Fetch messages sent by current user
+        final sentDocs = await _appwrite.databases.listDocuments(
           databaseId: AppwriteConfig.databaseId,
           collectionId: AppwriteConfig.messagesCollectionId,
           queries: [
-            Query.or([
-              Query.equal('sender_id', currentUserId),
-              Query.equal('recipient_id', currentUserId),
-            ]),
+            Query.equal('sender_id', currentUserId),
             Query.orderDesc('created_at'),
             Query.limit(50),
           ],
         );
         
-        final messages = docs.documents
-            .map((doc) => MessageModel.fromJson(doc.data))
-            .toList();
+        // Fetch messages received by current user
+        final receivedDocs = await _appwrite.databases.listDocuments(
+          databaseId: AppwriteConfig.databaseId,
+          collectionId: AppwriteConfig.messagesCollectionId,
+          queries: [
+            Query.equal('recipient_id', currentUserId),
+            Query.orderDesc('created_at'),
+            Query.limit(50),
+          ],
+        );
+        
+        // Combine and sort
+        final allMessages = [
+          ...sentDocs.documents.map((doc) => MessageModel.fromJson(doc.data)),
+          ...receivedDocs.documents.map((doc) => MessageModel.fromJson(doc.data)),
+        ];
+        
+        allMessages.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+        
+        final messages = allMessages.take(50).toList();
         
         yield messages;
       } catch (e) {

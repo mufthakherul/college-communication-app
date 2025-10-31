@@ -340,7 +340,7 @@ class MeshNetworkService {
     if (kDebugMode) {
       print('Generated pairing QR code with token: $pairingToken');
       print('Purposes: ${purposes?.map((p) => p.name).join(", ")}');
-      print('Expires: ${expiresAt != null ? expiresAt : "Never"}');
+      print('Expires: ${expiresAt ?? "Never"}');
     }
 
     return pairingData;

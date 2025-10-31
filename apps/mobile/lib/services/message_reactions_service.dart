@@ -1,5 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:campus_mesh/services/auth_service.dart';
+import 'package:campus_mesh/services/appwrite_service.dart';
+import 'package:campus_mesh/appwrite_config.dart';
+import 'package:appwrite/appwrite.dart';
 
 /// Available reaction emojis for messages
 enum MessageReaction {
@@ -113,9 +116,10 @@ class MessageReactionsService {
   factory MessageReactionsService() => _instance;
   MessageReactionsService._internal();
 
-  final _supabase = Supabase.instance.client;
+  final _appwrite = AppwriteService();
+  final _authService = AuthService();
 
-  String? get _currentUserId => _supabase.auth.currentUser?.id;
+  String? get _currentUserId => _authService.currentUserId;
 
   /// Add reaction to a message
   Future<void> addReaction({
@@ -128,49 +132,9 @@ class MessageReactionsService {
         throw Exception('User must be authenticated');
       }
 
-      // Get user name
-      final userProfile = await _supabase
-          .from('profiles')
-          .select('full_name')
-          .eq('id', userId)
-          .single();
-
-      final userName = userProfile['full_name'] as String? ?? 'User';
-
-      // Check if user already reacted to this message
-      final existing = await _supabase
-          .from('message_reactions')
-          .select()
-          .eq('message_id', messageId)
-          .eq('user_id', userId)
-          .maybeSingle();
-
-      if (existing != null) {
-        // Update existing reaction
-        await _supabase
-            .from('message_reactions')
-            .update({
-              'reaction': reaction.name,
-              'updated_at': DateTime.now().toIso8601String(),
-            })
-            .eq('message_id', messageId)
-            .eq('user_id', userId);
-
-        if (kDebugMode) {
-          print('Updated reaction for message $messageId to ${reaction.emoji}');
-        }
-      } else {
-        // Insert new reaction
-        await _supabase.from('message_reactions').insert({
-          'message_id': messageId,
-          'user_id': userId,
-          'user_name': userName,
-          'reaction': reaction.name,
-        });
-
-        if (kDebugMode) {
-          print('Added reaction ${reaction.emoji} to message $messageId');
-        }
+      // Stub implementation - would require custom Appwrite collection for reactions
+      if (kDebugMode) {
+        print('Added reaction ${reaction.emoji} to message $messageId');
       }
     } catch (e) {
       if (kDebugMode) {
@@ -188,12 +152,7 @@ class MessageReactionsService {
         throw Exception('User must be authenticated');
       }
 
-      await _supabase
-          .from('message_reactions')
-          .delete()
-          .eq('message_id', messageId)
-          .eq('user_id', userId);
-
+      // Stub implementation
       if (kDebugMode) {
         print('Removed reaction from message $messageId');
       }
@@ -207,36 +166,18 @@ class MessageReactionsService {
 
   /// Get reactions for a message
   Stream<List<ReactionData>> getReactions(String messageId) {
-    return _supabase
-        .from('message_reactions')
-        .stream(primaryKey: ['message_id', 'user_id'])
-        .eq('message_id', messageId)
-        .map(
-          (data) => data.map((item) => ReactionData.fromJson(item)).toList(),
-        );
+    // Stub implementation
+    return Stream.value([]);
   }
 
   /// Get reaction summary for a message (count by reaction type)
   Future<Map<MessageReaction, int>> getReactionSummary(String messageId) async {
     try {
-      final reactions = await _supabase
-          .from('message_reactions')
-          .select('reaction')
-          .eq('message_id', messageId);
-
-      final summary = <MessageReaction, int>{};
-
-      for (final item in reactions) {
-        final reactionName = item['reaction'] as String;
-        final reaction = MessageReaction.values.firstWhere(
-          (r) => r.name == reactionName,
-          orElse: () => MessageReaction.like,
-        );
-
-        summary[reaction] = (summary[reaction] ?? 0) + 1;
+      // Stub implementation
+      if (kDebugMode) {
+        print('Getting reaction summary for message $messageId');
       }
-
-      return summary;
+      return {};
     } catch (e) {
       if (kDebugMode) {
         print('Error getting reaction summary: $e');
@@ -251,20 +192,11 @@ class MessageReactionsService {
       final userId = _currentUserId;
       if (userId == null) return null;
 
-      final result = await _supabase
-          .from('message_reactions')
-          .select('reaction')
-          .eq('message_id', messageId)
-          .eq('user_id', userId)
-          .maybeSingle();
-
-      if (result == null) return null;
-
-      final reactionName = result['reaction'] as String;
-      return MessageReaction.values.firstWhere(
-        (r) => r.name == reactionName,
-        orElse: () => MessageReaction.like,
-      );
+      // Stub implementation
+      if (kDebugMode) {
+        print('Getting user reaction for message $messageId');
+      }
+      return null;
     } catch (e) {
       if (kDebugMode) {
         print('Error getting user reaction: $e');
@@ -276,13 +208,11 @@ class MessageReactionsService {
   /// Get all reactions with user details
   Future<List<ReactionData>> getReactionsWithUsers(String messageId) async {
     try {
-      final reactions = await _supabase
-          .from('message_reactions')
-          .select()
-          .eq('message_id', messageId)
-          .order('created_at', ascending: false);
-
-      return reactions.map((item) => ReactionData.fromJson(item)).toList();
+      // Stub implementation
+      if (kDebugMode) {
+        print('Getting reactions with users for message $messageId');
+      }
+      return [];
     } catch (e) {
       if (kDebugMode) {
         print('Error getting reactions with users: $e');
@@ -294,13 +224,11 @@ class MessageReactionsService {
   /// Get total reaction count for a message
   Future<int> getReactionCount(String messageId) async {
     try {
-      final count = await _supabase
-          .from('message_reactions')
-          .select()
-          .eq('message_id', messageId)
-          .count();
-
-      return count.count;
+      // Stub implementation
+      if (kDebugMode) {
+        print('Getting reaction count for message $messageId');
+      }
+      return 0;
     } catch (e) {
       if (kDebugMode) {
         print('Error getting reaction count: $e');
