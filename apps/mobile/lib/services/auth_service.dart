@@ -45,13 +45,20 @@ class AuthService {
 
       // Create user profile in database
       if (response.user != null) {
-        await _supabase.from('users').insert({
-          'id': response.user!.id,
-          'email': email,
-          'display_name': displayName,
-          'role': 'student', // Default role
-          'is_active': true,
-        });
+        try {
+          await _supabase.from('users').insert({
+            'id': response.user!.id,
+            'email': email,
+            'display_name': displayName,
+            'role': 'student', // Default role
+            'is_active': true,
+          });
+        } catch (dbError) {
+          // If profile creation fails, we should sign out the user
+          // to prevent having an authenticated user without a profile
+          await _supabase.auth.signOut();
+          throw Exception('Failed to create user profile: $dbError');
+        }
       }
 
       return response;

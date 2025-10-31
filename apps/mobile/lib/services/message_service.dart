@@ -17,20 +17,9 @@ class MessageService {
     return _supabase
         .from('messages')
         .stream(primaryKey: ['id'])
-        .or('sender_id.eq.$currentUserId,recipient_id.eq.$currentUserId')
+        .or('and(sender_id.eq.$currentUserId,recipient_id.eq.$otherUserId),and(sender_id.eq.$otherUserId,recipient_id.eq.$currentUserId)')
         .order('created_at', ascending: true)
-        .map((data) {
-          return data
-              .map((item) => MessageModel.fromJson(item))
-              .where(
-                (msg) =>
-                    (msg.senderId == currentUserId &&
-                        msg.recipientId == otherUserId) ||
-                    (msg.senderId == otherUserId &&
-                        msg.recipientId == currentUserId),
-              )
-              .toList();
-        });
+        .map((data) => data.map((item) => MessageModel.fromJson(item)).toList());
   }
 
   // Get recent conversations
@@ -43,7 +32,7 @@ class MessageService {
     return _supabase
         .from('messages')
         .stream(primaryKey: ['id'])
-        .eq('sender_id', currentUserId)
+        .or('sender_id.eq.$currentUserId,recipient_id.eq.$currentUserId')
         .order('created_at', ascending: false)
         .limit(50)
         .map(
