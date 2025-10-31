@@ -1,15 +1,19 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:campus_mesh/models/notice_model.dart';
 import 'package:campus_mesh/models/message_model.dart';
+import 'package:campus_mesh/services/auth_service.dart';
+import 'package:campus_mesh/services/appwrite_service.dart';
+import 'package:campus_mesh/appwrite_config.dart';
+import 'package:appwrite/appwrite.dart';
 
 /// Search service for full-text search across notices, messages, and more
-/// Uses PostgreSQL full-text search capabilities
+/// Note: Simplified implementation using Appwrite search capabilities
 class SearchService {
-  final SupabaseClient _supabase = Supabase.instance.client;
+  final _appwrite = AppwriteService();
+  final _authService = AuthService();
 
-  String? get _currentUserId => _supabase.auth.currentUser?.id;
+  String? get _currentUserId => _authService.currentUserId;
 
-  /// Search notices using full-text search
+  /// Search notices using Appwrite search
   /// Returns notices ranked by relevance
   Future<List<NoticeModel>> searchNotices(String query) async {
     if (query.trim().isEmpty) {
@@ -17,53 +21,47 @@ class SearchService {
     }
 
     try {
-      // Use PostgreSQL full-text search function
-      final response = await _supabase.rpc(
-        'search_notices',
-        params: {'search_query': query},
+      // Use Appwrite search
+      final response = await _appwrite.databases.listDocuments(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.noticesCollectionId,
+        queries: [
+          Query.search('title', query),
+          Query.equal('is_active', true),
+          Query.orderDesc('created_at'),
+          Query.limit(50),
+        ],
       );
 
-      if (response == null) {
-        return [];
-      }
-
-      final data = response as List<dynamic>;
-      return data.map((item) {
-        final itemMap = item as Map<String, dynamic>;
-        final Map<String, dynamic> noticeData = {
-          'id': itemMap['id'],
-          'title': itemMap['title'],
-          'content': itemMap['content'],
-          'type': itemMap['type'],
-          'is_active': true,
-          // Other fields will use defaults
-        };
-        return NoticeModel.fromJson(noticeData);
-      }).toList();
+      return response.documents
+          .map((doc) => NoticeModel.fromJson(doc.data))
+          .toList();
     } catch (e) {
       throw Exception('Failed to search notices: $e');
     }
   }
 
-  /// Simple search in notices (fallback if full-text search not available)
+  /// Simple search in notices (searches content as well)
   Future<List<NoticeModel>> simpleSearchNotices(String query) async {
     if (query.trim().isEmpty) {
       return [];
     }
 
     try {
-      final searchTerm = '%${query.toLowerCase()}%';
+      // Search in both title and content
+      final response = await _appwrite.databases.listDocuments(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.noticesCollectionId,
+        queries: [
+          Query.search('content', query),
+          Query.equal('is_active', true),
+          Query.orderDesc('created_at'),
+          Query.limit(50),
+        ],
+      );
 
-      final response = await _supabase
-          .from('notices')
-          .select()
-          .eq('is_active', true)
-          .or('title.ilike.$searchTerm,content.ilike.$searchTerm')
-          .order('created_at', ascending: false)
-          .limit(50);
-
-      return response
-          .map((item) => NoticeModel.fromJson(item as Map<String, dynamic>))
+      return response.documents
+          .map((doc) => NoticeModel.fromJson(doc.data))
           .toList();
     } catch (e) {
       throw Exception('Failed to search notices: $e');
@@ -80,19 +78,20 @@ class SearchService {
     }
 
     try {
-      final searchTerm = '%${query.toLowerCase()}%';
+      final response = await _appwrite.databases.listDocuments(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.noticesCollectionId,
+        queries: [
+          Query.search('title', query),
+          Query.equal('is_active', true),
+          Query.equal('type', type.name),
+          Query.orderDesc('created_at'),
+          Query.limit(50),
+        ],
+      );
 
-      final response = await _supabase
-          .from('notices')
-          .select()
-          .eq('is_active', true)
-          .eq('type', type.name)
-          .or('title.ilike.$searchTerm,content.ilike.$searchTerm')
-          .order('created_at', ascending: false)
-          .limit(50);
-
-      return response
-          .map((item) => NoticeModel.fromJson(item as Map<String, dynamic>))
+      return response.documents
+          .map((doc) => NoticeModel.fromJson(doc.data))
           .toList();
     } catch (e) {
       throw Exception('Failed to search notices by type: $e');
@@ -106,19 +105,20 @@ class SearchService {
     }
 
     try {
-      final searchTerm = '%${query.toLowerCase()}%';
-
       // Get matching notice titles as suggestions
-      final response = await _supabase
-          .from('notices')
-          .select('title')
-          .eq('is_active', true)
-          .ilike('title', searchTerm)
-          .order('created_at', ascending: false)
-          .limit(10);
+      final response = await _appwrite.databases.listDocuments(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.noticesCollectionId,
+        queries: [
+          Query.search('title', query),
+          Query.equal('is_active', true),
+          Query.orderDesc('created_at'),
+          Query.limit(10),
+        ],
+      );
 
-      return response
-          .map((item) => (item as Map<String, dynamic>)['title'] as String)
+      return response.documents
+          .map((doc) => doc.data['title'] as String)
           .toSet() // Remove duplicates
           .toList();
     } catch (e) {
@@ -138,19 +138,20 @@ class SearchService {
     }
 
     try {
-      final searchTerm = '%${query.toLowerCase()}%';
-
       // Search in user's messages (sent or received)
-      final response = await _supabase
-          .from('messages')
-          .select()
-          .or('sender_id.eq.$userId,recipient_id.eq.$userId')
-          .ilike('content', searchTerm)
-          .order('created_at', ascending: false)
-          .limit(50);
+      final response = await _appwrite.databases.listDocuments(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.messagesCollectionId,
+        queries: [
+          Query.search('content', query),
+          Query.equal('sender_id', userId),
+          Query.orderDesc('created_at'),
+          Query.limit(50),
+        ],
+      );
 
-      return response
-          .map((item) => MessageModel.fromJson(item as Map<String, dynamic>))
+      return response.documents
+          .map((doc) => MessageModel.fromJson(doc.data))
           .toList();
     } catch (e) {
       throw Exception('Failed to search messages: $e');
@@ -172,21 +173,21 @@ class SearchService {
     }
 
     try {
-      final searchTerm = '%${query.toLowerCase()}%';
-
       // Search in conversation with specific user
-      final response = await _supabase
-          .from('messages')
-          .select()
-          .or(
-            'and(sender_id.eq.$userId,recipient_id.eq.$otherUserId),and(sender_id.eq.$otherUserId,recipient_id.eq.$userId)',
-          )
-          .ilike('content', searchTerm)
-          .order('created_at', ascending: false)
-          .limit(50);
+      final response = await _appwrite.databases.listDocuments(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.messagesCollectionId,
+        queries: [
+          Query.search('content', query),
+          Query.equal('sender_id', userId),
+          Query.equal('recipient_id', otherUserId),
+          Query.orderDesc('created_at'),
+          Query.limit(50),
+        ],
+      );
 
-      return response
-          .map((item) => MessageModel.fromJson(item as Map<String, dynamic>))
+      return response.documents
+          .map((doc) => MessageModel.fromJson(doc.data))
           .toList();
     } catch (e) {
       throw Exception('Failed to search messages with user: $e');

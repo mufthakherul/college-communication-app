@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Conflict resolution strategy
 enum ConflictStrategy {
@@ -30,13 +29,14 @@ class DataConflict<T> {
 }
 
 /// Service to handle simultaneous edit conflicts
+/// Note: This is a stub implementation. Full conflict resolution would require
+/// custom Appwrite Functions or client-side logic
 class ConflictResolutionService {
   static final ConflictResolutionService _instance =
       ConflictResolutionService._internal();
   factory ConflictResolutionService() => _instance;
   ConflictResolutionService._internal();
 
-  final SupabaseClient _supabase = Supabase.instance.client;
   final List<DataConflict> _unresolvedConflicts = [];
 
   /// Default conflict resolution strategy

@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:path/path.dart' as path;
+import 'package:campus_mesh/services/appwrite_service.dart';
+import 'package:campus_mesh/appwrite_config.dart';
+import 'package:appwrite/appwrite.dart';
 
 /// Service to handle message attachments (images, files, videos, audio, documents)
 class MessageAttachmentsService {
@@ -10,8 +12,8 @@ class MessageAttachmentsService {
   factory MessageAttachmentsService() => _instance;
   MessageAttachmentsService._internal();
 
-  final _supabase = Supabase.instance.client;
-  static const String _bucketName = 'message-attachments';
+  final _appwrite = AppwriteService();
+  static const String _bucketId = AppwriteConfig.messageAttachmentsBucketId;
   static const int _maxFileSizeMB = 50; // 50 MB max file size
   static const int _maxFileSizeBytes = _maxFileSizeMB * 1024 * 1024;
 
@@ -53,27 +55,29 @@ class MessageAttachmentsService {
         print('Uploading attachment: $fileName (${_formatFileSize(fileSize)})');
       }
 
-      // Upload to Supabase storage
-      await _supabase.storage.from(_bucketName).upload(filePath, file);
+      // Upload to Appwrite storage
+      final uploadedFile = await _appwrite.storage.createFile(
+        bucketId: _bucketId,
+        fileId: ID.unique(),
+        file: InputFile.fromPath(path: file.path, filename: uniqueFileName),
+      );
 
-      // Get public URL
-      final publicUrl = _supabase.storage
-          .from(_bucketName)
-          .getPublicUrl(filePath);
+      // Get file URL
+      final fileUrl = '${AppwriteConfig.endpoint}/storage/buckets/$_bucketId/files/${uploadedFile.$id}/view?project=${AppwriteConfig.projectId}';
 
       // Generate thumbnail for images/videos if needed
       String? thumbnailUrl;
       if (_isImageFile(fileExtension) || _isVideoFile(fileExtension)) {
-        thumbnailUrl =
-            publicUrl; // Can be enhanced with actual thumbnail generation
+        thumbnailUrl = fileUrl; // Can be enhanced with actual thumbnail generation
       }
 
       if (kDebugMode) {
-        print('Upload successful: $publicUrl');
+        print('Upload successful: $fileUrl');
       }
 
       return {
-        'url': publicUrl,
+        'url': fileUrl,
+        'fileId': uploadedFile.$id,
         'fileName': fileName,
         'fileSize': fileSize,
         'filePath': filePath,
@@ -89,12 +93,15 @@ class MessageAttachmentsService {
   }
 
   /// Delete attachment from storage
-  Future<void> deleteAttachment(String filePath) async {
+  Future<void> deleteAttachment(String fileId) async {
     try {
-      await _supabase.storage.from(_bucketName).remove([filePath]);
+      await _appwrite.storage.deleteFile(
+        bucketId: _bucketId,
+        fileId: fileId,
+      );
 
       if (kDebugMode) {
-        print('Deleted attachment: $filePath');
+        print('Deleted attachment: $fileId');
       }
     } catch (e) {
       if (kDebugMode) {

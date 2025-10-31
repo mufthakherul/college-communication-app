@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:campus_mesh/services/mesh_network_service.dart';
+import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/screens/settings/mesh_qr_pairing_screen.dart';
 
 /// Screen for mesh network settings and controls
@@ -26,11 +26,12 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
 
   Future<void> _initializeMesh() async {
     try {
-      final user = Supabase.instance.client.auth.currentUser;
+      final authService = AuthService();
+      final user = await authService.currentUser;
       if (user != null) {
         await _meshService.initialize(
           deviceId: user.id,
-          deviceName: user.email?.split('@').first ?? 'Unknown',
+          deviceName: user.displayName ?? user.email ?? 'Unknown',
         );
 
         setState(() {
