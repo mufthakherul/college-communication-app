@@ -1,4 +1,4 @@
-enum MessageType { text, image, file }
+enum MessageType { text, image, file, video, audio, document }
 
 class MessageModel {
   final String id;
@@ -9,6 +9,11 @@ class MessageModel {
   final DateTime? createdAt;
   final bool read;
   final DateTime? readAt;
+  final String? attachmentUrl; // URL for file attachments
+  final String? attachmentName; // Original file name
+  final int? attachmentSize; // File size in bytes
+  final String? thumbnailUrl; // Thumbnail for images/videos
+  final Map<String, dynamic>? metadata; // Additional metadata
 
   MessageModel({
     required this.id,
@@ -19,6 +24,11 @@ class MessageModel {
     this.createdAt,
     this.read = false,
     this.readAt,
+    this.attachmentUrl,
+    this.attachmentName,
+    this.attachmentSize,
+    this.thumbnailUrl,
+    this.metadata,
   });
 
   factory MessageModel.fromJson(Map<String, dynamic> data) {
@@ -35,6 +45,11 @@ class MessageModel {
       readAt: data['read_at'] != null
           ? DateTime.parse(data['read_at'])
           : null,
+      attachmentUrl: data['attachment_url'] as String?,
+      attachmentName: data['attachment_name'] as String?,
+      attachmentSize: data['attachment_size'] as int?,
+      thumbnailUrl: data['thumbnail_url'] as String?,
+      metadata: data['metadata'] as Map<String, dynamic>?,
     );
   }
 
@@ -47,6 +62,11 @@ class MessageModel {
       'created_at': createdAt?.toIso8601String(),
       'read': read,
       'read_at': readAt?.toIso8601String(),
+      'attachment_url': attachmentUrl,
+      'attachment_name': attachmentName,
+      'attachment_size': attachmentSize,
+      'thumbnail_url': thumbnailUrl,
+      'metadata': metadata,
     };
   }
 
@@ -56,6 +76,12 @@ class MessageModel {
         return MessageType.image;
       case 'file':
         return MessageType.file;
+      case 'video':
+        return MessageType.video;
+      case 'audio':
+        return MessageType.audio;
+      case 'document':
+        return MessageType.document;
       case 'text':
       default:
         return MessageType.text;
@@ -71,6 +97,11 @@ class MessageModel {
     DateTime? createdAt,
     bool? read,
     DateTime? readAt,
+    String? attachmentUrl,
+    String? attachmentName,
+    int? attachmentSize,
+    String? thumbnailUrl,
+    Map<String, dynamic>? metadata,
   }) {
     return MessageModel(
       id: id ?? this.id,
@@ -81,6 +112,33 @@ class MessageModel {
       createdAt: createdAt ?? this.createdAt,
       read: read ?? this.read,
       readAt: readAt ?? this.readAt,
+      attachmentUrl: attachmentUrl ?? this.attachmentUrl,
+      attachmentName: attachmentName ?? this.attachmentName,
+      attachmentSize: attachmentSize ?? this.attachmentSize,
+      thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
+      metadata: metadata ?? this.metadata,
     );
+  }
+  
+  /// Check if message has attachment
+  bool get hasAttachment => attachmentUrl != null && attachmentUrl!.isNotEmpty;
+  
+  /// Get file extension from attachment name
+  String? get fileExtension {
+    if (attachmentName == null) return null;
+    final parts = attachmentName!.split('.');
+    return parts.length > 1 ? parts.last.toLowerCase() : null;
+  }
+  
+  /// Get human-readable file size
+  String get formattedFileSize {
+    if (attachmentSize == null) return '';
+    final bytes = attachmentSize!;
+    if (bytes < 1024) return '$bytes B';
+    if (bytes < 1024 * 1024) return '${(bytes / 1024).toStringAsFixed(1)} KB';
+    if (bytes < 1024 * 1024 * 1024) {
+      return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
+    }
+    return '${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(1)} GB';
   }
 }
