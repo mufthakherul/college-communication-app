@@ -1,9 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 
+// TODO: Update tests to use Supabase mocks
+// These are placeholder tests for Supabase PostgreSQL integration
+
 void main() {
   group('NoticeService Tests', () {
     test('should get all active notices', () {
-      // Test validates notice retrieval
+      // Test validates notice retrieval from PostgreSQL
       expect(true, isTrue);
     });
 

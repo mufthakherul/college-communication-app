@@ -31,6 +31,10 @@ render.experimental.xml
 google-services.json
 GoogleService-Info.plist
 
+# Supabase configuration (if it contains real credentials)
+# Uncomment this line if you add real credentials to supabase_config.dart
+# apps/mobile/lib/supabase_config.dart
+
 # Android Profiling
 *.hprof
 

@@ -1,101 +1,104 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:campus_mesh/models/message_model.dart';
 
 class MessageService {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final SupabaseClient _supabase = Supabase.instance.client;
+
+  // Get current user ID
+  String? get _currentUserId => _supabase.auth.currentUser?.id;
+
+  // Validate UUID format to prevent injection
+  bool _isValidUuid(String uuid) {
+    final uuidRegex = RegExp(
+      r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$',
+      caseSensitive: false,
+    );
+    return uuidRegex.hasMatch(uuid);
+  }
 
   // Get messages between current user and another user
   Stream<List<MessageModel>> getMessages(String otherUserId) {
-    final currentUserId = _auth.currentUser?.uid;
-    if (currentUserId == null) {
+    final currentUserId = _currentUserId;
+    if (currentUserId == null || !_isValidUuid(otherUserId)) {
       return Stream.value([]);
     }
 
-    return _firestore
-        .collection('messages')
-        .where('senderId', whereIn: [currentUserId, otherUserId])
-        .orderBy('createdAt', descending: false)
-        .snapshots()
-        .map((snapshot) {
-          return snapshot.docs
-              .map((doc) => MessageModel.fromFirestore(doc))
-              .where(
-                (msg) =>
-                    (msg.senderId == currentUserId &&
-                        msg.recipientId == otherUserId) ||
-                    (msg.senderId == otherUserId &&
-                        msg.recipientId == currentUserId),
-              )
-              .toList();
-        });
+    return _supabase
+        .from('messages')
+        .stream(primaryKey: ['id'])
+        .or('and(sender_id.eq.$currentUserId,recipient_id.eq.$otherUserId),and(sender_id.eq.$otherUserId,recipient_id.eq.$currentUserId)')
+        .order('created_at', ascending: true)
+        .map((data) => data.map((item) => MessageModel.fromJson(item)).toList());
   }
 
   // Get recent conversations
   Stream<List<MessageModel>> getRecentConversations() {
-    final currentUserId = _auth.currentUser?.uid;
+    final currentUserId = _currentUserId;
     if (currentUserId == null) {
       return Stream.value([]);
     }
 
-    return _firestore
-        .collection('messages')
-        .where('senderId', isEqualTo: currentUserId)
-        .orderBy('createdAt', descending: true)
+    return _supabase
+        .from('messages')
+        .stream(primaryKey: ['id'])
+        .or('sender_id.eq.$currentUserId,recipient_id.eq.$currentUserId')
+        .order('created_at', ascending: false)
         .limit(50)
-        .snapshots()
         .map(
-          (snapshot) => snapshot.docs
-              .map((doc) => MessageModel.fromFirestore(doc))
-              .toList(),
+          (data) => data.map((item) => MessageModel.fromJson(item)).toList(),
         );
   }
 
-  // Send message (direct Firestore write)
+  // Send message
   Future<String> sendMessage({
     required String recipientId,
     required String content,
     MessageType type = MessageType.text,
   }) async {
     try {
-      final currentUserId = _auth.currentUser?.uid;
+      final currentUserId = _currentUserId;
       if (currentUserId == null) {
         throw Exception('User must be authenticated to send messages');
       }
 
-      final message = MessageModel(
-        id: '', // Will be set by Firestore
-        senderId: currentUserId,
-        recipientId: recipientId,
-        content: content,
-        type: type,
-        createdAt: DateTime.now(),
-        read: false,
-      );
+      // Validate recipient ID format
+      if (!_isValidUuid(recipientId)) {
+        throw Exception('Invalid recipient ID format');
+      }
 
-      final docRef = await _firestore
-          .collection('messages')
-          .add(message.toMap());
-      return docRef.id;
+      final message = {
+        'sender_id': currentUserId,
+        'recipient_id': recipientId,
+        'content': content,
+        'type': type.name,
+        'read': false,
+      };
+
+      final response = await _supabase
+          .from('messages')
+          .insert(message)
+          .select()
+          .single();
+      
+      return response['id'] as String;
     } catch (e) {
       throw Exception('Failed to send message: $e');
     }
   }
 
-  // Mark message as read (direct Firestore write)
-  // Note: Authorization check (recipient only) is enforced by Firestore Security Rules
+  // Mark message as read
+  // Note: Authorization check (recipient only) is enforced by PostgreSQL Row Level Security
   Future<void> markMessageAsRead(String messageId) async {
     try {
-      final currentUserId = _auth.currentUser?.uid;
+      final currentUserId = _currentUserId;
       if (currentUserId == null) {
         throw Exception('User must be authenticated to mark messages as read');
       }
 
-      await _firestore.collection('messages').doc(messageId).update({
+      await _supabase.from('messages').update({
         'read': true,
-        'readAt': FieldValue.serverTimestamp(),
-      });
+        'read_at': DateTime.now().toIso8601String(),
+      }).eq('id', messageId);
     } catch (e) {
       throw Exception('Failed to mark message as read: $e');
     }
@@ -103,16 +106,16 @@ class MessageService {
 
   // Get unread message count
   Stream<int> getUnreadCount() {
-    final currentUserId = _auth.currentUser?.uid;
+    final currentUserId = _currentUserId;
     if (currentUserId == null) {
       return Stream.value(0);
     }
 
-    return _firestore
-        .collection('messages')
-        .where('recipientId', isEqualTo: currentUserId)
-        .where('read', isEqualTo: false)
-        .snapshots()
-        .map((snapshot) => snapshot.docs.length);
+    return _supabase
+        .from('messages')
+        .stream(primaryKey: ['id'])
+        .eq('recipient_id', currentUserId)
+        .eq('read', false)
+        .map((data) => data.length);
   }
 }

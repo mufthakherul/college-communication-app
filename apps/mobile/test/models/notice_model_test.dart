@@ -25,7 +25,7 @@ void main() {
       expect(notice.isActive, true);
     });
 
-    test('should convert NoticeModel to Map', () {
+    test('should convert NoticeModel to JSON', () {
       final notice = NoticeModel(
         id: 'notice123',
         title: 'Test Notice',
@@ -38,14 +38,14 @@ void main() {
         isActive: true,
       );
 
-      final map = notice.toMap();
+      final json = notice.toJson();
 
-      expect(map['title'], 'Test Notice');
-      expect(map['content'], 'Content');
-      expect(map['type'], 'event');
-      expect(map['targetAudience'], 'students');
-      expect(map['authorId'], 'author123');
-      expect(map['isActive'], true);
+      expect(json['title'], 'Test Notice');
+      expect(json['content'], 'Content');
+      expect(json['type'], 'event');
+      expect(json['target_audience'], 'students');
+      expect(json['author_id'], 'author123');
+      expect(json['is_active'], true);
     });
 
     test('should handle all NoticeType enum values', () {

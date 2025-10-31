@@ -1,20 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:campus_mesh/firebase_options.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:campus_mesh/supabase_config.dart';
 import 'package:campus_mesh/screens/auth/login_screen.dart';
 import 'package:campus_mesh/screens/home_screen.dart';
 import 'package:campus_mesh/services/theme_service.dart';
 import 'package:campus_mesh/services/cache_service.dart';
 import 'package:campus_mesh/services/offline_queue_service.dart';
 import 'package:campus_mesh/services/background_sync_service.dart';
+import 'package:campus_mesh/services/sentry_service.dart';
+import 'package:campus_mesh/services/onesignal_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  
+  // Initialize Sentry (crash reporting)
+  // Replace 'YOUR_SENTRY_DSN' with your actual Sentry DSN
+  // Get it from: https://sentry.io/settings/YOUR_ORG/projects/YOUR_PROJECT/keys/
+  const sentryDsn = String.fromEnvironment(
+    'SENTRY_DSN',
+    defaultValue: '', // Empty by default - configure via --dart-define
+  );
+  
+  if (sentryDsn.isNotEmpty) {
+    await SentryService.initialize(
+      dsn: sentryDsn,
+      environment: kReleaseMode ? 'production' : 'development',
+      release: 'campus_mesh@1.0.0+1',
+      tracesSampleRate: kReleaseMode ? 0.2 : 1.0, // Sample 20% in production
+    );
+  }
+  
+  // Initialize Supabase
+  await Supabase.initialize(
+    url: SupabaseConfig.supabaseUrl,
+    anonKey: SupabaseConfig.supabaseAnonKey,
+  );
+
+  // Initialize OneSignal (push notifications)
+  // Replace 'YOUR_ONESIGNAL_APP_ID' with your actual OneSignal App ID
+  // Get it from: https://app.onesignal.com/apps/YOUR_APP_ID/settings
+  const oneSignalAppId = String.fromEnvironment(
+    'ONESIGNAL_APP_ID',
+    defaultValue: '', // Empty by default - configure via --dart-define
+  );
+  
+  if (oneSignalAppId.isNotEmpty) {
+    await OneSignalService().initialize(oneSignalAppId);
+  }
 
   // Load theme preference
   await ThemeService().loadThemePreference();
@@ -33,28 +66,11 @@ void main() async {
   await backgroundSyncService.registerOfflineQueueSync();
   await backgroundSyncService.registerCacheCleanup();
 
-  // Enable Crashlytics only in release mode to avoid debug crashes in production
-  if (kReleaseMode) {
-    FlutterError.onError = (errorDetails) {
-      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-    };
-    // Pass all uncaught asynchronous errors to Crashlytics
-    PlatformDispatcher.instance.onError = (error, stack) {
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-      return true;
-    };
-  }
-
   runApp(const CampusMeshApp());
 }
 
 class CampusMeshApp extends StatefulWidget {
   const CampusMeshApp({super.key});
-
-  static FirebaseAnalytics analytics = FirebaseAnalytics.instance;
-  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(
-    analytics: analytics,
-  );
 
   @override
   State<CampusMeshApp> createState() => _CampusMeshAppState();
@@ -84,12 +100,11 @@ class _CampusMeshAppState extends State<CampusMeshApp> {
     return MaterialApp(
       title: 'RPI Communication',
       debugShowCheckedModeBanner: false,
-      navigatorObservers: [CampusMeshApp.observer],
       theme: ThemeService.lightTheme,
       darkTheme: ThemeService.darkTheme,
       themeMode: _themeService.themeMode,
-      home: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
+      home: StreamBuilder<AuthState>(
+        stream: Supabase.instance.client.auth.onAuthStateChange,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Scaffold(
@@ -97,7 +112,8 @@ class _CampusMeshAppState extends State<CampusMeshApp> {
             );
           }
 
-          if (snapshot.hasData) {
+          final session = snapshot.data?.session;
+          if (session != null) {
             return const HomeScreen();
           }
 

@@ -1,50 +1,43 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-// Generate mocks with: flutter pub run build_runner build
-@GenerateMocks([
-  FirebaseAuth,
-  FirebaseFirestore,
-  User,
-  UserCredential,
-  CollectionReference,
-  DocumentReference,
-  DocumentSnapshot,
-])
+// TODO: Update tests to use Supabase mocks
+// Supabase testing documentation: https://supabase.com/docs/reference/dart/testing
+// For now, these are placeholder tests demonstrating expected behavior
+
 void main() {
   group('AuthService Tests', () {
-    // Note: These tests demonstrate the expected behavior of Firebase Auth
-    // In a real implementation, you would inject mock instances into AuthService
-    // and test the service methods directly
+    // Note: These tests demonstrate the expected behavior of Supabase Auth
+    // In a real implementation, you would:
+    // 1. Mock the Supabase client
+    // 2. Inject the mock into AuthService
+    // 3. Test each service method directly
 
-    test('Firebase Auth mock - should return current user when signed in', () {
+    test('Supabase Auth mock - should return current user when signed in', () {
       // This test validates our mock setup
       expect(true, isTrue);
     });
 
-    test('Firebase Auth mock - sign in should work with valid credentials', () {
+    test('Supabase Auth mock - sign in should work with valid credentials', () {
       // This test validates sign in flow
       expect(true, isTrue);
     });
 
-    test('Firebase Auth mock - register should create new user', () {
+    test('Supabase Auth mock - register should create new user', () {
       // This test validates registration flow
       expect(true, isTrue);
     });
 
-    test('Firebase Auth mock - sign out should complete successfully', () {
+    test('Supabase Auth mock - sign out should complete successfully', () {
       // This test validates sign out flow
       expect(true, isTrue);
     });
 
-    test('Firebase Auth mock - password reset should send email', () {
+    test('Supabase Auth mock - password reset should send email', () {
       // This test validates password reset flow
       expect(true, isTrue);
     });
 
-    test('Firebase Auth mock - get user profile should return data', () {
+    test('Supabase Auth mock - get user profile should return data', () {
       // This test validates profile retrieval
       expect(true, isTrue);
     });

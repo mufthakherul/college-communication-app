@@ -1,54 +1,53 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:campus_mesh/models/notice_model.dart';
 
 class NoticeService {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final SupabaseClient _supabase = Supabase.instance.client;
+
+  // Get current user ID
+  String? get _currentUserId => _supabase.auth.currentUser?.id;
 
   // Get all active notices
   Stream<List<NoticeModel>> getNotices() {
-    return _firestore
-        .collection('notices')
-        .where('isActive', isEqualTo: true)
-        .orderBy('createdAt', descending: true)
-        .snapshots()
+    return _supabase
+        .from('notices')
+        .stream(primaryKey: ['id'])
+        .eq('is_active', true)
+        .order('created_at', ascending: false)
         .map(
-          (snapshot) => snapshot.docs
-              .map((doc) => NoticeModel.fromFirestore(doc))
-              .toList(),
+          (data) => data.map((item) => NoticeModel.fromJson(item)).toList(),
         );
   }
 
   // Get notices by type
   Stream<List<NoticeModel>> getNoticesByType(NoticeType type) {
-    return _firestore
-        .collection('notices')
-        .where('isActive', isEqualTo: true)
-        .where('type', isEqualTo: type.name)
-        .orderBy('createdAt', descending: true)
-        .snapshots()
+    return _supabase
+        .from('notices')
+        .stream(primaryKey: ['id'])
+        .eq('is_active', true)
+        .eq('type', type.name)
+        .order('created_at', ascending: false)
         .map(
-          (snapshot) => snapshot.docs
-              .map((doc) => NoticeModel.fromFirestore(doc))
-              .toList(),
+          (data) => data.map((item) => NoticeModel.fromJson(item)).toList(),
         );
   }
 
   // Get single notice
   Future<NoticeModel?> getNotice(String noticeId) async {
     try {
-      final doc = await _firestore.collection('notices').doc(noticeId).get();
-      if (doc.exists) {
-        return NoticeModel.fromFirestore(doc);
-      }
-      return null;
+      final response = await _supabase
+          .from('notices')
+          .select()
+          .eq('id', noticeId)
+          .single();
+      
+      return NoticeModel.fromJson(response);
     } catch (e) {
       throw Exception('Failed to get notice: $e');
     }
   }
 
-  // Create notice (direct Firestore write)
+  // Create notice
   Future<String> createNotice({
     required String title,
     required String content,
@@ -57,57 +56,54 @@ class NoticeService {
     DateTime? expiresAt,
   }) async {
     try {
-      final currentUserId = _auth.currentUser?.uid;
+      final currentUserId = _currentUserId;
       if (currentUserId == null) {
         throw Exception('User must be authenticated to create notices');
       }
 
-      final notice = NoticeModel(
-        id: '', // Will be set by Firestore
-        title: title,
-        content: content,
-        type: type,
-        targetAudience: targetAudience,
-        authorId: currentUserId,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-        expiresAt: expiresAt,
-        isActive: true,
-      );
+      final notice = {
+        'title': title,
+        'content': content,
+        'type': type.name,
+        'target_audience': targetAudience,
+        'author_id': currentUserId,
+        'expires_at': expiresAt?.toIso8601String(),
+        'is_active': true,
+      };
 
-      final docRef = await _firestore.collection('notices').add(notice.toMap());
-      return docRef.id;
+      final response = await _supabase
+          .from('notices')
+          .insert(notice)
+          .select()
+          .single();
+      
+      return response['id'] as String;
     } catch (e) {
       throw Exception('Failed to create notice: $e');
     }
   }
 
-  // Update notice (direct Firestore write)
-  // Note: Authorization is enforced by Firestore Security Rules
+  // Update notice
+  // Note: Authorization is enforced by PostgreSQL Row Level Security
   Future<void> updateNotice({
     required String noticeId,
     Map<String, dynamic>? updates,
   }) async {
     try {
-      final currentUserId = _auth.currentUser?.uid;
+      final currentUserId = _currentUserId;
       if (currentUserId == null) {
         throw Exception('User must be authenticated to update notices');
       }
 
-      final noticeDoc = await _firestore
-          .collection('notices')
-          .doc(noticeId)
-          .get();
-      if (!noticeDoc.exists) {
-        throw Exception('Notice not found');
-      }
-
       final updateData = {
         ...?updates,
-        'updatedAt': FieldValue.serverTimestamp(),
+        'updated_at': DateTime.now().toIso8601String(),
       };
 
-      await _firestore.collection('notices').doc(noticeId).update(updateData);
+      await _supabase
+          .from('notices')
+          .update(updateData)
+          .eq('id', noticeId);
     } catch (e) {
       throw Exception('Failed to update notice: $e');
     }
@@ -116,7 +112,7 @@ class NoticeService {
   // Delete notice
   Future<void> deleteNotice(String noticeId) async {
     try {
-      await updateNotice(noticeId: noticeId, updates: {'isActive': false});
+      await updateNotice(noticeId: noticeId, updates: {'is_active': false});
     } catch (e) {
       throw Exception('Failed to delete notice: $e');
     }

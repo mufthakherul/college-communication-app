@@ -1,0 +1,62 @@
+name: Automated Database Backup
+
+on:
+  schedule:
+    # Run daily at 3 AM UTC
+    - cron: '0 3 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  backup:
+    name: Backup Supabase Database
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup PostgreSQL Client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+      
+      - name: Generate backup metadata
+        id: metadata
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+        run: |
+          echo "Generating backup metadata..."
+          METADATA=$(curl -X POST "$SUPABASE_URL/rest/v1/rpc/generate_backup_metadata" \
+            -H "apikey: $SUPABASE_SERVICE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_SERVICE_KEY" \
+            -H "Content-Type: application/json" \
+            -s)
+          
+          echo "metadata=$METADATA" >> $GITHUB_OUTPUT
+          echo "Backup metadata:"
+          echo "$METADATA" | jq '.'
+      
+      - name: Create database backup
+        env:
+          SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+          SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
+          BACKUP_DIR: ./backups
+        run: |
+          chmod +x scripts/backup/backup_database.sh
+          ./scripts/backup/backup_database.sh
+      
+      - name: Upload backup artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: database-backup-${{ github.run_number }}
+          path: backups/*.gz
+          retention-days: 30
+      
+      - name: Backup summary
+        run: |
+          echo "✅ Database backup completed successfully"
+          echo "📦 Backup artifact uploaded"
+          echo "🔒 Retention: 30 days"
+          echo ""
+          ls -lh backups/
