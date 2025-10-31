@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../services/demo_mode_service.dart';
-import '../home_screen.dart';
+import 'package:campus_mesh/services/demo_mode_service.dart';
+import 'package:campus_mesh/screens/home_screen.dart';
 
 class DemoLoginScreen extends StatefulWidget {
   const DemoLoginScreen({super.key});
@@ -196,7 +196,7 @@ class _DemoLoginScreenState extends State<DemoLoginScreen> {
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.check_circle, color: Colors.green, size: 20),
+                            const Icon(Icons.check_circle, color: Colors.green, size: 20),
                             const SizedBox(width: 8),
                             Text(
                               'Demo Mode Features',
@@ -239,7 +239,7 @@ class _DemoLoginScreenState extends State<DemoLoginScreen> {
       padding: const EdgeInsets.only(bottom: 6),
       child: Row(
         children: [
-          Icon(Icons.check, color: Colors.green, size: 16),
+          const Icon(Icons.check, color: Colors.green, size: 16),
           const SizedBox(width: 8),
           Expanded(
             child: Text(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'developer_website_screen.dart';
+import 'package:campus_mesh/screens/developer/developer_website_screen.dart';
 
 class DeveloperInfoScreen extends StatelessWidget {
   const DeveloperInfoScreen({super.key});

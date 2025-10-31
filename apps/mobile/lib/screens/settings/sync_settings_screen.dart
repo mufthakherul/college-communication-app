@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../services/offline_queue_service.dart';
-import '../../services/connectivity_service.dart';
-import '../../services/cache_service.dart';
-import '../../services/background_sync_service.dart';
-import '../../services/conflict_resolution_service.dart';
+import 'package:campus_mesh/services/offline_queue_service.dart';
+import 'package:campus_mesh/services/connectivity_service.dart';
+import 'package:campus_mesh/services/cache_service.dart';
+import 'package:campus_mesh/services/background_sync_service.dart';
+import 'package:campus_mesh/services/conflict_resolution_service.dart';
 
 /// Screen for sync and network settings
 class SyncSettingsScreen extends StatefulWidget {
@@ -17,7 +17,6 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
   final _offlineQueueService = OfflineQueueService();
   final _connectivityService = ConnectivityService();
   final _cacheService = CacheService();
-  final _backgroundSyncService = BackgroundSyncService();
   final _conflictService = ConflictResolutionService();
 
   bool _isProcessing = false;

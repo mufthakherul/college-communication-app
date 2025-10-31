@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../models/user_model.dart';
-import '../../services/auth_service.dart';
-import '../../services/theme_service.dart';
-import '../auth/login_screen.dart';
-import '../developer/developer_info_screen.dart';
-import '../settings/sync_settings_screen.dart';
-import '../settings/mesh_network_screen.dart';
+import 'package:campus_mesh/models/user_model.dart';
+import 'package:campus_mesh/services/auth_service.dart';
+import 'package:campus_mesh/services/theme_service.dart';
+import 'package:campus_mesh/screens/auth/login_screen.dart';
+import 'package:campus_mesh/screens/developer/developer_info_screen.dart';
+import 'package:campus_mesh/screens/settings/sync_settings_screen.dart';
+import 'package:campus_mesh/screens/settings/mesh_network_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final UserModel? user;
