@@ -13,7 +13,7 @@ import 'package:campus_mesh/services/onesignal_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Initialize Sentry (crash reporting)
   // Replace 'YOUR_SENTRY_DSN' with your actual Sentry DSN
   // Get it from: https://sentry.io/settings/YOUR_ORG/projects/YOUR_PROJECT/keys/
@@ -21,7 +21,7 @@ void main() async {
     'SENTRY_DSN',
     defaultValue: '', // Empty by default - configure via --dart-define
   );
-  
+
   if (sentryDsn.isNotEmpty) {
     await SentryService.initialize(
       dsn: sentryDsn,
@@ -30,7 +30,7 @@ void main() async {
       tracesSampleRate: kReleaseMode ? 0.2 : 1.0, // Sample 20% in production
     );
   }
-  
+
   // Initialize Supabase
   await Supabase.initialize(
     url: SupabaseConfig.supabaseUrl,
@@ -44,7 +44,7 @@ void main() async {
     'ONESIGNAL_APP_ID',
     defaultValue: '', // Empty by default - configure via --dart-define
   );
-  
+
   if (oneSignalAppId.isNotEmpty) {
     await OneSignalService().initialize(oneSignalAppId);
   }

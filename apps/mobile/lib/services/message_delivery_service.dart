@@ -12,10 +12,7 @@ enum MessageDeliveryStatus {
 }
 
 /// Typing indicator status
-enum TypingStatus {
-  typing,
-  stopped,
-}
+enum TypingStatus { typing, stopped }
 
 /// Message delivery tracking
 class MessageDeliveryTracking {
@@ -36,13 +33,13 @@ class MessageDeliveryTracking {
   });
 
   Map<String, dynamic> toJson() => {
-        'messageId': messageId,
-        'status': status.name,
-        'sentAt': sentAt?.toIso8601String(),
-        'deliveredAt': deliveredAt?.toIso8601String(),
-        'readAt': readAt?.toIso8601String(),
-        'errorMessage': errorMessage,
-      };
+    'messageId': messageId,
+    'status': status.name,
+    'sentAt': sentAt?.toIso8601String(),
+    'deliveredAt': deliveredAt?.toIso8601String(),
+    'readAt': readAt?.toIso8601String(),
+    'errorMessage': errorMessage,
+  };
 
   factory MessageDeliveryTracking.fromJson(Map<String, dynamic> json) =>
       MessageDeliveryTracking(
@@ -79,11 +76,11 @@ class TypingIndicator {
   }) : timestamp = timestamp ?? DateTime.now();
 
   Map<String, dynamic> toJson() => {
-        'userId': userId,
-        'conversationId': conversationId,
-        'status': status.name,
-        'timestamp': timestamp.toIso8601String(),
-      };
+    'userId': userId,
+    'conversationId': conversationId,
+    'status': status.name,
+    'timestamp': timestamp.toIso8601String(),
+  };
 
   factory TypingIndicator.fromJson(Map<String, dynamic> json) =>
       TypingIndicator(
@@ -314,9 +311,11 @@ class MessageDeliveryService {
   /// Poll delivery status for pending messages
   Future<void> _pollDeliveryStatus() async {
     final pendingMessages = _deliveryTracking.entries
-        .where((e) =>
-            e.value.status == MessageDeliveryStatus.sending ||
-            e.value.status == MessageDeliveryStatus.sent)
+        .where(
+          (e) =>
+              e.value.status == MessageDeliveryStatus.sending ||
+              e.value.status == MessageDeliveryStatus.sent,
+        )
         .map((e) => e.key)
         .toList();
 
@@ -383,10 +382,12 @@ class MessageDeliveryService {
   /// Get typing users in conversation
   List<String> getTypingUsers(String conversationId) {
     return _typingIndicators.entries
-        .where((e) =>
-            e.value.conversationId == conversationId &&
-            e.value.status == TypingStatus.typing &&
-            !e.value.isStale)
+        .where(
+          (e) =>
+              e.value.conversationId == conversationId &&
+              e.value.status == TypingStatus.typing &&
+              !e.value.isStale,
+        )
         .map((e) => e.value.userId)
         .toList();
   }
@@ -451,7 +452,9 @@ class MessageDeliveryService {
   }
 
   /// Clear old tracking data
-  Future<void> clearOldTracking({Duration age = const Duration(days: 7)}) async {
+  Future<void> clearOldTracking({
+    Duration age = const Duration(days: 7),
+  }) async {
     final cutoff = DateTime.now().subtract(age);
 
     _deliveryTracking.removeWhere((key, tracking) {

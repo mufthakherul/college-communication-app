@@ -14,7 +14,9 @@ class NotificationService {
   Future<void> initialize() async {
     if (kDebugMode) {
       debugPrint('Notification service initialized');
-      debugPrint('Note: Push notifications require third-party service integration');
+      debugPrint(
+        'Note: Push notifications require third-party service integration',
+      );
     }
   }
 
@@ -32,7 +34,8 @@ class NotificationService {
         .order('created_at', ascending: false)
         .limit(50)
         .map(
-          (data) => data.map((item) => NotificationModel.fromJson(item)).toList(),
+          (data) =>
+              data.map((item) => NotificationModel.fromJson(item)).toList(),
         );
   }
 
@@ -43,27 +46,25 @@ class NotificationService {
       return Stream.value(0);
     }
 
-    return _supabase
-        .from('notifications')
-        .stream(primaryKey: ['id'])
-        .map((data) {
-          // Filter in memory for unread notifications for current user
-          return data
-              .where((item) {
-                final notificationUserId = item['user_id'] as String?;
-                final read = item['read'] as bool? ?? false;
-                return notificationUserId == userId && !read;
-              })
-              .length;
-        });
+    return _supabase.from('notifications').stream(primaryKey: ['id']).map((
+      data,
+    ) {
+      // Filter in memory for unread notifications for current user
+      return data.where((item) {
+        final notificationUserId = item['user_id'] as String?;
+        final read = item['read'] as bool? ?? false;
+        return notificationUserId == userId && !read;
+      }).length;
+    });
   }
 
   // Mark notification as read
   Future<void> markAsRead(String notificationId) async {
     try {
-      await _supabase.from('notifications').update({
-        'read': true,
-      }).eq('id', notificationId);
+      await _supabase
+          .from('notifications')
+          .update({'read': true})
+          .eq('id', notificationId);
     } catch (e) {
       throw Exception('Failed to mark notification as read: $e');
     }
@@ -75,9 +76,11 @@ class NotificationService {
     if (userId == null) return;
 
     try {
-      await _supabase.from('notifications').update({
-        'read': true,
-      }).eq('user_id', userId).eq('read', false);
+      await _supabase
+          .from('notifications')
+          .update({'read': true})
+          .eq('user_id', userId)
+          .eq('read', false);
     } catch (e) {
       throw Exception('Failed to mark all notifications as read: $e');
     }

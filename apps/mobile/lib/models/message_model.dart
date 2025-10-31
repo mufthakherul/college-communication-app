@@ -42,9 +42,7 @@ class MessageModel {
           ? DateTime.parse(data['created_at'])
           : null,
       read: data['read'] ?? false,
-      readAt: data['read_at'] != null
-          ? DateTime.parse(data['read_at'])
-          : null,
+      readAt: data['read_at'] != null ? DateTime.parse(data['read_at']) : null,
       attachmentUrl: data['attachment_url'] as String?,
       attachmentName: data['attachment_name'] as String?,
       attachmentSize: data['attachment_size'] as int?,
@@ -119,17 +117,17 @@ class MessageModel {
       metadata: metadata ?? this.metadata,
     );
   }
-  
+
   /// Check if message has attachment
   bool get hasAttachment => attachmentUrl != null && attachmentUrl!.isNotEmpty;
-  
+
   /// Get file extension from attachment name
   String? get fileExtension {
     if (attachmentName == null) return null;
     final parts = attachmentName!.split('.');
     return parts.length > 1 ? parts.last.toLowerCase() : null;
   }
-  
+
   /// Get human-readable file size
   String get formattedFileSize {
     if (attachmentSize == null) return '';

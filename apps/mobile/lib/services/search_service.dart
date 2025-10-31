@@ -6,7 +6,7 @@ import 'package:campus_mesh/models/message_model.dart';
 /// Uses PostgreSQL full-text search capabilities
 class SearchService {
   final SupabaseClient _supabase = Supabase.instance.client;
-  
+
   String? get _currentUserId => _supabase.auth.currentUser?.id;
 
   /// Search notices using full-text search
@@ -18,8 +18,10 @@ class SearchService {
 
     try {
       // Use PostgreSQL full-text search function
-      final response = await _supabase
-          .rpc('search_notices', params: {'search_query': query});
+      final response = await _supabase.rpc(
+        'search_notices',
+        params: {'search_query': query},
+      );
 
       if (response == null) {
         return [];
@@ -51,7 +53,7 @@ class SearchService {
 
     try {
       final searchTerm = '%${query.toLowerCase()}%';
-      
+
       final response = await _supabase
           .from('notices')
           .select()
@@ -79,7 +81,7 @@ class SearchService {
 
     try {
       final searchTerm = '%${query.toLowerCase()}%';
-      
+
       final response = await _supabase
           .from('notices')
           .select()
@@ -105,7 +107,7 @@ class SearchService {
 
     try {
       final searchTerm = '%${query.toLowerCase()}%';
-      
+
       // Get matching notice titles as suggestions
       final response = await _supabase
           .from('notices')
@@ -137,7 +139,7 @@ class SearchService {
 
     try {
       final searchTerm = '%${query.toLowerCase()}%';
-      
+
       // Search in user's messages (sent or received)
       final response = await _supabase
           .from('messages')
@@ -171,12 +173,14 @@ class SearchService {
 
     try {
       final searchTerm = '%${query.toLowerCase()}%';
-      
+
       // Search in conversation with specific user
       final response = await _supabase
           .from('messages')
           .select()
-          .or('and(sender_id.eq.$userId,recipient_id.eq.$otherUserId),and(sender_id.eq.$otherUserId,recipient_id.eq.$userId)')
+          .or(
+            'and(sender_id.eq.$userId,recipient_id.eq.$otherUserId),and(sender_id.eq.$otherUserId,recipient_id.eq.$userId)',
+          )
           .ilike('content', searchTerm)
           .order('created_at', ascending: false)
           .limit(50);
@@ -205,7 +209,7 @@ class SearchService {
 
     try {
       final searchTerm = '%${query.toLowerCase()}%';
-      
+
       var queryBuilder = _supabase
           .from('messages')
           .select()
@@ -232,16 +236,12 @@ class SearchService {
   /// Search across multiple content types (notices, messages, etc.)
   Future<Map<String, List<dynamic>>> universalSearch(String query) async {
     if (query.trim().isEmpty) {
-      return {
-        'notices': [],
-        'messages': [],
-        'users': [],
-      };
+      return {'notices': [], 'messages': [], 'users': []};
     }
 
     try {
       final searchTerm = '%${query.toLowerCase()}%';
-      
+
       // Search notices
       final noticesResponse = await _supabase
           .from('notices')
@@ -268,11 +268,7 @@ class SearchService {
 
       final users = usersResponse;
 
-      return {
-        'notices': notices,
-        'messages': messages,
-        'users': users,
-      };
+      return {'notices': notices, 'messages': messages, 'users': users};
     } catch (e) {
       throw Exception('Failed to perform universal search: $e');
     }
