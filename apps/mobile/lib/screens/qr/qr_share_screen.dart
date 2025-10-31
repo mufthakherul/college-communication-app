@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import '../../services/qr_data_service.dart';
+import 'package:campus_mesh/services/qr_data_service.dart';
 
 /// Screen for generating QR codes to share data
 class QRShareScreen extends StatelessWidget {

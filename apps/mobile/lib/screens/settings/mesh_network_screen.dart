@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../services/mesh_network_service.dart';
-import 'mesh_qr_pairing_screen.dart';
+import 'package:campus_mesh/services/mesh_network_service.dart';
+import 'package:campus_mesh/screens/settings/mesh_qr_pairing_screen.dart';
 
 /// Screen for mesh network settings and controls
 class MeshNetworkScreen extends StatefulWidget {
@@ -56,7 +56,7 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
   void _updateStats() {
     setState(() {
       _stats = _meshService.getStatistics();
-      _isEnabled = _stats['isActive'] ?? false;
+      _isEnabled = (_stats['isActive'] as bool?) ?? false;
     });
   }
 
@@ -274,12 +274,11 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
   }
 
   Widget _buildStatisticsCard() {
-    final connectedCount = _stats['connectedNodes'] ?? 0;
-    final hiddenCount = _stats['hiddenNodes'] ?? 0;
-    final visibleCount = _stats['visibleNodes'] ?? 0;
-    final messageHistory = _stats['messageHistory'] ?? 0;
-    final isAdvertising = _stats['isAdvertising'] ?? false;
-    final isDiscovering = _stats['isDiscovering'] ?? false;
+    final hiddenCount = (_stats['hiddenNodes'] as int?) ?? 0;
+    final visibleCount = (_stats['visibleNodes'] as int?) ?? 0;
+    final messageHistory = (_stats['messageHistory'] as int?) ?? 0;
+    final isAdvertising = (_stats['isAdvertising'] as bool?) ?? false;
+    final isDiscovering = (_stats['isDiscovering'] as bool?) ?? false;
 
     return Card(
       child: Padding(

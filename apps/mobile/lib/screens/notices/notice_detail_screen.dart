@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../models/notice_model.dart';
-import '../../services/notice_service.dart';
-import '../../services/qr_data_service.dart';
-import '../qr/qr_share_screen.dart';
+import 'package:campus_mesh/models/notice_model.dart';
+import 'package:campus_mesh/services/notice_service.dart';
+import 'package:campus_mesh/services/qr_data_service.dart';
+import 'package:campus_mesh/screens/qr/qr_share_screen.dart';
 
 class NoticeDetailScreen extends StatelessWidget {
   final String noticeId;

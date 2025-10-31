@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../models/notice_model.dart';
+import 'package:campus_mesh/models/notice_model.dart';
 
 class NoticeService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

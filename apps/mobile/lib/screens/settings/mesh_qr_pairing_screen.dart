@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import '../../services/mesh_network_service.dart';
+import 'package:campus_mesh/services/mesh_network_service.dart';
 
 /// Screen for mesh network QR code pairing
 class MeshQRPairingScreen extends StatefulWidget {
