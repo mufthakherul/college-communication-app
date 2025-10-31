@@ -11,8 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  # Supabase dependencies
-  supabase_flutter: ^2.0.0
+  # Appwrite dependencies
+  appwrite: ^11.0.0
   url_launcher: ^6.2.1
   webview_flutter: ^4.4.2
   shared_preferences: ^2.2.2
