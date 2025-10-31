@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:appwrite/appwrite.dart';
-import 'package:appwrite/models.dart' as models;
 import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/appwrite_config.dart';
@@ -11,6 +10,16 @@ class AuthService {
   // Get current user ID
   String? _currentUserId;
   String? get currentUserId => _currentUserId;
+  
+  // Get current user object
+  Future<UserModel?> get currentUser async {
+    if (_currentUserId == null) return null;
+    try {
+      return await getUserProfile(_currentUserId!);
+    } catch (e) {
+      return null;
+    }
+  }
 
   // Initialize and get current user
   Future<void> initialize() async {

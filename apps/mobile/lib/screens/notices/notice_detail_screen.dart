@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:campus_mesh/models/notice_model.dart';
 import 'package:campus_mesh/services/notice_service.dart';
 import 'package:campus_mesh/services/qr_data_service.dart';
+import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/screens/qr/qr_share_screen.dart';
 
 class NoticeDetailScreen extends StatelessWidget {
@@ -284,9 +284,10 @@ class NoticeDetailScreen extends StatelessWidget {
     return '${date.day}/${date.month}/${date.year} at ${date.hour}:${date.minute.toString().padLeft(2, '0')}';
   }
 
-  void _shareNoticeViaQR(BuildContext context, NoticeModel notice) {
+  void _shareNoticeViaQR(BuildContext context, NoticeModel notice) async {
     final qrDataService = QRDataService();
-    final currentUser = Supabase.instance.client.auth.currentUser;
+    final authService = AuthService();
+    final currentUser = await authService.currentUser;
 
     final qrData = qrDataService.generateNoticeQR(
       noticeId: notice.id,
@@ -294,13 +295,15 @@ class NoticeDetailScreen extends StatelessWidget {
       content: notice.content,
       type: notice.type.name,
       senderId: currentUser?.id,
-      senderName: currentUser?.email?.split('@').first ?? 'Unknown',
+      senderName: currentUser?.displayName ?? currentUser?.email ?? 'Unknown',
       expiry: const Duration(hours: 24), // QR code valid for 24 hours
     );
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => QRShareScreen(qrData: qrData)),
-    );
+    if (context.mounted) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => QRShareScreen(qrData: qrData)),
+      );
+    }
   }
 }

@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
 import 'package:campus_mesh/appwrite_config.dart';
 
 /// Security service to protect against tampering, rooting, and reverse engineering
@@ -10,8 +9,9 @@ class SecurityService {
   SecurityService._internal();
 
   /// Expected package name - validates app hasn't been repackaged
-  static const String _expectedPackageName = 
-      'gov.bd.polytech.rgpi.communication.develop.by.mufthakherul';
+  // Note: This field is reserved for future use
+  // static const String _expectedPackageName = 
+  //     'gov.bd.polytech.rgpi.communication.develop.by.mufthakherul';
 
   /// Expected Appwrite project ID - validates backend connection
   static const String _expectedProjectId = AppwriteConfig.projectId;

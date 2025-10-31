@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Message delivery status
 enum MessageDeliveryStatus {
@@ -100,13 +99,14 @@ class TypingIndicator {
 }
 
 /// Service to track message delivery and typing indicators
+/// Note: This is a simplified implementation. Real-time features would require
+/// Appwrite Realtime subscriptions or custom implementation
 class MessageDeliveryService {
   static final MessageDeliveryService _instance =
       MessageDeliveryService._internal();
   factory MessageDeliveryService() => _instance;
   MessageDeliveryService._internal();
 
-  final _supabase = Supabase.instance.client;
   final Map<String, MessageDeliveryTracking> _deliveryTracking = {};
   final Map<String, TypingIndicator> _typingIndicators = {};
   final _deliveryStatusController =
