@@ -114,6 +114,7 @@ class MessageAttachmentsService {
   /// Download attachment to local storage
   Future<File> downloadAttachment({
     required String url,
+    required String fileId,
     required String fileName,
     required String savePath,
   }) async {
@@ -122,14 +123,11 @@ class MessageAttachmentsService {
         print('Downloading attachment: $fileName');
       }
 
-      // Extract file path from URL
-      final uri = Uri.parse(url);
-      final filePath = uri.pathSegments.skip(3).join('/'); // Skip bucket name
-
-      // Download file
-      final bytes = await _supabase.storage
-          .from(_bucketName)
-          .download(filePath);
+      // Download file from Appwrite
+      final bytes = await _appwrite.storage.getFileDownload(
+        bucketId: _bucketId,
+        fileId: fileId,
+      );
 
       // Save to local storage
       final file = File('$savePath/$fileName');

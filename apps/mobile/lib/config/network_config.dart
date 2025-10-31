@@ -96,10 +96,9 @@ class NetworkConfig {
   static const int maxLoginAttempts = 5;
   static const Duration loginLockoutDuration = Duration(minutes: 15);
 
-  /// API endpoints (Supabase)
-  static String get supabaseUrl => Platform.environment['SUPABASE_URL'] ?? '';
-  static String get supabaseAnonKey =>
-      Platform.environment['SUPABASE_ANON_KEY'] ?? '';
+  /// API endpoints (Appwrite - configured in appwrite_config.dart)
+  // Note: These are legacy fields from Supabase migration
+  // Use AppwriteConfig for actual API endpoints
 
   /// Feature flags
   static const bool enableMeshNetwork = true;
