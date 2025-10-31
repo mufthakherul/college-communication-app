@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:campus_mesh/services/mesh_network_service.dart';
 import 'package:campus_mesh/screens/settings/mesh_qr_pairing_screen.dart';
 
@@ -26,10 +26,10 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
 
   Future<void> _initializeMesh() async {
     try {
-      final user = FirebaseAuth.instance.currentUser;
+      final user = Supabase.instance.client.auth.currentUser;
       if (user != null) {
         await _meshService.initialize(
-          deviceId: user.uid,
+          deviceId: user.id,
           deviceName: user.email?.split('@').first ?? 'Unknown',
         );
 
