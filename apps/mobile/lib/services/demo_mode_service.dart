@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/foundation.dart';
-import '../models/user_model.dart';
+import 'package:campus_mesh/models/user_model.dart';
 
 class DemoModeService {
   static const String _demoModeKey = 'demo_mode_enabled';
@@ -45,7 +45,6 @@ class DemoModeService {
 
   // Get demo user
   Future<UserModel?> getDemoUser() async {
-    final prefs = await SharedPreferences.getInstance();
     final isDemoEnabled = await isDemoModeEnabled();
     
     if (!isDemoEnabled) return null;

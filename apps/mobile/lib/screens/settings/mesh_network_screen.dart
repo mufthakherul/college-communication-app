@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../services/mesh_network_service.dart';
-import 'mesh_qr_pairing_screen.dart';
+import 'package:campus_mesh/services/mesh_network_service.dart';
+import 'package:campus_mesh/screens/settings/mesh_qr_pairing_screen.dart';
 
 /// Screen for mesh network settings and controls
 class MeshNetworkScreen extends StatefulWidget {
@@ -274,7 +274,6 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
   }
 
   Widget _buildStatisticsCard() {
-    final connectedCount = _stats['connectedNodes'] ?? 0;
     final hiddenCount = _stats['hiddenNodes'] ?? 0;
     final visibleCount = _stats['visibleNodes'] ?? 0;
     final messageHistory = _stats['messageHistory'] ?? 0;

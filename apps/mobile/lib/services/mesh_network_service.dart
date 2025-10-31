@@ -2,8 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_nearby_connections/flutter_nearby_connections.dart';
-import 'package:nearby_service/nearby_service.dart';
-import 'connectivity_service.dart';
+import 'package:campus_mesh/services/connectivity_service.dart';
 
 /// Connection type for mesh network
 enum MeshConnectionType {
@@ -169,8 +168,6 @@ class MeshNetworkService {
   static final MeshNetworkService _instance = MeshNetworkService._internal();
   factory MeshNetworkService() => _instance;
   MeshNetworkService._internal();
-
-  final _connectivityService = ConnectivityService();
   
   final Map<String, MeshNode> _connectedNodes = {};
   final Map<String, MeshNode> _hiddenNodes = {}; // Auto-connected but not authenticated
@@ -527,7 +524,7 @@ class MeshNetworkService {
       // Note: This is a placeholder - actual implementation depends on platform-specific requirements
 
       // Determine connection type based on discovery method
-      final connectionType = MeshConnectionType.bluetooth; // Auto-detect in real implementation
+      const connectionType = MeshConnectionType.bluetooth; // Auto-detect in real implementation
 
       // Add to nodes (hidden if auto-connect enabled)
       final node = MeshNode(
@@ -585,10 +582,9 @@ class MeshNetworkService {
         throw Exception('Node not connected: $recipientId');
       }
 
-      final jsonStr = jsonEncode(message.toJson());
       // Send message using flutter_nearby_connections
       // Note: This is a placeholder - actual implementation depends on platform-specific requirements
-      // await _nearbyConnections?.sendMessage(recipientId, jsonStr);
+      // await _nearbyConnections?.sendMessage(recipientId, jsonEncode(message.toJson()));
 
       if (kDebugMode) {
         print('Sent message to ${node.name}: ${message.type}');

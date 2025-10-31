@@ -75,7 +75,7 @@ void main() {
     test('should validate role types', () {
       final roles = [UserRole.student, UserRole.teacher, UserRole.admin];
       
-      for (var role in roles) {
+      for (final role in roles) {
         final user = UserModel(
           uid: 'user123',
           email: 'test@example.com',

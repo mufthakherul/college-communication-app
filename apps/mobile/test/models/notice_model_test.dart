@@ -90,7 +90,7 @@ void main() {
     test('should support different target audiences', () {
       final audiences = ['all', 'students', 'teachers', 'admin'];
       
-      for (var audience in audiences) {
+      for (final audience in audiences) {
         final notice = NoticeModel(
           id: 'notice123',
           title: 'Test',

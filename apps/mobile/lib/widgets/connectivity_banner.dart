@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../services/connectivity_service.dart';
-import '../services/offline_queue_service.dart';
+import 'package:campus_mesh/services/connectivity_service.dart';
+import 'package:campus_mesh/services/offline_queue_service.dart';
 
 /// Banner widget that displays connectivity status and offline queue info
 class ConnectivityBanner extends StatelessWidget {

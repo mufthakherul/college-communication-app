@@ -181,7 +181,7 @@ class ConflictResolutionService {
     Map<String, dynamic> serverData,
     Map<String, dynamic> clientUpdates,
   ) {
-    final merged = Map<String, dynamic>.from(serverData);
+    final merged = <String, dynamic>{...serverData};
 
     for (final entry in clientUpdates.entries) {
       final key = entry.key;
@@ -224,8 +224,6 @@ class ConflictResolutionService {
       if (conflictIndex == -1) {
         throw Exception('Conflict not found: $documentId');
       }
-
-      final conflict = _unresolvedConflicts[conflictIndex];
 
       // Apply resolved data
       // Note: The collection would need to be tracked in DataConflict for this to work

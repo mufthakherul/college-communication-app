@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../models/notice_model.dart';
-import '../../services/notice_service.dart';
-import '../../widgets/markdown_editor.dart';
+import 'package:campus_mesh/models/notice_model.dart';
+import 'package:campus_mesh/services/notice_service.dart';
+import 'package:campus_mesh/widgets/markdown_editor.dart';
 
 class CreateNoticeScreen extends StatefulWidget {
   const CreateNoticeScreen({super.key});
