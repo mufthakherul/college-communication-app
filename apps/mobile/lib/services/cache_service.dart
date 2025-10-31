@@ -71,8 +71,8 @@ class CacheService {
       final appDir = await getApplicationDocumentsDirectory();
       _cacheDirectory = Directory('${appDir.path}/cache');
       
-      if (!await _cacheDirectory!.exists()) {
-        await _cacheDirectory!.create(recursive: true);
+      if (!_cacheDirectory!.existsSync()) {
+        _cacheDirectory!.createSync(recursive: true);
       }
 
       // Clean expired cache on startup
@@ -111,7 +111,7 @@ class CacheService {
     // Check disk cache
     if (_cacheDirectory != null && fromJson != null) {
       final file = File('${_cacheDirectory!.path}/$key.json');
-      if (await file.exists()) {
+      if (file.existsSync()) {
         try {
           final jsonStr = await file.readAsString();
           final json = jsonDecode(jsonStr) as Map<String, dynamic>;
@@ -189,8 +189,8 @@ class CacheService {
 
     if (_cacheDirectory != null) {
       final file = File('${_cacheDirectory!.path}/$key.json');
-      if (await file.exists()) {
-        await file.delete();
+      if (file.existsSync()) {
+        file.deleteSync();
       }
     }
 
@@ -203,10 +203,10 @@ class CacheService {
   Future<void> clear() async {
     _memoryCache.clear();
 
-    if (_cacheDirectory != null && await _cacheDirectory!.exists()) {
+    if (_cacheDirectory != null && _cacheDirectory!.existsSync()) {
       await for (final file in _cacheDirectory!.list()) {
         if (file is File) {
-          await file.delete();
+          file.deleteSync();
         }
       }
     }
@@ -222,7 +222,7 @@ class CacheService {
     _memoryCache.removeWhere((key, entry) => entry.isExpired);
 
     // Clean disk cache
-    if (_cacheDirectory != null && await _cacheDirectory!.exists()) {
+    if (_cacheDirectory != null && _cacheDirectory!.existsSync()) {
       await for (final file in _cacheDirectory!.list()) {
         if (file is File && file.path.endsWith('.json')) {
           try {
@@ -232,14 +232,14 @@ class CacheService {
             final ttl = Duration(milliseconds: json['ttl'] as int);
             
             if (DateTime.now().difference(timestamp) > ttl) {
-              await file.delete();
+              file.deleteSync();
               if (kDebugMode) {
                 print('Deleted expired cache file: ${file.path}');
               }
             }
           } catch (e) {
             // Delete corrupted cache files
-            await file.delete();
+            file.deleteSync();
             if (kDebugMode) {
               print('Deleted corrupted cache file: ${file.path}');
             }
@@ -253,7 +253,7 @@ class CacheService {
   Future<int> getCacheSize() async {
     int totalSize = 0;
 
-    if (_cacheDirectory != null && await _cacheDirectory!.exists()) {
+    if (_cacheDirectory != null && _cacheDirectory!.existsSync()) {
       await for (final file in _cacheDirectory!.list(recursive: true)) {
         if (file is File) {
           try {
@@ -286,7 +286,7 @@ class CacheService {
         print('Cache size ${sizeMB.toStringAsFixed(2)} MB exceeds limit $_maxCacheSizeMB MB');
       }
 
-      if (_cacheDirectory != null && await _cacheDirectory!.exists()) {
+      if (_cacheDirectory != null && _cacheDirectory!.existsSync()) {
         // Get all cache files with their timestamps
         final files = <File, DateTime>{};
         
@@ -299,7 +299,7 @@ class CacheService {
               files[file] = timestamp;
             } catch (e) {
               // Delete corrupted files
-              await file.delete();
+              file.deleteSync();
             }
           }
         }
@@ -356,7 +356,7 @@ class CacheService {
 
     try {
       final file = File('${_cacheDirectory!.path}/$key.gz');
-      if (await file.exists()) {
+      if (file.existsSync()) {
         final compressed = await file.readAsBytes();
         final decoder = GZipDecoder();
         final decompressed = decoder.decodeBytes(compressed);
@@ -376,7 +376,7 @@ class CacheService {
     final sizeMB = await getCacheSizeMB();
     int fileCount = 0;
 
-    if (_cacheDirectory != null && await _cacheDirectory!.exists()) {
+    if (_cacheDirectory != null && _cacheDirectory!.existsSync()) {
       await for (final file in _cacheDirectory!.list()) {
         if (file is File) {
           fileCount++;
