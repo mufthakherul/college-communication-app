@@ -1,26 +1,18 @@
 import 'package:flutter/foundation.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Analytics service for tracking user activity and app usage
-/// Integrates with Supabase Edge Functions for detailed analytics
+/// Note: This is a stub implementation. In production, integrate with
+/// analytics services like Firebase Analytics, Sentry, or custom Appwrite Functions
 class AnalyticsService {
-  final SupabaseClient _supabase = Supabase.instance.client;
 
   // Track generic activity
   Future<void> trackActivity(
     String action,
     Map<String, dynamic> metadata,
   ) async {
-    try {
-      await _supabase.functions.invoke(
-        'track-activity',
-        body: {'action': action, 'metadata': metadata},
-      );
-    } catch (e) {
-      // Silently fail to not disrupt user experience
-      if (kDebugMode) {
-        debugPrint('Failed to track activity: $e');
-      }
+    // Stub implementation - integrate with your preferred analytics service
+    if (kDebugMode) {
+      debugPrint('Analytics: $action - ${metadata.toString()}');
     }
   }
 
@@ -82,141 +74,63 @@ class AnalyticsService {
 
 /// Admin analytics service for generating reports
 /// Requires admin role to access
+/// Note: This is a stub implementation. Integrate with Appwrite Functions or analytics service
 class AdminAnalyticsService {
-  final SupabaseClient _supabase = Supabase.instance.client;
-
   Future<Map<String, dynamic>> generateUserActivityReport(
     DateTime startDate,
     DateTime endDate,
   ) async {
-    try {
-      final response = await _supabase.functions.invoke(
-        'generate-analytics',
-        body: {
-          'reportType': 'user_activity',
-          'startDate': startDate.toIso8601String(),
-          'endDate': endDate.toIso8601String(),
-        },
-      );
-
-      if (response.status != 200) {
-        throw Exception('Failed to generate report');
-      }
-
-      final data = response.data as Map<String, dynamic>?;
-      if (data == null || !data.containsKey('report')) {
-        throw Exception('Invalid report response');
-      }
-      return data['report'] as Map<String, dynamic>;
-    } catch (e) {
-      throw Exception('Failed to generate user activity report: $e');
+    // Stub implementation
+    if (kDebugMode) {
+      debugPrint('Generate user activity report: $startDate to $endDate');
     }
+    return {'report': 'stub'};
   }
 
   Future<Map<String, dynamic>> generateNoticesReport(
     DateTime startDate,
     DateTime endDate,
   ) async {
-    try {
-      final response = await _supabase.functions.invoke(
-        'generate-analytics',
-        body: {
-          'reportType': 'notices',
-          'startDate': startDate.toIso8601String(),
-          'endDate': endDate.toIso8601String(),
-        },
-      );
-
-      if (response.status != 200) {
-        throw Exception('Failed to generate report');
-      }
-
-      final data = response.data as Map<String, dynamic>?;
-      if (data == null || !data.containsKey('report')) {
-        throw Exception('Invalid report response');
-      }
-      return data['report'] as Map<String, dynamic>;
-    } catch (e) {
-      throw Exception('Failed to generate notices report: $e');
+    // Stub implementation
+    if (kDebugMode) {
+      debugPrint('Generate notices report: $startDate to $endDate');
     }
+    return {'report': 'stub'};
   }
 
   Future<Map<String, dynamic>> generateMessagesReport(
     DateTime startDate,
     DateTime endDate,
   ) async {
-    try {
-      final response = await _supabase.functions.invoke(
-        'generate-analytics',
-        body: {
-          'reportType': 'messages',
-          'startDate': startDate.toIso8601String(),
-          'endDate': endDate.toIso8601String(),
-        },
-      );
-
-      if (response.status != 200) {
-        throw Exception('Failed to generate report');
-      }
-
-      final data = response.data as Map<String, dynamic>?;
-      if (data == null || !data.containsKey('report')) {
-        throw Exception('Invalid report response');
-      }
-      return data['report'] as Map<String, dynamic>;
-    } catch (e) {
-      throw Exception('Failed to generate messages report: $e');
+    // Stub implementation
+    if (kDebugMode) {
+      debugPrint('Generate messages report: $startDate to $endDate');
     }
+    return {'report': 'stub'};
   }
 
-  // Get real-time analytics from database views
+  // Get real-time analytics from database
   Future<List<Map<String, dynamic>>> getDailyActiveUsers(int days) async {
-    try {
-      final endDate = DateTime.now();
-      final startDate = endDate.subtract(Duration(days: days));
-
-      final response = await _supabase
-          .from('daily_active_users')
-          .select()
-          .gte('date', startDate.toIso8601String())
-          .lte('date', endDate.toIso8601String())
-          .order('date', ascending: false);
-
-      return List<Map<String, dynamic>>.from(response);
-    } catch (e) {
-      throw Exception('Failed to get daily active users: $e');
+    // Stub implementation
+    if (kDebugMode) {
+      debugPrint('Get daily active users for $days days');
     }
+    return [];
   }
 
   Future<List<Map<String, dynamic>>> getNoticeEngagement(int limit) async {
-    try {
-      final response = await _supabase
-          .from('notice_engagement')
-          .select()
-          .limit(limit)
-          .order('views', ascending: false);
-
-      return List<Map<String, dynamic>>.from(response);
-    } catch (e) {
-      throw Exception('Failed to get notice engagement: $e');
+    // Stub implementation
+    if (kDebugMode) {
+      debugPrint('Get notice engagement, limit: $limit');
     }
+    return [];
   }
 
   Future<List<Map<String, dynamic>>> getMessageStatistics(int days) async {
-    try {
-      final endDate = DateTime.now();
-      final startDate = endDate.subtract(Duration(days: days));
-
-      final response = await _supabase
-          .from('message_statistics')
-          .select()
-          .gte('date', startDate.toIso8601String())
-          .lte('date', endDate.toIso8601String())
-          .order('date', ascending: false);
-
-      return List<Map<String, dynamic>>.from(response);
-    } catch (e) {
-      throw Exception('Failed to get message statistics: $e');
+    // Stub implementation
+    if (kDebugMode) {
+      debugPrint('Get message statistics for $days days');
     }
+    return [];
   }
 }

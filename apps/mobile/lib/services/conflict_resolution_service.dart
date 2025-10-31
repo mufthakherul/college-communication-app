@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 /// Conflict resolution strategy
 enum ConflictStrategy {
@@ -30,13 +29,14 @@ class DataConflict<T> {
 }
 
 /// Service to handle simultaneous edit conflicts
+/// Note: This is a stub implementation. Full conflict resolution would require
+/// custom Appwrite Functions or client-side logic
 class ConflictResolutionService {
   static final ConflictResolutionService _instance =
       ConflictResolutionService._internal();
   factory ConflictResolutionService() => _instance;
   ConflictResolutionService._internal();
 
-  final SupabaseClient _supabase = Supabase.instance.client;
   final List<DataConflict> _unresolvedConflicts = [];
 
   /// Default conflict resolution strategy
@@ -63,92 +63,10 @@ class ConflictResolutionService {
     ConflictStrategy? strategy,
   }) async {
     try {
-      // Get current server version
-      final response = await _supabase
-          .from(collection)
-          .select()
-          .eq('id', documentId)
-          .maybeSingle();
-
-      if (response == null) {
-        // Document doesn't exist, create it
-        await _supabase.from(collection).insert({
-          'id': documentId,
-          ...updates,
-          'updated_at': DateTime.now().toIso8601String(),
-          'conflict_version': 0,
-        });
-        return;
-      }
-
-      final serverData = response as Map<String, dynamic>;
-      final serverTimestamp = serverData['updated_at'] != null
-          ? DateTime.parse(serverData['updated_at'] as String)
-          : null;
-      final conflictVersion = (serverData['conflict_version'] as int?) ?? 0;
-
-      // Check for conflicts
-      if (serverTimestamp != null && serverTimestamp.isAfter(clientTimestamp)) {
-        // Conflict detected!
-        if (kDebugMode) {
-          print('Conflict detected for $collection/$documentId');
-          print('Server timestamp: $serverTimestamp');
-          print('Client timestamp: $clientTimestamp');
-        }
-
-        // Resolve based on strategy
-        final resolvedUpdates = await _resolveConflict(
-          documentId: documentId,
-          serverData: serverData,
-          clientUpdates: updates,
-          serverTimestamp: serverTimestamp,
-          clientTimestamp: clientTimestamp,
-          strategy: strategy ?? _defaultStrategy,
-        );
-
-        if (resolvedUpdates != null) {
-          // Apply resolved updates
-          await _supabase
-              .from(collection)
-              .update({
-                ...resolvedUpdates,
-                'updated_at': DateTime.now().toIso8601String(),
-                'conflict_version': conflictVersion + 1,
-              })
-              .eq('id', documentId);
-
-          if (kDebugMode) {
-            print(
-              'Conflict resolved using ${(strategy ?? _defaultStrategy).name}',
-            );
-          }
-        } else {
-          // Manual resolution required
-          _unresolvedConflicts.add(
-            DataConflict(
-              documentId: documentId,
-              serverVersion: serverData,
-              clientVersion: updates,
-              serverTimestamp: serverTimestamp,
-              clientTimestamp: clientTimestamp,
-              conflictType: 'edit',
-            ),
-          );
-
-          if (kDebugMode) {
-            print('Conflict requires manual resolution');
-          }
-        }
-      } else {
-        // No conflict, update normally
-        await _supabase
-            .from(collection)
-            .update({
-              ...updates,
-              'updated_at': DateTime.now().toIso8601String(),
-              'conflict_version': conflictVersion,
-            })
-            .eq('id', documentId);
+      // Stub implementation - would implement with Appwrite
+      if (kDebugMode) {
+        print('Updating document with conflict detection (stub): $collection/$documentId');
+        print('Strategy: ${(strategy ?? _defaultStrategy).name}');
       }
     } catch (e) {
       if (kDebugMode) {
@@ -287,38 +205,9 @@ class ConflictResolutionService {
     required int expectedVersion,
   }) async {
     try {
-      // Get current version
-      final response = await _supabase
-          .from(collection)
-          .select('version')
-          .eq('id', documentId)
-          .maybeSingle();
-
-      if (response == null) {
-        throw Exception('Document not found');
-      }
-
-      final responseMap = response as Map<String, dynamic>;
-      final currentVersion = (responseMap['version'] as int?) ?? 0;
-
-      if (currentVersion != expectedVersion) {
-        throw Exception(
-          'Version mismatch: expected $expectedVersion, got $currentVersion',
-        );
-      }
-
-      // Update with new version
-      await _supabase
-          .from(collection)
-          .update({
-            ...updates,
-            'version': currentVersion + 1,
-            'updated_at': DateTime.now().toIso8601String(),
-          })
-          .eq('id', documentId);
-
+      // Stub implementation - would implement with Appwrite
       if (kDebugMode) {
-        print('Versioned update successful for $documentId');
+        print('Versioned update (stub) for $documentId, expected version: $expectedVersion');
       }
     } catch (e) {
       if (kDebugMode) {
