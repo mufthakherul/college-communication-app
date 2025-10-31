@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_nearby_connections/flutter_nearby_connections.dart';
 
 /// Connection type for mesh network
 enum MeshConnectionType {
