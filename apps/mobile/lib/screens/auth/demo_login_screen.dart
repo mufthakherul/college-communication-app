@@ -89,17 +89,13 @@ class _DemoLoginScreenState extends State<DemoLoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Icon(
-                    Icons.code,
-                    size: 80,
-                    color: Colors.blue[700],
-                  ),
+                  Icon(Icons.code, size: 80, color: Colors.blue[700]),
                   const SizedBox(height: 24),
                   Text(
                     'Demo Mode',
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                      fontWeight: FontWeight.bold,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
@@ -117,7 +113,11 @@ class _DemoLoginScreenState extends State<DemoLoginScreen> {
                     ),
                     child: Row(
                       children: [
-                        Icon(Icons.info_outline, color: Colors.blue[700], size: 20),
+                        Icon(
+                          Icons.info_outline,
+                          color: Colors.blue[700],
+                          size: 20,
+                        ),
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
@@ -148,8 +148,9 @@ class _DemoLoginScreenState extends State<DemoLoginScreen> {
                         return 'Username must be at least 3 characters';
                       }
                       // Check for valid GitHub username format
-                      if (!RegExp(r'^[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?$')
-                          .hasMatch(value)) {
+                      if (!RegExp(
+                        r'^[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?$',
+                      ).hasMatch(value)) {
                         return 'Invalid GitHub username format';
                       }
                       return null;
@@ -165,7 +166,9 @@ class _DemoLoginScreenState extends State<DemoLoginScreen> {
                             child: CircularProgressIndicator(strokeWidth: 2),
                           )
                         : const Icon(Icons.login),
-                    label: Text(_isLoading ? 'Verifying...' : 'Login with GitHub'),
+                    label: Text(
+                      _isLoading ? 'Verifying...' : 'Login with GitHub',
+                    ),
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       backgroundColor: Colors.grey[900],
@@ -196,7 +199,11 @@ class _DemoLoginScreenState extends State<DemoLoginScreen> {
                       children: [
                         Row(
                           children: [
-                            const Icon(Icons.check_circle, color: Colors.green, size: 20),
+                            const Icon(
+                              Icons.check_circle,
+                              color: Colors.green,
+                              size: 20,
+                            ),
                             const SizedBox(width: 8),
                             Text(
                               'Demo Mode Features',
@@ -220,9 +227,9 @@ class _DemoLoginScreenState extends State<DemoLoginScreen> {
                   Text(
                     'Note: Data in demo mode is not saved. Connect Firebase for real functionality.',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: Colors.grey,
-                          fontStyle: FontStyle.italic,
-                        ),
+                      color: Colors.grey,
+                      fontStyle: FontStyle.italic,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ],

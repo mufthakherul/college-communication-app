@@ -93,9 +93,7 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create Notice'),
-      ),
+      appBar: AppBar(title: const Text('Create Notice')),
       body: Form(
         key: _formKey,
         child: ListView(
@@ -179,10 +177,7 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
                 border: OutlineInputBorder(),
               ),
               items: NoticeType.values.map((type) {
-                return DropdownMenuItem(
-                  value: type,
-                  child: Text(type.name),
-                );
+                return DropdownMenuItem(value: type, child: Text(type.name));
               }).toList(),
               onChanged: (value) {
                 if (value != null) {

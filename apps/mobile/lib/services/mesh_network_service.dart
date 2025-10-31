@@ -11,7 +11,7 @@ enum MeshConnectionType {
   wifiRouter,
   lan,
   usb,
-  auto // Automatically detected
+  auto, // Automatically detected
 }
 
 /// Mesh network node information
@@ -33,25 +33,25 @@ class MeshNode {
   });
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'connectedAt': connectedAt.toIso8601String(),
-        'connectionType': connectionType.name,
-        'isActive': isActive,
-        'isVisible': isVisible,
-      };
+    'id': id,
+    'name': name,
+    'connectedAt': connectedAt.toIso8601String(),
+    'connectionType': connectionType.name,
+    'isActive': isActive,
+    'isVisible': isVisible,
+  };
 
   factory MeshNode.fromJson(Map<String, dynamic> json) => MeshNode(
-        id: json['id'] as String,
-        name: json['name'] as String,
-        connectedAt: DateTime.parse(json['connectedAt'] as String),
-        connectionType: MeshConnectionType.values.firstWhere(
-          (t) => t.name == json['connectionType'],
-          orElse: () => MeshConnectionType.auto,
-        ),
-        isActive: json['isActive'] ?? true,
-        isVisible: json['isVisible'] ?? false,
-      );
+    id: json['id'] as String,
+    name: json['name'] as String,
+    connectedAt: DateTime.parse(json['connectedAt'] as String),
+    connectionType: MeshConnectionType.values.firstWhere(
+      (t) => t.name == json['connectionType'],
+      orElse: () => MeshConnectionType.auto,
+    ),
+    isActive: json['isActive'] ?? true,
+    isVisible: json['isVisible'] ?? false,
+  );
 
   String getConnectionTypeDisplay() {
     switch (connectionType) {
@@ -88,19 +88,21 @@ class MeshPairingData {
   });
 
   Map<String, dynamic> toJson() => {
-        'deviceId': deviceId,
-        'deviceName': deviceName,
-        'pairingToken': pairingToken,
-        'expiresAt': expiresAt.toIso8601String(),
-        'supportedConnections': supportedConnections,
-      };
+    'deviceId': deviceId,
+    'deviceName': deviceName,
+    'pairingToken': pairingToken,
+    'expiresAt': expiresAt.toIso8601String(),
+    'supportedConnections': supportedConnections,
+  };
 
-  factory MeshPairingData.fromJson(Map<String, dynamic> json) => MeshPairingData(
+  factory MeshPairingData.fromJson(Map<String, dynamic> json) =>
+      MeshPairingData(
         deviceId: json['deviceId'] as String,
         deviceName: json['deviceName'] as String,
         pairingToken: json['pairingToken'] as String,
         expiresAt: DateTime.parse(json['expiresAt'] as String),
-        supportedConnections: (json['supportedConnections'] as List).cast<String>(),
+        supportedConnections: (json['supportedConnections'] as List)
+            .cast<String>(),
       );
 
   String toQRString() => jsonEncode(toJson());
@@ -129,26 +131,26 @@ class MeshMessage {
     required this.payload,
     DateTime? timestamp,
     List<String>? routePath,
-  })  : timestamp = timestamp ?? DateTime.now(),
-        routePath = routePath ?? [];
+  }) : timestamp = timestamp ?? DateTime.now(),
+       routePath = routePath ?? [];
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'senderId': senderId,
-        'type': type,
-        'payload': payload,
-        'timestamp': timestamp.toIso8601String(),
-        'routePath': routePath,
-      };
+    'id': id,
+    'senderId': senderId,
+    'type': type,
+    'payload': payload,
+    'timestamp': timestamp.toIso8601String(),
+    'routePath': routePath,
+  };
 
   factory MeshMessage.fromJson(Map<String, dynamic> json) => MeshMessage(
-        id: json['id'] as String,
-        senderId: json['senderId'] as String,
-        type: json['type'] as String,
-        payload: json['payload'] as Map<String, dynamic>,
-        timestamp: DateTime.parse(json['timestamp'] as String),
-        routePath: (json['routePath'] as List?)?.cast<String>() ?? [],
-      );
+    id: json['id'] as String,
+    senderId: json['senderId'] as String,
+    type: json['type'] as String,
+    payload: json['payload'] as Map<String, dynamic>,
+    timestamp: DateTime.parse(json['timestamp'] as String),
+    routePath: (json['routePath'] as List?)?.cast<String>() ?? [],
+  );
 
   MeshMessage copyWithRoute(String nodeId) {
     return MeshMessage(
@@ -168,14 +170,16 @@ class MeshNetworkService {
   static final MeshNetworkService _instance = MeshNetworkService._internal();
   factory MeshNetworkService() => _instance;
   MeshNetworkService._internal();
-  
+
   final Map<String, MeshNode> _connectedNodes = {};
-  final Map<String, MeshNode> _hiddenNodes = {}; // Auto-connected but not authenticated
+  final Map<String, MeshNode> _hiddenNodes =
+      {}; // Auto-connected but not authenticated
   final List<MeshMessage> _messageHistory = [];
-  final Map<String, MeshPairingData> _activePairings = {}; // Active pairing sessions
+  final Map<String, MeshPairingData> _activePairings =
+      {}; // Active pairing sessions
   final _messageController = StreamController<MeshMessage>.broadcast();
   final _nodeController = StreamController<List<MeshNode>>.broadcast();
-  
+
   bool _isInitialized = false;
   bool _isAdvertising = false;
   bool _isDiscovering = false;
@@ -209,7 +213,7 @@ class MeshNetworkService {
     try {
       _deviceId = deviceId;
       _deviceName = deviceName;
-      
+
       // Initialize the nearby connections
       // Note: Actual initialization is handled by the flutter_nearby_connections plugin
 
@@ -330,7 +334,9 @@ class MeshNetworkService {
   /// Connect to device using pairing data
   Future<void> _connectToDeviceWithPairing(MeshPairingData pairingData) async {
     // Try connection types in order of preference
-    final connectionTypes = _determineConnectionPriority(pairingData.supportedConnections);
+    final connectionTypes = _determineConnectionPriority(
+      pairingData.supportedConnections,
+    );
 
     for (final connectionType in connectionTypes) {
       try {
@@ -341,7 +347,9 @@ class MeshNetworkService {
         );
 
         // If successful, make the node visible
-        final node = _connectedNodes[pairingData.deviceId] ?? _hiddenNodes[pairingData.deviceId];
+        final node =
+            _connectedNodes[pairingData.deviceId] ??
+            _hiddenNodes[pairingData.deviceId];
         if (node != null) {
           node.isVisible = true;
           if (_hiddenNodes.containsKey(pairingData.deviceId)) {
@@ -418,7 +426,9 @@ class MeshNetworkService {
   }
 
   /// Determine connection priority based on available types
-  List<MeshConnectionType> _determineConnectionPriority(List<String> supported) {
+  List<MeshConnectionType> _determineConnectionPriority(
+    List<String> supported,
+  ) {
     final priority = <MeshConnectionType>[];
 
     // Prefer faster, more stable connections
@@ -450,7 +460,7 @@ class MeshNetworkService {
   }
 
   /// Get list of visible nodes only
-  List<MeshNode> get visibleNodes => 
+  List<MeshNode> get visibleNodes =>
       _connectedNodes.values.where((node) => node.isVisible).toList();
 
   /// Get list of hidden (auto-connected) nodes
@@ -463,7 +473,7 @@ class MeshNetworkService {
       node.isVisible = true;
       _connectedNodes[deviceId] = node;
       _nodeController.add(connectedNodes);
-      
+
       if (kDebugMode) {
         print('Node made visible: ${node.name}');
       }
@@ -514,7 +524,8 @@ class MeshNetworkService {
       // Note: This is a placeholder - actual implementation depends on platform-specific requirements
 
       // Determine connection type based on discovery method
-      const connectionType = MeshConnectionType.bluetooth; // Auto-detect in real implementation
+      const connectionType =
+          MeshConnectionType.bluetooth; // Auto-detect in real implementation
 
       // Add to nodes (hidden if auto-connect enabled)
       final node = MeshNode(
@@ -606,7 +617,10 @@ class MeshNetworkService {
   }
 
   /// Forward message to other nodes (mesh routing)
-  Future<void> _forwardMessage(MeshMessage message, {String? excludeNodeId}) async {
+  Future<void> _forwardMessage(
+    MeshMessage message, {
+    String? excludeNodeId,
+  }) async {
     final routedMessage = message.copyWithRoute(_deviceId!);
 
     for (final node in _connectedNodes.values) {

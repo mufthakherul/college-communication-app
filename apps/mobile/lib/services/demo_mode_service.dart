@@ -5,7 +5,7 @@ import 'package:campus_mesh/models/user_model.dart';
 class DemoModeService {
   static const String _demoModeKey = 'demo_mode_enabled';
   static const String _demoUserKey = 'demo_user_data';
-  
+
   // Security: Demo mode can be disabled in production by setting this to false
   // Change to false before releasing to production for enhanced security
   static const bool _allowDemoMode = true;
@@ -25,7 +25,7 @@ class DemoModeService {
     if (!isDemoModeAvailable()) {
       return false;
     }
-    
+
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_demoModeKey) ?? false;
   }
@@ -46,7 +46,7 @@ class DemoModeService {
   // Get demo user
   Future<UserModel?> getDemoUser() async {
     final isDemoEnabled = await isDemoModeEnabled();
-    
+
     if (!isDemoEnabled) return null;
 
     // Return a demo user with sample data
@@ -69,14 +69,14 @@ class DemoModeService {
     if (!isDemoModeAvailable()) {
       throw Exception('Demo mode is not available in this build');
     }
-    
+
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_demoModeKey, true);
-    
+
     // SECURITY NOTE: Demo users ONLY access local sample data
     // They CANNOT access real Firebase data or make actual API calls
     // All demo data is stored locally and isolated from production
-    
+
     // Create a demo user with GitHub username
     return UserModel(
       uid: 'demo_github_${githubUsername.toLowerCase()}',
@@ -108,7 +108,8 @@ class DemoModeService {
       {
         'id': 'notice_2',
         'title': 'Demo Mode Active',
-        'content': 'You are viewing this app in demo mode. Firebase connection is not required for demo mode.',
+        'content':
+            'You are viewing this app in demo mode. Firebase connection is not required for demo mode.',
         'type': 'urgent',
         'authorId': 'demo_admin',
         'authorName': 'System',
@@ -119,7 +120,8 @@ class DemoModeService {
       {
         'id': 'notice_3',
         'title': 'Upcoming Event',
-        'content': 'Sample event notice. All features are available in demo mode.',
+        'content':
+            'Sample event notice. All features are available in demo mode.',
         'type': 'event',
         'authorId': 'demo_teacher',
         'authorName': 'Demo Teacher',

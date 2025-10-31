@@ -50,7 +50,9 @@ class NoticeModel {
       'type': type.name,
       'targetAudience': targetAudience,
       'authorId': authorId,
-      'createdAt': createdAt != null ? Timestamp.fromDate(createdAt!) : FieldValue.serverTimestamp(),
+      'createdAt': createdAt != null
+          ? Timestamp.fromDate(createdAt!)
+          : FieldValue.serverTimestamp(),
       'updatedAt': FieldValue.serverTimestamp(),
       'expiresAt': expiresAt != null ? Timestamp.fromDate(expiresAt!) : null,
       'isActive': isActive,

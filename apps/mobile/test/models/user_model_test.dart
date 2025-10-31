@@ -74,7 +74,7 @@ void main() {
 
     test('should validate role types', () {
       final roles = [UserRole.student, UserRole.teacher, UserRole.admin];
-      
+
       for (final role in roles) {
         final user = UserModel(
           uid: 'user123',
@@ -87,7 +87,7 @@ void main() {
           isActive: true,
           createdAt: DateTime.now(),
         );
-        
+
         expect(user.role, role);
       }
     });

@@ -10,11 +10,7 @@ class CacheEntry<T> {
   final DateTime timestamp;
   final Duration ttl; // Time to live
 
-  CacheEntry({
-    required this.data,
-    required this.timestamp,
-    required this.ttl,
-  });
+  CacheEntry({required this.data, required this.timestamp, required this.ttl});
 
   bool get isExpired => DateTime.now().difference(timestamp) > ttl;
 
@@ -34,10 +30,10 @@ class CacheEntry<T> {
   }
 
   Map<String, dynamic> toJson() => {
-        'data': data,
-        'timestamp': timestamp.toIso8601String(),
-        'ttl': ttl.inMilliseconds,
-      };
+    'data': data,
+    'timestamp': timestamp.toIso8601String(),
+    'ttl': ttl.inMilliseconds,
+  };
 
   factory CacheEntry.fromJson(
     Map<String, dynamic> json,
@@ -70,14 +66,14 @@ class CacheService {
     try {
       final appDir = await getApplicationDocumentsDirectory();
       _cacheDirectory = Directory('${appDir.path}/cache');
-      
+
       if (!_cacheDirectory!.existsSync()) {
         _cacheDirectory!.createSync(recursive: true);
       }
 
       // Clean expired cache on startup
       await cleanExpiredCache();
-      
+
       // Check and enforce cache size limit
       await _enforceCacheSizeLimit();
     } catch (e) {
@@ -115,12 +111,15 @@ class CacheService {
         try {
           final jsonStr = await file.readAsString();
           final json = jsonDecode(jsonStr) as Map<String, dynamic>;
-          final entry = CacheEntry.fromJson(json, (data) => fromJson(data as Map<String, dynamic>));
-          
+          final entry = CacheEntry.fromJson(
+            json,
+            (data) => fromJson(data as Map<String, dynamic>),
+          );
+
           if (!entry.isExpired) {
             // Store in memory cache for faster access
             _memoryCache[key] = entry;
-            
+
             if (kDebugMode) {
               print('Cache hit (disk): $key (age: ${entry.getAgeText()})');
             }
@@ -167,7 +166,7 @@ class CacheService {
         final file = File('${_cacheDirectory!.path}/$key.json');
         final jsonStr = jsonEncode(entry.toJson());
         await file.writeAsString(jsonStr);
-        
+
         if (kDebugMode) {
           print('Cached to disk: $key (ttl: ${entry.ttl.inMinutes}m)');
         }
@@ -230,7 +229,7 @@ class CacheService {
             final json = jsonDecode(jsonStr) as Map<String, dynamic>;
             final timestamp = DateTime.parse(json['timestamp'] as String);
             final ttl = Duration(milliseconds: json['ttl'] as int);
-            
+
             if (DateTime.now().difference(timestamp) > ttl) {
               file.deleteSync();
               if (kDebugMode) {
@@ -280,16 +279,18 @@ class CacheService {
   /// Enforce cache size limit by removing oldest entries
   Future<void> _enforceCacheSizeLimit() async {
     final sizeMB = await getCacheSizeMB();
-    
+
     if (sizeMB > _maxCacheSizeMB) {
       if (kDebugMode) {
-        print('Cache size ${sizeMB.toStringAsFixed(2)} MB exceeds limit $_maxCacheSizeMB MB');
+        print(
+          'Cache size ${sizeMB.toStringAsFixed(2)} MB exceeds limit $_maxCacheSizeMB MB',
+        );
       }
 
       if (_cacheDirectory != null && _cacheDirectory!.existsSync()) {
         // Get all cache files with their timestamps
         final files = <File, DateTime>{};
-        
+
         await for (final file in _cacheDirectory!.list()) {
           if (file is File && file.path.endsWith('.json')) {
             try {
@@ -332,15 +333,17 @@ class CacheService {
       final file = File('${_cacheDirectory!.path}/$key.gz');
       final encoder = GZipEncoder();
       final compressed = encoder.encode(utf8.encode(data));
-      
+
       if (compressed != null) {
         await file.writeAsBytes(compressed);
-        
+
         if (kDebugMode) {
           final originalSize = utf8.encode(data).length;
           final compressedSize = compressed.length;
           final ratio = (1 - compressedSize / originalSize) * 100;
-          print('Compressed cache: $key (${ratio.toStringAsFixed(1)}% reduction)');
+          print(
+            'Compressed cache: $key (${ratio.toStringAsFixed(1)}% reduction)',
+          );
         }
       }
     } catch (e) {

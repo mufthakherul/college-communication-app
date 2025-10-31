@@ -3,11 +3,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 /// Conflict resolution strategy
 enum ConflictStrategy {
-  serverWins,    // Server version always wins
-  clientWins,    // Client version always wins
-  newerWins,     // Newer timestamp wins
-  merge,         // Merge both versions
-  manual,        // Require manual resolution
+  serverWins, // Server version always wins
+  clientWins, // Client version always wins
+  newerWins, // Newer timestamp wins
+  merge, // Merge both versions
+  manual, // Require manual resolution
 }
 
 /// Represents a data conflict
@@ -31,7 +31,8 @@ class DataConflict<T> {
 
 /// Service to handle simultaneous edit conflicts
 class ConflictResolutionService {
-  static final ConflictResolutionService _instance = ConflictResolutionService._internal();
+  static final ConflictResolutionService _instance =
+      ConflictResolutionService._internal();
   factory ConflictResolutionService() => _instance;
   ConflictResolutionService._internal();
 
@@ -42,7 +43,8 @@ class ConflictResolutionService {
   ConflictStrategy _defaultStrategy = ConflictStrategy.newerWins;
 
   /// Get list of unresolved conflicts
-  List<DataConflict> get unresolvedConflicts => List.unmodifiable(_unresolvedConflicts);
+  List<DataConflict> get unresolvedConflicts =>
+      List.unmodifiable(_unresolvedConflicts);
 
   /// Set default conflict resolution strategy
   void setDefaultStrategy(ConflictStrategy strategy) {
@@ -107,18 +109,22 @@ class ConflictResolutionService {
           });
 
           if (kDebugMode) {
-            print('Conflict resolved using ${(strategy ?? _defaultStrategy).name}');
+            print(
+              'Conflict resolved using ${(strategy ?? _defaultStrategy).name}',
+            );
           }
         } else {
           // Manual resolution required
-          _unresolvedConflicts.add(DataConflict(
-            documentId: documentId,
-            serverVersion: serverData,
-            clientVersion: updates,
-            serverTimestamp: serverTimestamp,
-            clientTimestamp: clientTimestamp,
-            conflictType: 'edit',
-          ));
+          _unresolvedConflicts.add(
+            DataConflict(
+              documentId: documentId,
+              serverVersion: serverData,
+              clientVersion: updates,
+              serverTimestamp: serverTimestamp,
+              clientTimestamp: clientTimestamp,
+              conflictType: 'edit',
+            ),
+          );
 
           if (kDebugMode) {
             print('Conflict requires manual resolution');
@@ -246,7 +252,7 @@ class ConflictResolutionService {
   /// Discard a conflict (keep server version)
   void discardConflict(String documentId) {
     _unresolvedConflicts.removeWhere((c) => c.documentId == documentId);
-    
+
     if (kDebugMode) {
       print('Discarded conflict for $documentId');
     }
@@ -255,7 +261,7 @@ class ConflictResolutionService {
   /// Clear all unresolved conflicts
   void clearUnresolvedConflicts() {
     _unresolvedConflicts.clear();
-    
+
     if (kDebugMode) {
       print('Cleared all unresolved conflicts');
     }
@@ -307,9 +313,9 @@ class ConflictResolutionService {
   /// Get conflict statistics
   Map<String, dynamic> getStatistics() {
     final conflictsByType = <String, int>{};
-    
+
     for (final conflict in _unresolvedConflicts) {
-      conflictsByType[conflict.conflictType] = 
+      conflictsByType[conflict.conflictType] =
           (conflictsByType[conflict.conflictType] ?? 0) + 1;
     }
 

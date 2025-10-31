@@ -10,8 +10,9 @@ void main() {
       expect(true, isTrue);
     });
 
-    testWidgets('Demo mode banner should be visible',
-        (WidgetTester tester) async {
+    testWidgets('Demo mode banner should be visible', (
+      WidgetTester tester,
+    ) async {
       expect(true, isTrue);
     });
 
@@ -33,47 +34,51 @@ void main() {
       expect(true, isTrue);
     });
 
-    testWidgets('Demo messages should be visible',
-        (WidgetTester tester) async {
+    testWidgets('Demo messages should be visible', (WidgetTester tester) async {
       expect(true, isTrue);
     });
 
-    testWidgets('Demo user profile should be visible',
-        (WidgetTester tester) async {
+    testWidgets('Demo user profile should be visible', (
+      WidgetTester tester,
+    ) async {
       expect(true, isTrue);
     });
   });
 
   group('Demo Mode Isolation', () {
-    testWidgets('Demo mode should not affect production data',
-        (WidgetTester tester) async {
+    testWidgets('Demo mode should not affect production data', (
+      WidgetTester tester,
+    ) async {
       expect(true, isTrue);
     });
 
-    testWidgets('Exiting demo mode should restore normal mode',
-        (WidgetTester tester) async {
+    testWidgets('Exiting demo mode should restore normal mode', (
+      WidgetTester tester,
+    ) async {
       expect(true, isTrue);
     });
 
-    testWidgets('Demo changes should not persist',
-        (WidgetTester tester) async {
+    testWidgets('Demo changes should not persist', (WidgetTester tester) async {
       expect(true, isTrue);
     });
   });
 
   group('Demo Mode Navigation', () {
-    testWidgets('All screens should be accessible in demo mode',
-        (WidgetTester tester) async {
+    testWidgets('All screens should be accessible in demo mode', (
+      WidgetTester tester,
+    ) async {
       expect(true, isTrue);
     });
 
-    testWidgets('Bottom navigation should work in demo mode',
-        (WidgetTester tester) async {
+    testWidgets('Bottom navigation should work in demo mode', (
+      WidgetTester tester,
+    ) async {
       expect(true, isTrue);
     });
 
-    testWidgets('Back navigation should work in demo mode',
-        (WidgetTester tester) async {
+    testWidgets('Back navigation should work in demo mode', (
+      WidgetTester tester,
+    ) async {
       expect(true, isTrue);
     });
   });
