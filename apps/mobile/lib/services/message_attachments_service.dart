@@ -41,7 +41,10 @@ class MessageAttachmentsService {
 
       // Generate unique file name
       final fileName = customFileName ?? path.basename(file.path);
-      final fileExtension = path.extension(fileName).toLowerCase().replaceAll('.', '');
+      final fileExtension = path
+          .extension(fileName)
+          .toLowerCase()
+          .replaceAll('.', '');
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final uniqueFileName = '${userId}_${timestamp}_$fileName';
       final filePath = '$userId/$uniqueFileName';
@@ -51,17 +54,18 @@ class MessageAttachmentsService {
       }
 
       // Upload to Supabase storage
-      await _supabase.storage
-          .from(_bucketName)
-          .upload(filePath, file);
+      await _supabase.storage.from(_bucketName).upload(filePath, file);
 
       // Get public URL
-      final publicUrl = _supabase.storage.from(_bucketName).getPublicUrl(filePath);
+      final publicUrl = _supabase.storage
+          .from(_bucketName)
+          .getPublicUrl(filePath);
 
       // Generate thumbnail for images/videos if needed
       String? thumbnailUrl;
       if (_isImageFile(fileExtension) || _isVideoFile(fileExtension)) {
-        thumbnailUrl = publicUrl; // Can be enhanced with actual thumbnail generation
+        thumbnailUrl =
+            publicUrl; // Can be enhanced with actual thumbnail generation
       }
 
       if (kDebugMode) {
@@ -116,7 +120,9 @@ class MessageAttachmentsService {
       final filePath = uri.pathSegments.skip(3).join('/'); // Skip bucket name
 
       // Download file
-      final bytes = await _supabase.storage.from(_bucketName).download(filePath);
+      final bytes = await _supabase.storage
+          .from(_bucketName)
+          .download(filePath);
 
       // Save to local storage
       final file = File('$savePath/$fileName');

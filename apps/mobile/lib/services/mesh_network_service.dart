@@ -129,11 +129,13 @@ class MeshPairingData {
             .cast<String>(),
         purposes: json['purposes'] != null
             ? (json['purposes'] as List)
-                .map((p) => QRPairingPurpose.values.firstWhere(
+                  .map(
+                    (p) => QRPairingPurpose.values.firstWhere(
                       (purpose) => purpose.name == p,
                       orElse: () => QRPairingPurpose.privateChat,
-                    ))
-                .toList()
+                    ),
+                  )
+                  .toList()
             : [QRPairingPurpose.privateChat],
         sharedInfo: json['sharedInfo'] as Map<String, dynamic>?,
       );
@@ -146,9 +148,9 @@ class MeshPairingData {
   }
 
   bool get isExpired => expiresAt != null && DateTime.now().isAfter(expiresAt!);
-  
+
   bool get hasNoExpiry => expiresAt == null;
-  
+
   bool hasPurpose(QRPairingPurpose purpose) => purposes.contains(purpose);
 }
 

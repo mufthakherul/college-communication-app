@@ -7,14 +7,14 @@ class AnalyticsService {
   final SupabaseClient _supabase = Supabase.instance.client;
 
   // Track generic activity
-  Future<void> trackActivity(String action, Map<String, dynamic> metadata) async {
+  Future<void> trackActivity(
+    String action,
+    Map<String, dynamic> metadata,
+  ) async {
     try {
       await _supabase.functions.invoke(
         'track-activity',
-        body: {
-          'action': action,
-          'metadata': metadata,
-        },
+        body: {'action': action, 'metadata': metadata},
       );
     } catch (e) {
       // Silently fail to not disrupt user experience
@@ -55,9 +55,7 @@ class AnalyticsService {
 
   // Track message read
   Future<void> trackMessageRead(String messageId) async {
-    await trackActivity('read_message', {
-      'messageId': messageId,
-    });
+    await trackActivity('read_message', {'messageId': messageId});
   }
 
   // Track app launch
@@ -69,19 +67,16 @@ class AnalyticsService {
   }
 
   // Track feature usage
-  Future<void> trackFeatureUsage(String featureName, Map<String, dynamic>? params) async {
-    await trackActivity('feature_usage', {
-      'feature': featureName,
-      ...?params,
-    });
+  Future<void> trackFeatureUsage(
+    String featureName,
+    Map<String, dynamic>? params,
+  ) async {
+    await trackActivity('feature_usage', {'feature': featureName, ...?params});
   }
 
   // Track errors (non-critical)
   Future<void> trackError(String errorType, String errorMessage) async {
-    await trackActivity('error', {
-      'type': errorType,
-      'message': errorMessage,
-    });
+    await trackActivity('error', {'type': errorType, 'message': errorMessage});
   }
 }
 

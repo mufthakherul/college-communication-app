@@ -17,38 +17,37 @@ class SentryService {
     String? release,
     double tracesSampleRate = 1.0,
   }) async {
-    await SentryFlutter.init(
-      (options) {
-        options.dsn = dsn;
-        options.environment = environment ?? (kReleaseMode ? 'production' : 'development');
-        options.release = release ?? 'campus_mesh@1.0.0+1';
-        options.tracesSampleRate = tracesSampleRate;
-        
-        // Enable auto session tracking
-        options.enableAutoSessionTracking = true;
-        
-        // Set debug mode based on build mode
-        options.debug = kDebugMode;
-        
-        // Filter events before sending
-        options.beforeSend = (event, {hint}) {
-          // Filter out demo mode errors
-          if (event.tags?['demo_mode'] == 'true') {
-            return null;
-          }
-          
-          // Filter out development errors in production
-          if (kReleaseMode && event.environment == 'development') {
-            return null;
-          }
-          
-          return event;
-        };
-        
-        // Add breadcrumbs for better context
-        options.maxBreadcrumbs = 100;
-      },
-    );
+    await SentryFlutter.init((options) {
+      options.dsn = dsn;
+      options.environment =
+          environment ?? (kReleaseMode ? 'production' : 'development');
+      options.release = release ?? 'campus_mesh@1.0.0+1';
+      options.tracesSampleRate = tracesSampleRate;
+
+      // Enable auto session tracking
+      options.enableAutoSessionTracking = true;
+
+      // Set debug mode based on build mode
+      options.debug = kDebugMode;
+
+      // Filter events before sending
+      options.beforeSend = (event, {hint}) {
+        // Filter out demo mode errors
+        if (event.tags?['demo_mode'] == 'true') {
+          return null;
+        }
+
+        // Filter out development errors in production
+        if (kReleaseMode && event.environment == 'development') {
+          return null;
+        }
+
+        return event;
+      };
+
+      // Add breadcrumbs for better context
+      options.maxBreadcrumbs = 100;
+    });
   }
 
   /// Capture an exception manually
@@ -89,12 +88,9 @@ class SentryService {
     Map<String, dynamic>? data,
   }) {
     Sentry.configureScope((scope) {
-      scope.setUser(SentryUser(
-        id: id,
-        email: email,
-        username: username,
-        data: data,
-      ));
+      scope.setUser(
+        SentryUser(id: id, email: email, username: username, data: data),
+      );
     });
   }
 
@@ -128,12 +124,14 @@ class SentryService {
     SentryLevel level = SentryLevel.info,
     Map<String, dynamic>? data,
   }) {
-    Sentry.addBreadcrumb(Breadcrumb(
-      message: message,
-      category: category,
-      level: level,
-      data: data,
-    ));
+    Sentry.addBreadcrumb(
+      Breadcrumb(
+        message: message,
+        category: category,
+        level: level,
+        data: data,
+      ),
+    );
   }
 
   /// Start a transaction for performance monitoring
@@ -147,13 +145,13 @@ class SentryService {
       description,
       bindToScope: true,
     );
-    
+
     if (data != null) {
       data.forEach((key, value) {
         transaction.setData(key, value);
       });
     }
-    
+
     return transaction;
   }
 
@@ -164,7 +162,7 @@ class SentryService {
     Future<T> Function() function,
   ) async {
     final transaction = startTransaction(operation, description);
-    
+
     try {
       final result = await function();
       transaction.status = const SpanStatus.ok();

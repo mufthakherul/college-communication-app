@@ -4,12 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 /// WebRTC signaling message type
-enum SignalingMessageType {
-  offer,
-  answer,
-  candidate,
-  bye,
-}
+enum SignalingMessageType { offer, answer, candidate, bye }
 
 /// WebRTC signaling message
 class SignalingMessage {
@@ -26,18 +21,19 @@ class SignalingMessage {
   });
 
   Map<String, dynamic> toJson() => {
-        'from': from,
-        'to': to,
-        'type': type.name,
-        'payload': payload,
-      };
+    'from': from,
+    'to': to,
+    'type': type.name,
+    'payload': payload,
+  };
 
   factory SignalingMessage.fromJson(Map<String, dynamic> json) =>
       SignalingMessage(
         from: json['from'] as String,
         to: json['to'] as String,
-        type: SignalingMessageType.values
-            .firstWhere((t) => t.name == json['type']),
+        type: SignalingMessageType.values.firstWhere(
+          (t) => t.name == json['type'],
+        ),
         payload: json['payload'] as Map<String, dynamic>,
       );
 }
@@ -84,8 +80,7 @@ class WebRTCSignalingService {
 
   final Map<String, WebRTCPeerConnection> _connections = {};
   final _messageController = StreamController<Map<String, dynamic>>.broadcast();
-  final _signalingController =
-      StreamController<SignalingMessage>.broadcast();
+  final _signalingController = StreamController<SignalingMessage>.broadcast();
   final _connectionStateController =
       StreamController<Map<String, dynamic>>.broadcast();
 
@@ -112,19 +107,17 @@ class WebRTCSignalingService {
   Stream<Map<String, dynamic>> get messageStream => _messageController.stream;
 
   /// Stream of signaling messages (for external transport)
-  Stream<SignalingMessage> get signalingStream =>
-      _signalingController.stream;
+  Stream<SignalingMessage> get signalingStream => _signalingController.stream;
 
   /// Stream of connection state changes
   Stream<Map<String, dynamic>> get connectionStateStream =>
       _connectionStateController.stream;
 
   /// List of connected peers
-  List<String> get connectedPeers =>
-      _connections.entries
-          .where((e) => e.value.state == WebRTCConnectionState.connected)
-          .map((e) => e.key)
-          .toList();
+  List<String> get connectedPeers => _connections.entries
+      .where((e) => e.value.state == WebRTCConnectionState.connected)
+      .map((e) => e.key)
+      .toList();
 
   /// Initialize WebRTC service
   Future<void> initialize(String localPeerId) async {
@@ -153,8 +146,7 @@ class WebRTCSignalingService {
 
     try {
       // Create peer connection
-      final peerConnection =
-          await createPeerConnection(_rtcConfiguration);
+      final peerConnection = await createPeerConnection(_rtcConfiguration);
 
       // Create data channel
       final dataChannel = await peerConnection.createDataChannel(
@@ -186,12 +178,14 @@ class WebRTCSignalingService {
       }
 
       // Send offer via signaling
-      _signalingController.add(SignalingMessage(
-        from: _localPeerId!,
-        to: peerId,
-        type: SignalingMessageType.offer,
-        payload: {'sdp': offer.toMap()},
-      ));
+      _signalingController.add(
+        SignalingMessage(
+          from: _localPeerId!,
+          to: peerId,
+          type: SignalingMessageType.offer,
+          payload: {'sdp': offer.toMap()},
+        ),
+      );
 
       return offer;
     } catch (e) {
@@ -234,8 +228,7 @@ class WebRTCSignalingService {
 
     try {
       // Create peer connection
-      final peerConnection =
-          await createPeerConnection(_rtcConfiguration);
+      final peerConnection = await createPeerConnection(_rtcConfiguration);
 
       // Store connection
       _connections[peerId] = WebRTCPeerConnection(
@@ -262,12 +255,14 @@ class WebRTCSignalingService {
       await peerConnection.setLocalDescription(answer);
 
       // Send answer via signaling
-      _signalingController.add(SignalingMessage(
-        from: _localPeerId!,
-        to: peerId,
-        type: SignalingMessageType.answer,
-        payload: {'sdp': answer.toMap()},
-      ));
+      _signalingController.add(
+        SignalingMessage(
+          from: _localPeerId!,
+          to: peerId,
+          type: SignalingMessageType.answer,
+          payload: {'sdp': answer.toMap()},
+        ),
+      );
 
       if (kDebugMode) {
         print('Created answer for peer: $peerId');
@@ -339,12 +334,14 @@ class WebRTCSignalingService {
   void _setupConnectionHandlers(RTCPeerConnection connection, String peerId) {
     connection.onIceCandidate = (candidate) {
       // Send ICE candidate via signaling
-      _signalingController.add(SignalingMessage(
-        from: _localPeerId!,
-        to: peerId,
-        type: SignalingMessageType.candidate,
-        payload: {'candidate': candidate.toMap()},
-      ));
+      _signalingController.add(
+        SignalingMessage(
+          from: _localPeerId!,
+          to: peerId,
+          type: SignalingMessageType.candidate,
+          payload: {'candidate': candidate.toMap()},
+        ),
+      );
     };
 
     connection.onIceConnectionState = (state) {
@@ -422,9 +419,7 @@ class WebRTCSignalingService {
 
     try {
       final jsonMessage = jsonEncode(message);
-      await connection.dataChannel!.send(
-        RTCDataChannelMessage(jsonMessage),
-      );
+      await connection.dataChannel!.send(RTCDataChannelMessage(jsonMessage));
 
       connection.bytesSent += jsonMessage.length;
 
@@ -460,12 +455,14 @@ class WebRTCSignalingService {
 
     if (connection != null) {
       // Send bye message
-      _signalingController.add(SignalingMessage(
-        from: _localPeerId!,
-        to: peerId,
-        type: SignalingMessageType.bye,
-        payload: {},
-      ));
+      _signalingController.add(
+        SignalingMessage(
+          from: _localPeerId!,
+          to: peerId,
+          type: SignalingMessageType.bye,
+          payload: {},
+        ),
+      );
 
       await connection.close();
       _connections.remove(peerId);

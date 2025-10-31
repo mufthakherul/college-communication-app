@@ -9,7 +9,8 @@ class PerformanceMonitoringService {
   final AnalyticsService _analytics = AnalyticsService();
 
   // Singleton pattern
-  static final PerformanceMonitoringService _instance = PerformanceMonitoringService._internal();
+  static final PerformanceMonitoringService _instance =
+      PerformanceMonitoringService._internal();
   factory PerformanceMonitoringService() => _instance;
   PerformanceMonitoringService._internal();
 
@@ -45,9 +46,11 @@ class PerformanceMonitoringService {
     // Warn about slow operations
     if (duration.inMilliseconds > 1000) {
       if (kDebugMode) {
-        debugPrint('⚠️ Slow operation: $name took ${duration.inMilliseconds}ms');
+        debugPrint(
+          '⚠️ Slow operation: $name took ${duration.inMilliseconds}ms',
+        );
       }
-      
+
       await _analytics.trackActivity('slow_operation', {
         'name': name,
         'duration_ms': duration.inMilliseconds,
@@ -80,7 +83,7 @@ class PerformanceMonitoringService {
     if (!_durations.containsKey(name) || _durations[name]!.isEmpty) {
       return null;
     }
-    
+
     final sum = _durations[name]!.reduce((a, b) => a + b);
     return sum / _durations[name]!.length;
   }
@@ -88,20 +91,20 @@ class PerformanceMonitoringService {
   /// Get performance statistics
   Map<String, dynamic> getStatistics() {
     final stats = <String, dynamic>{};
-    
+
     for (final entry in _durations.entries) {
       final name = entry.key;
       final durations = entry.value;
-      
+
       if (durations.isEmpty) continue;
-      
+
       durations.sort();
       final sum = durations.reduce((a, b) => a + b);
       final avg = sum / durations.length;
       final min = durations.first;
       final max = durations.last;
       final p95 = durations[(durations.length * 0.95).floor()];
-      
+
       stats[name] = {
         'count': durations.length,
         'average_ms': avg.toInt(),
@@ -110,7 +113,7 @@ class PerformanceMonitoringService {
         'p95_ms': p95,
       };
     }
-    
+
     return stats;
   }
 
@@ -123,13 +126,13 @@ class PerformanceMonitoringService {
   /// Log performance statistics
   void logStatistics() {
     if (!kDebugMode) return;
-    
+
     final stats = getStatistics();
     if (stats.isEmpty) {
       debugPrint('📊 No performance data collected');
       return;
     }
-    
+
     debugPrint('📊 Performance Statistics:');
     for (final entry in stats.entries) {
       final name = entry.key;
