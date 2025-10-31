@@ -225,7 +225,6 @@ class MeshNetworkService {
   String? _deviceName;
 
   static const Duration _nodeTimeout = Duration(minutes: 5);
-  static const Duration _pairingTimeout = Duration(minutes: 5);
 
   /// Stream of incoming mesh messages
   Stream<MeshMessage> get messageStream => _messageController.stream;
