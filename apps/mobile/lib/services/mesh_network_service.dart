@@ -7,8 +7,11 @@ enum MeshConnectionType {
   bluetooth,
   wifiDirect,
   wifiRouter,
+  wifiHotspot, // Mobile hotspot
   lan,
   usb,
+  nfc, // Near Field Communication
+  ethernet, // Wired ethernet
   auto, // Automatically detected
 }
 
@@ -59,38 +62,59 @@ class MeshNode {
         return 'WiFi Direct';
       case MeshConnectionType.wifiRouter:
         return 'WiFi Router';
+      case MeshConnectionType.wifiHotspot:
+        return 'WiFi Hotspot';
       case MeshConnectionType.lan:
         return 'LAN';
       case MeshConnectionType.usb:
         return 'USB';
+      case MeshConnectionType.nfc:
+        return 'NFC';
+      case MeshConnectionType.ethernet:
+        return 'Ethernet';
       case MeshConnectionType.auto:
         return 'Auto';
     }
   }
 }
 
-/// QR code pairing data
+/// QR code purpose/permission types
+enum QRPairingPurpose {
+  privateChat, // Start a private chat
+  internetSharing, // Share cellular internet
+  infoSharing, // Share information/files
+  autoSync, // Auto sync messages (invisible connection)
+  fullAccess, // All permissions
+}
+
+/// QR code pairing data with enhanced permissions
 class MeshPairingData {
   final String deviceId;
   final String deviceName;
   final String pairingToken; // Unique token for this pairing session
-  final DateTime expiresAt;
+  final DateTime? expiresAt; // Null means no expiry
   final List<String> supportedConnections; // Connection types supported
+  final List<QRPairingPurpose> purposes; // What this QR code allows
+  final Map<String, dynamic>? sharedInfo; // Optional info to share
 
   MeshPairingData({
     required this.deviceId,
     required this.deviceName,
     required this.pairingToken,
-    required this.expiresAt,
+    this.expiresAt,
     required this.supportedConnections,
+    this.purposes = const [QRPairingPurpose.privateChat],
+    this.sharedInfo,
   });
 
   Map<String, dynamic> toJson() => {
     'deviceId': deviceId,
     'deviceName': deviceName,
     'pairingToken': pairingToken,
-    'expiresAt': expiresAt.toIso8601String(),
+    'expiresAt': expiresAt?.toIso8601String(),
     'supportedConnections': supportedConnections,
+    'purposes': purposes.map((p) => p.name).toList(),
+    'sharedInfo': sharedInfo,
   };
 
   factory MeshPairingData.fromJson(Map<String, dynamic> json) =>
@@ -98,9 +122,20 @@ class MeshPairingData {
         deviceId: json['deviceId'] as String,
         deviceName: json['deviceName'] as String,
         pairingToken: json['pairingToken'] as String,
-        expiresAt: DateTime.parse(json['expiresAt'] as String),
+        expiresAt: json['expiresAt'] != null
+            ? DateTime.parse(json['expiresAt'] as String)
+            : null,
         supportedConnections: (json['supportedConnections'] as List)
             .cast<String>(),
+        purposes: json['purposes'] != null
+            ? (json['purposes'] as List)
+                .map((p) => QRPairingPurpose.values.firstWhere(
+                      (purpose) => purpose.name == p,
+                      orElse: () => QRPairingPurpose.privateChat,
+                    ))
+                .toList()
+            : [QRPairingPurpose.privateChat],
+        sharedInfo: json['sharedInfo'] as Map<String, dynamic>?,
       );
 
   String toQRString() => jsonEncode(toJson());
@@ -110,7 +145,11 @@ class MeshPairingData {
     return MeshPairingData.fromJson(json);
   }
 
-  bool get isExpired => DateTime.now().isAfter(expiresAt);
+  bool get isExpired => expiresAt != null && DateTime.now().isAfter(expiresAt!);
+  
+  bool get hasNoExpiry => expiresAt == null;
+  
+  bool hasPurpose(QRPairingPurpose purpose) => purposes.contains(purpose);
 }
 
 /// Mesh message for peer-to-peer communication
@@ -263,30 +302,44 @@ class MeshNetworkService {
     }
   }
 
-  /// Generate QR code pairing data
-  MeshPairingData generatePairingQRCode() {
+  /// Generate QR code pairing data with custom purposes and optional expiry
+  MeshPairingData generatePairingQRCode({
+    List<QRPairingPurpose>? purposes,
+    Duration? expiryDuration,
+    Map<String, dynamic>? sharedInfo,
+  }) {
     if (!_isInitialized || _deviceId == null) {
       throw Exception('Mesh network not initialized');
     }
 
     final pairingToken = _generatePairingToken();
+    final DateTime? expiresAt = expiryDuration != null
+        ? DateTime.now().add(expiryDuration)
+        : null; // No expiry if duration not provided
+
     final pairingData = MeshPairingData(
       deviceId: _deviceId!,
       deviceName: _deviceName!,
       pairingToken: pairingToken,
-      expiresAt: DateTime.now().add(_pairingTimeout),
+      expiresAt: expiresAt,
       supportedConnections: _getSupportedConnectionTypes(),
+      purposes: purposes ?? [QRPairingPurpose.privateChat],
+      sharedInfo: sharedInfo,
     );
 
     _activePairings[pairingToken] = pairingData;
 
-    // Auto-cleanup expired pairings
-    Future.delayed(_pairingTimeout, () {
-      _activePairings.remove(pairingToken);
-    });
+    // Auto-cleanup expired pairings only if they have expiry
+    if (expiryDuration != null) {
+      Future.delayed(expiryDuration, () {
+        _activePairings.remove(pairingToken);
+      });
+    }
 
     if (kDebugMode) {
       print('Generated pairing QR code with token: $pairingToken');
+      print('Purposes: ${purposes?.map((p) => p.name).join(", ")}');
+      print('Expires: ${expiresAt != null ? expiresAt : "Never"}');
     }
 
     return pairingData;
@@ -417,8 +470,12 @@ class MeshNetworkService {
       MeshConnectionType.bluetooth.name,
       MeshConnectionType.wifiDirect.name,
       MeshConnectionType.wifiRouter.name,
+      MeshConnectionType.wifiHotspot.name,
       MeshConnectionType.lan.name,
-      // USB connection detection would require platform-specific code
+      MeshConnectionType.ethernet.name,
+      MeshConnectionType.nfc.name,
+      MeshConnectionType.usb.name,
+      // All connection types are listed - platform-specific detection happens at runtime
     ];
   }
 
@@ -428,21 +485,30 @@ class MeshNetworkService {
   ) {
     final priority = <MeshConnectionType>[];
 
-    // Prefer faster, more stable connections
+    // Prefer faster, more stable connections (ordered by speed and stability)
+    if (supported.contains(MeshConnectionType.ethernet.name)) {
+      priority.add(MeshConnectionType.ethernet);
+    }
     if (supported.contains(MeshConnectionType.lan.name)) {
       priority.add(MeshConnectionType.lan);
+    }
+    if (supported.contains(MeshConnectionType.usb.name)) {
+      priority.add(MeshConnectionType.usb);
     }
     if (supported.contains(MeshConnectionType.wifiRouter.name)) {
       priority.add(MeshConnectionType.wifiRouter);
     }
+    if (supported.contains(MeshConnectionType.wifiHotspot.name)) {
+      priority.add(MeshConnectionType.wifiHotspot);
+    }
     if (supported.contains(MeshConnectionType.wifiDirect.name)) {
       priority.add(MeshConnectionType.wifiDirect);
     }
+    if (supported.contains(MeshConnectionType.nfc.name)) {
+      priority.add(MeshConnectionType.nfc);
+    }
     if (supported.contains(MeshConnectionType.bluetooth.name)) {
       priority.add(MeshConnectionType.bluetooth);
-    }
-    if (supported.contains(MeshConnectionType.usb.name)) {
-      priority.add(MeshConnectionType.usb);
     }
 
     return priority;

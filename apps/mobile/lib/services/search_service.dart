@@ -1,10 +1,13 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:campus_mesh/models/notice_model.dart';
+import 'package:campus_mesh/models/message_model.dart';
 
-/// Search service for full-text search across notices
+/// Search service for full-text search across notices, messages, and more
 /// Uses PostgreSQL full-text search capabilities
 class SearchService {
   final SupabaseClient _supabase = Supabase.instance.client;
+  
+  String? get _currentUserId => _supabase.auth.currentUser?.id;
 
   /// Search notices using full-text search
   /// Returns notices ranked by relevance
@@ -120,11 +123,117 @@ class SearchService {
     }
   }
 
+  /// Search messages
+  Future<List<MessageModel>> searchMessages(String query) async {
+    if (query.trim().isEmpty) {
+      return [];
+    }
+
+    final userId = _currentUserId;
+    if (userId == null) {
+      return [];
+    }
+
+    try {
+      final searchTerm = '%${query.toLowerCase()}%';
+      
+      // Search in user's messages (sent or received)
+      final response = await _supabase
+          .from('messages')
+          .select()
+          .or('sender_id.eq.$userId,recipient_id.eq.$userId')
+          .ilike('content', searchTerm)
+          .order('created_at', ascending: false)
+          .limit(50);
+
+      return (response as List<dynamic>)
+          .map((item) => MessageModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to search messages: $e');
+    }
+  }
+
+  /// Search messages with specific user
+  Future<List<MessageModel>> searchMessagesWithUser(
+    String query,
+    String otherUserId,
+  ) async {
+    if (query.trim().isEmpty) {
+      return [];
+    }
+
+    final userId = _currentUserId;
+    if (userId == null) {
+      return [];
+    }
+
+    try {
+      final searchTerm = '%${query.toLowerCase()}%';
+      
+      // Search in conversation with specific user
+      final response = await _supabase
+          .from('messages')
+          .select()
+          .or('and(sender_id.eq.$userId,recipient_id.eq.$otherUserId),and(sender_id.eq.$otherUserId,recipient_id.eq.$userId)')
+          .ilike('content', searchTerm)
+          .order('created_at', ascending: false)
+          .limit(50);
+
+      return (response as List<dynamic>)
+          .map((item) => MessageModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to search messages with user: $e');
+    }
+  }
+
+  /// Search messages by type (text, image, file, etc.)
+  Future<List<MessageModel>> searchMessagesByType(
+    String query,
+    MessageType type,
+  ) async {
+    if (query.trim().isEmpty && type == MessageType.text) {
+      return [];
+    }
+
+    final userId = _currentUserId;
+    if (userId == null) {
+      return [];
+    }
+
+    try {
+      final searchTerm = '%${query.toLowerCase()}%';
+      
+      var queryBuilder = _supabase
+          .from('messages')
+          .select()
+          .or('sender_id.eq.$userId,recipient_id.eq.$userId')
+          .eq('type', type.name);
+
+      // Only apply content filter if query is provided
+      if (query.trim().isNotEmpty) {
+        queryBuilder = queryBuilder.ilike('content', searchTerm);
+      }
+
+      final response = await queryBuilder
+          .order('created_at', ascending: false)
+          .limit(50);
+
+      return (response as List<dynamic>)
+          .map((item) => MessageModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to search messages by type: $e');
+    }
+  }
+
   /// Search across multiple content types (notices, messages, etc.)
   Future<Map<String, List<dynamic>>> universalSearch(String query) async {
     if (query.trim().isEmpty) {
       return {
         'notices': [],
+        'messages': [],
         'users': [],
       };
     }
@@ -145,6 +254,9 @@ class SearchService {
           .map((item) => NoticeModel.fromJson(item as Map<String, dynamic>))
           .toList();
 
+      // Search messages
+      final messages = await searchMessages(query);
+
       // Search users (for admins/teachers to find students)
       final usersResponse = await _supabase
           .from('users')
@@ -157,10 +269,27 @@ class SearchService {
 
       return {
         'notices': notices,
+        'messages': messages,
         'users': users,
       };
     } catch (e) {
       throw Exception('Failed to perform universal search: $e');
     }
+  }
+
+  /// Get recent searches (can be stored locally)
+  List<String> getRecentSearches() {
+    // TODO: Implement local storage for search history
+    return [];
+  }
+
+  /// Save search query to history
+  Future<void> saveSearchQuery(String query) async {
+    // TODO: Implement local storage for search history
+  }
+
+  /// Clear search history
+  Future<void> clearSearchHistory() async {
+    // TODO: Implement clearing of search history
   }
 }

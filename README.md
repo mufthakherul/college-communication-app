@@ -131,6 +131,8 @@ flutter run
 ### Technical Documentation
 - [Mesh Network Guide](MESH_NETWORK_GUIDE.md) - **Peer-to-peer communication**
 - [Network Improvements Summary](NETWORK_IMPROVEMENTS_SUMMARY.md) - **Technical details**
+- [Complete Networking Guide](NETWORKING_COMPLETE_GUIDE.md) - **🆕 Comprehensive networking documentation**
+- [Networking Troubleshooting](NETWORKING_TROUBLESHOOTING.md) - **🆕 Solve networking issues**
 - [Full Documentation](docs/README.md)
 - [Architecture Overview](docs/ARCHITECTURE.md)
 - [API Reference](docs/API.md)
