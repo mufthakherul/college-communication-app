@@ -41,6 +41,16 @@ dependencies:
   # Monitoring & Analytics
   sentry_flutter: ^7.14.0
   onesignal_flutter: ^5.0.0
+  # Environment configuration
+  flutter_dotenv: ^5.1.0
+  # Security
+  package_info_plus: ^5.0.0
+  device_info_plus: ^10.0.0
+  crypto: ^3.0.3
+  flutter_secure_storage: ^9.0.0
+  # Root detection
+  root_checker: ^1.0.1
+  flutter_jailbreak_detection: ^1.10.0
 
 dev_dependencies:
   flutter_test:
@@ -53,3 +63,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - .env
+    - .env.production
+    - .env.development

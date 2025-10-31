@@ -46,3 +46,27 @@ app.*.map.json
 # Firebase (keep firebase_options.dart stub in repo)
 google-services.json
 GoogleService-Info.plist
+
+# Environment files with sensitive data
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+# Keep .env.example in repo
+
+# Security and signing files
+*.keystore
+*.jks
+key.properties
+upload-keystore.jks
+android/key.properties
+
+# Supabase local config
+supabase/.env
+supabase/.branches
+
+# Build artifacts
+*.apk
+*.aab
+*.ipa
