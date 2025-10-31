@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:campus_mesh/supabase_config.dart';
 import 'package:campus_mesh/screens/auth/login_screen.dart';
 import 'package:campus_mesh/screens/home_screen.dart';
 import 'package:campus_mesh/services/theme_service.dart';
@@ -10,6 +8,8 @@ import 'package:campus_mesh/services/offline_queue_service.dart';
 import 'package:campus_mesh/services/background_sync_service.dart';
 import 'package:campus_mesh/services/sentry_service.dart';
 import 'package:campus_mesh/services/onesignal_service.dart';
+import 'package:campus_mesh/services/appwrite_service.dart';
+import 'package:campus_mesh/services/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,11 +31,11 @@ void main() async {
     );
   }
 
-  // Initialize Supabase
-  await Supabase.initialize(
-    url: SupabaseConfig.supabaseUrl,
-    anonKey: SupabaseConfig.supabaseAnonKey,
-  );
+  // Initialize Appwrite
+  AppwriteService().init();
+  
+  // Initialize auth service
+  await AuthService().initialize();
 
   // Initialize OneSignal (push notifications)
   // Replace 'YOUR_ONESIGNAL_APP_ID' with your actual OneSignal App ID
@@ -103,8 +103,8 @@ class _CampusMeshAppState extends State<CampusMeshApp> {
       theme: ThemeService.lightTheme,
       darkTheme: ThemeService.darkTheme,
       themeMode: _themeService.themeMode,
-      home: StreamBuilder<AuthState>(
-        stream: Supabase.instance.client.auth.onAuthStateChange,
+      home: FutureBuilder<bool>(
+        future: AuthService().isAuthenticated(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Scaffold(
@@ -112,8 +112,8 @@ class _CampusMeshAppState extends State<CampusMeshApp> {
             );
           }
 
-          final session = snapshot.data?.session;
-          if (session != null) {
+          final isAuthenticated = snapshot.data ?? false;
+          if (isAuthenticated) {
             return const HomeScreen();
           }
 

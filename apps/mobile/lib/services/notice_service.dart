@@ -1,51 +1,81 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'dart:async';
+import 'package:appwrite/appwrite.dart';
 import 'package:campus_mesh/models/notice_model.dart';
+import 'package:campus_mesh/services/appwrite_service.dart';
+import 'package:campus_mesh/services/auth_service.dart';
+import 'package:campus_mesh/appwrite_config.dart';
 
 class NoticeService {
-  final SupabaseClient _supabase = Supabase.instance.client;
+  final _appwrite = AppwriteService();
+  final _authService = AuthService();
+  
+  StreamController<List<NoticeModel>>? _noticesController;
 
   // Get current user ID
-  String? get _currentUserId => _supabase.auth.currentUser?.id;
+  String? get _currentUserId => _authService.currentUserId;
 
-  // Get all active notices
+  // Get all active notices (polling-based stream for compatibility)
   Stream<List<NoticeModel>> getNotices() {
-    return _supabase
-        .from('notices')
-        .stream(primaryKey: ['id'])
-        .eq('is_active', true)
-        .order('created_at', ascending: false)
-        .map((data) => data.map((item) => NoticeModel.fromJson(item)).toList());
+    _noticesController ??= StreamController<List<NoticeModel>>.broadcast(
+      onListen: () => _startPolling(),
+      onCancel: () => _stopPolling(),
+    );
+    return _noticesController!.stream;
+  }
+
+  Timer? _pollingTimer;
+  
+  void _startPolling() {
+    _fetchNotices(); // Fetch immediately
+    _pollingTimer = Timer.periodic(const Duration(seconds: 5), (_) => _fetchNotices());
+  }
+  
+  void _stopPolling() {
+    _pollingTimer?.cancel();
+    _pollingTimer = null;
+  }
+  
+  Future<void> _fetchNotices() async {
+    try {
+      final docs = await _appwrite.databases.listDocuments(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.noticesCollectionId,
+        queries: [
+          Query.equal('is_active', true),
+          Query.orderDesc('created_at'),
+          Query.limit(100),
+        ],
+      );
+      
+      final notices = docs.documents
+          .map((doc) => NoticeModel.fromJson(doc.data))
+          .toList();
+      
+      _noticesController?.add(notices);
+    } catch (e) {
+      _noticesController?.addError(e);
+    }
   }
 
   // Get notices by type
   Stream<List<NoticeModel>> getNoticesByType(NoticeType type) {
-    return _supabase
-        .from('notices')
-        .stream(primaryKey: ['id'])
-        .order('created_at', ascending: false)
-        .map((data) {
-          // Filter in memory for active notices of the specified type
-          return data
-              .where((item) {
-                final isActive = item['is_active'] as bool? ?? false;
-                final noticeType = item['type'] as String?;
-                return isActive && noticeType == type.name;
-              })
-              .map((item) => NoticeModel.fromJson(item))
-              .toList();
-        });
+    return getNotices().map((notices) {
+      return notices.where((notice) => notice.type == type).toList();
+    });
   }
 
   // Get single notice
   Future<NoticeModel?> getNotice(String noticeId) async {
     try {
-      final response = await _supabase
-          .from('notices')
-          .select()
-          .eq('id', noticeId)
-          .single();
+      final document = await _appwrite.databases.getDocument(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.noticesCollectionId,
+        documentId: noticeId,
+      );
 
-      return NoticeModel.fromJson(response);
+      return NoticeModel.fromJson(document.data);
+    } on AppwriteException catch (e) {
+      throw Exception('Failed to get notice: ${e.message}');
     } catch (e) {
       throw Exception('Failed to get notice: $e');
     }
@@ -65,30 +95,32 @@ class NoticeService {
         throw Exception('User must be authenticated to create notices');
       }
 
-      final notice = {
-        'title': title,
-        'content': content,
-        'type': type.name,
-        'target_audience': targetAudience,
-        'author_id': currentUserId,
-        'expires_at': expiresAt?.toIso8601String(),
-        'is_active': true,
-      };
+      final document = await _appwrite.databases.createDocument(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.noticesCollectionId,
+        documentId: ID.unique(),
+        data: {
+          'title': title,
+          'content': content,
+          'type': type.name,
+          'target_audience': targetAudience,
+          'author_id': currentUserId,
+          'expires_at': expiresAt?.toIso8601String(),
+          'is_active': true,
+          'created_at': DateTime.now().toIso8601String(),
+          'updated_at': DateTime.now().toIso8601String(),
+        },
+      );
 
-      final response = await _supabase
-          .from('notices')
-          .insert(notice)
-          .select()
-          .single();
-
-      return response['id'] as String;
+      return document.$id;
+    } on AppwriteException catch (e) {
+      throw Exception('Failed to create notice: ${e.message}');
     } catch (e) {
       throw Exception('Failed to create notice: $e');
     }
   }
 
   // Update notice
-  // Note: Authorization is enforced by PostgreSQL Row Level Security
   Future<void> updateNotice({
     required String noticeId,
     Map<String, dynamic>? updates,
@@ -104,7 +136,14 @@ class NoticeService {
         'updated_at': DateTime.now().toIso8601String(),
       };
 
-      await _supabase.from('notices').update(updateData).eq('id', noticeId);
+      await _appwrite.databases.updateDocument(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.noticesCollectionId,
+        documentId: noticeId,
+        data: updateData,
+      );
+    } on AppwriteException catch (e) {
+      throw Exception('Failed to update notice: ${e.message}');
     } catch (e) {
       throw Exception('Failed to update notice: $e');
     }
@@ -117,5 +156,12 @@ class NoticeService {
     } catch (e) {
       throw Exception('Failed to delete notice: $e');
     }
+  }
+  
+  // Clean up
+  void dispose() {
+    _stopPolling();
+    _noticesController?.close();
+    _noticesController = null;
   }
 }

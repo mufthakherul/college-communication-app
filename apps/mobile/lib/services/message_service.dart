@@ -1,11 +1,19 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'dart:async';
+import 'package:appwrite/appwrite.dart';
 import 'package:campus_mesh/models/message_model.dart';
+import 'package:campus_mesh/services/appwrite_service.dart';
+import 'package:campus_mesh/services/auth_service.dart';
+import 'package:campus_mesh/appwrite_config.dart';
 
 class MessageService {
-  final SupabaseClient _supabase = Supabase.instance.client;
+  final _appwrite = AppwriteService();
+  final _authService = AuthService();
+  
+  StreamController<List<MessageModel>>? _messagesController;
+  StreamController<int>? _unreadCountController;
 
   // Get current user ID
-  String? get _currentUserId => _supabase.auth.currentUser?.id;
+  String? get _currentUserId => _authService.currentUserId;
 
   // Validate UUID format to prevent injection
   bool _isValidUuid(String uuid) {
@@ -23,49 +31,100 @@ class MessageService {
       return Stream.value([]);
     }
 
-    return _supabase
-        .from('messages')
-        .stream(primaryKey: ['id'])
-        .order('created_at', ascending: true)
-        .map((data) {
-          // Filter in memory for messages between the two users
-          return data
-              .where((item) {
-                final senderId = item['sender_id'] as String?;
-                final recipientId = item['recipient_id'] as String?;
-                return (senderId == currentUserId &&
-                        recipientId == otherUserId) ||
-                    (senderId == otherUserId && recipientId == currentUserId);
-              })
-              .map((item) => MessageModel.fromJson(item))
-              .toList();
-        });
+    _messagesController ??= StreamController<List<MessageModel>>.broadcast(
+      onListen: () => _startMessagesPolling(otherUserId),
+      onCancel: () => _stopMessagesPolling(),
+    );
+    
+    return _messagesController!.stream;
+  }
+
+  Timer? _messagesPollingTimer;
+  String? _currentOtherUserId;
+  
+  void _startMessagesPolling(String otherUserId) {
+    _currentOtherUserId = otherUserId;
+    _fetchMessages(otherUserId);
+    _messagesPollingTimer = Timer.periodic(
+      const Duration(seconds: 3), 
+      (_) => _fetchMessages(otherUserId),
+    );
+  }
+  
+  void _stopMessagesPolling() {
+    _messagesPollingTimer?.cancel();
+    _messagesPollingTimer = null;
+    _currentOtherUserId = null;
+  }
+  
+  Future<void> _fetchMessages(String otherUserId) async {
+    final currentUserId = _currentUserId;
+    if (currentUserId == null) return;
+    
+    try {
+      final docs = await _appwrite.databases.listDocuments(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.messagesCollectionId,
+        queries: [
+          Query.or([
+            Query.and([
+              Query.equal('sender_id', currentUserId),
+              Query.equal('recipient_id', otherUserId),
+            ]),
+            Query.and([
+              Query.equal('sender_id', otherUserId),
+              Query.equal('recipient_id', currentUserId),
+            ]),
+          ]),
+          Query.orderAsc('created_at'),
+          Query.limit(100),
+        ],
+      );
+      
+      final messages = docs.documents
+          .map((doc) => MessageModel.fromJson(doc.data))
+          .toList();
+      
+      _messagesController?.add(messages);
+    } catch (e) {
+      _messagesController?.addError(e);
+    }
   }
 
   // Get recent conversations
-  Stream<List<MessageModel>> getRecentConversations() {
+  Stream<List<MessageModel>> getRecentConversations() async* {
     final currentUserId = _currentUserId;
     if (currentUserId == null) {
-      return Stream.value([]);
+      yield [];
+      return;
     }
 
-    return _supabase
-        .from('messages')
-        .stream(primaryKey: ['id'])
-        .order('created_at', ascending: false)
-        .map((data) {
-          // Filter in memory for messages involving current user
-          return data
-              .where((item) {
-                final senderId = item['sender_id'] as String?;
-                final recipientId = item['recipient_id'] as String?;
-                return senderId == currentUserId ||
-                    recipientId == currentUserId;
-              })
-              .take(50)
-              .map((item) => MessageModel.fromJson(item))
-              .toList();
-        });
+    while (true) {
+      try {
+        final docs = await _appwrite.databases.listDocuments(
+          databaseId: AppwriteConfig.databaseId,
+          collectionId: AppwriteConfig.messagesCollectionId,
+          queries: [
+            Query.or([
+              Query.equal('sender_id', currentUserId),
+              Query.equal('recipient_id', currentUserId),
+            ]),
+            Query.orderDesc('created_at'),
+            Query.limit(50),
+          ],
+        );
+        
+        final messages = docs.documents
+            .map((doc) => MessageModel.fromJson(doc.data))
+            .toList();
+        
+        yield messages;
+      } catch (e) {
+        yield [];
+      }
+      
+      await Future.delayed(const Duration(seconds: 5));
+    }
   }
 
   // Send message
@@ -85,28 +144,29 @@ class MessageService {
         throw Exception('Invalid recipient ID format');
       }
 
-      final message = {
-        'sender_id': currentUserId,
-        'recipient_id': recipientId,
-        'content': content,
-        'type': type.name,
-        'read': false,
-      };
+      final document = await _appwrite.databases.createDocument(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.messagesCollectionId,
+        documentId: ID.unique(),
+        data: {
+          'sender_id': currentUserId,
+          'recipient_id': recipientId,
+          'content': content,
+          'type': type.name,
+          'read': false,
+          'created_at': DateTime.now().toIso8601String(),
+        },
+      );
 
-      final response = await _supabase
-          .from('messages')
-          .insert(message)
-          .select()
-          .single();
-
-      return response['id'] as String;
+      return document.$id;
+    } on AppwriteException catch (e) {
+      throw Exception('Failed to send message: ${e.message}');
     } catch (e) {
       throw Exception('Failed to send message: $e');
     }
   }
 
   // Mark message as read
-  // Note: Authorization check (recipient only) is enforced by PostgreSQL Row Level Security
   Future<void> markMessageAsRead(String messageId) async {
     try {
       final currentUserId = _currentUserId;
@@ -114,10 +174,17 @@ class MessageService {
         throw Exception('User must be authenticated to mark messages as read');
       }
 
-      await _supabase
-          .from('messages')
-          .update({'read': true, 'read_at': DateTime.now().toIso8601String()})
-          .eq('id', messageId);
+      await _appwrite.databases.updateDocument(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.messagesCollectionId,
+        documentId: messageId,
+        data: {
+          'read': true,
+          'read_at': DateTime.now().toIso8601String(),
+        },
+      );
+    } on AppwriteException catch (e) {
+      throw Exception('Failed to mark message as read: ${e.message}');
     } catch (e) {
       throw Exception('Failed to mark message as read: $e');
     }
@@ -130,13 +197,59 @@ class MessageService {
       return Stream.value(0);
     }
 
-    return _supabase.from('messages').stream(primaryKey: ['id']).map((data) {
-      // Filter in memory for unread messages to current user
-      return data.where((item) {
-        final recipientId = item['recipient_id'] as String?;
-        final read = item['read'] as bool? ?? false;
-        return recipientId == currentUserId && !read;
-      }).length;
-    });
+    _unreadCountController ??= StreamController<int>.broadcast(
+      onListen: () => _startUnreadCountPolling(),
+      onCancel: () => _stopUnreadCountPolling(),
+    );
+    
+    return _unreadCountController!.stream;
+  }
+
+  Timer? _unreadCountPollingTimer;
+  
+  void _startUnreadCountPolling() {
+    _fetchUnreadCount();
+    _unreadCountPollingTimer = Timer.periodic(
+      const Duration(seconds: 5), 
+      (_) => _fetchUnreadCount(),
+    );
+  }
+  
+  void _stopUnreadCountPolling() {
+    _unreadCountPollingTimer?.cancel();
+    _unreadCountPollingTimer = null;
+  }
+  
+  Future<void> _fetchUnreadCount() async {
+    final currentUserId = _currentUserId;
+    if (currentUserId == null) {
+      _unreadCountController?.add(0);
+      return;
+    }
+    
+    try {
+      final docs = await _appwrite.databases.listDocuments(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.messagesCollectionId,
+        queries: [
+          Query.equal('recipient_id', currentUserId),
+          Query.equal('read', false),
+        ],
+      );
+      
+      _unreadCountController?.add(docs.total);
+    } catch (e) {
+      _unreadCountController?.add(0);
+    }
+  }
+  
+  // Clean up
+  void dispose() {
+    _stopMessagesPolling();
+    _stopUnreadCountPolling();
+    _messagesController?.close();
+    _messagesController = null;
+    _unreadCountController?.close();
+    _unreadCountController = null;
   }
 }
