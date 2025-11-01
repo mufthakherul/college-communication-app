@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:campus_mesh/models/message_model.dart';
+import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/services/message_service.dart';
+import 'package:campus_mesh/services/auth_service.dart';
+import 'package:campus_mesh/screens/messages/new_conversation_screen.dart';
+import 'package:campus_mesh/screens/messages/chat_screen.dart';
 
 class MessagesScreen extends StatefulWidget {
   const MessagesScreen({super.key});
@@ -11,9 +15,11 @@ class MessagesScreen extends StatefulWidget {
 
 class _MessagesScreenState extends State<MessagesScreen> {
   final _messageService = MessageService();
+  final _authService = AuthService();
   final _searchController = TextEditingController();
   bool _isSearching = false;
   String _searchQuery = '';
+  Map<String, UserModel> _userCache = {};
 
   @override
   void dispose() {
@@ -24,6 +30,22 @@ class _MessagesScreenState extends State<MessagesScreen> {
   Future<void> _handleRefresh() async {
     // Wait for the stream to update (simulate refresh)
     await Future.delayed(const Duration(milliseconds: 500));
+  }
+
+  Future<void> _startNewConversation() async {
+    final selectedUser = await Navigator.of(context).push<UserModel>(
+      MaterialPageRoute(
+        builder: (context) => const NewConversationScreen(),
+      ),
+    );
+
+    if (selectedUser != null && mounted) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => ChatScreen(otherUser: selectedUser),
+        ),
+      );
+    }
   }
 
   List<MessageModel> _filterMessages(List<MessageModel> messages) {
@@ -92,6 +114,11 @@ class _MessagesScreenState extends State<MessagesScreen> {
               },
             ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _startNewConversation,
+        tooltip: 'Start new conversation',
+        child: const Icon(Icons.add_comment),
       ),
       body: StreamBuilder<List<MessageModel>>(
         stream: _messageService.getRecentConversations(),
@@ -189,9 +216,40 @@ class _MessagesScreenState extends State<MessagesScreen> {
                         const Icon(Icons.circle, size: 8, color: Colors.blue),
                     ],
                   ),
-                  onTap: () {
+                  onTap: () async {
                     // Navigate to chat screen
-                    // TODO: Implement chat screen navigation
+                    final userId = message.senderId == _authService.currentUserId
+                        ? message.recipientId
+                        : message.senderId;
+                    
+                    // Get or fetch user info
+                    UserModel? otherUser;
+                    if (_userCache.containsKey(userId)) {
+                      otherUser = _userCache[userId];
+                    } else {
+                      try {
+                        otherUser = await _authService.getUserProfile(userId);
+                        if (otherUser != null) {
+                          _userCache[userId] = otherUser;
+                        }
+                      } catch (e) {
+                        // Create a placeholder user if fetch fails
+                        otherUser = UserModel(
+                          uid: userId,
+                          email: '',
+                          displayName: userId.substring(0, 8),
+                          role: UserRole.student,
+                        );
+                      }
+                    }
+
+                    if (otherUser != null && mounted) {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => ChatScreen(otherUser: otherUser!),
+                        ),
+                      );
+                    }
                   },
                 );
               },

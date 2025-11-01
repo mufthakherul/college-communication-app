@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/screens/home_screen.dart';
@@ -13,6 +14,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _authService = AuthService();
@@ -24,6 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
+    _phoneController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
@@ -39,9 +42,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _emailController.text.trim(),
         _passwordController.text,
         _nameController.text.trim(),
+        _phoneController.text.trim(),
       );
 
+      // Send email verification
+      try {
+        await _authService.sendEmailVerification();
+      } catch (verificationError) {
+        // Log error but don't block registration
+        debugPrint('Failed to send verification email: $verificationError');
+      }
+
       if (mounted) {
+        // Show verification message
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Registration successful! Please check your email for verification.'),
+            duration: Duration(seconds: 5),
+            backgroundColor: Colors.green,
+          ),
+        );
+
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const HomeScreen()),
         );
@@ -159,6 +180,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         }
                         if (!value.contains('@')) {
                           return 'Please enter a valid email';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Semantics(
+                    label: 'Phone number input field',
+                    hint: 'Enter your phone number',
+                    textField: true,
+                    child: TextFormField(
+                      controller: _phoneController,
+                      keyboardType: TextInputType.phone,
+                      autofillHints: const [AutofillHints.telephoneNumber],
+                      decoration: const InputDecoration(
+                        labelText: 'Phone Number',
+                        prefixIcon: Icon(Icons.phone),
+                        border: OutlineInputBorder(),
+                        hintText: '+8801712345678',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your phone number';
+                        }
+                        // Basic validation for phone number format
+                        final phoneRegex = RegExp(r'^\+?[0-9]{10,15}$');
+                        if (!phoneRegex.hasMatch(value.replaceAll(RegExp(r'[\s-]'), ''))) {
+                          return 'Please enter a valid phone number';
                         }
                         return null;
                       },
