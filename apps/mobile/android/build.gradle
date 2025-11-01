@@ -27,22 +27,24 @@ subprojects {
     project.evaluationDependsOn(':app')
 }
 
+// Define namespace mappings for plugins that don't specify one
+def pluginNamespaces = [
+    'flutter_nearby_connections': 'com.pkmnapps.flutter_nearby_connections',
+    'nearby_service': 'np.com.susanthapa.nearby_service',
+    'qr_code_scanner': 'net.touchcapture.qr.flutterqr',
+    'flutter_webrtc': 'com.cloudwebrtc.webrtc',
+    'workmanager': 'be.tramckrijte.workmanager'
+]
+
 subprojects { subproject ->
     afterEvaluate {
         if (subproject.plugins.hasPlugin('com.android.library')) {
             // Set namespace for plugins that don't have one defined
             android {
                 if (namespace == null) {
-                    def pluginNamespaces = [
-                        'flutter_nearby_connections': 'com.pkmnapps.flutter_nearby_connections',
-                        'nearby_service': 'np.com.susanthapa.nearby_service',
-                        'qr_code_scanner': 'net.touchcapture.qr.flutterqr',
-                        'flutter_webrtc': 'com.cloudwebrtc.webrtc',
-                        'workmanager': 'be.tramckrijte.workmanager'
-                    ]
-                    
-                    if (pluginNamespaces.containsKey(subproject.name)) {
-                        namespace pluginNamespaces[subproject.name]
+                    def pluginNamespace = pluginNamespaces[subproject.name]
+                    if (pluginNamespace != null) {
+                        namespace pluginNamespace
                     }
                 }
             }
