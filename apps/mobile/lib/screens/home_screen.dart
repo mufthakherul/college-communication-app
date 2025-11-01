@@ -78,12 +78,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List<Widget> get _screens => [
-        const NoticesScreen(),
-        const MessagesScreen(),
-        const BooksScreen(),
-        const ToolsScreen(),
-        ProfileScreen(user: _currentUser, currentUser: _currentUser),
-      ];
+    const NoticesScreen(),
+    const MessagesScreen(),
+    const BooksScreen(),
+    const ToolsScreen(),
+    ProfileScreen(user: _currentUser, currentUser: _currentUser),
+  ];
 
   void _showQROptions() {
     showModalBottomSheet(
@@ -202,7 +202,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Messages'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.library_books), label: 'Library'),
+            icon: Icon(Icons.library_books),
+            label: 'Library',
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.build), label: 'Tools'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],

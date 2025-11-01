@@ -27,8 +27,10 @@ class NoticeService {
 
   void _startPolling() {
     _fetchNotices(); // Fetch immediately
-    _pollingTimer =
-        Timer.periodic(const Duration(seconds: 5), (_) => _fetchNotices());
+    _pollingTimer = Timer.periodic(
+      const Duration(seconds: 5),
+      (_) => _fetchNotices(),
+    );
   }
 
   void _stopPolling() {
@@ -48,8 +50,9 @@ class NoticeService {
         ],
       );
 
-      final notices =
-          docs.documents.map((doc) => NoticeModel.fromJson(doc.data)).toList();
+      final notices = docs.documents
+          .map((doc) => NoticeModel.fromJson(doc.data))
+          .toList();
 
       _noticesController?.add(notices);
     } catch (e) {

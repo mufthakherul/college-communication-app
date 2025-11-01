@@ -43,9 +43,7 @@ class _EventsScreenState extends State<EventsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('College Events'),
-      ),
+      appBar: AppBar(title: const Text('College Events')),
       body: Column(
         children: [
           // Event type filters
@@ -64,17 +62,18 @@ class _EventsScreenState extends State<EventsScreen> {
                   },
                 ),
                 const SizedBox(width: 8),
-                ...EventType.values.map((type) => Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: FilterChip(
-                        label: Text(_getTypeName(type)),
-                        selected: _selectedType == type,
-                        onSelected: (selected) {
-                          setState(
-                              () => _selectedType = selected ? type : null);
-                        },
-                      ),
-                    )),
+                ...EventType.values.map(
+                  (type) => Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: FilterChip(
+                      label: Text(_getTypeName(type)),
+                      selected: _selectedType == type,
+                      onSelected: (selected) {
+                        setState(() => _selectedType = selected ? type : null);
+                      },
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -201,8 +200,9 @@ class _EventsScreenState extends State<EventsScreen> {
           children: [
             if (event.imageUrl != null)
               ClipRRect(
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(12)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(12),
+                ),
                 child: Image.network(
                   event.imageUrl!,
                   height: 150,
@@ -255,32 +255,37 @@ class _EventsScreenState extends State<EventsScreen> {
                   const SizedBox(height: 8),
                   Text(
                     event.description,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[700],
-                    ),
+                    style: TextStyle(fontSize: 14, color: Colors.grey[700]),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 12),
                   Row(
                     children: [
-                      Icon(Icons.calendar_today,
-                          size: 16, color: Colors.grey[600]),
+                      Icon(
+                        Icons.calendar_today,
+                        size: 16,
+                        color: Colors.grey[600],
+                      ),
                       const SizedBox(width: 4),
                       Text(
                         _formatDate(event.startDate),
                         style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                       ),
                       const SizedBox(width: 16),
-                      Icon(Icons.location_on,
-                          size: 16, color: Colors.grey[600]),
+                      Icon(
+                        Icons.location_on,
+                        size: 16,
+                        color: Colors.grey[600],
+                      ),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
                           event.venue,
-                          style:
-                              TextStyle(fontSize: 12, color: Colors.grey[600]),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey[600],
+                          ),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -290,8 +295,11 @@ class _EventsScreenState extends State<EventsScreen> {
                   Row(
                     children: [
                       if (isUpcoming) ...[
-                        const Icon(Icons.schedule,
-                            size: 16, color: Colors.blue),
+                        const Icon(
+                          Icons.schedule,
+                          size: 16,
+                          color: Colors.blue,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           'In ${event.daysUntilStart} days',
@@ -302,8 +310,11 @@ class _EventsScreenState extends State<EventsScreen> {
                           ),
                         ),
                       ] else if (isOngoing) ...[
-                        const Icon(Icons.play_circle,
-                            size: 16, color: Colors.green),
+                        const Icon(
+                          Icons.play_circle,
+                          size: 16,
+                          color: Colors.green,
+                        ),
                         const SizedBox(width: 4),
                         const Text(
                           'Ongoing',
@@ -314,8 +325,11 @@ class _EventsScreenState extends State<EventsScreen> {
                           ),
                         ),
                       ] else if (isPast) ...[
-                        const Icon(Icons.check_circle,
-                            size: 16, color: Colors.grey),
+                        const Icon(
+                          Icons.check_circle,
+                          size: 16,
+                          color: Colors.grey,
+                        ),
                         const SizedBox(width: 4),
                         const Text(
                           'Completed',
@@ -329,8 +343,11 @@ class _EventsScreenState extends State<EventsScreen> {
                       if (event.isRegistrationRequired &&
                           event.isRegistrationOpen) ...[
                         const Spacer(),
-                        const Icon(Icons.people,
-                            size: 16, color: Colors.orange),
+                        const Icon(
+                          Icons.people,
+                          size: 16,
+                          color: Colors.orange,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           '${event.currentParticipants}/${event.maxParticipants ?? "∞"}',
@@ -396,10 +413,7 @@ class _EventsScreenState extends State<EventsScreen> {
                 ),
                 child: Text(
                   event.typeDisplayName,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.white,
-                  ),
+                  style: const TextStyle(fontSize: 14, color: Colors.white),
                 ),
               ),
               const SizedBox(height: 16),
@@ -429,16 +443,20 @@ class _EventsScreenState extends State<EventsScreen> {
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     onPressed: () async {
-                      final success =
-                          await _eventsService.registerForEvent(event.id);
+                      final success = await _eventsService.registerForEvent(
+                        event.id,
+                      );
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text(success
-                                ? 'Successfully registered!'
-                                : 'Registration failed'),
-                            backgroundColor:
-                                success ? Colors.green : Colors.red,
+                            content: Text(
+                              success
+                                  ? 'Successfully registered!'
+                                  : 'Registration failed',
+                            ),
+                            backgroundColor: success
+                                ? Colors.green
+                                : Colors.red,
                           ),
                         );
                         Navigator.pop(context);
@@ -468,19 +486,13 @@ class _EventsScreenState extends State<EventsScreen> {
             width: 120,
             child: Text(
               label,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-              ),
+              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
             ),
           ),
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             ),
           ),
         ],

@@ -19,16 +19,18 @@ class AssignmentService {
   Stream<List<AssignmentModel>> getAssignments() {
     _assignmentsController ??=
         StreamController<List<AssignmentModel>>.broadcast(
-      onListen: () => _startPolling(),
-      onCancel: () => _stopPolling(),
-    );
+          onListen: () => _startPolling(),
+          onCancel: () => _stopPolling(),
+        );
     return _assignmentsController!.stream;
   }
 
   void _startPolling() {
     _fetchAssignments();
-    _pollingTimer =
-        Timer.periodic(const Duration(seconds: 10), (_) => _fetchAssignments());
+    _pollingTimer = Timer.periodic(
+      const Duration(seconds: 10),
+      (_) => _fetchAssignments(),
+    );
   }
 
   void _stopPolling() {
@@ -41,10 +43,7 @@ class AssignmentService {
       final docs = await _appwrite.databases.listDocuments(
         databaseId: AppwriteConfig.databaseId,
         collectionId: AppwriteConfig.assignmentsCollectionId,
-        queries: [
-          Query.orderDesc('due_date'),
-          Query.limit(100),
-        ],
+        queries: [Query.orderDesc('due_date'), Query.limit(100)],
       );
 
       final assignments = docs.documents
@@ -121,7 +120,9 @@ class AssignmentService {
 
   // Update assignment (teacher/admin only)
   Future<bool> updateAssignment(
-      String assignmentId, Map<String, dynamic> updates) async {
+    String assignmentId,
+    Map<String, dynamic> updates,
+  ) async {
     try {
       if (_currentUserId == null) {
         throw Exception('User not authenticated');
@@ -169,7 +170,8 @@ class AssignmentService {
 
   // Submit assignment (student only)
   Future<AssignmentSubmissionModel?> submitAssignment(
-      AssignmentSubmissionModel submission) async {
+    AssignmentSubmissionModel submission,
+  ) async {
     try {
       if (_currentUserId == null) {
         throw Exception('User not authenticated');
@@ -191,7 +193,8 @@ class AssignmentService {
 
   // Get student submissions
   Future<List<AssignmentSubmissionModel>> getStudentSubmissions(
-      String studentId) async {
+    String studentId,
+  ) async {
     try {
       final docs = await _appwrite.databases.listDocuments(
         databaseId: AppwriteConfig.databaseId,

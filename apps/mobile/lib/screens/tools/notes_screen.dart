@@ -112,80 +112,81 @@ class _NotesScreenState extends State<NotesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Quick Notes'),
-      ),
+      appBar: AppBar(title: const Text('Quick Notes')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _notes.isEmpty
-              ? const Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.note, size: 64, color: Colors.grey),
-                      SizedBox(height: 16),
-                      Text(
-                        'No notes yet',
-                        style: TextStyle(fontSize: 18, color: Colors.grey),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        'Tap + to create a note',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ],
+          ? const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.note, size: 64, color: Colors.grey),
+                  SizedBox(height: 16),
+                  Text(
+                    'No notes yet',
+                    style: TextStyle(fontSize: 18, color: Colors.grey),
                   ),
-                )
-              : ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: _notes.length,
-                  itemBuilder: (context, index) {
-                    final note = _notes[index];
-                    return Card(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      child: ListTile(
-                        title: Text(
-                          note.title,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                  SizedBox(height: 8),
+                  Text(
+                    'Tap + to create a note',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ],
+              ),
+            )
+          : ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: _notes.length,
+              itemBuilder: (context, index) {
+                final note = _notes[index];
+                return Card(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  child: ListTile(
+                    title: Text(
+                      note.title,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 4),
+                        Text(
+                          note.content,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 4),
-                            Text(
-                              note.content,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              _formatDate(note.createdAt),
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                          ],
+                        const SizedBox(height: 4),
+                        Text(
+                          _formatDate(note.createdAt),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey[600],
+                          ),
                         ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.edit, size: 20),
-                              onPressed: () => _editNote(note),
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete,
-                                  size: 20, color: Colors.red),
-                              onPressed: () => _deleteNote(note),
-                            ),
-                          ],
+                      ],
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.edit, size: 20),
+                          onPressed: () => _editNote(note),
                         ),
-                        onTap: () => _editNote(note),
-                      ),
-                    );
-                  },
-                ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.delete,
+                            size: 20,
+                            color: Colors.red,
+                          ),
+                          onPressed: () => _deleteNote(note),
+                        ),
+                      ],
+                    ),
+                    onTap: () => _editNote(note),
+                  ),
+                );
+              },
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addNote,
         child: const Icon(Icons.add),
@@ -248,10 +249,7 @@ class _NoteDialog extends StatefulWidget {
   final Note? note;
   final Function(String title, String content) onSave;
 
-  const _NoteDialog({
-    this.note,
-    required this.onSave,
-  });
+  const _NoteDialog({this.note, required this.onSave});
 
   @override
   State<_NoteDialog> createState() => _NoteDialogState();
@@ -265,8 +263,9 @@ class _NoteDialogState extends State<_NoteDialog> {
   void initState() {
     super.initState();
     _titleController = TextEditingController(text: widget.note?.title ?? '');
-    _contentController =
-        TextEditingController(text: widget.note?.content ?? '');
+    _contentController = TextEditingController(
+      text: widget.note?.content ?? '',
+    );
   }
 
   @override
