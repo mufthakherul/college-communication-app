@@ -111,9 +111,11 @@
 -keep class io.sentry.protocol.** { *; }
 -keep class io.sentry.android.core.** { *; }
 
-# QR Code Scanner
+# Mobile Scanner (QR Code Scanner)
 -keep class com.google.zxing.** { *; }
 -dontwarn com.google.zxing.**
+-keep class com.google.mlkit.** { *; }
+-dontwarn com.google.mlkit.**
 
 # Prevent stripping of native methods
 -keepclasseswithmembernames class * {

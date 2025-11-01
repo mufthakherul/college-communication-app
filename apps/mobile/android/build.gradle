@@ -28,7 +28,7 @@ subprojects {
 def pluginNamespaces = [
     'flutter_nearby_connections': 'com.nankai.flutter_nearby_connections',
     'nearby_service': 'np.com.susanthapa.nearby_service',
-    'qr_code_scanner': 'net.touchcapture.qr.flutterqr',
+    'mobile_scanner': 'dev.steenbakker.mobile_scanner',
     'flutter_webrtc': 'com.cloudwebrtc.webrtc',
     'workmanager': 'be.tramckrijte.workmanager'
 ]
