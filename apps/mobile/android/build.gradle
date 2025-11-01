@@ -27,6 +27,27 @@ subprojects {
     project.evaluationDependsOn(':app')
 }
 
+subprojects { subproject ->
+    afterEvaluate {
+        if (subproject.plugins.hasPlugin('com.android.library')) {
+            // Set namespace for plugins that don't have one defined
+            android {
+                if (namespace == null) {
+                    def pluginNamespaces = [
+                        'flutter_nearby_connections': 'com.pkmnapps.flutter_nearby_connections',
+                        'nearby_service': 'np.com.susanthapa.nearby_service',
+                        'qr_code_scanner': 'net.touchcapture.qr.flutterqr'
+                    ]
+                    
+                    if (pluginNamespaces.containsKey(subproject.name)) {
+                        namespace pluginNamespaces[subproject.name]
+                    }
+                }
+            }
+        }
+    }
+}
+
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
