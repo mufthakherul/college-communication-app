@@ -157,10 +157,18 @@ class _ChatScreenState extends State<ChatScreen> {
                   );
                 }
 
-                // Auto-scroll to bottom when new messages arrive
+                // Auto-scroll to bottom only when user is at bottom or sending new message
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   if (_scrollController.hasClients) {
-                    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+                    final isAtBottom = _scrollController.position.pixels >= 
+                        _scrollController.position.maxScrollExtent - 100;
+                    if (isAtBottom) {
+                      _scrollController.animateTo(
+                        _scrollController.position.maxScrollExtent,
+                        duration: const Duration(milliseconds: 200),
+                        curve: Curves.easeOut,
+                      );
+                    }
                   }
                 });
 

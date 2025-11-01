@@ -86,31 +86,31 @@ class WebsiteScraperService {
     final notices = <ScrapedNotice>[];
     
     try {
-      // This is a placeholder implementation
-      // In a real scenario, you would:
-      // 1. Parse the HTML using html package
-      // 2. Find the notice elements (e.g., <div class="notice">)
-      // 3. Extract title, date, and link from each element
+      // TODO: Implement proper HTML parsing using 'html' package
+      // This is a placeholder that returns empty list
+      // 
+      // Recommended approach:
+      // 1. Add dependency: html: ^0.15.4
+      // 2. Parse HTML: var document = parse(html);
+      // 3. Find notice elements: document.querySelectorAll('.notice-item');
+      // 4. Extract title, date, link from each element
+      // 5. Create ScrapedNotice objects from extracted data
+      //
+      // Example (uncomment when html package is added):
+      // var document = parse(html);
+      // var noticeElements = document.querySelectorAll('.notice-item');
+      // for (var element in noticeElements) {
+      //   notices.add(ScrapedNotice(
+      //     id: element.attributes['id'] ?? 'notice_${DateTime.now().millisecondsSinceEpoch}',
+      //     title: element.querySelector('.notice-title')?.text ?? '',
+      //     description: element.querySelector('.notice-desc')?.text ?? '',
+      //     url: element.querySelector('a')?.attributes['href'] ?? _websiteUrl,
+      //     publishedDate: _parseDate(element.querySelector('.notice-date')?.text),
+      //     source: 'Website',
+      //   ));
+      // }
       
-      // For now, we'll create a mock implementation that returns empty
-      // or you can implement basic regex-based parsing
-      
-      // Example regex patterns (adjust based on actual website structure):
-      // final titlePattern = RegExp(r'<h[23].*?>(.*?)</h[23]>', dotAll: true);
-      // final datePattern = RegExp(r'<span class="date".*?>(.*?)</span>', dotAll: true);
-      
-      // Basic implementation to detect if there's any notice content
-      if (html.contains('notice') || html.contains('Notice')) {
-        // Create a placeholder notice indicating website check was successful
-        notices.add(ScrapedNotice(
-          id: 'website_check_${DateTime.now().millisecondsSinceEpoch}',
-          title: 'Website Notice Check',
-          description: 'Successfully checked website for notices. Enable full HTML parsing for detailed notices.',
-          url: _websiteUrl,
-          publishedDate: DateTime.now(),
-          source: 'Website',
-        ));
-      }
+      debugPrint('HTML parsing not yet implemented. Add html package for full functionality.');
     } catch (e) {
       debugPrint('Error parsing HTML: $e');
     }
