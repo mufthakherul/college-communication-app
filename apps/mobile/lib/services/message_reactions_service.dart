@@ -1,8 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:campus_mesh/services/auth_service.dart';
-import 'package:campus_mesh/services/appwrite_service.dart';
-import 'package:campus_mesh/appwrite_config.dart';
-import 'package:appwrite/appwrite.dart';
 
 /// Available reaction emojis for messages
 enum MessageReaction {
@@ -101,12 +98,12 @@ class ReactionData {
   }
 
   Map<String, dynamic> toJson() => {
-    'message_id': messageId,
-    'user_id': userId,
-    'user_name': userName,
-    'reaction': reaction.name,
-    'created_at': createdAt.toIso8601String(),
-  };
+        'message_id': messageId,
+        'user_id': userId,
+        'user_name': userName,
+        'reaction': reaction.name,
+        'created_at': createdAt.toIso8601String(),
+      };
 }
 
 /// Service to handle message reactions (emojis)
@@ -116,7 +113,6 @@ class MessageReactionsService {
   factory MessageReactionsService() => _instance;
   MessageReactionsService._internal();
 
-  final _appwrite = AppwriteService();
   final _authService = AuthService();
 
   String? get _currentUserId => _authService.currentUserId;

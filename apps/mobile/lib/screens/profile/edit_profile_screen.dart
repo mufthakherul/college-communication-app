@@ -31,15 +31,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _displayNameController = TextEditingController(text: widget.user.displayName);
+    _displayNameController =
+        TextEditingController(text: widget.user.displayName);
     _departmentController = TextEditingController(text: widget.user.department);
     _yearController = TextEditingController(text: widget.user.year);
     _shiftController = TextEditingController(text: widget.user.shift);
     _groupController = TextEditingController(text: widget.user.group);
     _classRollController = TextEditingController(text: widget.user.classRoll);
-    _academicSessionController = TextEditingController(text: widget.user.academicSession);
-    _phoneNumberController = TextEditingController(text: widget.user.phoneNumber);
-    
+    _academicSessionController =
+        TextEditingController(text: widget.user.academicSession);
+    _phoneNumberController =
+        TextEditingController(text: widget.user.phoneNumber);
+
     _selectedShift = widget.user.shift.isEmpty ? null : widget.user.shift;
   }
 
@@ -123,8 +126,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             Text(
               'Basic Information',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
             const SizedBox(height: 16),
             TextFormField(
@@ -161,23 +164,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 hintText: 'e.g., 3rd',
               ),
             ),
-            
+
             // Student-Specific Information Section
             if (isStudent) ...[
               const SizedBox(height: 32),
               Text(
                 'Student Information',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
               ),
               const SizedBox(height: 8),
               Text(
                 'These details are only visible to you and teachers',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Colors.grey[600],
-                  fontStyle: FontStyle.italic,
-                ),
+                      color: Colors.grey[600],
+                      fontStyle: FontStyle.italic,
+                    ),
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
@@ -245,7 +248,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     // Basic validation for phone number format
                     // Accepts formats: +8801234567890, 01234567890, or 8801234567890
                     final phoneRegex = RegExp(r'^\+?[0-9]{10,15}$');
-                    if (!phoneRegex.hasMatch(value.replaceAll(RegExp(r'[\s-]'), ''))) {
+                    if (!phoneRegex
+                        .hasMatch(value.replaceAll(RegExp(r'[\s-]'), ''))) {
                       return 'Please enter a valid phone number (10-15 digits)';
                     }
                   }
@@ -253,7 +257,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 },
               ),
             ],
-            
+
             const SizedBox(height: 32),
             ElevatedButton.icon(
               onPressed: _isLoading ? null : _saveProfile,

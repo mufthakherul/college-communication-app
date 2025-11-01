@@ -149,11 +149,9 @@ class OfflineQueueService {
       Exception? lastError;
 
       // Retry with exponential backoff
-      for (
-        int attempt = 0;
-        attempt <= action.retryCount && attempt < _maxRetries;
-        attempt++
-      ) {
+      for (int attempt = 0;
+          attempt <= action.retryCount && attempt < _maxRetries;
+          attempt++) {
         try {
           if (attempt > 0) {
             // Exponential backoff: 1s, 2s, 4s
@@ -375,20 +373,20 @@ class OfflineAction {
   }) : timestamp = timestamp ?? DateTime.now();
 
   Map<String, dynamic> toJson() => {
-    'type': type,
-    'data': data,
-    'timestamp': timestamp.toIso8601String(),
-    'retryCount': retryCount,
-    'priority': priority,
-    'lastError': lastError,
-  };
+        'type': type,
+        'data': data,
+        'timestamp': timestamp.toIso8601String(),
+        'retryCount': retryCount,
+        'priority': priority,
+        'lastError': lastError,
+      };
 
   factory OfflineAction.fromJson(Map<String, dynamic> json) => OfflineAction(
-    type: json['type'] as String,
-    data: json['data'] as Map<String, dynamic>,
-    timestamp: DateTime.parse(json['timestamp'] as String),
-    retryCount: json['retryCount'] ?? 0,
-    priority: json['priority'] ?? 5,
-    lastError: json['lastError'] as String?,
-  );
+        type: json['type'] as String,
+        data: json['data'] as Map<String, dynamic>,
+        timestamp: DateTime.parse(json['timestamp'] as String),
+        retryCount: json['retryCount'] ?? 0,
+        priority: json['priority'] ?? 5,
+        lastError: json['lastError'] as String?,
+      );
 }

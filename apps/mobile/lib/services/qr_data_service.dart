@@ -37,14 +37,14 @@ class QRCodeData {
 
   /// Convert to JSON
   Map<String, dynamic> toJson() => {
-    'type': type.name,
-    'data': data,
-    'createdAt': createdAt.toIso8601String(),
-    'expiresAt': expiresAt?.toIso8601String(),
-    'senderId': senderId,
-    'senderName': senderName,
-    'appSignature': 'campus_mesh_v1', // App-specific signature
-  };
+        'type': type.name,
+        'data': data,
+        'createdAt': createdAt.toIso8601String(),
+        'expiresAt': expiresAt?.toIso8601String(),
+        'senderId': senderId,
+        'senderName': senderName,
+        'appSignature': 'campus_mesh_v1', // App-specific signature
+      };
 
   /// Create from JSON
   factory QRCodeData.fromJson(Map<String, dynamic> json) {

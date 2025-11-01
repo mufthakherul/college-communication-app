@@ -8,7 +8,7 @@ import 'package:campus_mesh/appwrite_config.dart';
 class NoticeService {
   final _appwrite = AppwriteService();
   final _authService = AuthService();
-  
+
   StreamController<List<NoticeModel>>? _noticesController;
 
   // Get current user ID
@@ -24,17 +24,18 @@ class NoticeService {
   }
 
   Timer? _pollingTimer;
-  
+
   void _startPolling() {
     _fetchNotices(); // Fetch immediately
-    _pollingTimer = Timer.periodic(const Duration(seconds: 5), (_) => _fetchNotices());
+    _pollingTimer =
+        Timer.periodic(const Duration(seconds: 5), (_) => _fetchNotices());
   }
-  
+
   void _stopPolling() {
     _pollingTimer?.cancel();
     _pollingTimer = null;
   }
-  
+
   Future<void> _fetchNotices() async {
     try {
       final docs = await _appwrite.databases.listDocuments(
@@ -46,11 +47,10 @@ class NoticeService {
           Query.limit(100),
         ],
       );
-      
-      final notices = docs.documents
-          .map((doc) => NoticeModel.fromJson(doc.data))
-          .toList();
-      
+
+      final notices =
+          docs.documents.map((doc) => NoticeModel.fromJson(doc.data)).toList();
+
       _noticesController?.add(notices);
     } catch (e) {
       _noticesController?.addError(e);
@@ -157,7 +157,7 @@ class NoticeService {
       throw Exception('Failed to delete notice: $e');
     }
   }
-  
+
   // Clean up
   void dispose() {
     _stopPolling();

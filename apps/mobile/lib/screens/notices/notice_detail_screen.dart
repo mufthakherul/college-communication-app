@@ -135,7 +135,9 @@ class NoticeDetailScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       Text(
                         notice.title,
-                        style: Theme.of(context).textTheme.headlineSmall
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineSmall
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
@@ -294,7 +296,7 @@ class NoticeDetailScreen extends StatelessWidget {
       title: notice.title,
       content: notice.content,
       type: notice.type.name,
-      senderId: currentUser?.id,
+      senderId: currentUser?.uid,
       senderName: currentUser?.displayName ?? currentUser?.email ?? 'Unknown',
       expiry: const Duration(hours: 24), // QR code valid for 24 hours
     );
