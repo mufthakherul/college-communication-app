@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:campus_mesh/services/qr_data_service.dart';
 import 'package:campus_mesh/services/mesh_network_service.dart';
 
@@ -12,11 +12,10 @@ class QRScannerScreen extends StatefulWidget {
 }
 
 class _QRScannerScreenState extends State<QRScannerScreen> {
-  final GlobalKey _qrKey = GlobalKey(debugLabel: 'QR');
   final _qrDataService = QRDataService();
   final _meshService = MeshNetworkService();
-
-  QRViewController? _controller;
+  final MobileScannerController _controller = MobileScannerController();
+  
   bool _isProcessing = false;
 
   @override
@@ -26,10 +25,31 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
         title: const Text('Scan QR Code'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.flash_on),
-            onPressed: () async {
-              await _controller?.toggleFlash();
-            },
+            icon: ValueListenableBuilder(
+              valueListenable: _controller.torchState,
+              builder: (context, state, child) {
+                switch (state) {
+                  case TorchState.off:
+                    return const Icon(Icons.flash_off);
+                  case TorchState.on:
+                    return const Icon(Icons.flash_on);
+                  case TorchState.auto:
+                    return const Icon(Icons.flash_auto);
+                  default:
+                    return const Icon(Icons.flash_off);
+                }
+              },
+            ),
+            onPressed: () => _controller.toggleTorch(),
+          ),
+          IconButton(
+            icon: ValueListenableBuilder(
+              valueListenable: _controller.cameraFacingState,
+              builder: (context, state, child) {
+                return const Icon(Icons.flip_camera_ios);
+              },
+            ),
+            onPressed: () => _controller.switchCamera(),
           ),
         ],
       ),
@@ -37,23 +57,41 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
         children: [
           Expanded(
             flex: 5,
-            child: QRView(
-              key: _qrKey,
-              onQRViewCreated: _onQRViewCreated,
-              overlay: QrScannerOverlayShape(
-                borderColor: Theme.of(context).primaryColor,
-                borderRadius: 10,
-                borderLength: 30,
-                borderWidth: 10,
-                cutOutSize: 300,
-              ),
+            child: Stack(
+              children: [
+                MobileScanner(
+                  controller: _controller,
+                  onDetect: (capture) {
+                    final List<Barcode> barcodes = capture.barcodes;
+                    for (final barcode in barcodes) {
+                      if (barcode.rawValue != null && !_isProcessing) {
+                        _handleScannedData(barcode.rawValue!);
+                        break;
+                      }
+                    }
+                  },
+                ),
+                Center(
+                  child: Container(
+                    width: 300,
+                    height: 300,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).primaryColor,
+                        width: 3,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           Expanded(
             flex: 2,
             child: Container(
               padding: const EdgeInsets.all(24),
-              color: Colors.white,
+              color: Theme.of(context).scaffoldBackgroundColor,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -92,28 +130,13 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
     );
   }
 
-  void _onQRViewCreated(QRViewController controller) {
-    _controller = controller;
-    controller.scannedDataStream.listen((scanData) async {
-      if (_isProcessing || scanData.code == null) return;
-
-      setState(() {
-        _isProcessing = true;
-      });
-
-      await controller.pauseCamera();
-      await _handleScannedData(scanData.code!);
-
-      if (mounted) {
-        setState(() {
-          _isProcessing = false;
-        });
-        await controller.resumeCamera();
-      }
-    });
-  }
-
   Future<void> _handleScannedData(String qrString) async {
+    if (_isProcessing) return;
+    
+    setState(() {
+      _isProcessing = true;
+    });
+
     try {
       // Try to parse as QR data
       final qrData = _qrDataService.parseQRCode(qrString);
@@ -121,6 +144,11 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
       if (qrData != null) {
         if (qrData.isExpired) {
           _showError('This QR code has expired');
+          if (mounted) {
+            setState(() {
+              _isProcessing = false;
+            });
+          }
           return;
         }
 
@@ -150,6 +178,12 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
       }
     } catch (e) {
       _showError('Failed to process QR code: $e');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isProcessing = false;
+        });
+      }
     }
   }
 
@@ -401,7 +435,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
 
   @override
   void dispose() {
-    _controller?.dispose();
+    _controller.dispose();
     super.dispose();
   }
 }
