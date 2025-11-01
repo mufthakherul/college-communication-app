@@ -42,8 +42,6 @@ class _AssignmentTrackerScreenState extends State<AssignmentTrackerScreen> {
   }
 
   List<AssignmentModel> _filterAssignments(List<AssignmentModel> assignments) {
-    final now = DateTime.now();
-    
     switch (_filterStatus) {
       case 'pending':
         return assignments.where((a) => !a.isOverdue).toList();

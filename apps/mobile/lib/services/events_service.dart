@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:appwrite/appwrite.dart';
+import 'package:flutter/foundation.dart';
 import 'package:campus_mesh/models/event_model.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
@@ -50,7 +51,7 @@ class EventsService {
 
       _eventsController?.add(events);
     } catch (e) {
-      print('Error fetching events: $e');
+      debugPrint('Error fetching events: $e');
       _eventsController?.addError(e);
     }
   }
@@ -74,7 +75,7 @@ class EventsService {
           .map((doc) => EventModel.fromJson(doc.data))
           .toList();
     } catch (e) {
-      print('Error fetching upcoming events: $e');
+      debugPrint('Error fetching upcoming events: $e');
       return [];
     }
   }
@@ -96,7 +97,7 @@ class EventsService {
           .map((doc) => EventModel.fromJson(doc.data))
           .toList();
     } catch (e) {
-      print('Error fetching events by type: $e');
+      debugPrint('Error fetching events by type: $e');
       return [];
     }
   }
@@ -112,7 +113,7 @@ class EventsService {
 
       return EventModel.fromJson(doc.data);
     } catch (e) {
-      print('Error fetching event: $e');
+      debugPrint('Error fetching event: $e');
       return null;
     }
   }
@@ -135,7 +136,7 @@ class EventsService {
 
       return EventModel.fromJson(doc.data);
     } catch (e) {
-      print('Error creating event: $e');
+      debugPrint('Error creating event: $e');
       return null;
     }
   }
@@ -160,7 +161,7 @@ class EventsService {
 
       return true;
     } catch (e) {
-      print('Error updating event: $e');
+      debugPrint('Error updating event: $e');
       return false;
     }
   }
@@ -182,7 +183,7 @@ class EventsService {
 
       return true;
     } catch (e) {
-      print('Error deleting event: $e');
+      debugPrint('Error deleting event: $e');
       return false;
     }
   }
@@ -204,7 +205,7 @@ class EventsService {
 
       return true;
     } catch (e) {
-      print('Error registering for event: $e');
+      debugPrint('Error registering for event: $e');
       return false;
     }
   }

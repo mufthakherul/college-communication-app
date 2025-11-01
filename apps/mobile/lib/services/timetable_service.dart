@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:appwrite/appwrite.dart';
+import 'package:flutter/foundation.dart';
 import 'package:campus_mesh/models/timetable_model.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
@@ -51,7 +52,7 @@ class TimetableService {
 
       _timetablesController?.add(timetables);
     } catch (e) {
-      print('Error fetching timetables: $e');
+      debugPrint('Error fetching timetables: $e');
       _timetablesController?.addError(e);
     }
   }
@@ -74,7 +75,7 @@ class TimetableService {
 
       return TimetableModel.fromJson(docs.documents.first.data);
     } catch (e) {
-      print('Error fetching timetable: $e');
+      debugPrint('Error fetching timetable: $e');
       return null;
     }
   }
@@ -90,7 +91,7 @@ class TimetableService {
 
       return TimetableModel.fromJson(doc.data);
     } catch (e) {
-      print('Error fetching timetable: $e');
+      debugPrint('Error fetching timetable: $e');
       return null;
     }
   }
@@ -113,7 +114,7 @@ class TimetableService {
 
       return TimetableModel.fromJson(doc.data);
     } catch (e) {
-      print('Error creating timetable: $e');
+      debugPrint('Error creating timetable: $e');
       return null;
     }
   }
@@ -139,7 +140,7 @@ class TimetableService {
 
       return true;
     } catch (e) {
-      print('Error updating timetable: $e');
+      debugPrint('Error updating timetable: $e');
       return false;
     }
   }
@@ -161,7 +162,7 @@ class TimetableService {
 
       return true;
     } catch (e) {
-      print('Error deleting timetable: $e');
+      debugPrint('Error deleting timetable: $e');
       return false;
     }
   }
