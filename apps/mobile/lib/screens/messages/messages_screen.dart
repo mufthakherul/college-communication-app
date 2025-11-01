@@ -19,7 +19,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
   final _searchController = TextEditingController();
   bool _isSearching = false;
   String _searchQuery = '';
-  Map<String, UserModel> _userCache = {};
+  final Map<String, UserModel> _userCache = {};
 
   @override
   void dispose() {

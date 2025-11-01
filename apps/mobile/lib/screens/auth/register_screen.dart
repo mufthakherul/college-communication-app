@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/screens/home_screen.dart';

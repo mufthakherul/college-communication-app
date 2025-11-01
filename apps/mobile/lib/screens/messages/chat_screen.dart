@@ -76,6 +76,9 @@ class _ChatScreenState extends State<ChatScreen> {
             CircleAvatar(
               radius: 18,
               backgroundColor: Colors.grey,
+              backgroundImage: widget.otherUser.photoURL.isNotEmpty
+                  ? NetworkImage(widget.otherUser.photoURL)
+                  : null,
               child: widget.otherUser.photoURL.isNotEmpty
                   ? null
                   : Text(
@@ -84,9 +87,6 @@ class _ChatScreenState extends State<ChatScreen> {
                           : '?',
                       style: const TextStyle(color: Colors.white),
                     ),
-              backgroundImage: widget.otherUser.photoURL.isNotEmpty
-                  ? NetworkImage(widget.otherUser.photoURL)
-                  : null,
             ),
             const SizedBox(width: 12),
             Expanded(

@@ -48,7 +48,7 @@ class AuthService {
     String password,
   ) async {
     try {
-      final session = await _appwrite.account.createEmailSession(
+      final session = await _appwrite.account.createEmailPasswordSession(
         email: email,
         password: password,
       );
@@ -78,7 +78,7 @@ class AuthService {
       );
 
       // Create session
-      await _appwrite.account.createEmailSession(
+      await _appwrite.account.createEmailPasswordSession(
         email: email,
         password: password,
       );

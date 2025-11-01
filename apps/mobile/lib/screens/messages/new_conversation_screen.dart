@@ -206,6 +206,9 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
     return ListTile(
       leading: CircleAvatar(
         backgroundColor: _getColorForRole(user.role),
+        backgroundImage: user.photoURL.isNotEmpty
+            ? NetworkImage(user.photoURL)
+            : null,
         child: user.photoURL.isNotEmpty
             ? null
             : Text(
@@ -217,9 +220,6 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-        backgroundImage: user.photoURL.isNotEmpty
-            ? NetworkImage(user.photoURL)
-            : null,
       ),
       title: Text(
         user.displayName,
