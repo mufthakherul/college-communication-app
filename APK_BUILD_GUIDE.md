@@ -167,7 +167,7 @@ This has been fixed! The project automatically assigns namespaces to Flutter plu
 
 ### APK Won't Install on Device
 - Enable "Install from Unknown Sources"
-- Check if Android version is 5.0 (API 21) or higher
+- Check if Android version is 7.0 (API 24) or higher
 - Ensure enough storage space on device
 
 ### App Crashes on Launch
