@@ -77,7 +77,7 @@ Or follow detailed guide: [FIREBASE_SETUP_GUIDE.md](FIREBASE_SETUP_GUIDE.md)
 **Package:** gov.bd.polytech.rgpi.communication.develop.by.mufthakherul  
 **Developer:** Mufthakherul  
 **Version:** 1.0.0  
-**Platform:** Android (API 21+)  
+**Platform:** Android (API 24+)  
 **College Website:** https://rangpur.polytech.gov.bd
 
 ## 🚀 Installation Steps
