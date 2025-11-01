@@ -54,7 +54,7 @@ subprojects { subproject ->
         }
         
         // Apply Kotlin JVM target for all projects with Kotlin plugin
-        if (subproject.plugins.hasPlugin('kotlin-android')) {
+        if (subproject.plugins.hasPlugin('org.jetbrains.kotlin.android')) {
             subproject.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
                 kotlinOptions {
                     jvmTarget = '17'
