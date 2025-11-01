@@ -41,7 +41,7 @@ android {
 
     defaultConfig {
         applicationId "gov.bd.polytech.rgpi.communication.develop.by.mufthakherul"
-        minSdk 21
+        minSdk 24
         targetSdk 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

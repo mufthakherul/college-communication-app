@@ -28,7 +28,7 @@ A comprehensive mobile communication platform built specifically for **Rangpur P
 | **Cost** | $0 - Completely Free |
 | **Deployment Time** | 30-45 minutes |
 | **Technology** | Flutter (Mobile) + Appwrite (Backend) |
-| **Supported Devices** | Android 5.0+ (covers 95%+ devices) |
+| **Supported Devices** | Android 7.0+ (covers 95%+ devices) |
 | **Security Level** | Production-grade with multiple protections |
 | **Documentation** | 12+ comprehensive guides |
 | **Support** | Open source with community support |
