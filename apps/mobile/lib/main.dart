@@ -113,12 +113,52 @@ Future<void> _initializeApp() async {
     }
   }
 
-  // Initialize Appwrite
+  // Initialize Appwrite - CRITICAL: Must be done before any service uses it
   try {
+    debugPrint('🚀 Starting Appwrite initialization...');
     AppwriteService().init();
-  } catch (e) {
-    debugPrint('Failed to initialize Appwrite: $e');
-    // Critical error - but continue to show error screen
+    debugPrint('✅ Appwrite initialization complete');
+  } catch (e, stackTrace) {
+    debugPrint('❌ CRITICAL: Failed to initialize Appwrite: $e');
+    debugPrint('Stack trace: $stackTrace');
+    // Show error to user - app cannot function without backend
+    runApp(
+      MaterialApp(
+        home: Scaffold(
+          body: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.cloud_off, size: 80, color: Colors.red),
+                  const SizedBox(height: 24),
+                  const Text(
+                    'Backend Connection Error',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Cannot connect to backend services. Please check your internet connection and try again.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  if (kDebugMode) ...[
+                    const SizedBox(height: 16),
+                    Text(
+                      'Error: $e',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    return;
   }
 
   // Initialize auth service
