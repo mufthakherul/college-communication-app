@@ -77,7 +77,7 @@ Use this checklist before deploying to production to ensure everything is config
 - [ ] Build tested in release mode
 
 ### Android
-- [ ] Android SDK configured (min 21, target 34)
+- [ ] Android SDK configured (min 24, target 35)
 - [ ] `AndroidManifest.xml` permissions correct
 - [ ] Application ID correct: `gov.bd.polytech.rgpi.communication.develop.by.mufthakherul`
 - [ ] Version code and name updated
@@ -115,7 +115,7 @@ Use this checklist before deploying to production to ensure everything is config
 - [ ] No sensitive data in logs
 
 ### Platform Testing
-- [ ] Tested on Android 5.0 (API 21)
+- [ ] Tested on Android 7.0 (API 24)
 - [ ] Tested on Android 14 (API 34)
 - [ ] Tested on different screen sizes
 - [ ] Tested on low-end devices
