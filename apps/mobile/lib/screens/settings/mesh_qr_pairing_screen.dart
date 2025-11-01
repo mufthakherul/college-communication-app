@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:campus_mesh/services/mesh_network_service.dart';
+import 'package:campus_mesh/services/permission_service.dart';
 
 /// Screen for mesh network QR code pairing
 class MeshQRPairingScreen extends StatefulWidget {
@@ -13,15 +14,18 @@ class MeshQRPairingScreen extends StatefulWidget {
 
 class _MeshQRPairingScreenState extends State<MeshQRPairingScreen> {
   final _meshService = MeshNetworkService();
+  final _permissionService = PermissionService();
   final MobileScannerController _scannerController = MobileScannerController();
   MeshPairingData? _pairingData;
   bool _isScanning = false;
   bool _isProcessing = false;
+  bool _hasPermission = false;
 
   @override
   void initState() {
     super.initState();
     _generateQRCode();
+    _checkCameraPermission();
   }
 
   void _generateQRCode() {
@@ -35,6 +39,31 @@ class _MeshQRPairingScreenState extends State<MeshQRPairingScreen> {
     }
   }
 
+  Future<void> _checkCameraPermission() async {
+    final hasPermission = await _permissionService.isCameraPermissionGranted();
+    if (mounted) {
+      setState(() {
+        _hasPermission = hasPermission;
+      });
+    }
+  }
+
+  Future<void> _requestCameraPermission() async {
+    final granted = await _permissionService.requestCameraPermission();
+    if (mounted) {
+      setState(() {
+        _hasPermission = granted;
+      });
+      if (granted) {
+        setState(() {
+          _isScanning = true;
+        });
+      } else {
+        _showMessage('Camera permission is required to scan QR codes');
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,10 +72,14 @@ class _MeshQRPairingScreenState extends State<MeshQRPairingScreen> {
         actions: [
           IconButton(
             icon: Icon(_isScanning ? Icons.qr_code : Icons.qr_code_scanner),
-            onPressed: () {
-              setState(() {
-                _isScanning = !_isScanning;
-              });
+            onPressed: () async {
+              if (!_isScanning && !_hasPermission) {
+                await _requestCameraPermission();
+              } else {
+                setState(() {
+                  _isScanning = !_isScanning;
+                });
+              }
             },
             tooltip: _isScanning ? 'Show QR Code' : 'Scan QR Code',
           ),
