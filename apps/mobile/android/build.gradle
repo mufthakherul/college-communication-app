@@ -23,9 +23,6 @@ rootProject.buildDir = '../build'
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
-subprojects {
-    project.evaluationDependsOn(':app')
-}
 
 // Define namespace mappings for plugins that don't specify one
 def pluginNamespaces = [
