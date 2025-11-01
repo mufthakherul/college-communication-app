@@ -391,9 +391,7 @@ class _BooksScreenState extends State<BooksScreen> {
                         ),
                         const SizedBox(width: 8),
                         Icon(
-                          book.isAvailable
-                              ? Icons.check_circle
-                              : Icons.cancel,
+                          book.isAvailable ? Icons.check_circle : Icons.cancel,
                           size: 16,
                           color: book.isAvailable ? Colors.green : Colors.red,
                         ),
