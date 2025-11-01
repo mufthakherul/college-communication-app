@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
 import 'package:campus_mesh/appwrite_config.dart';
@@ -5,7 +6,14 @@ import 'package:campus_mesh/appwrite_config.dart';
 /// Appwrite service singleton for managing Appwrite SDK instances
 class AppwriteService {
   static final AppwriteService _instance = AppwriteService._internal();
-  factory AppwriteService() => _instance;
+  factory AppwriteService() {
+    // Ensure initialization on every access in release mode
+    if (!_instance._initialized) {
+      debugPrint('WARNING: AppwriteService accessed before initialization!');
+      _instance.init();
+    }
+    return _instance;
+  }
   AppwriteService._internal();
 
   late Client client;
@@ -15,21 +23,36 @@ class AppwriteService {
   late Realtime realtime;
 
   bool _initialized = false;
+  bool get isInitialized => _initialized;
 
   /// Initialize Appwrite client and services
   void init() {
-    if (_initialized) return;
+    if (_initialized) {
+      debugPrint('AppwriteService already initialized');
+      return;
+    }
 
-    client = Client()
-        .setEndpoint(AppwriteConfig.endpoint)
-        .setProject(AppwriteConfig.projectId);
+    try {
+      debugPrint('Initializing Appwrite with endpoint: ${AppwriteConfig.endpoint}');
+      debugPrint('Project ID: ${AppwriteConfig.projectId}');
 
-    account = Account(client);
-    databases = Databases(client);
-    storage = Storage(client);
-    realtime = Realtime(client);
+      client = Client()
+          .setEndpoint(AppwriteConfig.endpoint)
+          .setProject(AppwriteConfig.projectId)
+          .setSelfSigned(status: false); // Ensure HTTPS is properly validated
 
-    _initialized = true;
+      account = Account(client);
+      databases = Databases(client);
+      storage = Storage(client);
+      realtime = Realtime(client);
+
+      _initialized = true;
+      debugPrint('✅ Appwrite initialized successfully');
+    } catch (e, stackTrace) {
+      debugPrint('❌ Failed to initialize Appwrite: $e');
+      debugPrint('Stack trace: $stackTrace');
+      throw Exception('Appwrite initialization failed: $e');
+    }
   }
 
   /// Check if user is authenticated

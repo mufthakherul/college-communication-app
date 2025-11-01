@@ -10,21 +10,37 @@
 -keep class com.google.firebase.** { *; }
 -keep class com.google.android.gms.** { *; }
 
-# Appwrite SDK
+# Appwrite SDK - CRITICAL: Keep all classes for network operations
 -keep class io.appwrite.** { *; }
 -keep class io.appwrite.models.** { *; }
 -keep class io.appwrite.services.** { *; }
+-keep class io.appwrite.exceptions.** { *; }
+-keep class io.appwrite.enums.** { *; }
+-keepclassmembers class io.appwrite.** { *; }
 -dontwarn io.appwrite.**
 
-# Gson (used by Appwrite)
+# OkHttp (used by Appwrite for networking)
+-keep class okhttp3.** { *; }
+-keep class okio.** { *; }
+-dontwarn okhttp3.**
+-dontwarn okio.**
+
+# Gson (used by Appwrite for JSON serialization)
 -keep class com.google.gson.** { *; }
 -keep class * implements com.google.gson.TypeAdapter
 -keep class * implements com.google.gson.TypeAdapterFactory
 -keep class * implements com.google.gson.JsonSerializer
 -keep class * implements com.google.gson.JsonDeserializer
--keepclassmembers,allowobfuscation class * {
+-keepclassmembers class * {
   @com.google.gson.annotations.SerializedName <fields>;
 }
+
+# Keep data classes used with Gson/Appwrite
+-keepclassmembers class * {
+  @com.google.gson.annotations.SerializedName <fields>;
+}
+-keepattributes Signature
+-keepattributes *Annotation*
 
 # Prevent obfuscation of model classes
 -keepclassmembers class ** {
