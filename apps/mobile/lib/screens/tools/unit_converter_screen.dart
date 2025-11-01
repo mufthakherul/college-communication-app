@@ -69,7 +69,7 @@ class _UnitConverterScreenState extends State<UnitConverterScreen> {
 
   void _convertTemperature() {
     double celsius;
-    
+
     // Convert input to Celsius first
     if (_fromUnit == 'Celsius') {
       celsius = _inputValue;

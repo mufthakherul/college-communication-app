@@ -45,8 +45,9 @@ class AssignmentModel {
       createdAt: data['created_at'] != null
           ? DateTime.parse(data['created_at'])
           : DateTime.now(),
-      updatedAt:
-          data['updated_at'] != null ? DateTime.parse(data['updated_at']) : null,
+      updatedAt: data['updated_at'] != null
+          ? DateTime.parse(data['updated_at'])
+          : null,
       targetGroups: data['target_groups'] != null
           ? List<String>.from(data['target_groups'])
           : [],

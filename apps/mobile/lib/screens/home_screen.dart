@@ -159,7 +159,8 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Notices',
           ),
           BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Messages'),
-          BottomNavigationBarItem(icon: Icon(Icons.library_books), label: 'Library'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.library_books), label: 'Library'),
           BottomNavigationBarItem(icon: Icon(Icons.build), label: 'Tools'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],

@@ -16,8 +16,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
   final _timetableService = TimetableService();
   final _authService = AuthService();
   final _alertService = ClassAlertService();
-  
-  UserModel? _currentUser;
+
   TimetableModel? _timetable;
   DayOfWeek _selectedDay = DayOfWeek.monday;
   bool _isLoading = true;
@@ -33,12 +32,9 @@ class _TimetableScreenState extends State<TimetableScreen> {
   Future<void> _loadData() async {
     await _authService.initialize();
     final userId = _authService.currentUserId;
-    
+
     if (userId != null) {
       final profile = await _authService.getUserProfile(userId);
-      if (mounted) {
-        setState(() => _currentUser = profile);
-      }
 
       // Load timetable based on user's department and shift
       if (profile != null && profile.department.isNotEmpty) {
@@ -46,7 +42,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
           profile.department,
           profile.shift.isNotEmpty ? profile.shift : 'Day',
         );
-        
+
         if (mounted) {
           setState(() {
             _timetable = timetable;
@@ -65,7 +61,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
   Future<void> _loadAlertPreferences() async {
     final enabled = await _alertService.isAlertEnabled();
     final minutes = await _alertService.getAlertMinutesBefore();
-    
+
     if (mounted) {
       setState(() {
         _alertEnabled = enabled;
@@ -144,7 +140,9 @@ class _TimetableScreenState extends State<TimetableScreen> {
         title: const Text('Class Timetable'),
         actions: [
           IconButton(
-            icon: Icon(_alertEnabled ? Icons.notifications_active : Icons.notifications_off),
+            icon: Icon(_alertEnabled
+                ? Icons.notifications_active
+                : Icons.notifications_off),
             onPressed: _showAlertSettings,
             tooltip: 'Alert Settings',
           ),
@@ -188,8 +186,9 @@ class _TimetableScreenState extends State<TimetableScreen> {
                         itemBuilder: (context, index) {
                           final day = DayOfWeek.values[index];
                           final isSelected = day == _selectedDay;
-                          final isToday = day == DayOfWeek.values[now.weekday - 1];
-                          
+                          final isToday =
+                              day == DayOfWeek.values[now.weekday - 1];
+
                           return Padding(
                             padding: const EdgeInsets.only(right: 8),
                             child: FilterChip(
@@ -215,7 +214,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
 
   Widget _buildDaySchedule(DayOfWeek day) {
     final periods = _timetable!.getPeriodsForDay(day);
-    
+
     if (periods.isEmpty) {
       return const Center(
         child: Column(
@@ -238,7 +237,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
       itemBuilder: (context, index) {
         final period = periods[index];
         final isNow = period.isNow;
-        
+
         return Card(
           margin: const EdgeInsets.only(bottom: 12),
           color: isNow ? Colors.green[50] : null,
