@@ -209,7 +209,7 @@ Remove Supabase:
 Add Appwrite:
 ```yaml
 dependencies:
-  appwrite: ^11.0.0
+  appwrite: ^12.0.1
 ```
 
 Run:
