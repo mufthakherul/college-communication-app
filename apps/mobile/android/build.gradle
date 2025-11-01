@@ -26,7 +26,7 @@ subprojects {
 
 // Define namespace mappings for plugins that don't specify one
 def pluginNamespaces = [
-    'flutter_nearby_connections': 'com.pkmnapps.flutter_nearby_connections',
+    'flutter_nearby_connections': 'com.nankai.flutter_nearby_connections',
     'nearby_service': 'np.com.susanthapa.nearby_service',
     'qr_code_scanner': 'net.touchcapture.qr.flutterqr',
     'flutter_webrtc': 'com.cloudwebrtc.webrtc',
