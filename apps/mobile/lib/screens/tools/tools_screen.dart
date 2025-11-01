@@ -4,6 +4,8 @@ import 'package:campus_mesh/screens/tools/study_timer_screen.dart';
 import 'package:campus_mesh/screens/tools/assignment_tracker_screen.dart';
 import 'package:campus_mesh/screens/tools/timetable_screen.dart';
 import 'package:campus_mesh/screens/tools/events_screen.dart';
+import 'package:campus_mesh/screens/tools/unit_converter_screen.dart';
+import 'package:campus_mesh/screens/tools/notes_screen.dart';
 
 class ToolsScreen extends StatelessWidget {
   const ToolsScreen({super.key});
@@ -54,6 +56,20 @@ class ToolsScreen extends StatelessWidget {
             Icons.timer,
             Colors.teal,
             const StudyTimerScreen(),
+          ),
+          _buildToolCard(
+            context,
+            'Unit Converter',
+            Icons.swap_horiz,
+            Colors.pink,
+            const UnitConverterScreen(),
+          ),
+          _buildToolCard(
+            context,
+            'Quick Notes',
+            Icons.note,
+            Colors.amber,
+            const NotesScreen(),
           ),
           _buildToolCard(
             context,
