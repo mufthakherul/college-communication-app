@@ -4,6 +4,7 @@ import 'package:campus_mesh/models/notice_model.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/appwrite_config.dart';
+import 'package:campus_mesh/utils/input_validator.dart';
 
 class NoticeService {
   final _appwrite = AppwriteService();
@@ -97,13 +98,28 @@ class NoticeService {
         throw Exception('User must be authenticated to create notices');
       }
 
+      // Input validation and sanitization
+      final sanitizedTitle = InputValidator.sanitizeContent(title);
+      if (sanitizedTitle == null || sanitizedTitle.isEmpty) {
+        throw Exception('Notice title is required');
+      }
+
+      final sanitizedContent = InputValidator.sanitizeContent(content);
+      if (sanitizedContent == null || sanitizedContent.isEmpty) {
+        throw Exception('Notice content is required');
+      }
+
+      if (sanitizedTitle.length > InputValidator.maxTitleLength) {
+        throw Exception('Notice title is too long (max ${InputValidator.maxTitleLength} characters)');
+      }
+
       final document = await _appwrite.databases.createDocument(
         databaseId: AppwriteConfig.databaseId,
         collectionId: AppwriteConfig.noticesCollectionId,
         documentId: ID.unique(),
         data: {
-          'title': title,
-          'content': content,
+          'title': sanitizedTitle,
+          'content': sanitizedContent,
           'type': type.name,
           'target_audience': targetAudience,
           'author_id': currentUserId,

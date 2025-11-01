@@ -78,7 +78,7 @@ class CacheService {
       await _enforceCacheSizeLimit();
     } catch (e) {
       if (kDebugMode) {
-        print('Error initializing cache: $e');
+        debugPrint('Error initializing cache: $e');
       }
     }
   }
@@ -93,13 +93,13 @@ class CacheService {
       final entry = _memoryCache[key]!;
       if (!entry.isExpired) {
         if (kDebugMode) {
-          print('Cache hit (memory): $key (age: ${entry.getAgeText()})');
+          debugPrint('Cache hit (memory): $key (age: ${entry.getAgeText()})');
         }
         return entry.data as T;
       } else {
         _memoryCache.remove(key);
         if (kDebugMode) {
-          print('Cache expired (memory): $key');
+          debugPrint('Cache expired (memory): $key');
         }
       }
     }
@@ -121,25 +121,25 @@ class CacheService {
             _memoryCache[key] = entry;
 
             if (kDebugMode) {
-              print('Cache hit (disk): $key (age: ${entry.getAgeText()})');
+              debugPrint('Cache hit (disk): $key (age: ${entry.getAgeText()})');
             }
             return entry.data;
           } else {
             await file.delete();
             if (kDebugMode) {
-              print('Cache expired (disk): $key');
+              debugPrint('Cache expired (disk): $key');
             }
           }
         } catch (e) {
           if (kDebugMode) {
-            print('Error reading cache: $e');
+            debugPrint('Error reading cache: $e');
           }
         }
       }
     }
 
     if (kDebugMode) {
-      print('Cache miss: $key');
+      debugPrint('Cache miss: $key');
     }
     return null;
   }
@@ -168,17 +168,17 @@ class CacheService {
         await file.writeAsString(jsonStr);
 
         if (kDebugMode) {
-          print('Cached to disk: $key (ttl: ${entry.ttl.inMinutes}m)');
+          debugPrint('Cached to disk: $key (ttl: ${entry.ttl.inMinutes}m)');
         }
       } catch (e) {
         if (kDebugMode) {
-          print('Error writing cache: $e');
+          debugPrint('Error writing cache: $e');
         }
       }
     }
 
     if (kDebugMode) {
-      print('Cached to memory: $key (ttl: ${entry.ttl.inMinutes}m)');
+      debugPrint('Cached to memory: $key (ttl: ${entry.ttl.inMinutes}m)');
     }
   }
 
@@ -194,7 +194,7 @@ class CacheService {
     }
 
     if (kDebugMode) {
-      print('Cache removed: $key');
+      debugPrint('Cache removed: $key');
     }
   }
 
@@ -211,7 +211,7 @@ class CacheService {
     }
 
     if (kDebugMode) {
-      print('Cache cleared');
+      debugPrint('Cache cleared');
     }
   }
 
@@ -233,14 +233,14 @@ class CacheService {
             if (DateTime.now().difference(timestamp) > ttl) {
               file.deleteSync();
               if (kDebugMode) {
-                print('Deleted expired cache file: ${file.path}');
+                debugPrint('Deleted expired cache file: ${file.path}');
               }
             }
           } catch (e) {
             // Delete corrupted cache files
             file.deleteSync();
             if (kDebugMode) {
-              print('Deleted corrupted cache file: ${file.path}');
+              debugPrint('Deleted corrupted cache file: ${file.path}');
             }
           }
         }
@@ -261,7 +261,7 @@ class CacheService {
             totalSize += stat.size;
           } catch (e) {
             if (kDebugMode) {
-              print('Error getting file size: $e');
+              debugPrint('Error getting file size: $e');
             }
           }
         }
@@ -314,7 +314,7 @@ class CacheService {
         for (final entry in sortedFiles) {
           await entry.key.delete();
           if (kDebugMode) {
-            print('Deleted old cache file: ${entry.key.path}');
+            debugPrint('Deleted old cache file: ${entry.key.path}');
           }
 
           final newSizeMB = await getCacheSizeMB();
@@ -349,7 +349,7 @@ class CacheService {
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error compressing cache: $e');
+        debugPrint('Error compressing cache: $e');
       }
     }
   }
@@ -368,7 +368,7 @@ class CacheService {
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error decompressing cache: $e');
+        debugPrint('Error decompressing cache: $e');
       }
     }
 

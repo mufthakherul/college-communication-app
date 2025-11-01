@@ -56,7 +56,7 @@ class ConnectivityService {
       },
       onError: (error) {
         if (kDebugMode) {
-          print('Connectivity listener error: $error');
+          debugPrint('Connectivity listener error: $error');
         }
       },
     );
@@ -75,9 +75,9 @@ class ConnectivityService {
     if (wasOnline != _isOnline) {
       _connectivityController.add(_isOnline);
       if (kDebugMode) {
-        print('Connectivity changed: ${_isOnline ? "Online" : "Offline"}');
+        debugPrint('Connectivity changed: ${_isOnline ? "Online" : "Offline"}');
         if (_isOnline) {
-          print('Connection types: ${results.map((r) => r.name).join(", ")}');
+          debugPrint('Connection types: ${results.map((r) => r.name).join(", ")}');
         }
       }
     }
@@ -97,7 +97,7 @@ class ConnectivityService {
       await _handleConnectivityChange(results);
     } catch (e) {
       if (kDebugMode) {
-        print('Error checking connectivity: $e');
+        debugPrint('Error checking connectivity: $e');
       }
     }
   }
@@ -128,7 +128,7 @@ class ConnectivityService {
       _networkQuality = quality;
       _networkQualityController.add(_networkQuality);
       if (kDebugMode) {
-        print('Network quality changed: ${_networkQuality.name}');
+        debugPrint('Network quality changed: ${_networkQuality.name}');
       }
     }
   }
@@ -142,7 +142,7 @@ class ConnectivityService {
         isOnline ? NetworkQuality.good : NetworkQuality.offline,
       );
       if (kDebugMode) {
-        print('Connectivity manually set: ${_isOnline ? "Online" : "Offline"}');
+        debugPrint('Connectivity manually set: ${_isOnline ? "Online" : "Offline"}');
       }
     }
   }

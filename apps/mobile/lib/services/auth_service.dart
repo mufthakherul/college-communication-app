@@ -3,6 +3,7 @@ import 'package:appwrite/appwrite.dart';
 import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/appwrite_config.dart';
+import 'package:campus_mesh/utils/input_validator.dart';
 
 class AuthService {
   final _appwrite = AppwriteService();
@@ -47,6 +48,15 @@ class AuthService {
     String email,
     String password,
   ) async {
+    // Input validation
+    if (!InputValidator.isValidEmail(email)) {
+      throw Exception('invalid-email: Please enter a valid email address.');
+    }
+
+    if (password.isEmpty || password.length < 6) {
+      throw Exception('invalid-password: Password must be at least 6 characters.');
+    }
+
     // Ensure Appwrite is initialized
     if (!_appwrite.isInitialized) {
       debugPrint('⚠️ Appwrite not initialized, initializing now...');
@@ -56,7 +66,7 @@ class AuthService {
     try {
       debugPrint('🔐 Attempting sign in for email: $email');
       final session = await _appwrite.account.createEmailPasswordSession(
-        email: email,
+        email: email.trim().toLowerCase(),
         password: password,
       );
       _currentUserId = session.userId;
@@ -88,6 +98,25 @@ class AuthService {
     String displayName,
     String phoneNumber,
   ) async {
+    // Input validation
+    if (!InputValidator.isValidEmail(email)) {
+      throw Exception('invalid-email: Please enter a valid email address.');
+    }
+
+    final passwordError = InputValidator.validatePassword(password);
+    if (passwordError != null) {
+      throw Exception('weak-password: $passwordError');
+    }
+
+    final sanitizedName = InputValidator.sanitizeName(displayName);
+    if (sanitizedName == null || sanitizedName.isEmpty) {
+      throw Exception('invalid-name: Please enter a valid name.');
+    }
+
+    if (!InputValidator.isValidPhone(phoneNumber)) {
+      throw Exception('invalid-phone: Please enter a valid phone number.');
+    }
+
     // Ensure Appwrite is initialized
     if (!_appwrite.isInitialized) {
       debugPrint('⚠️ Appwrite not initialized, initializing now...');
@@ -100,9 +129,9 @@ class AuthService {
       // Create account
       final user = await _appwrite.account.create(
         userId: ID.unique(),
-        email: email,
+        email: email.trim().toLowerCase(),
         password: password,
-        name: displayName,
+        name: sanitizedName,
       );
       debugPrint('✅ Account created with ID: ${user.$id}');
 
@@ -124,9 +153,9 @@ class AuthService {
           collectionId: AppwriteConfig.usersCollectionId,
           documentId: user.$id,
           data: {
-            'email': email,
-            'display_name': displayName,
-            'phone_number': phoneNumber,
+            'email': email.trim().toLowerCase(),
+            'display_name': sanitizedName,
+            'phone_number': phoneNumber.trim(),
             'role': 'student', // Default role
             'is_active': true,
             'email_verified': false, // New field for email verification
