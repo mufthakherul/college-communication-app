@@ -116,7 +116,7 @@ Use this checklist before deploying to production to ensure everything is config
 
 ### Platform Testing
 - [ ] Tested on Android 7.0 (API 24)
-- [ ] Tested on Android 14 (API 34)
+- [ ] Tested on Android 15 (API 35)
 - [ ] Tested on different screen sizes
 - [ ] Tested on low-end devices
 - [ ] Tested with poor network

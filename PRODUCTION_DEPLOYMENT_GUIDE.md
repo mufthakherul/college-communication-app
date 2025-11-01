@@ -27,7 +27,7 @@ Complete guide for deploying the RPI Communication App to production with Appwri
 
 - **Android Studio**: Latest version with Android SDK
   - Min SDK: 24 (Android 7.0)
-  - Target SDK: 35 (Android 14)
+  - Target SDK: 35 (Android 15)
 
 - **Git**: For version control
   ```bash
