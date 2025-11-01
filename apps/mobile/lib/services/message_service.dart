@@ -4,6 +4,7 @@ import 'package:campus_mesh/models/message_model.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/appwrite_config.dart';
+import 'package:campus_mesh/utils/input_validator.dart';
 
 class MessageService {
   final _appwrite = AppwriteService();
@@ -15,19 +16,10 @@ class MessageService {
   // Get current user ID
   String? get _currentUserId => _authService.currentUserId;
 
-  // Validate UUID format to prevent injection
-  bool _isValidUuid(String uuid) {
-    final uuidRegex = RegExp(
-      r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$',
-      caseSensitive: false,
-    );
-    return uuidRegex.hasMatch(uuid);
-  }
-
   // Get messages between current user and another user
   Stream<List<MessageModel>> getMessages(String otherUserId) {
     final currentUserId = _currentUserId;
-    if (currentUserId == null || !_isValidUuid(otherUserId)) {
+    if (currentUserId == null || !InputValidator.isValidUuid(otherUserId)) {
       return Stream.value([]);
     }
 
@@ -175,8 +167,18 @@ class MessageService {
       }
 
       // Validate recipient ID format
-      if (!_isValidUuid(recipientId)) {
+      if (!InputValidator.isValidUuid(recipientId)) {
         throw Exception('Invalid recipient ID format');
+      }
+
+      // Sanitize message content
+      final sanitizedContent = InputValidator.sanitizeMessage(content);
+      if (sanitizedContent == null || sanitizedContent.isEmpty) {
+        throw Exception('Message content is required');
+      }
+
+      if (sanitizedContent.length > InputValidator.maxMessageLength) {
+        throw Exception('Message is too long (max ${InputValidator.maxMessageLength} characters)');
       }
 
       final document = await _appwrite.databases.createDocument(
@@ -186,7 +188,7 @@ class MessageService {
         data: {
           'sender_id': currentUserId,
           'recipient_id': recipientId,
-          'content': content,
+          'content': sanitizedContent,
           'type': type.name,
           'read': false,
           'created_at': DateTime.now().toIso8601String(),

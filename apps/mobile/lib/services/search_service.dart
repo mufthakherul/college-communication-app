@@ -3,6 +3,7 @@ import 'package:campus_mesh/models/message_model.dart';
 import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/appwrite_config.dart';
+import 'package:campus_mesh/utils/input_validator.dart';
 import 'package:appwrite/appwrite.dart';
 
 /// Search service for full-text search across notices, messages, and more
@@ -16,7 +17,9 @@ class SearchService {
   /// Search notices using Appwrite search
   /// Returns notices ranked by relevance
   Future<List<NoticeModel>> searchNotices(String query) async {
-    if (query.trim().isEmpty) {
+    // Sanitize search query to prevent injection
+    final sanitizedQuery = InputValidator.sanitizeSearchQuery(query);
+    if (sanitizedQuery == null || sanitizedQuery.isEmpty) {
       return [];
     }
 
@@ -26,7 +29,7 @@ class SearchService {
         databaseId: AppwriteConfig.databaseId,
         collectionId: AppwriteConfig.noticesCollectionId,
         queries: [
-          Query.search('title', query),
+          Query.search('title', sanitizedQuery),
           Query.equal('is_active', true),
           Query.orderDesc('created_at'),
           Query.limit(50),
@@ -43,7 +46,9 @@ class SearchService {
 
   /// Simple search in notices (searches content as well)
   Future<List<NoticeModel>> simpleSearchNotices(String query) async {
-    if (query.trim().isEmpty) {
+    // Sanitize search query to prevent injection
+    final sanitizedQuery = InputValidator.sanitizeSearchQuery(query);
+    if (sanitizedQuery == null || sanitizedQuery.isEmpty) {
       return [];
     }
 
@@ -53,7 +58,7 @@ class SearchService {
         databaseId: AppwriteConfig.databaseId,
         collectionId: AppwriteConfig.noticesCollectionId,
         queries: [
-          Query.search('content', query),
+          Query.search('content', sanitizedQuery),
           Query.equal('is_active', true),
           Query.orderDesc('created_at'),
           Query.limit(50),
@@ -73,7 +78,9 @@ class SearchService {
     String query,
     NoticeType type,
   ) async {
-    if (query.trim().isEmpty) {
+    // Sanitize search query to prevent injection
+    final sanitizedQuery = InputValidator.sanitizeSearchQuery(query);
+    if (sanitizedQuery == null || sanitizedQuery.isEmpty) {
       return [];
     }
 
@@ -82,7 +89,7 @@ class SearchService {
         databaseId: AppwriteConfig.databaseId,
         collectionId: AppwriteConfig.noticesCollectionId,
         queries: [
-          Query.search('title', query),
+          Query.search('title', sanitizedQuery),
           Query.equal('is_active', true),
           Query.equal('type', type.name),
           Query.orderDesc('created_at'),

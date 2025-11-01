@@ -70,7 +70,7 @@ class QRCodeData {
       return jsonEncode(jsonData);
     } catch (e) {
       if (kDebugMode) {
-        print('Error encoding QR data: $e');
+        debugPrint('Error encoding QR data: $e');
       }
       rethrow;
     }
@@ -89,7 +89,7 @@ class QRCodeData {
       return QRCodeData.fromJson(json);
     } catch (e) {
       if (kDebugMode) {
-        print('Error decoding QR string: $e');
+        debugPrint('Error decoding QR string: $e');
       }
       rethrow;
     }
@@ -233,7 +233,7 @@ class QRDataService {
       return QRCodeData.fromQRString(qrString);
     } catch (e) {
       if (kDebugMode) {
-        print('Failed to parse QR code: $e');
+        debugPrint('Failed to parse QR code: $e');
       }
       return null;
     }

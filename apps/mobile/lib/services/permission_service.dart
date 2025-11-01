@@ -17,18 +17,18 @@ class PermissionService {
         return true;
       } else if (status.isPermanentlyDenied) {
         if (kDebugMode) {
-          print('Camera permission permanently denied');
+          debugPrint('Camera permission permanently denied');
         }
         return false;
       } else {
         if (kDebugMode) {
-          print('Camera permission denied');
+          debugPrint('Camera permission denied');
         }
         return false;
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error requesting camera permission: $e');
+        debugPrint('Error requesting camera permission: $e');
       }
       return false;
     }
@@ -52,7 +52,7 @@ class PermissionService {
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error requesting storage permission: $e');
+        debugPrint('Error requesting storage permission: $e');
       }
       return false;
     }
@@ -69,7 +69,7 @@ class PermissionService {
       return true;
     } catch (e) {
       if (kDebugMode) {
-        print('Error requesting notification permission: $e');
+        debugPrint('Error requesting notification permission: $e');
       }
       return false;
     }
@@ -84,14 +84,14 @@ class PermissionService {
         return true;
       } else if (status.isPermanentlyDenied) {
         if (kDebugMode) {
-          print('Location permission permanently denied');
+          debugPrint('Location permission permanently denied');
         }
         return false;
       }
       return false;
     } catch (e) {
       if (kDebugMode) {
-        print('Error requesting location permission: $e');
+        debugPrint('Error requesting location permission: $e');
       }
       return false;
     }
@@ -114,7 +114,7 @@ class PermissionService {
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error requesting Bluetooth permissions: $e');
+        debugPrint('Error requesting Bluetooth permissions: $e');
       }
       return false;
     }
@@ -130,7 +130,7 @@ class PermissionService {
       return true;
     } catch (e) {
       if (kDebugMode) {
-        print('Error requesting nearby WiFi devices permission: $e');
+        debugPrint('Error requesting nearby WiFi devices permission: $e');
       }
       return false;
     }
@@ -143,7 +143,7 @@ class PermissionService {
       return status.isGranted;
     } catch (e) {
       if (kDebugMode) {
-        print('Error checking camera permission: $e');
+        debugPrint('Error checking camera permission: $e');
       }
       return false;
     }
@@ -161,7 +161,7 @@ class PermissionService {
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error checking storage permission: $e');
+        debugPrint('Error checking storage permission: $e');
       }
       return false;
     }
@@ -173,7 +173,7 @@ class PermissionService {
       return await openAppSettings();
     } catch (e) {
       if (kDebugMode) {
-        print('Error opening app settings: $e');
+        debugPrint('Error opening app settings: $e');
       }
       return false;
     }
@@ -217,7 +217,7 @@ class PermissionService {
       return locationGranted && bluetoothGranted;
     } catch (e) {
       if (kDebugMode) {
-        print('Error checking mesh networking permissions: $e');
+        debugPrint('Error checking mesh networking permissions: $e');
       }
       return false;
     }
@@ -229,7 +229,7 @@ class PermissionService {
       return await permission.shouldShowRequestRationale;
     } catch (e) {
       if (kDebugMode) {
-        print('Error checking permission rationale: $e');
+        debugPrint('Error checking permission rationale: $e');
       }
       return false;
     }
