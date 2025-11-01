@@ -19,7 +19,7 @@ void main() async {
   if (kReleaseMode) {
     final securityService = SecurityService();
     final securityResult = await securityService.performSecurityChecks();
-    
+
     if (!securityService.shouldAllowAppExecution(securityResult)) {
       // Critical security issue detected - show error and exit
       runApp(SecurityBlockedApp(
@@ -27,10 +27,11 @@ void main() async {
       ));
       return;
     }
-    
+
     // Log security warnings but allow execution
     if (!securityResult.allChecksPassed) {
-      debugPrint('Security warning: ${securityService.getSecurityWarningMessage(securityResult)}');
+      debugPrint(
+          'Security warning: ${securityService.getSecurityWarningMessage(securityResult)}');
     }
   }
 
@@ -53,7 +54,7 @@ void main() async {
 
   // Initialize Appwrite
   AppwriteService().init();
-  
+
   // Initialize auth service
   await AuthService().initialize();
 

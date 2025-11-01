@@ -43,10 +43,8 @@ class MessageAttachmentsService {
 
       // Generate unique file name
       final fileName = customFileName ?? path.basename(file.path);
-      final fileExtension = path
-          .extension(fileName)
-          .toLowerCase()
-          .replaceAll('.', '');
+      final fileExtension =
+          path.extension(fileName).toLowerCase().replaceAll('.', '');
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final uniqueFileName = '${userId}_${timestamp}_$fileName';
       final filePath = '$userId/$uniqueFileName';
@@ -63,12 +61,14 @@ class MessageAttachmentsService {
       );
 
       // Get file URL
-      final fileUrl = '${AppwriteConfig.endpoint}/storage/buckets/$_bucketId/files/${uploadedFile.$id}/view?project=${AppwriteConfig.projectId}';
+      final fileUrl =
+          '${AppwriteConfig.endpoint}/storage/buckets/$_bucketId/files/${uploadedFile.$id}/view?project=${AppwriteConfig.projectId}';
 
       // Generate thumbnail for images/videos if needed
       String? thumbnailUrl;
       if (_isImageFile(fileExtension) || _isVideoFile(fileExtension)) {
-        thumbnailUrl = fileUrl; // Can be enhanced with actual thumbnail generation
+        thumbnailUrl =
+            fileUrl; // Can be enhanced with actual thumbnail generation
       }
 
       if (kDebugMode) {

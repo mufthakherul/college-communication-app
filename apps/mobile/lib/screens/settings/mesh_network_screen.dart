@@ -30,8 +30,9 @@ class _MeshNetworkScreenState extends State<MeshNetworkScreen> {
       final user = await authService.currentUser;
       if (user != null) {
         await _meshService.initialize(
-          deviceId: user.id,
-          deviceName: user.displayName ?? user.email ?? 'Unknown',
+          deviceId: user.uid,
+          deviceName:
+              user.displayName.isNotEmpty ? user.displayName : user.email,
         );
 
         setState(() {

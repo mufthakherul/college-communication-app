@@ -10,7 +10,7 @@ class AuthService {
   // Get current user ID
   String? _currentUserId;
   String? get currentUserId => _currentUserId;
-  
+
   // Get current user object
   Future<UserModel?> get currentUser async {
     if (_currentUserId == null) return null;
@@ -98,7 +98,7 @@ class AuthService {
         try {
           await _appwrite.account.deleteSession(sessionId: 'current');
         } catch (_) {}
-        
+
         // Log the specific error for debugging but show generic message to user
         if (kDebugMode) {
           debugPrint('Profile creation error: $dbError');
@@ -171,7 +171,8 @@ class AuthService {
     try {
       await _appwrite.account.createRecovery(
         email: email,
-        url: 'https://rpi-communication.app/reset-password', // Update with your app URL
+        url:
+            'https://rpi-communication.app/reset-password', // Update with your app URL
       );
     } on AppwriteException catch (e) {
       throw Exception('Failed to send password reset email: ${e.message}');
