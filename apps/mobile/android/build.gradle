@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.8.22'
+    ext.kotlin_version = '1.9.22'
     repositories {
         google()
         mavenCentral()
@@ -43,6 +43,21 @@ subprojects { subproject ->
                     if (pluginNamespace != null) {
                         namespace pluginNamespace
                     }
+                }
+                
+                // Ensure consistent JVM target across all subprojects
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_17
+                    targetCompatibility JavaVersion.VERSION_17
+                }
+            }
+        }
+        
+        // Apply Kotlin JVM target for all projects with Kotlin plugin
+        if (subproject.plugins.hasPlugin('org.jetbrains.kotlin.android')) {
+            subproject.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+                kotlinOptions {
+                    jvmTarget = '17'
                 }
             }
         }
