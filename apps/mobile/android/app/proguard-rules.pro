@@ -31,6 +31,12 @@
     @com.google.gson.annotations.SerializedName <fields>;
 }
 
+# Keep all model classes (Dart models accessed via reflection)
+-keep class io.flutter.plugins.** { *; }
+-keep class io.flutter.plugin.** { *; }
+-keep class io.flutter.view.** { *; }
+-keep class io.flutter.app.** { *; }
+
 # Google Play Core (for deferred components)
 -dontwarn com.google.android.play.core.splitcompat.**
 -dontwarn com.google.android.play.core.splitinstall.**
@@ -90,6 +96,9 @@
 # OneSignal
 -keep class com.onesignal.** { *; }
 -dontwarn com.onesignal.**
+-keep class com.onesignal.notifications.** { *; }
+-keep class com.onesignal.user.** { *; }
+-keep class com.onesignal.core.** { *; }
 
 # Shared Preferences (for session persistence)
 -keep class androidx.preference.** { *; }
@@ -98,6 +107,9 @@
 # Sentry
 -keep class io.sentry.** { *; }
 -dontwarn io.sentry.**
+-keepattributes LineNumberTable,SourceFile
+-keep class io.sentry.protocol.** { *; }
+-keep class io.sentry.android.core.** { *; }
 
 # QR Code Scanner
 -keep class com.google.zxing.** { *; }
@@ -112,3 +124,21 @@
 -keep class io.flutter.plugins.** { *; }
 -keep class io.flutter.plugin.common.** { *; }
 -keep class io.flutter.embedding.engine.plugins.** { *; }
+
+# Prevent crashes from missing classes at runtime
+-dontnote **
+-dontwarn **
+
+# Keep generated plugin registrant
+-keep class io.flutter.plugins.GeneratedPluginRegistrant { *; }
+
+# Keep main activity
+-keep class **.MainActivity { *; }
+
+# Prevent R8 from removing or renaming classes that are referenced only by reflection
+-keepattributes RuntimeVisibleAnnotations
+-keepattributes RuntimeInvisibleAnnotations
+-keepattributes RuntimeVisibleParameterAnnotations
+-keepattributes RuntimeInvisibleParameterAnnotations
+-keepattributes EnclosingMethod
+-keepattributes InnerClasses
