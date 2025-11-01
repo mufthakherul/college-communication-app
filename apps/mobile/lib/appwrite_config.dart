@@ -20,9 +20,19 @@ class AppwriteConfig {
   static const String notificationsCollectionId = 'notifications';
   static const String approvalRequestsCollectionId = 'approval_requests';
   static const String userActivityCollectionId = 'user_activity';
+  static const String booksCollectionId = 'books';
+  static const String bookBorrowsCollectionId = 'book_borrows';
+  static const String assignmentsCollectionId = 'assignments';
+  static const String assignmentSubmissionsCollectionId = 'assignment_submissions';
+  static const String timetablesCollectionId = 'timetables';
+  static const String studyGroupsCollectionId = 'study_groups';
+  static const String eventsCollectionId = 'events';
 
   // Storage bucket IDs
   static const String profileImagesBucketId = 'profile-images';
   static const String noticeAttachmentsBucketId = 'notice-attachments';
   static const String messageAttachmentsBucketId = 'message-attachments';
+  static const String bookCoversBucketId = 'book-covers';
+  static const String bookFilesBucketId = 'book-files';
+  static const String assignmentFilesBucketId = 'assignment-files';
 }
