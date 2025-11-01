@@ -253,17 +253,38 @@ class MeshNetworkService {
 
       // Initialize the nearby connections
       // Note: Actual initialization is handled by the flutter_nearby_connections plugin
+      // TODO: Integrate flutter_nearby_connections plugin for full functionality
+      // See MESH_NETWORKING_FIX_GUIDE.md for implementation details
 
       _isInitialized = true;
 
       if (kDebugMode) {
-        print('Mesh network initialized: $deviceName ($deviceId)');
+        debugPrint('Mesh network initialized: $deviceName ($deviceId)');
+        debugPrint('Note: Mesh networking requires full plugin integration');
+        debugPrint('App will work normally using internet connection');
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error initializing mesh network: $e');
+        debugPrint('Error initializing mesh network: $e');
       }
+      // Don't throw - allow app to continue without mesh networking
+      _isInitialized = false;
     }
+  }
+
+  /// Get human-readable status message for mesh networking
+  String getStatusMessage() {
+    if (!_isInitialized) {
+      return 'Mesh networking unavailable. Using internet connection.';
+    }
+    if (!isActive) {
+      return 'Mesh networking inactive. Enable to connect with nearby devices.';
+    }
+    if (connectedNodes.isEmpty) {
+      return 'No nearby devices found. Messages sent via internet.';
+    }
+    final visibleCount = connectedNodes.where((n) => n.isVisible).length;
+    return 'Connected to $visibleCount device(s) nearby.';
   }
 
   /// Start advertising (make device discoverable)

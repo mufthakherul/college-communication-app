@@ -12,6 +12,7 @@ import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/widgets/connectivity_banner.dart';
 import 'package:campus_mesh/widgets/network_status_widget.dart';
 import 'package:campus_mesh/screens/qr/qr_scanner_screen.dart';
+import 'package:campus_mesh/screens/qr/qr_generator_menu_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -83,6 +84,47 @@ class _HomeScreenState extends State<HomeScreen> {
         const ToolsScreen(),
         ProfileScreen(user: _currentUser, currentUser: _currentUser),
       ];
+
+  void _showQROptions() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.qr_code_scanner, color: Colors.blue),
+              title: const Text('Scan QR Code'),
+              subtitle: const Text('Scan a QR code from another device'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const QRScannerScreen(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.qr_code, color: Colors.green),
+              title: const Text('Generate QR Code'),
+              subtitle: const Text('Create a QR code to share information'),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const QRGeneratorMenuScreen(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -166,14 +208,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const QRScannerScreen()),
-          );
-        },
-        tooltip: 'Scan QR Code',
-        child: const Icon(Icons.qr_code_scanner),
+        onPressed: _showQROptions,
+        tooltip: 'QR Code',
+        child: const Icon(Icons.qr_code_2),
       ),
     );
   }
