@@ -34,9 +34,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
 
   Future<void> _startNewConversation() async {
     final selectedUser = await Navigator.of(context).push<UserModel>(
-      MaterialPageRoute(
-        builder: (context) => const NewConversationScreen(),
-      ),
+      MaterialPageRoute(builder: (context) => const NewConversationScreen()),
     );
 
     if (selectedUser != null && mounted) {
@@ -55,11 +53,11 @@ class _MessagesScreenState extends State<MessagesScreen> {
 
     return messages.where((message) {
       final contentMatch = message.content.toLowerCase().contains(
-            _searchQuery.toLowerCase(),
-          );
+        _searchQuery.toLowerCase(),
+      );
       final recipientMatch = message.recipientId.toLowerCase().contains(
-            _searchQuery.toLowerCase(),
-          );
+        _searchQuery.toLowerCase(),
+      );
       return contentMatch || recipientMatch;
     }).toList();
   }
@@ -170,8 +168,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
             final otherUserId = message.recipientId;
             if (!conversations.containsKey(otherUserId) ||
                 (conversations[otherUserId]!.createdAt!.isBefore(
-                      message.createdAt!,
-                    ))) {
+                  message.createdAt!,
+                ))) {
               conversations[otherUserId] = message;
             }
           }
@@ -195,8 +193,9 @@ class _MessagesScreenState extends State<MessagesScreen> {
                   title: Text(
                     message.recipientId,
                     style: TextStyle(
-                      fontWeight:
-                          message.read ? FontWeight.normal : FontWeight.bold,
+                      fontWeight: message.read
+                          ? FontWeight.normal
+                          : FontWeight.bold,
                     ),
                   ),
                   subtitle: Text(
@@ -218,10 +217,11 @@ class _MessagesScreenState extends State<MessagesScreen> {
                   ),
                   onTap: () async {
                     // Navigate to chat screen
-                    final userId = message.senderId == _authService.currentUserId
+                    final userId =
+                        message.senderId == _authService.currentUserId
                         ? message.recipientId
                         : message.senderId;
-                    
+
                     // Get or fetch user info
                     UserModel? otherUser;
                     if (_userCache.containsKey(userId)) {
@@ -246,7 +246,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
                     if (otherUser != null && mounted) {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => ChatScreen(otherUser: otherUser!),
+                          builder: (context) =>
+                              ChatScreen(otherUser: otherUser!),
                         ),
                       );
                     }

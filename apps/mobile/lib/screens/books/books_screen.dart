@@ -146,10 +146,12 @@ class _BooksScreenState extends State<BooksScreen> {
                     },
                   ),
                   const SizedBox(width: 8),
-                  ...BookCategory.values.map((cat) => Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: _buildCategoryChip(cat),
-                      )),
+                  ...BookCategory.values.map(
+                    (cat) => Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: _buildCategoryChip(cat),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -158,8 +160,8 @@ class _BooksScreenState extends State<BooksScreen> {
             child: _isSearching
                 ? _buildSearchResults()
                 : _selectedCategory == null
-                    ? _buildAllBooks()
-                    : _buildCategoryBooks(_selectedCategory!),
+                ? _buildAllBooks()
+                : _buildCategoryBooks(_selectedCategory!),
           ),
         ],
       ),
@@ -207,10 +209,7 @@ class _BooksScreenState extends State<BooksScreen> {
           children: [
             Icon(Icons.search_off, size: 64, color: Colors.grey),
             SizedBox(height: 16),
-            Text(
-              'No books found',
-              style: TextStyle(color: Colors.grey),
-            ),
+            Text('No books found', style: TextStyle(color: Colors.grey)),
           ],
         ),
       );
@@ -234,9 +233,7 @@ class _BooksScreenState extends State<BooksScreen> {
         }
 
         if (snapshot.hasError) {
-          return Center(
-            child: Text('Error: ${snapshot.error}'),
-          );
+          return Center(child: Text('Error: ${snapshot.error}'));
         }
 
         final books = snapshot.data ?? [];
@@ -277,9 +274,7 @@ class _BooksScreenState extends State<BooksScreen> {
         }
 
         if (snapshot.hasError) {
-          return Center(
-            child: Text('Error: ${snapshot.error}'),
-          );
+          return Center(child: Text('Error: ${snapshot.error}'));
         }
 
         final books = snapshot.data ?? [];
@@ -364,10 +359,7 @@ class _BooksScreenState extends State<BooksScreen> {
                     const SizedBox(height: 4),
                     Text(
                       book.author,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                     ),
                     const SizedBox(height: 8),
                     Row(

@@ -102,9 +102,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Book Details'),
-      ),
+      appBar: AppBar(title: const Text('Book Details')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -153,10 +151,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                       const SizedBox(height: 8),
                       Text(
                         widget.book.author,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                       ),
                       const SizedBox(height: 12),
                       Container(
@@ -226,10 +221,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
             if (widget.book.description.isNotEmpty) ...[
               const Text(
                 'Description',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               Text(
@@ -242,25 +234,24 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
             // Details
             const Text(
               'Details',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
             _buildDetailRow('ISBN', widget.book.isbn),
             _buildDetailRow('Publisher', widget.book.publisher),
             _buildDetailRow('Edition', widget.book.edition),
             _buildDetailRow(
-                'Publication Year',
-                widget.book.publicationYear > 0
-                    ? '${widget.book.publicationYear}'
-                    : 'N/A'),
+              'Publication Year',
+              widget.book.publicationYear > 0
+                  ? '${widget.book.publicationYear}'
+                  : 'N/A',
+            ),
             _buildDetailRow(
-                'Department',
-                widget.book.department.isNotEmpty
-                    ? widget.book.department
-                    : 'General'),
+              'Department',
+              widget.book.department.isNotEmpty
+                  ? widget.book.department
+                  : 'General',
+            ),
             const SizedBox(height: 24),
 
             // Action buttons
@@ -305,10 +296,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
               const SizedBox(height: 32),
               const Text(
                 'Borrow History',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
               if (_borrowHistory.isEmpty)
@@ -317,29 +305,28 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                   style: TextStyle(color: Colors.grey),
                 )
               else
-                ..._borrowHistory.map((borrow) => Card(
-                      margin: const EdgeInsets.only(bottom: 8),
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          child: Text(borrow.userName[0]),
-                        ),
-                        title: Text(borrow.userName),
-                        subtitle: Text(
-                          'Borrowed: ${_formatDate(borrow.borrowDate)}\n'
-                          'Due: ${_formatDate(borrow.dueDate)}\n'
-                          'Status: ${borrow.status}',
-                        ),
-                        isThreeLine: true,
-                        trailing: borrow.isOverdue
-                            ? Chip(
-                                label:
-                                    Text('${borrow.daysOverdue} days overdue'),
-                                backgroundColor: Colors.red[100],
-                                labelStyle: const TextStyle(color: Colors.red),
-                              )
-                            : null,
+                ..._borrowHistory.map(
+                  (borrow) => Card(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    child: ListTile(
+                      leading: CircleAvatar(child: Text(borrow.userName[0])),
+                      title: Text(borrow.userName),
+                      subtitle: Text(
+                        'Borrowed: ${_formatDate(borrow.borrowDate)}\n'
+                        'Due: ${_formatDate(borrow.dueDate)}\n'
+                        'Status: ${borrow.status}',
                       ),
-                    )),
+                      isThreeLine: true,
+                      trailing: borrow.isOverdue
+                          ? Chip(
+                              label: Text('${borrow.daysOverdue} days overdue'),
+                              backgroundColor: Colors.red[100],
+                              labelStyle: const TextStyle(color: Colors.red),
+                            )
+                          : null,
+                    ),
+                  ),
+                ),
             ],
           ],
         ),
@@ -359,19 +346,13 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
             width: 140,
             child: Text(
               label,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-              ),
+              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
             ),
           ),
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             ),
           ),
         ],

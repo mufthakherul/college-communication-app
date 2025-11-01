@@ -19,7 +19,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final _authService = AuthService();
   final _messageController = TextEditingController();
   final _scrollController = ScrollController();
-  
+
   bool _isSending = false;
 
   @override
@@ -42,7 +42,7 @@ class _ChatScreenState extends State<ChatScreen> {
       );
 
       _messageController.clear();
-      
+
       // Scroll to bottom after sending
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
@@ -126,7 +126,11 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.error_outline, size: 64, color: Colors.red),
+                        const Icon(
+                          Icons.error_outline,
+                          size: 64,
+                          color: Colors.red,
+                        ),
                         const SizedBox(height: 16),
                         Text('Error: ${snapshot.error}'),
                       ],
@@ -141,16 +145,26 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.chat_bubble_outline, size: 64, color: Colors.grey[400]),
+                        Icon(
+                          Icons.chat_bubble_outline,
+                          size: 64,
+                          color: Colors.grey[400],
+                        ),
                         const SizedBox(height: 16),
                         Text(
                           'No messages yet',
-                          style: TextStyle(fontSize: 18, color: Colors.grey[600]),
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.grey[600],
+                          ),
                         ),
                         const SizedBox(height: 8),
                         Text(
                           'Send a message to start the conversation',
-                          style: TextStyle(fontSize: 14, color: Colors.grey[500]),
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[500],
+                          ),
                         ),
                       ],
                     ),
@@ -160,7 +174,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 // Auto-scroll to bottom only when user is at bottom or sending new message
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   if (_scrollController.hasClients) {
-                    final isAtBottom = _scrollController.position.pixels >= 
+                    final isAtBottom =
+                        _scrollController.position.pixels >=
                         _scrollController.position.maxScrollExtent - 100;
                     if (isAtBottom) {
                       _scrollController.animateTo(
@@ -179,7 +194,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   itemBuilder: (context, index) {
                     final message = messages[index];
                     final isMe = message.senderId == _authService.currentUserId;
-                    
+
                     return _buildMessageBubble(message, isMe);
                   },
                 );

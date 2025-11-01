@@ -17,7 +17,7 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
   final _appwrite = AppwriteService();
   final _authService = AuthService();
   final _searchController = TextEditingController();
-  
+
   List<UserModel> _users = [];
   List<UserModel> _filteredUsers = [];
   bool _isLoading = true;
@@ -51,10 +51,7 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
       final response = await _appwrite.databases.listDocuments(
         databaseId: AppwriteConfig.databaseId,
         collectionId: AppwriteConfig.usersCollectionId,
-        queries: [
-          Query.equal('is_active', true),
-          Query.limit(100),
-        ],
+        queries: [Query.equal('is_active', true), Query.limit(100)],
       );
 
       final users = response.documents
@@ -88,10 +85,10 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
           final emailLower = user.email.toLowerCase();
           final queryLower = query.toLowerCase();
           final deptLower = user.department.toLowerCase();
-          
+
           return nameLower.contains(queryLower) ||
-                 emailLower.contains(queryLower) ||
-                 deptLower.contains(queryLower);
+              emailLower.contains(queryLower) ||
+              deptLower.contains(queryLower);
         }).toList();
       }
     });
@@ -143,9 +140,7 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
 
   Widget _buildBody() {
     if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (_errorMessage.isNotEmpty) {
@@ -177,7 +172,9 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              _searchController.text.isEmpty ? Icons.people_outline : Icons.search_off,
+              _searchController.text.isEmpty
+                  ? Icons.people_outline
+                  : Icons.search_off,
               size: 64,
               color: Colors.grey,
             ),
@@ -235,10 +232,7 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
                 if (user.department.isNotEmpty) user.department,
                 if (user.year.isNotEmpty) user.year,
               ].join(' • '),
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[600],
-              ),
+              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
             ),
         ],
       ),

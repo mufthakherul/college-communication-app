@@ -84,9 +84,7 @@ class _AssignmentTrackerScreenState extends State<AssignmentTrackerScreen> {
           }
 
           if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
+            return Center(child: Text('Error: ${snapshot.error}'));
           }
 
           final allAssignments = snapshot.data ?? [];
@@ -145,8 +143,8 @@ class _AssignmentTrackerScreenState extends State<AssignmentTrackerScreen> {
       color: isOverdue
           ? Colors.red[50]
           : isDueSoon
-              ? Colors.orange[50]
-              : null,
+          ? Colors.orange[50]
+          : null,
       child: InkWell(
         onTap: () {
           _showAssignmentDetails(assignment);
@@ -178,10 +176,7 @@ class _AssignmentTrackerScreenState extends State<AssignmentTrackerScreen> {
                     ),
                     child: Text(
                       assignment.subject,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.white,
-                      ),
+                      style: const TextStyle(fontSize: 12, color: Colors.white),
                     ),
                   ),
                 ],
@@ -189,21 +184,14 @@ class _AssignmentTrackerScreenState extends State<AssignmentTrackerScreen> {
               const SizedBox(height: 8),
               Text(
                 assignment.description,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[700],
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.grey[700]),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 12),
               Row(
                 children: [
-                  Icon(
-                    Icons.person,
-                    size: 16,
-                    color: Colors.grey[600],
-                  ),
+                  Icon(Icons.person, size: 16, color: Colors.grey[600]),
                   const SizedBox(width: 4),
                   Text(
                     assignment.teacherName,
@@ -214,14 +202,14 @@ class _AssignmentTrackerScreenState extends State<AssignmentTrackerScreen> {
                     isOverdue
                         ? Icons.error
                         : isDueSoon
-                            ? Icons.warning
-                            : Icons.schedule,
+                        ? Icons.warning
+                        : Icons.schedule,
                     size: 16,
                     color: isOverdue
                         ? Colors.red
                         : isDueSoon
-                            ? Colors.orange
-                            : Colors.blue,
+                        ? Colors.orange
+                        : Colors.blue,
                   ),
                   const SizedBox(width: 4),
                   Text(
@@ -234,8 +222,8 @@ class _AssignmentTrackerScreenState extends State<AssignmentTrackerScreen> {
                       color: isOverdue
                           ? Colors.red
                           : isDueSoon
-                              ? Colors.orange
-                              : Colors.blue,
+                          ? Colors.orange
+                          : Colors.blue,
                     ),
                   ),
                 ],
@@ -295,19 +283,13 @@ class _AssignmentTrackerScreenState extends State<AssignmentTrackerScreen> {
                 ),
                 child: Text(
                   assignment.subject,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.white,
-                  ),
+                  style: const TextStyle(fontSize: 14, color: Colors.white),
                 ),
               ),
               const SizedBox(height: 16),
               const Text(
                 'Description',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               Text(
@@ -333,8 +315,9 @@ class _AssignmentTrackerScreenState extends State<AssignmentTrackerScreen> {
                       // TODO: Navigate to submission screen
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content:
-                              Text('Submit assignment feature coming soon'),
+                          content: Text(
+                            'Submit assignment feature coming soon',
+                          ),
                         ),
                       );
                     },
@@ -362,19 +345,13 @@ class _AssignmentTrackerScreenState extends State<AssignmentTrackerScreen> {
             width: 120,
             child: Text(
               label,
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-              ),
+              style: TextStyle(fontSize: 14, color: Colors.grey[600]),
             ),
           ),
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             ),
           ),
         ],

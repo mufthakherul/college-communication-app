@@ -27,7 +27,7 @@ class NotificationService {
     if (kDebugMode) {
       debugPrint('Notification service initialized');
     }
-    
+
     // Start periodic website scraping
     _websiteScraper.startPeriodicCheck();
   }
@@ -81,7 +81,9 @@ class NotificationService {
   }
 
   // Get notifications from Appwrite database
-  Future<List<NotificationModel>> _getAppwriteNotifications(String userId) async {
+  Future<List<NotificationModel>> _getAppwriteNotifications(
+    String userId,
+  ) async {
     try {
       final response = await _appwrite.databases.listDocuments(
         databaseId: AppwriteConfig.databaseId,
@@ -103,7 +105,9 @@ class NotificationService {
   }
 
   // Get notifications from website scraping
-  Future<List<NotificationModel>> _getWebsiteNotifications(String userId) async {
+  Future<List<NotificationModel>> _getWebsiteNotifications(
+    String userId,
+  ) async {
     try {
       final scrapedNotices = await _websiteScraper.getNotices();
       return _websiteScraper.toNotificationModels(scrapedNotices, userId);
@@ -121,7 +125,9 @@ class NotificationService {
       return;
     }
 
-    await for (final notifications in getNotifications(source: source ?? NotificationSource.all)) {
+    await for (final notifications in getNotifications(
+      source: source ?? NotificationSource.all,
+    )) {
       final unreadCount = notifications.where((n) => !n.read).length;
       yield unreadCount;
     }
@@ -152,10 +158,7 @@ class NotificationService {
       final response = await _appwrite.databases.listDocuments(
         databaseId: AppwriteConfig.databaseId,
         collectionId: AppwriteConfig.notificationsCollectionId,
-        queries: [
-          Query.equal('user_id', userId),
-          Query.equal('read', false),
-        ],
+        queries: [Query.equal('user_id', userId), Query.equal('read', false)],
       );
 
       // Mark each as read (consider using batch operations if available)

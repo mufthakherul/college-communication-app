@@ -5,7 +5,7 @@ enum DayOfWeek {
   thursday,
   friday,
   saturday,
-  sunday
+  sunday,
 }
 
 class TimetableModel {
@@ -161,10 +161,20 @@ class ClassPeriod {
     final startParts = startTime.split(':');
     final endParts = endTime.split(':');
 
-    final start = DateTime(now.year, now.month, now.day,
-        int.parse(startParts[0]), int.parse(startParts[1]));
-    final end = DateTime(now.year, now.month, now.day, int.parse(endParts[0]),
-        int.parse(endParts[1]));
+    final start = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      int.parse(startParts[0]),
+      int.parse(startParts[1]),
+    );
+    final end = DateTime(
+      now.year,
+      now.month,
+      now.day,
+      int.parse(endParts[0]),
+      int.parse(endParts[1]),
+    );
 
     return now.isAfter(start) && now.isBefore(end);
   }

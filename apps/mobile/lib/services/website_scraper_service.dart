@@ -8,17 +8,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Service for scraping notices from the school website
 /// URL: https://rangpur.polytech.gov.bd/site/view/notices
 class WebsiteScraperService {
-  static final WebsiteScraperService _instance = WebsiteScraperService._internal();
+  static final WebsiteScraperService _instance =
+      WebsiteScraperService._internal();
   factory WebsiteScraperService() => _instance;
   WebsiteScraperService._internal();
 
-  static const String _websiteUrl = 'https://rangpur.polytech.gov.bd/site/view/notices';
+  static const String _websiteUrl =
+      'https://rangpur.polytech.gov.bd/site/view/notices';
   static const String _cacheKey = 'scraped_notices_cache';
   static const String _lastCheckKey = 'last_scrape_check';
-  
+
   Timer? _pollingTimer;
   final _noticesController = StreamController<List<ScrapedNotice>>.broadcast();
-  
+
   Stream<List<ScrapedNotice>> get noticesStream => _noticesController.stream;
 
   /// Start periodic checking for new notices
@@ -38,17 +40,19 @@ class WebsiteScraperService {
   Future<List<ScrapedNotice>> _fetchNotices() async {
     try {
       debugPrint('Fetching notices from website...');
-      
+
       // Note: Since we cannot directly parse HTML without additional packages,
       // we'll implement a basic approach using HTTP client
       // For production, consider using packages like html or web_scraper
-      
-      final response = await http.get(
-        Uri.parse(_websiteUrl),
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (compatible; RPICommunicationApp/1.0)',
-        },
-      ).timeout(const Duration(seconds: 30));
+
+      final response = await http
+          .get(
+            Uri.parse(_websiteUrl),
+            headers: {
+              'User-Agent': 'Mozilla/5.0 (compatible; RPICommunicationApp/1.0)',
+            },
+          )
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode != 200) {
         throw Exception('Failed to load website: ${response.statusCode}');
@@ -58,22 +62,22 @@ class WebsiteScraperService {
       // This is a simplified implementation
       // In production, use a proper HTML parser
       final notices = _parseNoticesFromHtml(response.body);
-      
+
       // Cache the results
       await _cacheNotices(notices);
-      
+
       // Update last check time
       final prefs = await SharedPreferences.getInstance();
       await prefs.setInt(_lastCheckKey, DateTime.now().millisecondsSinceEpoch);
-      
+
       // Notify listeners
       _noticesController.add(notices);
-      
+
       debugPrint('Fetched ${notices.length} notices from website');
       return notices;
     } catch (e) {
       debugPrint('Error fetching website notices: $e');
-      
+
       // Return cached notices on error
       return await _getCachedNotices();
     }
@@ -84,11 +88,11 @@ class WebsiteScraperService {
   /// For production, use a proper HTML parser like html package
   List<ScrapedNotice> _parseNoticesFromHtml(String html) {
     final notices = <ScrapedNotice>[];
-    
+
     try {
       // TODO: Implement proper HTML parsing using 'html' package
       // This is a placeholder that returns empty list
-      // 
+      //
       // Recommended approach:
       // 1. Add dependency: html: ^0.15.4
       // 2. Parse HTML: var document = parse(html);
@@ -109,12 +113,14 @@ class WebsiteScraperService {
       //     source: 'Website',
       //   ));
       // }
-      
-      debugPrint('HTML parsing not yet implemented. Add html package for full functionality.');
+
+      debugPrint(
+        'HTML parsing not yet implemented. Add html package for full functionality.',
+      );
     } catch (e) {
       debugPrint('Error parsing HTML: $e');
     }
-    
+
     return notices;
   }
 
@@ -134,9 +140,9 @@ class WebsiteScraperService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final cachedData = prefs.getString(_cacheKey);
-      
+
       if (cachedData == null) return [];
-      
+
       final List<dynamic> noticesJson = jsonDecode(cachedData);
       return noticesJson.map((json) => ScrapedNotice.fromJson(json)).toList();
     } catch (e) {
@@ -150,16 +156,17 @@ class WebsiteScraperService {
     if (forceRefresh) {
       return await _fetchNotices();
     }
-    
+
     // Check if we need to refresh based on last check time
     final prefs = await SharedPreferences.getInstance();
     final lastCheck = prefs.getInt(_lastCheckKey);
-    
-    if (lastCheck == null || 
-        DateTime.now().millisecondsSinceEpoch - lastCheck > 1800000) { // 30 minutes
+
+    if (lastCheck == null ||
+        DateTime.now().millisecondsSinceEpoch - lastCheck > 1800000) {
+      // 30 minutes
       return await _fetchNotices();
     }
-    
+
     return await _getCachedNotices();
   }
 
@@ -168,9 +175,9 @@ class WebsiteScraperService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final lastCheck = prefs.getInt(_lastCheckKey);
-      
+
       if (lastCheck == null) return null;
-      
+
       return DateTime.fromMillisecondsSinceEpoch(lastCheck);
     } catch (e) {
       return null;
@@ -178,7 +185,10 @@ class WebsiteScraperService {
   }
 
   /// Convert scraped notices to notification models
-  List<NotificationModel> toNotificationModels(List<ScrapedNotice> notices, String userId) {
+  List<NotificationModel> toNotificationModels(
+    List<ScrapedNotice> notices,
+    String userId,
+  ) {
     return notices.map((notice) {
       return NotificationModel(
         id: notice.id,

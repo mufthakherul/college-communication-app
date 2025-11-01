@@ -26,8 +26,10 @@ class TimetableService {
 
   void _startPolling() {
     _fetchTimetables();
-    _pollingTimer =
-        Timer.periodic(const Duration(seconds: 10), (_) => _fetchTimetables());
+    _pollingTimer = Timer.periodic(
+      const Duration(seconds: 10),
+      (_) => _fetchTimetables(),
+    );
   }
 
   void _stopPolling() {
@@ -40,10 +42,7 @@ class TimetableService {
       final docs = await _appwrite.databases.listDocuments(
         databaseId: AppwriteConfig.databaseId,
         collectionId: AppwriteConfig.timetablesCollectionId,
-        queries: [
-          Query.orderDesc('created_at'),
-          Query.limit(100),
-        ],
+        queries: [Query.orderDesc('created_at'), Query.limit(100)],
       );
 
       final timetables = docs.documents
@@ -59,7 +58,9 @@ class TimetableService {
 
   // Get timetable by department and shift
   Future<TimetableModel?> getTimetableByClass(
-      String department, String shift) async {
+    String department,
+    String shift,
+  ) async {
     try {
       final docs = await _appwrite.databases.listDocuments(
         databaseId: AppwriteConfig.databaseId,
@@ -121,7 +122,9 @@ class TimetableService {
 
   // Update timetable (admin only)
   Future<bool> updateTimetable(
-      String timetableId, Map<String, dynamic> updates) async {
+    String timetableId,
+    Map<String, dynamic> updates,
+  ) async {
     try {
       if (_currentUserId == null) {
         throw Exception('User not authenticated');

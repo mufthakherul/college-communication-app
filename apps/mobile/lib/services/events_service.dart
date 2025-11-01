@@ -26,8 +26,10 @@ class EventsService {
 
   void _startPolling() {
     _fetchEvents();
-    _pollingTimer =
-        Timer.periodic(const Duration(seconds: 10), (_) => _fetchEvents());
+    _pollingTimer = Timer.periodic(
+      const Duration(seconds: 10),
+      (_) => _fetchEvents(),
+    );
   }
 
   void _stopPolling() {
@@ -40,14 +42,12 @@ class EventsService {
       final docs = await _appwrite.databases.listDocuments(
         databaseId: AppwriteConfig.databaseId,
         collectionId: AppwriteConfig.eventsCollectionId,
-        queries: [
-          Query.orderDesc('start_date'),
-          Query.limit(100),
-        ],
+        queries: [Query.orderDesc('start_date'), Query.limit(100)],
       );
 
-      final events =
-          docs.documents.map((doc) => EventModel.fromJson(doc.data)).toList();
+      final events = docs.documents
+          .map((doc) => EventModel.fromJson(doc.data))
+          .toList();
 
       _eventsController?.add(events);
     } catch (e) {
