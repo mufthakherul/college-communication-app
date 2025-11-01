@@ -104,7 +104,6 @@ class SecurityService {
           } catch (e) {
             // Individual file check failed - continue checking others
             debugPrint('Error checking file $path: $e');
-            continue;
           }
         }
       } else if (Platform.isIOS) {
@@ -132,7 +131,6 @@ class SecurityService {
           } catch (e) {
             // Individual file check failed - continue checking others
             debugPrint('Error checking file $path: $e');
-            continue;
           }
         }
       }

@@ -36,10 +36,10 @@ void main() async {
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 16),
-                  Text(
+                  const Text(
                     'The app encountered an error during startup. Please reinstall the app or contact support.',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 16),
                   ),
                   if (kDebugMode) ...[
                     const SizedBox(height: 16),
