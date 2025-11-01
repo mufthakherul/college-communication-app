@@ -60,6 +60,7 @@ class AuthService {
     String email,
     String password,
     String displayName,
+    String phoneNumber,
   ) async {
     try {
       // Create account
@@ -87,8 +88,10 @@ class AuthService {
           data: {
             'email': email,
             'display_name': displayName,
+            'phone_number': phoneNumber,
             'role': 'student', // Default role
             'is_active': true,
+            'email_verified': false, // New field for email verification
             'created_at': DateTime.now().toIso8601String(),
             'updated_at': DateTime.now().toIso8601String(),
           },
