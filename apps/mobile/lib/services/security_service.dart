@@ -229,16 +229,15 @@ class SecurityService {
 
   /// Determines if the app should be allowed to run based on security checks
   bool shouldAllowAppExecution(SecurityCheckResult result) {
-    // In release mode, block execution if critical security checks fail
+    // In release mode, only block for critical backend issues
+    // Package name and build integrity checks are informational only
     if (kReleaseMode) {
-      if (!result.packageNameValid ||
-          !result.backendConfigValid ||
-          !result.buildIntegrityValid) {
+      if (!result.backendConfigValid) {
         return false;
       }
 
-      // For rooted devices, show warning but allow execution
-      // (blocking rooted devices entirely may impact legitimate users)
+      // For other checks (rooted devices, package validation), show warning but allow execution
+      // This prevents blocking legitimate users while maintaining security awareness
     }
 
     // In debug mode, always allow execution
