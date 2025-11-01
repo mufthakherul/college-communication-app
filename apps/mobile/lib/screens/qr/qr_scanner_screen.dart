@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:campus_mesh/services/qr_data_service.dart';
 import 'package:campus_mesh/services/mesh_network_service.dart';
+import 'package:campus_mesh/services/permission_service.dart';
 
 /// Universal QR scanner screen that handles different QR code types
 class QRScannerScreen extends StatefulWidget {
@@ -12,12 +13,65 @@ class QRScannerScreen extends StatefulWidget {
 }
 
 class _QRScannerScreenState extends State<QRScannerScreen> {
-  final GlobalKey _qrKey = GlobalKey(debugLabel: 'QR');
   final _qrDataService = QRDataService();
   final _meshService = MeshNetworkService();
-
-  QRViewController? _controller;
+  final _permissionService = PermissionService();
+  final MobileScannerController _controller = MobileScannerController();
+  
   bool _isProcessing = false;
+  bool _hasPermission = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkCameraPermission();
+  }
+
+  Future<void> _checkCameraPermission() async {
+    final hasPermission = await _permissionService.isCameraPermissionGranted();
+    if (!hasPermission) {
+      final granted = await _permissionService.requestCameraPermission();
+      if (mounted) {
+        setState(() {
+          _hasPermission = granted;
+        });
+      }
+      if (!granted && mounted) {
+        _showPermissionDeniedDialog();
+      }
+    } else {
+      if (mounted) {
+        setState(() {
+          _hasPermission = true;
+        });
+      }
+    }
+  }
+
+  void _showPermissionDeniedDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Camera Permission Required'),
+        content: const Text(
+          'Camera permission is required to scan QR codes. Please grant the permission in app settings.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Navigator.pop(context);
+              await _permissionService.openSettings();
+            },
+            child: const Text('Open Settings'),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,95 +79,156 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
       appBar: AppBar(
         title: const Text('Scan QR Code'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.flash_on),
-            onPressed: () async {
-              await _controller?.toggleFlash();
-            },
-          ),
+          if (_hasPermission) ...[
+            IconButton(
+              icon: ValueListenableBuilder(
+                valueListenable: _controller.torchState,
+                builder: (context, state, child) {
+                  switch (state) {
+                    case TorchState.off:
+                      return const Icon(Icons.flash_off);
+                    case TorchState.on:
+                      return const Icon(Icons.flash_on);
+                    case TorchState.auto:
+                      return const Icon(Icons.flash_auto);
+                    default:
+                      return const Icon(Icons.flash_off);
+                  }
+                },
+              ),
+              onPressed: () => _controller.toggleTorch(),
+            ),
+            IconButton(
+              icon: ValueListenableBuilder(
+                valueListenable: _controller.cameraFacingState,
+                builder: (context, state, child) {
+                  return const Icon(Icons.flip_camera_ios);
+                },
+              ),
+              onPressed: () => _controller.switchCamera(),
+            ),
+          ],
         ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            flex: 5,
-            child: QRView(
-              key: _qrKey,
-              onQRViewCreated: _onQRViewCreated,
-              overlay: QrScannerOverlayShape(
-                borderColor: Theme.of(context).primaryColor,
-                borderRadius: 10,
-                borderLength: 30,
-                borderWidth: 10,
-                cutOutSize: 300,
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Container(
-              padding: const EdgeInsets.all(24),
-              color: Colors.white,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (_isProcessing)
-                    const CircularProgressIndicator()
-                  else ...[
-                    Icon(
-                      Icons.qr_code_scanner,
-                      size: 48,
-                      color: Theme.of(context).primaryColor,
+      body: !_hasPermission
+          ? Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.camera_alt_outlined,
+                      size: 80,
+                      color: Colors.grey,
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 24),
                     const Text(
-                      'Point camera at QR code',
+                      'Camera Permission Required',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Works with device pairing, notices, messages, and more',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey.shade600,
-                      ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'To scan QR codes, please grant camera permission.',
                       textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: _checkCameraPermission,
+                      child: const Text('Grant Permission'),
                     ),
                   ],
-                ],
+                ),
               ),
+            )
+          : Column(
+              children: [
+                Expanded(
+                  flex: 5,
+                  child: Stack(
+                    children: [
+                      MobileScanner(
+                        controller: _controller,
+                        onDetect: (capture) {
+                          final List<Barcode> barcodes = capture.barcodes;
+                          for (final barcode in barcodes) {
+                            if (barcode.rawValue != null && !_isProcessing) {
+                              _handleScannedData(barcode.rawValue!);
+                              break;
+                            }
+                          }
+                        },
+                      ),
+                      Center(
+                        child: Container(
+                          width: 300,
+                          height: 300,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Theme.of(context).primaryColor,
+                              width: 3,
+                            ),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Container(
+                    padding: const EdgeInsets.all(24),
+                    color: Theme.of(context).scaffoldBackgroundColor,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (_isProcessing)
+                          const CircularProgressIndicator()
+                        else ...[
+                          Icon(
+                            Icons.qr_code_scanner,
+                            size: 48,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            'Point camera at QR code',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Works with device pairing, notices, messages, and more',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey.shade600,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 
-  void _onQRViewCreated(QRViewController controller) {
-    _controller = controller;
-    controller.scannedDataStream.listen((scanData) async {
-      if (_isProcessing || scanData.code == null) return;
-
-      setState(() {
-        _isProcessing = true;
-      });
-
-      await controller.pauseCamera();
-      await _handleScannedData(scanData.code!);
-
-      if (mounted) {
-        setState(() {
-          _isProcessing = false;
-        });
-        await controller.resumeCamera();
-      }
-    });
-  }
-
   Future<void> _handleScannedData(String qrString) async {
+    if (_isProcessing) return;
+    
+    setState(() {
+      _isProcessing = true;
+    });
+
     try {
       // Try to parse as QR data
       final qrData = _qrDataService.parseQRCode(qrString);
@@ -121,6 +236,11 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
       if (qrData != null) {
         if (qrData.isExpired) {
           _showError('This QR code has expired');
+          if (mounted) {
+            setState(() {
+              _isProcessing = false;
+            });
+          }
           return;
         }
 
@@ -150,6 +270,12 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
       }
     } catch (e) {
       _showError('Failed to process QR code: $e');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isProcessing = false;
+        });
+      }
     }
   }
 
@@ -401,7 +527,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
 
   @override
   void dispose() {
-    _controller?.dispose();
+    _controller.dispose();
     super.dispose();
   }
 }
