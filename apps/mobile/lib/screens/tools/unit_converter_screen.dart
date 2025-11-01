@@ -140,7 +140,8 @@ class _UnitConverterScreenState extends State<UnitConverterScreen> {
                 border: OutlineInputBorder(),
                 isDense: true,
               ),
-              items: _conversionFactors[_category]!.keys
+              items: _conversionFactors[_category]!
+                  .keys
                   .map(
                     (unit) => DropdownMenuItem(value: unit, child: Text(unit)),
                   )
@@ -182,7 +183,8 @@ class _UnitConverterScreenState extends State<UnitConverterScreen> {
                 border: OutlineInputBorder(),
                 isDense: true,
               ),
-              items: _conversionFactors[_category]!.keys
+              items: _conversionFactors[_category]!
+                  .keys
                   .map(
                     (unit) => DropdownMenuItem(value: unit, child: Text(unit)),
                   )

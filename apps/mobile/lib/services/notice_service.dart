@@ -50,9 +50,8 @@ class NoticeService {
         ],
       );
 
-      final notices = docs.documents
-          .map((doc) => NoticeModel.fromJson(doc.data))
-          .toList();
+      final notices =
+          docs.documents.map((doc) => NoticeModel.fromJson(doc.data)).toList();
 
       _noticesController?.add(notices);
     } catch (e) {
