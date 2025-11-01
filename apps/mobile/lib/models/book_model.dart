@@ -6,7 +6,7 @@ enum BookCategory {
   research,
   magazine,
   journal,
-  other
+  other,
 }
 
 enum BookStatus { available, borrowed, reserved, maintenance }

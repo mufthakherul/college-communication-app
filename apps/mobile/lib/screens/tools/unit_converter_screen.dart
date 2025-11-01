@@ -33,11 +33,7 @@ class _UnitConverterScreenState extends State<UnitConverterScreen> {
       'Ounces': 35.274,
       'Tons': 0.001,
     },
-    'Temperature': {
-      'Celsius': 1.0,
-      'Fahrenheit': 1.0,
-      'Kelvin': 1.0,
-    },
+    'Temperature': {'Celsius': 1.0, 'Fahrenheit': 1.0, 'Kelvin': 1.0},
     'Area': {
       'Square Meters': 1.0,
       'Square Kilometers': 0.000001,
@@ -109,9 +105,7 @@ class _UnitConverterScreenState extends State<UnitConverterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Unit Converter'),
-      ),
+      appBar: AppBar(title: const Text('Unit Converter')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -146,12 +140,10 @@ class _UnitConverterScreenState extends State<UnitConverterScreen> {
                 border: OutlineInputBorder(),
                 isDense: true,
               ),
-              items: _conversionFactors[_category]!
-                  .keys
-                  .map((unit) => DropdownMenuItem(
-                        value: unit,
-                        child: Text(unit),
-                      ))
+              items: _conversionFactors[_category]!.keys
+                  .map(
+                    (unit) => DropdownMenuItem(value: unit, child: Text(unit)),
+                  )
                   .toList(),
               onChanged: (value) {
                 setState(() => _fromUnit = value!);
@@ -190,12 +182,10 @@ class _UnitConverterScreenState extends State<UnitConverterScreen> {
                 border: OutlineInputBorder(),
                 isDense: true,
               ),
-              items: _conversionFactors[_category]!
-                  .keys
-                  .map((unit) => DropdownMenuItem(
-                        value: unit,
-                        child: Text(unit),
-                      ))
+              items: _conversionFactors[_category]!.keys
+                  .map(
+                    (unit) => DropdownMenuItem(value: unit, child: Text(unit)),
+                  )
                   .toList(),
               onChanged: (value) {
                 setState(() => _toUnit = value!);

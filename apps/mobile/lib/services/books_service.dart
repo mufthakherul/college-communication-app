@@ -27,8 +27,10 @@ class BooksService {
 
   void _startPolling() {
     _fetchBooks(); // Fetch immediately
-    _pollingTimer =
-        Timer.periodic(const Duration(seconds: 10), (_) => _fetchBooks());
+    _pollingTimer = Timer.periodic(
+      const Duration(seconds: 10),
+      (_) => _fetchBooks(),
+    );
   }
 
   void _stopPolling() {
@@ -41,14 +43,12 @@ class BooksService {
       final docs = await _appwrite.databases.listDocuments(
         databaseId: AppwriteConfig.databaseId,
         collectionId: AppwriteConfig.booksCollectionId,
-        queries: [
-          Query.orderDesc('created_at'),
-          Query.limit(100),
-        ],
+        queries: [Query.orderDesc('created_at'), Query.limit(100)],
       );
 
-      final books =
-          docs.documents.map((doc) => BookModel.fromJson(doc.data)).toList();
+      final books = docs.documents
+          .map((doc) => BookModel.fromJson(doc.data))
+          .toList();
 
       _booksController?.add(books);
     } catch (e) {
@@ -104,20 +104,14 @@ class BooksService {
       final titleDocs = await _appwrite.databases.listDocuments(
         databaseId: AppwriteConfig.databaseId,
         collectionId: AppwriteConfig.booksCollectionId,
-        queries: [
-          Query.search('title', query),
-          Query.limit(50),
-        ],
+        queries: [Query.search('title', query), Query.limit(50)],
       );
 
       // Search by author
       final authorDocs = await _appwrite.databases.listDocuments(
         databaseId: AppwriteConfig.databaseId,
         collectionId: AppwriteConfig.booksCollectionId,
-        queries: [
-          Query.search('author', query),
-          Query.limit(50),
-        ],
+        queries: [Query.search('author', query), Query.limit(50)],
       );
 
       // Combine and deduplicate results
@@ -219,8 +213,13 @@ class BooksService {
   }
 
   // Borrow a book
-  Future<bool> borrowBook(String bookId, String userId, String userName,
-      String userEmail, int daysToReturn) async {
+  Future<bool> borrowBook(
+    String bookId,
+    String userId,
+    String userName,
+    String userEmail,
+    int daysToReturn,
+  ) async {
     try {
       final book = await getBook(bookId);
       if (book == null || !book.isAvailable) {

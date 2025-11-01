@@ -57,7 +57,7 @@ class _QRGeneratorMenuScreenState extends State<QRGeneratorMenuScreen> {
 
   Future<void> _generateCustomTextQR() async {
     final textController = TextEditingController();
-    
+
     final result = await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
@@ -86,12 +86,10 @@ class _QRGeneratorMenuScreenState extends State<QRGeneratorMenuScreen> {
     if (result != null && result.isNotEmpty) {
       try {
         final user = await _authService.currentUser;
-        
+
         final qrData = QRCodeData(
           type: QRDataType.custom,
-          data: {
-            'text': result,
-          },
+          data: {'text': result},
           senderId: user?.uid,
           senderName: user?.displayName,
         );
@@ -157,26 +155,18 @@ class _QRGeneratorMenuScreenState extends State<QRGeneratorMenuScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Generate QR Code'),
-      ),
+      appBar: AppBar(title: const Text('Generate QR Code')),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           const Text(
             'Choose what to share',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Text(
             'Generate a QR code to share information with others',
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[600],
-            ),
+            style: TextStyle(fontSize: 14, color: Colors.grey[600]),
           ),
           const SizedBox(height: 24),
           _buildOptionCard(
@@ -231,10 +221,7 @@ class _QRGeneratorMenuScreenState extends State<QRGeneratorMenuScreen> {
                   '• Some codes expire after a set time\n'
                   '• Only RPI Communication App can scan these codes\n'
                   '• Never share sensitive passwords via QR codes',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.blue.shade600,
-                  ),
+                  style: TextStyle(fontSize: 13, color: Colors.blue.shade600),
                 ),
               ],
             ),
@@ -283,10 +270,7 @@ class _QRGeneratorMenuScreenState extends State<QRGeneratorMenuScreen> {
                     const SizedBox(height: 4),
                     Text(
                       description,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontSize: 13, color: Colors.grey[600]),
                     ),
                   ],
                 ),

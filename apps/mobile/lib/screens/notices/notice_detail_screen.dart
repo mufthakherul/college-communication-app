@@ -135,9 +135,7 @@ class NoticeDetailScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       Text(
                         notice.title,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineSmall
+                        style: Theme.of(context).textTheme.headlineSmall
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),

@@ -110,9 +110,7 @@ class _CreateBookScreenState extends State<CreateBookScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add New Book'),
-      ),
+      appBar: AppBar(title: const Text('Add New Book')),
       body: Form(
         key: _formKey,
         child: ListView(

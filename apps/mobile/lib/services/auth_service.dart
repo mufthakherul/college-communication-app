@@ -27,7 +27,7 @@ class AuthService {
       // Try to get current session from Appwrite
       final user = await _appwrite.account.get();
       _currentUserId = user.$id;
-      
+
       // Session exists, user is authenticated
       debugPrint('Session restored for user: ${user.$id}');
     } catch (e) {
@@ -163,10 +163,7 @@ class AuthService {
         databaseId: AppwriteConfig.databaseId,
         collectionId: AppwriteConfig.usersCollectionId,
         documentId: _currentUserId!,
-        data: {
-          ...updates,
-          'updated_at': DateTime.now().toIso8601String(),
-        },
+        data: {...updates, 'updated_at': DateTime.now().toIso8601String()},
       );
     } on AppwriteException catch (e) {
       throw Exception('Failed to update user profile: ${e.message}');

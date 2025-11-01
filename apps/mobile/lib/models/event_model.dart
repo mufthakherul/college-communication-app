@@ -17,7 +17,7 @@ class EventModel {
   final DateTime createdAt;
   final DateTime? updatedAt;
   final List<String>
-      targetAudience; // 'all', 'students', 'teachers', specific departments
+  targetAudience; // 'all', 'students', 'teachers', specific departments
 
   EventModel({
     required this.id,

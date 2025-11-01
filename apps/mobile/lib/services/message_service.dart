@@ -137,8 +137,9 @@ class MessageService {
         // Combine and sort
         final allMessages = [
           ...sentDocs.documents.map((doc) => MessageModel.fromJson(doc.data)),
-          ...receivedDocs.documents
-              .map((doc) => MessageModel.fromJson(doc.data)),
+          ...receivedDocs.documents.map(
+            (doc) => MessageModel.fromJson(doc.data),
+          ),
         ];
 
         allMessages.sort((a, b) {
@@ -212,10 +213,7 @@ class MessageService {
         databaseId: AppwriteConfig.databaseId,
         collectionId: AppwriteConfig.messagesCollectionId,
         documentId: messageId,
-        data: {
-          'read': true,
-          'read_at': DateTime.now().toIso8601String(),
-        },
+        data: {'read': true, 'read_at': DateTime.now().toIso8601String()},
       );
     } on AppwriteException catch (e) {
       throw Exception('Failed to mark message as read: ${e.message}');
