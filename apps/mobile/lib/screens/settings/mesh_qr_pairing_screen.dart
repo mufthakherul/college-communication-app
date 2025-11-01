@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:campus_mesh/services/mesh_network_service.dart';
 
 /// Screen for mesh network QR code pairing
@@ -13,10 +13,10 @@ class MeshQRPairingScreen extends StatefulWidget {
 
 class _MeshQRPairingScreenState extends State<MeshQRPairingScreen> {
   final _meshService = MeshNetworkService();
+  final MobileScannerController _scannerController = MobileScannerController();
   MeshPairingData? _pairingData;
   bool _isScanning = false;
-  QRViewController? _qrController;
-  final GlobalKey _qrKey = GlobalKey(debugLabel: 'QR');
+  bool _isProcessing = false;
 
   @override
   void initState() {
@@ -101,10 +101,6 @@ class _MeshQRPairingScreenState extends State<MeshQRPairingScreen> {
               size: 280,
               backgroundColor: Colors.white,
               errorCorrectionLevel: QrErrorCorrectLevel.H,
-              embeddedImage: const AssetImage('assets/logo.png'),
-              embeddedImageStyle: const QrEmbeddedImageStyle(
-                size: Size(40, 40),
-              ),
             ),
           ),
           const SizedBox(height: 24),
@@ -179,33 +175,57 @@ class _MeshQRPairingScreenState extends State<MeshQRPairingScreen> {
     return Column(
       children: [
         Expanded(
-          child: QRView(
-            key: _qrKey,
-            onQRViewCreated: _onQRViewCreated,
-            overlay: QrScannerOverlayShape(
-              borderColor: Theme.of(context).primaryColor,
-              borderRadius: 10,
-              borderLength: 30,
-              borderWidth: 10,
-              cutOutSize: 300,
-            ),
+          child: Stack(
+            children: [
+              MobileScanner(
+                controller: _scannerController,
+                onDetect: (capture) {
+                  if (_isProcessing) return;
+                  
+                  final List<Barcode> barcodes = capture.barcodes;
+                  for (final barcode in barcodes) {
+                    if (barcode.rawValue != null) {
+                      _handleScannedCode(barcode.rawValue!);
+                      break;
+                    }
+                  }
+                },
+              ),
+              Center(
+                child: Container(
+                  width: 300,
+                  height: 300,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Theme.of(context).primaryColor,
+                      width: 3,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         Container(
           padding: const EdgeInsets.all(24),
-          color: Colors.white,
+          color: Theme.of(context).scaffoldBackgroundColor,
           child: Column(
             children: [
-              const Text(
-                'Scan QR Code',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Point your camera at the QR code to pair with another device',
-                style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
-                textAlign: TextAlign.center,
-              ),
+              if (_isProcessing)
+                const CircularProgressIndicator()
+              else ...[
+                const Text(
+                  'Scan QR Code',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Point your camera at the QR code to pair with another device',
+                  style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+                  textAlign: TextAlign.center,
+                ),
+              ],
               const SizedBox(height: 16),
               Row(
                 children: [
@@ -244,29 +264,36 @@ class _MeshQRPairingScreenState extends State<MeshQRPairingScreen> {
     );
   }
 
-  void _onQRViewCreated(QRViewController controller) {
-    _qrController = controller;
-    controller.scannedDataStream.listen((scanData) async {
-      if (scanData.code != null) {
-        // Pause scanning
-        await controller.pauseCamera();
+  Future<void> _handleScannedCode(String qrCode) async {
+    if (_isProcessing) return;
+    
+    setState(() {
+      _isProcessing = true;
+    });
 
-        // Process QR code
-        final success = await _meshService.pairWithQRCode(scanData.code!);
+    try {
+      // Process QR code
+      final success = await _meshService.pairWithQRCode(qrCode);
 
+      if (mounted) {
         if (success) {
-          if (mounted) {
-            _showMessage('Successfully paired with device!');
-            Navigator.pop(context, true);
-          }
+          _showMessage('Successfully paired with device!');
+          Navigator.pop(context, true);
         } else {
-          if (mounted) {
-            _showMessage('Failed to pair. QR code may be invalid or expired.');
-            await controller.resumeCamera();
-          }
+          _showMessage('Failed to pair. QR code may be invalid or expired.');
+          setState(() {
+            _isProcessing = false;
+          });
         }
       }
-    });
+    } catch (e) {
+      if (mounted) {
+        _showMessage('Error: $e');
+        setState(() {
+          _isProcessing = false;
+        });
+      }
+    }
   }
 
   void _showMessage(String message) {
@@ -278,7 +305,7 @@ class _MeshQRPairingScreenState extends State<MeshQRPairingScreen> {
 
   @override
   void dispose() {
-    _qrController?.dispose();
+    _scannerController.dispose();
     super.dispose();
   }
 }
