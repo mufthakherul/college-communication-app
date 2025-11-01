@@ -44,6 +44,21 @@ subprojects { subproject ->
                         namespace pluginNamespace
                     }
                 }
+                
+                // Ensure consistent JVM target across all subprojects
+                compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_17
+                    targetCompatibility JavaVersion.VERSION_17
+                }
+            }
+        }
+        
+        // Apply Kotlin JVM target for all projects with Kotlin plugin
+        if (subproject.plugins.hasPlugin('kotlin-android')) {
+            subproject.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+                kotlinOptions {
+                    jvmTarget = '17'
+                }
             }
         }
     }
