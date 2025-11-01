@@ -36,7 +36,9 @@ subprojects { subproject ->
                     def pluginNamespaces = [
                         'flutter_nearby_connections': 'com.pkmnapps.flutter_nearby_connections',
                         'nearby_service': 'np.com.susanthapa.nearby_service',
-                        'qr_code_scanner': 'net.touchcapture.qr.flutterqr'
+                        'qr_code_scanner': 'net.touchcapture.qr.flutterqr',
+                        'flutter_webrtc': 'com.cloudwebrtc.webrtc',
+                        'workmanager': 'be.tramckrijte.workmanager'
                     ]
                     
                     if (pluginNamespaces.containsKey(subproject.name)) {
