@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:campus_mesh/screens/notices/notices_screen.dart';
 import 'package:campus_mesh/screens/messages/messages_screen.dart';
+import 'package:campus_mesh/screens/books/books_screen.dart';
+import 'package:campus_mesh/screens/tools/tools_screen.dart';
 import 'package:campus_mesh/screens/profile/profile_screen.dart';
 import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/services/demo_mode_service.dart';
@@ -77,6 +79,8 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> get _screens => [
         const NoticesScreen(),
         const MessagesScreen(),
+        const BooksScreen(),
+        const ToolsScreen(),
         ProfileScreen(user: _currentUser, currentUser: _currentUser),
       ];
 
@@ -146,12 +150,17 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: (index) => setState(() => _currentIndex = index),
+        type: BottomNavigationBarType.fixed,
+        selectedFontSize: 12,
+        unselectedFontSize: 12,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.notifications),
             label: 'Notices',
           ),
           BottomNavigationBarItem(icon: Icon(Icons.message), label: 'Messages'),
+          BottomNavigationBarItem(icon: Icon(Icons.library_books), label: 'Library'),
+          BottomNavigationBarItem(icon: Icon(Icons.build), label: 'Tools'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
