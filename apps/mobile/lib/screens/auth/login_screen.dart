@@ -105,16 +105,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   Text(
                     'RPI Communication',
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'Rangpur Government Polytechnic Institute',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w500,
-                    ),
+                          fontWeight: FontWeight.w500,
+                        ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 4),
@@ -131,9 +131,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Text(
                       'rangpur.polytech.gov.bd',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.blue,
-                        decoration: TextDecoration.underline,
-                      ),
+                            color: Colors.blue,
+                            decoration: TextDecoration.underline,
+                          ),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -254,9 +254,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     Text(
                       'Demo mode: Local sample data only, no real data access',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Colors.grey,
-                        fontStyle: FontStyle.italic,
-                      ),
+                            color: Colors.grey,
+                            fontStyle: FontStyle.italic,
+                          ),
                       textAlign: TextAlign.center,
                     ),
                 ],
