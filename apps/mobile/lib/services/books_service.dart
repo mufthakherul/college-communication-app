@@ -70,9 +70,7 @@ class BooksService {
         ],
       );
 
-      return docs.documents
-          .map((doc) => BookModel.fromJson(doc.data))
-          .toList();
+      return docs.documents.map((doc) => BookModel.fromJson(doc.data)).toList();
     } catch (e) {
       debugPrint('Error fetching books by category: $e');
       return [];
@@ -92,9 +90,7 @@ class BooksService {
         ],
       );
 
-      return docs.documents
-          .map((doc) => BookModel.fromJson(doc.data))
-          .toList();
+      return docs.documents.map((doc) => BookModel.fromJson(doc.data)).toList();
     } catch (e) {
       debugPrint('Error fetching books by department: $e');
       return [];

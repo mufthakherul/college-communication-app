@@ -21,7 +21,7 @@ class _NotesScreenState extends State<NotesScreen> {
   Future<void> _loadNotes() async {
     final prefs = await SharedPreferences.getInstance();
     final notesJson = prefs.getStringList('notes') ?? [];
-    
+
     setState(() {
       _notes = notesJson
           .map((json) => Note.fromString(json))
@@ -265,7 +265,8 @@ class _NoteDialogState extends State<_NoteDialog> {
   void initState() {
     super.initState();
     _titleController = TextEditingController(text: widget.note?.title ?? '');
-    _contentController = TextEditingController(text: widget.note?.content ?? '');
+    _contentController =
+        TextEditingController(text: widget.note?.content ?? '');
   }
 
   @override

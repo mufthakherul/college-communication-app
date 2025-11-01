@@ -14,7 +14,7 @@ class EventsScreen extends StatefulWidget {
 class _EventsScreenState extends State<EventsScreen> {
   final _eventsService = EventsService();
   final _authService = AuthService();
-  
+
   UserModel? _currentUser;
   EventType? _selectedType;
 
@@ -70,7 +70,8 @@ class _EventsScreenState extends State<EventsScreen> {
                         label: Text(_getTypeName(type)),
                         selected: _selectedType == type,
                         onSelected: (selected) {
-                          setState(() => _selectedType = selected ? type : null);
+                          setState(
+                              () => _selectedType = selected ? type : null);
                         },
                       ),
                     )),
@@ -272,7 +273,8 @@ class _EventsScreenState extends State<EventsScreen> {
                         style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                       ),
                       const SizedBox(width: 16),
-                      Icon(Icons.location_on, size: 16, color: Colors.grey[600]),
+                      Icon(Icons.location_on,
+                          size: 16, color: Colors.grey[600]),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
@@ -327,7 +329,8 @@ class _EventsScreenState extends State<EventsScreen> {
                       if (event.isRegistrationRequired &&
                           event.isRegistrationOpen) ...[
                         const Spacer(),
-                        const Icon(Icons.people, size: 16, color: Colors.orange),
+                        const Icon(Icons.people,
+                            size: 16, color: Colors.orange),
                         const SizedBox(width: 4),
                         Text(
                           '${event.currentParticipants}/${event.maxParticipants ?? "∞"}',

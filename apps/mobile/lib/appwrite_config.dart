@@ -23,7 +23,8 @@ class AppwriteConfig {
   static const String booksCollectionId = 'books';
   static const String bookBorrowsCollectionId = 'book_borrows';
   static const String assignmentsCollectionId = 'assignments';
-  static const String assignmentSubmissionsCollectionId = 'assignment_submissions';
+  static const String assignmentSubmissionsCollectionId =
+      'assignment_submissions';
   static const String timetablesCollectionId = 'timetables';
   static const String studyGroupsCollectionId = 'study_groups';
   static const String eventsCollectionId = 'events';
