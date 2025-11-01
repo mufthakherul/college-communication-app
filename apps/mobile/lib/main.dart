@@ -47,7 +47,7 @@ void main() async {
     await SentryService.initialize(
       dsn: sentryDsn,
       environment: kReleaseMode ? 'production' : 'development',
-      release: 'campus_mesh@1.0.0+1',
+      release: 'campus_mesh@2.0.0+2',
       tracesSampleRate: kReleaseMode ? 0.2 : 1.0, // Sample 20% in production
     );
   }
