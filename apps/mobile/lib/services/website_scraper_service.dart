@@ -45,14 +45,12 @@ class WebsiteScraperService {
       // we'll implement a basic approach using HTTP client
       // For production, consider using packages like html or web_scraper
 
-      final response = await http
-          .get(
-            Uri.parse(_websiteUrl),
-            headers: {
-              'User-Agent': 'Mozilla/5.0 (compatible; RPICommunicationApp/1.0)',
-            },
-          )
-          .timeout(const Duration(seconds: 30));
+      final response = await http.get(
+        Uri.parse(_websiteUrl),
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (compatible; RPICommunicationApp/1.0)',
+        },
+      ).timeout(const Duration(seconds: 30));
 
       if (response.statusCode != 200) {
         throw Exception('Failed to load website: ${response.statusCode}');
@@ -232,20 +230,20 @@ class ScrapedNotice {
   });
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'title': title,
-    'description': description,
-    'url': url,
-    'publishedDate': publishedDate.toIso8601String(),
-    'source': source,
-  };
+        'id': id,
+        'title': title,
+        'description': description,
+        'url': url,
+        'publishedDate': publishedDate.toIso8601String(),
+        'source': source,
+      };
 
   factory ScrapedNotice.fromJson(Map<String, dynamic> json) => ScrapedNotice(
-    id: json['id'] ?? '',
-    title: json['title'] ?? '',
-    description: json['description'] ?? '',
-    url: json['url'] ?? '',
-    publishedDate: DateTime.parse(json['publishedDate']),
-    source: json['source'] ?? 'Website',
-  );
+        id: json['id'] ?? '',
+        title: json['title'] ?? '',
+        description: json['description'] ?? '',
+        url: json['url'] ?? '',
+        publishedDate: DateTime.parse(json['publishedDate']),
+        source: json['source'] ?? 'Website',
+      );
 }

@@ -454,9 +454,8 @@ class _EventsScreenState extends State<EventsScreen> {
                                   ? 'Successfully registered!'
                                   : 'Registration failed',
                             ),
-                            backgroundColor: success
-                                ? Colors.green
-                                : Colors.red,
+                            backgroundColor:
+                                success ? Colors.green : Colors.red,
                           ),
                         );
                         Navigator.pop(context);
