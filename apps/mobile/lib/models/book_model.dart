@@ -75,8 +75,9 @@ class BookModel {
       createdAt: data['created_at'] != null
           ? DateTime.parse(data['created_at'])
           : DateTime.now(),
-      updatedAt:
-          data['updated_at'] != null ? DateTime.parse(data['updated_at']) : null,
+      updatedAt: data['updated_at'] != null
+          ? DateTime.parse(data['updated_at'])
+          : null,
       addedBy: data['added_by'] ?? '',
     );
   }
@@ -257,8 +258,9 @@ class BookBorrowModel {
       userEmail: data['user_email'] ?? '',
       borrowDate: DateTime.parse(data['borrow_date']),
       dueDate: DateTime.parse(data['due_date']),
-      returnDate:
-          data['return_date'] != null ? DateTime.parse(data['return_date']) : null,
+      returnDate: data['return_date'] != null
+          ? DateTime.parse(data['return_date'])
+          : null,
       status: data['status'] ?? 'borrowed',
       notes: data['notes'],
     );

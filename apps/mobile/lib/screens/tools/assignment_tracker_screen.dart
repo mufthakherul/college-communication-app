@@ -15,7 +15,7 @@ class AssignmentTrackerScreen extends StatefulWidget {
 class _AssignmentTrackerScreenState extends State<AssignmentTrackerScreen> {
   final _assignmentService = AssignmentService();
   final _authService = AuthService();
-  
+
   UserModel? _currentUser;
   String _filterStatus = 'all'; // all, pending, upcoming, overdue
 
@@ -42,13 +42,13 @@ class _AssignmentTrackerScreenState extends State<AssignmentTrackerScreen> {
   }
 
   List<AssignmentModel> _filterAssignments(List<AssignmentModel> assignments) {
-    final now = DateTime.now();
-    
     switch (_filterStatus) {
       case 'pending':
         return assignments.where((a) => !a.isOverdue).toList();
       case 'upcoming':
-        return assignments.where((a) => a.daysUntilDue > 0 && a.daysUntilDue <= 7).toList();
+        return assignments
+            .where((a) => a.daysUntilDue > 0 && a.daysUntilDue <= 7)
+            .toList();
       case 'overdue':
         return assignments.where((a) => a.isOverdue).toList();
       default:
@@ -100,7 +100,7 @@ class _AssignmentTrackerScreenState extends State<AssignmentTrackerScreen> {
                   const Icon(Icons.assignment, size: 64, color: Colors.grey),
                   const SizedBox(height: 16),
                   Text(
-                    _filterStatus == 'all' 
+                    _filterStatus == 'all'
                         ? 'No assignments yet'
                         : 'No $_filterStatus assignments',
                     style: const TextStyle(fontSize: 18, color: Colors.grey),
@@ -333,7 +333,8 @@ class _AssignmentTrackerScreenState extends State<AssignmentTrackerScreen> {
                       // TODO: Navigate to submission screen
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
-                          content: Text('Submit assignment feature coming soon'),
+                          content:
+                              Text('Submit assignment feature coming soon'),
                         ),
                       );
                     },
@@ -392,7 +393,7 @@ class _AssignmentTrackerScreenState extends State<AssignmentTrackerScreen> {
       Colors.indigo,
       Colors.amber,
     ];
-    
+
     final hash = subject.hashCode;
     return colors[hash % colors.length];
   }

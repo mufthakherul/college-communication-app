@@ -251,11 +251,16 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
             _buildDetailRow('ISBN', widget.book.isbn),
             _buildDetailRow('Publisher', widget.book.publisher),
             _buildDetailRow('Edition', widget.book.edition),
-            _buildDetailRow('Publication Year',
-                widget.book.publicationYear > 0 ? '${widget.book.publicationYear}' : 'N/A'),
-            _buildDetailRow('Department', widget.book.department.isNotEmpty
-                ? widget.book.department
-                : 'General'),
+            _buildDetailRow(
+                'Publication Year',
+                widget.book.publicationYear > 0
+                    ? '${widget.book.publicationYear}'
+                    : 'N/A'),
+            _buildDetailRow(
+                'Department',
+                widget.book.department.isNotEmpty
+                    ? widget.book.department
+                    : 'General'),
             const SizedBox(height: 24),
 
             // Action buttons
@@ -327,7 +332,8 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                         isThreeLine: true,
                         trailing: borrow.isOverdue
                             ? Chip(
-                                label: Text('${borrow.daysOverdue} days overdue'),
+                                label:
+                                    Text('${borrow.daysOverdue} days overdue'),
                                 backgroundColor: Colors.red[100],
                                 labelStyle: const TextStyle(color: Colors.red),
                               )
@@ -343,7 +349,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
 
   Widget _buildDetailRow(String label, String value) {
     if (value.isEmpty || value == 'N/A') return const SizedBox.shrink();
-    
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Row(

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:appwrite/appwrite.dart';
+import 'package:flutter/foundation.dart';
 import 'package:campus_mesh/models/book_model.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
@@ -51,7 +52,7 @@ class BooksService {
 
       _booksController?.add(books);
     } catch (e) {
-      print('Error fetching books: $e');
+      debugPrint('Error fetching books: $e');
       _booksController?.addError(e);
     }
   }
@@ -69,11 +70,9 @@ class BooksService {
         ],
       );
 
-      return docs.documents
-          .map((doc) => BookModel.fromJson(doc.data))
-          .toList();
+      return docs.documents.map((doc) => BookModel.fromJson(doc.data)).toList();
     } catch (e) {
-      print('Error fetching books by category: $e');
+      debugPrint('Error fetching books by category: $e');
       return [];
     }
   }
@@ -91,11 +90,9 @@ class BooksService {
         ],
       );
 
-      return docs.documents
-          .map((doc) => BookModel.fromJson(doc.data))
-          .toList();
+      return docs.documents.map((doc) => BookModel.fromJson(doc.data)).toList();
     } catch (e) {
-      print('Error fetching books by department: $e');
+      debugPrint('Error fetching books by department: $e');
       return [];
     }
   }
@@ -127,7 +124,7 @@ class BooksService {
       final allDocs = {...titleDocs.documents, ...authorDocs.documents};
       return allDocs.map((doc) => BookModel.fromJson(doc.data)).toList();
     } catch (e) {
-      print('Error searching books: $e');
+      debugPrint('Error searching books: $e');
       return [];
     }
   }
@@ -143,7 +140,7 @@ class BooksService {
 
       return BookModel.fromJson(doc.data);
     } catch (e) {
-      print('Error fetching book: $e');
+      debugPrint('Error fetching book: $e');
       return null;
     }
   }
@@ -167,7 +164,7 @@ class BooksService {
 
       return BookModel.fromJson(doc.data);
     } catch (e) {
-      print('Error creating book: $e');
+      debugPrint('Error creating book: $e');
       return null;
     }
   }
@@ -193,7 +190,7 @@ class BooksService {
 
       return true;
     } catch (e) {
-      print('Error updating book: $e');
+      debugPrint('Error updating book: $e');
       return false;
     }
   }
@@ -216,7 +213,7 @@ class BooksService {
 
       return true;
     } catch (e) {
-      print('Error deleting book: $e');
+      debugPrint('Error deleting book: $e');
       return false;
     }
   }
@@ -257,7 +254,7 @@ class BooksService {
 
       return true;
     } catch (e) {
-      print('Error borrowing book: $e');
+      debugPrint('Error borrowing book: $e');
       return false;
     }
   }
@@ -287,7 +284,7 @@ class BooksService {
 
       return true;
     } catch (e) {
-      print('Error returning book: $e');
+      debugPrint('Error returning book: $e');
       return false;
     }
   }
@@ -309,7 +306,7 @@ class BooksService {
           .map((doc) => BookBorrowModel.fromJson(doc.data))
           .toList();
     } catch (e) {
-      print('Error fetching borrowed books: $e');
+      debugPrint('Error fetching borrowed books: $e');
       return [];
     }
   }
@@ -330,7 +327,7 @@ class BooksService {
           .map((doc) => BookBorrowModel.fromJson(doc.data))
           .toList();
     } catch (e) {
-      print('Error fetching borrow history: $e');
+      debugPrint('Error fetching borrow history: $e');
       return [];
     }
   }

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:appwrite/appwrite.dart';
+import 'package:flutter/foundation.dart';
 import 'package:campus_mesh/models/assignment_model.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
@@ -52,7 +53,7 @@ class AssignmentService {
 
       _assignmentsController?.add(assignments);
     } catch (e) {
-      print('Error fetching assignments: $e');
+      debugPrint('Error fetching assignments: $e');
       _assignmentsController?.addError(e);
     }
   }
@@ -74,7 +75,7 @@ class AssignmentService {
           .map((doc) => AssignmentModel.fromJson(doc.data))
           .toList();
     } catch (e) {
-      print('Error fetching assignments by subject: $e');
+      debugPrint('Error fetching assignments by subject: $e');
       return [];
     }
   }
@@ -90,7 +91,7 @@ class AssignmentService {
 
       return AssignmentModel.fromJson(doc.data);
     } catch (e) {
-      print('Error fetching assignment: $e');
+      debugPrint('Error fetching assignment: $e');
       return null;
     }
   }
@@ -113,7 +114,7 @@ class AssignmentService {
 
       return AssignmentModel.fromJson(doc.data);
     } catch (e) {
-      print('Error creating assignment: $e');
+      debugPrint('Error creating assignment: $e');
       return null;
     }
   }
@@ -139,7 +140,7 @@ class AssignmentService {
 
       return true;
     } catch (e) {
-      print('Error updating assignment: $e');
+      debugPrint('Error updating assignment: $e');
       return false;
     }
   }
@@ -161,7 +162,7 @@ class AssignmentService {
 
       return true;
     } catch (e) {
-      print('Error deleting assignment: $e');
+      debugPrint('Error deleting assignment: $e');
       return false;
     }
   }
@@ -183,7 +184,7 @@ class AssignmentService {
 
       return AssignmentSubmissionModel.fromJson(doc.data);
     } catch (e) {
-      print('Error submitting assignment: $e');
+      debugPrint('Error submitting assignment: $e');
       return null;
     }
   }
@@ -205,7 +206,7 @@ class AssignmentService {
           .map((doc) => AssignmentSubmissionModel.fromJson(doc.data))
           .toList();
     } catch (e) {
-      print('Error fetching student submissions: $e');
+      debugPrint('Error fetching student submissions: $e');
       return [];
     }
   }

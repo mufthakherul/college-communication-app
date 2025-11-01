@@ -1,4 +1,12 @@
-enum DayOfWeek { monday, tuesday, wednesday, thursday, friday, saturday, sunday }
+enum DayOfWeek {
+  monday,
+  tuesday,
+  wednesday,
+  thursday,
+  friday,
+  saturday,
+  sunday
+}
 
 class TimetableModel {
   final String id;
@@ -34,8 +42,9 @@ class TimetableModel {
       createdAt: data['created_at'] != null
           ? DateTime.parse(data['created_at'])
           : DateTime.now(),
-      updatedAt:
-          data['updated_at'] != null ? DateTime.parse(data['updated_at']) : null,
+      updatedAt: data['updated_at'] != null
+          ? DateTime.parse(data['updated_at'])
+          : null,
     );
   }
 
@@ -142,16 +151,16 @@ class ClassPeriod {
   bool get isNow {
     final now = DateTime.now();
     final dayOfWeek = now.weekday;
-    
+
     // Map weekday to DayOfWeek enum (Monday = 1, Sunday = 7)
     final currentDay = DayOfWeek.values[dayOfWeek - 1];
-    
+
     if (currentDay != day) return false;
 
     // Parse time
     final startParts = startTime.split(':');
     final endParts = endTime.split(':');
-    
+
     final start = DateTime(now.year, now.month, now.day,
         int.parse(startParts[0]), int.parse(startParts[1]));
     final end = DateTime(now.year, now.month, now.day, int.parse(endParts[0]),

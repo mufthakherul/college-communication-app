@@ -16,7 +16,8 @@ class EventModel {
   final String? registrationLink;
   final DateTime createdAt;
   final DateTime? updatedAt;
-  final List<String> targetAudience; // 'all', 'students', 'teachers', specific departments
+  final List<String>
+      targetAudience; // 'all', 'students', 'teachers', specific departments
 
   EventModel({
     required this.id,
@@ -55,8 +56,9 @@ class EventModel {
       createdAt: data['created_at'] != null
           ? DateTime.parse(data['created_at'])
           : DateTime.now(),
-      updatedAt:
-          data['updated_at'] != null ? DateTime.parse(data['updated_at']) : null,
+      updatedAt: data['updated_at'] != null
+          ? DateTime.parse(data['updated_at'])
+          : null,
       targetAudience: data['target_audience'] != null
           ? List<String>.from(data['target_audience'])
           : ['all'],
