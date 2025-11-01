@@ -215,7 +215,7 @@ See [PRODUCTION_DEPLOYMENT_GUIDE.md](PRODUCTION_DEPLOYMENT_GUIDE.md) - **45 minu
 
 ### Dependencies (All Secure)
 
-- ✅ appwrite: ^11.0.0
+- ✅ appwrite: ^12.0.1
 - ✅ connectivity_plus: ^6.0.0
 - ✅ workmanager: ^0.5.2
 - ✅ file_picker: ^6.1.1

@@ -63,7 +63,7 @@ Quick reference checklist for migrating RPI Communication App from Supabase to A
 #### Dependencies
 - [ ] Backup current code (git commit/tag)
 - [ ] Remove Supabase from pubspec.yaml
-- [ ] Add Appwrite to pubspec.yaml: `appwrite: ^11.0.0`
+- [ ] Add Appwrite to pubspec.yaml: `appwrite: ^12.0.1`
 - [ ] Run `flutter pub get`
 - [ ] Verify no dependency conflicts
 
