@@ -64,7 +64,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
           ElevatedButton(
             onPressed: () async {
               Navigator.pop(context);
-              await _permissionService.openAppSettings();
+              await _permissionService.openSettings();
             },
             child: const Text('Open Settings'),
           ),
