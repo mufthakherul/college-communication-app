@@ -1,4 +1,4 @@
-import 'package:shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:campus_mesh/models/timetable_model.dart';
 
 class ClassAlertService {

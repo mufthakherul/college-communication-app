@@ -17,7 +17,6 @@ class _TimetableScreenState extends State<TimetableScreen> {
   final _authService = AuthService();
   final _alertService = ClassAlertService();
   
-  UserModel? _currentUser;
   TimetableModel? _timetable;
   DayOfWeek _selectedDay = DayOfWeek.monday;
   bool _isLoading = true;
@@ -36,9 +35,6 @@ class _TimetableScreenState extends State<TimetableScreen> {
     
     if (userId != null) {
       final profile = await _authService.getUserProfile(userId);
-      if (mounted) {
-        setState(() => _currentUser = profile);
-      }
 
       // Load timetable based on user's department and shift
       if (profile != null && profile.department.isNotEmpty) {
