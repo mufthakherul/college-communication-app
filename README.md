@@ -163,10 +163,12 @@ flutter run
 ### Core Features
 - 📢 **Notices & Announcements** - Share important information with students and faculty
 - 💬 **Direct Messaging** - Real-time communication between users
+- 📚 **Books Library** - 🆕 Digital library with borrowing system
+- 🎓 **Student Tools** - 🆕 GPA Calculator, Study Timer, and more
 - 👤 **Role-Based Access** - Admin, Teacher, and Student roles
-- 🔐 **Secure Authentication** - Supabase Authentication with email/password
+- 🔐 **Secure Authentication** - Appwrite Authentication with email/password
 - 🌙 **Dark Mode** - Eye-friendly theme support
-- 🔍 **Full-Text Search** - 🆕 Fast PostgreSQL search with relevance ranking
+- 🔍 **Full-Text Search** - Fast search with relevance ranking
 - 📝 **Markdown Support** - Rich text formatting in notices
 
 ### Advanced Features
@@ -191,8 +193,29 @@ flutter run
   - Connectivity indicators
   - Sync statistics
 
-### Enterprise Features 🆕
-- ⚡ **Edge Functions** - Serverless backend with Supabase Edge Functions
+### Academic Features 🆕
+- 📚 **Books Library System** - Complete digital library
+  - Browse books by category (Textbooks, Reference, Fiction, Technical, etc.)
+  - Search by title or author
+  - Book borrowing with due dates
+  - Digital book support (PDF preview/download)
+  - Availability tracking
+  - Borrow history
+- 🧮 **GPA Calculator** - Track academic performance
+  - Multiple courses with credits and grades
+  - Standard grading scale (A+, A, A-, B+, etc.)
+  - Automatic GPA calculation
+- ⏱️ **Study Timer** - Productivity tool
+  - Pomodoro technique (25-min focus + 5-min break)
+  - Stopwatch mode
+  - Customizable durations
+  - Session tracking
+- 📝 **Assignment Tracker** - Coming soon
+- 📅 **Class Timetable** - Coming soon
+- 🎉 **College Events** - Coming soon
+
+### Enterprise Features
+- ⚡ **Edge Functions** - Serverless backend with Appwrite Functions
   - User activity tracking
   - Analytics report generation
   - Batch notifications
@@ -201,10 +224,10 @@ flutter run
   - Admin analytics dashboard
   - Performance monitoring
   - Real-time metrics
-- 🔍 **Full-Text Search** - PostgreSQL-powered search
+- 🔍 **Full-Text Search** - Appwrite-powered search
   - Weighted relevance ranking
   - Search suggestions
-  - 10x faster than basic search
+  - Fast and efficient
 - ⚡ **Performance Monitoring** - Built-in performance tracking
   - Operation duration tracking
   - Slow operation detection
@@ -212,7 +235,7 @@ flutter run
 - 🛡️ **Crash Reporting** - Integration ready (Sentry)
 - 📱 **Push Notifications** - Integration ready (OneSignal)
 - 💾 **Data Backup** - Automated backup helpers
-- 🚀 **10x Performance** - Optimized with indexes and materialized views
+- 🚀 **Optimized Performance** - Efficient queries and caching
 
 ## 📖 Documentation
 
