@@ -202,7 +202,7 @@ See [PRODUCTION_DEPLOYMENT_GUIDE.md](PRODUCTION_DEPLOYMENT_GUIDE.md) - **45 minu
 **Flutter SDK**: 3.0.0+  
 **Dart SDK**: 3.0.0+  
 **Android Min SDK**: 24 (Android 7.0)  
-**Android Target SDK**: 35 (Android 14)  
+**Android Target SDK**: 35 (Android 15)  
 **Package Name**: `gov.bd.polytech.rgpi.communication.develop.by.mufthakherul`
 
 ### Backend: Appwrite
