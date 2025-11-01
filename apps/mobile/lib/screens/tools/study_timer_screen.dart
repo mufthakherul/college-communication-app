@@ -34,8 +34,9 @@ class _StudyTimerScreenState extends State<StudyTimerScreen> {
 
         // Check if Pomodoro session completed
         if (_isPomodoroMode) {
-          final targetSeconds =
-              _isWorkSession ? _workMinutes * 60 : _breakMinutes * 60;
+          final targetSeconds = _isWorkSession
+              ? _workMinutes * 60
+              : _breakMinutes * 60;
 
           if (_seconds >= targetSeconds) {
             _completeSession();
@@ -77,8 +78,9 @@ class _StudyTimerScreenState extends State<StudyTimerScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title:
-            Text(_isWorkSession ? 'Break Complete!' : 'Work Session Complete!'),
+        title: Text(
+          _isWorkSession ? 'Break Complete!' : 'Work Session Complete!',
+        ),
         content: Text(
           _isWorkSession
               ? 'Great job! Time for a break.'
@@ -180,10 +182,7 @@ class _StudyTimerScreenState extends State<StudyTimerScreen> {
               const SizedBox(height: 24),
               Text(
                 'Completed Pomodoros: $_completedPomodoros',
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
+                style: const TextStyle(fontSize: 16, color: Colors.grey),
               ),
               const SizedBox(height: 24),
             ],

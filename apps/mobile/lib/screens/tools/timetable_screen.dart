@@ -139,9 +139,11 @@ class _TimetableScreenState extends State<TimetableScreen> {
         title: const Text('Class Timetable'),
         actions: [
           IconButton(
-            icon: Icon(_alertEnabled
-                ? Icons.notifications_active
-                : Icons.notifications_off),
+            icon: Icon(
+              _alertEnabled
+                  ? Icons.notifications_active
+                  : Icons.notifications_off,
+            ),
             onPressed: _showAlertSettings,
             tooltip: 'Alert Settings',
           ),
@@ -150,64 +152,61 @@ class _TimetableScreenState extends State<TimetableScreen> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _timetable == null
-              ? const Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.schedule, size: 64, color: Colors.grey),
-                      SizedBox(height: 16),
-                      Text(
-                        'No timetable available',
-                        style: TextStyle(fontSize: 18, color: Colors.grey),
-                      ),
-                      SizedBox(height: 8),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 48),
-                        child: Text(
-                          'Your class timetable will appear here once it\'s created by the admin.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.grey),
-                        ),
-                      ),
-                    ],
+          ? const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.schedule, size: 64, color: Colors.grey),
+                  SizedBox(height: 16),
+                  Text(
+                    'No timetable available',
+                    style: TextStyle(fontSize: 18, color: Colors.grey),
                   ),
-                )
-              : Column(
-                  children: [
-                    // Day selector
-                    Container(
-                      height: 60,
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        itemCount: DayOfWeek.values.length,
-                        itemBuilder: (context, index) {
-                          final day = DayOfWeek.values[index];
-                          final isSelected = day == _selectedDay;
-                          final isToday =
-                              day == DayOfWeek.values[now.weekday - 1];
+                  SizedBox(height: 8),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 48),
+                    child: Text(
+                      'Your class timetable will appear here once it\'s created by the admin.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : Column(
+              children: [
+                // Day selector
+                Container(
+                  height: 60,
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    itemCount: DayOfWeek.values.length,
+                    itemBuilder: (context, index) {
+                      final day = DayOfWeek.values[index];
+                      final isSelected = day == _selectedDay;
+                      final isToday = day == DayOfWeek.values[now.weekday - 1];
 
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 8),
-                            child: FilterChip(
-                              label: Text(_getDayShortName(day)),
-                              selected: isSelected,
-                              backgroundColor: isToday ? Colors.blue[50] : null,
-                              onSelected: (selected) {
-                                setState(() => _selectedDay = day);
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    // Classes list
-                    Expanded(
-                      child: _buildDaySchedule(_selectedDay),
-                    ),
-                  ],
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 8),
+                        child: FilterChip(
+                          label: Text(_getDayShortName(day)),
+                          selected: isSelected,
+                          backgroundColor: isToday ? Colors.blue[50] : null,
+                          onSelected: (selected) {
+                            setState(() => _selectedDay = day);
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 ),
+                // Classes list
+                Expanded(child: _buildDaySchedule(_selectedDay)),
+              ],
+            ),
     );
   }
 
@@ -261,10 +260,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
                   ),
                   const Text(
                     'to',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 10,
-                    ),
+                    style: TextStyle(color: Colors.white70, fontSize: 10),
                   ),
                   Text(
                     period.endTime,

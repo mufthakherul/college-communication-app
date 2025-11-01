@@ -22,16 +22,19 @@ void main() async {
 
     if (!securityService.shouldAllowAppExecution(securityResult)) {
       // Critical security issue detected - show error and exit
-      runApp(SecurityBlockedApp(
-        message: securityService.getSecurityWarningMessage(securityResult),
-      ));
+      runApp(
+        SecurityBlockedApp(
+          message: securityService.getSecurityWarningMessage(securityResult),
+        ),
+      );
       return;
     }
 
     // Log security warnings but allow execution
     if (!securityResult.allChecksPassed) {
       debugPrint(
-          'Security warning: ${securityService.getSecurityWarningMessage(securityResult)}');
+        'Security warning: ${securityService.getSecurityWarningMessage(securityResult)}',
+      );
     }
   }
 
@@ -149,10 +152,7 @@ class _CampusMeshAppState extends State<CampusMeshApp> {
 class SecurityBlockedApp extends StatelessWidget {
   final String message;
 
-  const SecurityBlockedApp({
-    super.key,
-    required this.message,
-  });
+  const SecurityBlockedApp({super.key, required this.message});
 
   @override
   Widget build(BuildContext context) {
@@ -167,18 +167,11 @@ class SecurityBlockedApp extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
-                  Icons.security,
-                  size: 80,
-                  color: Colors.red,
-                ),
+                const Icon(Icons.security, size: 80, color: Colors.red),
                 const SizedBox(height: 24),
                 const Text(
                   'Security Alert',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
                 Text(
@@ -190,10 +183,7 @@ class SecurityBlockedApp extends StatelessWidget {
                 const Text(
                   'Please download the official app from trusted sources.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.grey,
-                  ),
+                  style: TextStyle(fontSize: 14, color: Colors.grey),
                 ),
               ],
             ),

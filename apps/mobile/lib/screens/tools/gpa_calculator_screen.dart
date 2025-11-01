@@ -52,9 +52,7 @@ class _GPACalculatorScreenState extends State<GPACalculatorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('GPA Calculator'),
-      ),
+      appBar: AppBar(title: const Text('GPA Calculator')),
       body: Column(
         children: [
           Expanded(
@@ -86,18 +84,13 @@ class _GPACalculatorScreenState extends State<GPACalculatorScreen> {
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
                 color: Colors.green[50],
-                border: Border(
-                  top: BorderSide(color: Colors.grey[300]!),
-                ),
+                border: Border(top: BorderSide(color: Colors.grey[300]!)),
               ),
               child: Column(
                 children: [
                   const Text(
                     'Your GPA',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
                   const SizedBox(height: 8),
                   Text(

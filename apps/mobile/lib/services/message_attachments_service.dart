@@ -43,8 +43,10 @@ class MessageAttachmentsService {
 
       // Generate unique file name
       final fileName = customFileName ?? path.basename(file.path);
-      final fileExtension =
-          path.extension(fileName).toLowerCase().replaceAll('.', '');
+      final fileExtension = path
+          .extension(fileName)
+          .toLowerCase()
+          .replaceAll('.', '');
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final uniqueFileName = '${userId}_${timestamp}_$fileName';
       final filePath = '$userId/$uniqueFileName';
@@ -95,10 +97,7 @@ class MessageAttachmentsService {
   /// Delete attachment from storage
   Future<void> deleteAttachment(String fileId) async {
     try {
-      await _appwrite.storage.deleteFile(
-        bucketId: _bucketId,
-        fileId: fileId,
-      );
+      await _appwrite.storage.deleteFile(bucketId: _bucketId, fileId: fileId);
 
       if (kDebugMode) {
         print('Deleted attachment: $fileId');

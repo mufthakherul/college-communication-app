@@ -66,7 +66,8 @@ class ConflictResolutionService {
       // Stub implementation - would implement with Appwrite
       if (kDebugMode) {
         print(
-            'Updating document with conflict detection (stub): $collection/$documentId');
+          'Updating document with conflict detection (stub): $collection/$documentId',
+        );
         print('Strategy: ${(strategy ?? _defaultStrategy).name}');
       }
     } catch (e) {
@@ -139,7 +140,8 @@ class ConflictResolutionService {
       // Stub implementation - would implement with Appwrite
       if (kDebugMode) {
         print(
-            'Versioned update (stub) for $documentId, expected version: $expectedVersion');
+          'Versioned update (stub) for $documentId, expected version: $expectedVersion',
+        );
       }
     } catch (e) {
       if (kDebugMode) {

@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/screens/home_screen.dart';
@@ -57,7 +56,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         // Show verification message
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Registration successful! Please check your email for verification.'),
+            content: Text(
+              'Registration successful! Please check your email for verification.',
+            ),
             duration: Duration(seconds: 5),
             backgroundColor: Colors.green,
           ),
@@ -129,8 +130,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   Text(
                     'Create Account',
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                      fontWeight: FontWeight.bold,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
@@ -206,7 +207,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         }
                         // Basic validation for phone number format
                         final phoneRegex = RegExp(r'^\+?[0-9]{10,15}$');
-                        if (!phoneRegex.hasMatch(value.replaceAll(RegExp(r'[\s-]'), ''))) {
+                        if (!phoneRegex.hasMatch(
+                          value.replaceAll(RegExp(r'[\s-]'), ''),
+                        )) {
                           return 'Please enter a valid phone number';
                         }
                         return null;

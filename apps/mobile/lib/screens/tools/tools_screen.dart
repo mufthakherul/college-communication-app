@@ -13,9 +13,7 @@ class ToolsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Student Tools'),
-      ),
+      appBar: AppBar(title: const Text('Student Tools')),
       body: GridView.count(
         crossAxisCount: 2,
         padding: const EdgeInsets.all(16),
@@ -83,8 +81,13 @@ class ToolsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildToolCard(BuildContext context, String title, IconData icon,
-      Color color, Widget destination) {
+  Widget _buildToolCard(
+    BuildContext context,
+    String title,
+    IconData icon,
+    Color color,
+    Widget destination,
+  ) {
     return Card(
       elevation: 2,
       child: InkWell(
@@ -109,10 +112,7 @@ class ToolsScreen extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
             ),
           ],
         ),
@@ -138,22 +138,12 @@ class ImportantLinksScreen extends StatelessWidget {
         'url': 'https://www.bteb.gov.bd',
         'icon': Icons.business,
       },
-      {
-        'title': 'Library Portal',
-        'url': '#',
-        'icon': Icons.library_books,
-      },
-      {
-        'title': 'Student Portal',
-        'url': '#',
-        'icon': Icons.person,
-      },
+      {'title': 'Library Portal', 'url': '#', 'icon': Icons.library_books},
+      {'title': 'Student Portal', 'url': '#', 'icon': Icons.person},
     ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Important Links'),
-      ),
+      appBar: AppBar(title: const Text('Important Links')),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: links.length,
@@ -162,18 +152,14 @@ class ImportantLinksScreen extends StatelessWidget {
           return Card(
             margin: const EdgeInsets.only(bottom: 12),
             child: ListTile(
-              leading: CircleAvatar(
-                child: Icon(link['icon'] as IconData),
-              ),
+              leading: CircleAvatar(child: Icon(link['icon'] as IconData)),
               title: Text(link['title'] as String),
               subtitle: Text(link['url'] as String),
               trailing: const Icon(Icons.open_in_new),
               onTap: () {
                 // Open URL
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Opening ${link['title']}...'),
-                  ),
+                  SnackBar(content: Text('Opening ${link['title']}...')),
                 );
               },
             ),
