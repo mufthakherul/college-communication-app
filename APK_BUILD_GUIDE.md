@@ -152,6 +152,14 @@ git push origin v1.0.0
 
 ## 🐛 Troubleshooting
 
+### Build Fails with "Namespace not specified" Error
+If you encounter an error like:
+```
+Namespace not specified. Specify a namespace in the module's build file.
+```
+
+This has been fixed! The project automatically assigns namespaces to Flutter plugins that don't have one defined. See [NAMESPACE_FIX.md](NAMESPACE_FIX.md) for details.
+
 ### Build Fails in GitHub Actions
 - Check the Actions log for error messages
 - Ensure all Flutter dependencies are correctly specified
