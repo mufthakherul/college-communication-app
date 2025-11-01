@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/screens/home_screen.dart';
@@ -44,7 +45,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
         _phoneController.text.trim(),
       );
 
+      // Send email verification
+      try {
+        await _authService.sendEmailVerification();
+      } catch (verificationError) {
+        // Log error but don't block registration
+        debugPrint('Failed to send verification email: $verificationError');
+      }
+
       if (mounted) {
+        // Show verification message
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Registration successful! Please check your email for verification.'),
+            duration: Duration(seconds: 5),
+            backgroundColor: Colors.green,
+          ),
+        );
+
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const HomeScreen()),
         );

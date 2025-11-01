@@ -24,10 +24,16 @@ class AuthService {
   // Initialize and get current user
   Future<void> initialize() async {
     try {
+      // Try to get current session from Appwrite
       final user = await _appwrite.account.get();
       _currentUserId = user.$id;
+      
+      // Session exists, user is authenticated
+      debugPrint('Session restored for user: ${user.$id}');
     } catch (e) {
+      // No active session
       _currentUserId = null;
+      debugPrint('No active session found');
     }
   }
 
@@ -181,6 +187,48 @@ class AuthService {
       throw Exception('Failed to send password reset email: ${e.message}');
     } catch (e) {
       throw Exception('Failed to send password reset email: $e');
+    }
+  }
+
+  // Send email verification
+  Future<void> sendEmailVerification() async {
+    try {
+      await _appwrite.account.createVerification(
+        url: 'https://rpi-communication.app/verify-email',
+      );
+    } on AppwriteException catch (e) {
+      throw Exception('Failed to send verification email: ${e.message}');
+    } catch (e) {
+      throw Exception('Failed to send verification email: $e');
+    }
+  }
+
+  // Confirm email verification
+  Future<void> confirmEmailVerification(String userId, String secret) async {
+    try {
+      await _appwrite.account.updateVerification(
+        userId: userId,
+        secret: secret,
+      );
+
+      // Update user profile to mark email as verified
+      if (_currentUserId != null) {
+        await updateUserProfile({'email_verified': true});
+      }
+    } on AppwriteException catch (e) {
+      throw Exception('Failed to verify email: ${e.message}');
+    } catch (e) {
+      throw Exception('Failed to verify email: $e');
+    }
+  }
+
+  // Check if email is verified
+  Future<bool> isEmailVerified() async {
+    try {
+      final user = await _appwrite.account.get();
+      return user.emailVerification;
+    } catch (e) {
+      return false;
     }
   }
 }
