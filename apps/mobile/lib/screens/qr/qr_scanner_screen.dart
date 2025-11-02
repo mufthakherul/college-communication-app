@@ -17,7 +17,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
   final _meshService = MeshNetworkService();
   final _permissionService = PermissionService();
   final MobileScannerController _controller = MobileScannerController();
-  
+
   bool _isProcessing = false;
   bool _hasPermission = false;
 
@@ -207,7 +207,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
 
   Future<void> _handleScannedData(String qrString) async {
     if (_isProcessing) return;
-    
+
     setState(() {
       _isProcessing = true;
     });

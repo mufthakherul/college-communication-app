@@ -52,7 +52,7 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
           decoration: BoxDecoration(
             color: Theme.of(
               context,
-            ).colorScheme.surfaceContainerHighest.withOpacity(0.5),
+            ).colorScheme.surfaceVariant.withOpacity(0.5),
             borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
           ),
           child: SingleChildScrollView(
