@@ -77,7 +77,8 @@ class ConnectivityService {
       if (kDebugMode) {
         debugPrint('Connectivity changed: ${_isOnline ? "Online" : "Offline"}');
         if (_isOnline) {
-          debugPrint('Connection types: ${results.map((r) => r.name).join(", ")}');
+          debugPrint(
+              'Connection types: ${results.map((r) => r.name).join(", ")}');
         }
       }
     }
@@ -142,7 +143,8 @@ class ConnectivityService {
         isOnline ? NetworkQuality.good : NetworkQuality.offline,
       );
       if (kDebugMode) {
-        debugPrint('Connectivity manually set: ${_isOnline ? "Online" : "Offline"}');
+        debugPrint(
+            'Connectivity manually set: ${_isOnline ? "Online" : "Offline"}');
       }
     }
   }

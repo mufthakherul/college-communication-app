@@ -178,7 +178,8 @@ class MessageService {
       }
 
       if (sanitizedContent.length > InputValidator.maxMessageLength) {
-        throw Exception('Message is too long (max ${InputValidator.maxMessageLength} characters)');
+        throw Exception(
+            'Message is too long (max ${InputValidator.maxMessageLength} characters)');
       }
 
       final document = await _appwrite.databases.createDocument(

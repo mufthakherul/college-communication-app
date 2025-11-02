@@ -46,7 +46,7 @@ class InputValidator {
   /// Validates email format
   static bool isValidEmail(String? email) {
     if (email == null || email.isEmpty) return false;
-    
+
     if (email.length > maxEmailLength) return false;
 
     // RFC 5322 simplified email regex
@@ -88,8 +88,8 @@ class InputValidator {
 
     // Remove script tags and their content
     sanitized = sanitized.replaceAll(
-      RegExp(r'<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>', 
-        caseSensitive: false),
+      RegExp(r'<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>',
+          caseSensitive: false),
       '',
     );
 
@@ -138,7 +138,8 @@ class InputValidator {
     sanitized = sanitized.replaceAll(RegExp(r'<[^>]*>'), '');
 
     // Remove null bytes and control characters (except newlines and tabs)
-    sanitized = sanitized.replaceAll(RegExp(r'[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]'), '');
+    sanitized =
+        sanitized.replaceAll(RegExp(r'[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]'), '');
 
     if (sanitized.isEmpty) {
       return null;
@@ -155,7 +156,7 @@ class InputValidator {
 
     try {
       final uri = Uri.parse(url);
-      
+
       // Only allow http and https schemes
       if (uri.scheme != 'http' && uri.scheme != 'https') {
         return false;
@@ -253,7 +254,8 @@ class InputValidator {
   }
 
   /// Validates that confirm password matches password
-  static String? validateConfirmPassword(String? password, String? confirmPassword) {
+  static String? validateConfirmPassword(
+      String? password, String? confirmPassword) {
     if (confirmPassword == null || confirmPassword.isEmpty) {
       return 'Please confirm your password';
     }

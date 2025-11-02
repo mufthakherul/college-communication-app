@@ -54,7 +54,8 @@ class AuthService {
     }
 
     if (password.isEmpty || password.length < 6) {
-      throw Exception('invalid-password: Password must be at least 6 characters.');
+      throw Exception(
+          'invalid-password: Password must be at least 6 characters.');
     }
 
     // Ensure Appwrite is initialized
@@ -74,16 +75,17 @@ class AuthService {
       return session.userId;
     } on AppwriteException catch (e) {
       debugPrint('❌ Sign in failed: ${e.message} (Code: ${e.code})');
-      
+
       // Provide user-friendly error messages
       if (e.code == 401 || e.message?.contains('Invalid credentials') == true) {
         throw Exception('invalid-credentials: Invalid email or password.');
       } else if (e.message?.contains('network') == true || e.code == 0) {
         throw Exception('network: Please check your internet connection.');
-      } else if (e.message?.contains('user') == true && e.message?.contains('blocked') == true) {
+      } else if (e.message?.contains('user') == true &&
+          e.message?.contains('blocked') == true) {
         throw Exception('user-blocked: This account has been disabled.');
       }
-      
+
       throw Exception('Failed to sign in: ${e.message ?? 'Unknown error'}');
     } catch (e) {
       debugPrint('❌ Unexpected sign in error: $e');
@@ -125,7 +127,7 @@ class AuthService {
 
     try {
       debugPrint('📝 Starting registration for email: $email');
-      
+
       // Create account
       final user = await _appwrite.account.create(
         userId: ID.unique(),
@@ -166,10 +168,11 @@ class AuthService {
         debugPrint('✅ User profile created successfully');
       } catch (dbError) {
         debugPrint('❌ Profile creation error: $dbError');
-        
+
         // If profile creation fails, delete the account to maintain consistency
         try {
-          debugPrint('🗑️ Cleaning up account due to profile creation failure...');
+          debugPrint(
+              '🗑️ Cleaning up account due to profile creation failure...');
           await _appwrite.account.deleteSession(sessionId: 'current');
         } catch (cleanupError) {
           debugPrint('⚠️ Cleanup error: $cleanupError');
@@ -177,33 +180,39 @@ class AuthService {
 
         // Provide specific error messages
         if (dbError.toString().contains('document_already_exists')) {
-          throw Exception('An account with this email already exists. Please sign in instead.');
+          throw Exception(
+              'An account with this email already exists. Please sign in instead.');
         } else if (dbError.toString().contains('collection_not_found')) {
-          throw Exception('Database configuration error. Please contact support with error: Collection not found.');
+          throw Exception(
+              'Database configuration error. Please contact support with error: Collection not found.');
         } else if (dbError.toString().contains('unauthorized')) {
           throw Exception('Database permission error. Please contact support.');
         }
-        
+
         throw Exception(
           'Failed to create user profile. Error: ${dbError.toString().length > 100 ? dbError.toString().substring(0, 100) : dbError}',
         );
       }
 
-      debugPrint('🎉 Registration completed successfully for user: ${user.$id}');
+      debugPrint(
+          '🎉 Registration completed successfully for user: ${user.$id}');
       return user.$id;
     } on AppwriteException catch (e) {
       debugPrint('❌ Appwrite exception during registration: ${e.message}');
       debugPrint('   Code: ${e.code}, Type: ${e.type}');
-      
+
       // Provide user-friendly error messages
       if (e.code == 409 || e.message?.contains('already exists') == true) {
-        throw Exception('email-already-in-use: This email is already registered.');
+        throw Exception(
+            'email-already-in-use: This email is already registered.');
       } else if (e.code == 400 && e.message?.contains('password') == true) {
-        throw Exception('weak-password: Password must be at least 8 characters.');
+        throw Exception(
+            'weak-password: Password must be at least 8 characters.');
       } else if (e.message?.contains('network') == true || e.code == 0) {
-        throw Exception('network: Please check your internet connection and try again.');
+        throw Exception(
+            'network: Please check your internet connection and try again.');
       }
-      
+
       throw Exception('Failed to register: ${e.message ?? 'Unknown error'}');
     } catch (e) {
       debugPrint('❌ Unexpected error during registration: $e');

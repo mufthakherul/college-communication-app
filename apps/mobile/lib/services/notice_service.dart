@@ -110,7 +110,8 @@ class NoticeService {
       }
 
       if (sanitizedTitle.length > InputValidator.maxTitleLength) {
-        throw Exception('Notice title is too long (max ${InputValidator.maxTitleLength} characters)');
+        throw Exception(
+            'Notice title is too long (max ${InputValidator.maxTitleLength} characters)');
       }
 
       final document = await _appwrite.databases.createDocument(

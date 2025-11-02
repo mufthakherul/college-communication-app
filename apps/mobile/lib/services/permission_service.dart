@@ -12,7 +12,7 @@ class PermissionService {
   Future<bool> requestCameraPermission() async {
     try {
       final status = await Permission.camera.request();
-      
+
       if (status.isGranted) {
         return true;
       } else if (status.isPermanentlyDenied) {
@@ -43,7 +43,7 @@ class PermissionService {
           Permission.photos,
           Permission.videos,
         ].request();
-        
+
         return statuses.values.every((status) => status.isGranted);
       } else {
         // For Android 10-12, use storage permission
@@ -79,7 +79,7 @@ class PermissionService {
   Future<bool> requestLocationPermission() async {
     try {
       final status = await Permission.location.request();
-      
+
       if (status.isGranted) {
         return true;
       } else if (status.isPermanentlyDenied) {
@@ -105,7 +105,7 @@ class PermissionService {
           Permission.bluetoothScan,
           Permission.bluetoothConnect,
         ].request();
-        
+
         return statuses.values.every((status) => status.isGranted);
       } else {
         // Below Android 12, use legacy Bluetooth permission
@@ -198,11 +198,11 @@ class PermissionService {
   /// Request all permissions needed for mesh networking
   Future<Map<String, bool>> requestMeshNetworkingPermissions() async {
     final results = <String, bool>{};
-    
+
     results['location'] = await requestLocationPermission();
     results['bluetooth'] = await requestBluetoothPermissions();
     results['nearbyWifiDevices'] = await requestNearbyWifiDevicesPermission();
-    
+
     return results;
   }
 
@@ -213,7 +213,7 @@ class PermissionService {
       final bluetoothGranted = await _isAndroid12OrAbove()
           ? await Permission.bluetoothScan.isGranted
           : await Permission.bluetooth.isGranted;
-      
+
       return locationGranted && bluetoothGranted;
     } catch (e) {
       if (kDebugMode) {
@@ -224,7 +224,8 @@ class PermissionService {
   }
 
   /// Show permission rationale dialog
-  Future<bool> shouldShowRequestPermissionRationale(Permission permission) async {
+  Future<bool> shouldShowRequestPermissionRationale(
+      Permission permission) async {
     try {
       return await permission.shouldShowRequestRationale;
     } catch (e) {

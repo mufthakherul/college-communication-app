@@ -33,7 +33,8 @@ class AppwriteService {
     }
 
     try {
-      debugPrint('Initializing Appwrite with endpoint: ${AppwriteConfig.endpoint}');
+      debugPrint(
+          'Initializing Appwrite with endpoint: ${AppwriteConfig.endpoint}');
       debugPrint('Project ID: ${AppwriteConfig.projectId}');
 
       client = Client()
