@@ -51,6 +51,8 @@ dependencies:
   http: ^1.1.0
   # HTML parser for web scraping
   html: ^0.15.4
+  # Google Gemini AI
+  google_generative_ai: ^0.2.2
 
 dev_dependencies:
   flutter_test:
