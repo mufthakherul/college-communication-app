@@ -1,5 +1,7 @@
 enum MessageType { text, image, file, video, audio, document }
 
+enum MessageSyncStatus { synced, pending, failed, pendingApproval }
+
 class MessageModel {
   final String id;
   final String senderId;
@@ -14,6 +16,8 @@ class MessageModel {
   final int? attachmentSize; // File size in bytes
   final String? thumbnailUrl; // Thumbnail for images/videos
   final Map<String, dynamic>? metadata; // Additional metadata
+  final MessageSyncStatus? syncStatus; // Sync status for offline messages
+  final String? approvalStatus; // Approval status for group messages
 
   MessageModel({
     required this.id,
@@ -29,6 +33,8 @@ class MessageModel {
     this.attachmentSize,
     this.thumbnailUrl,
     this.metadata,
+    this.syncStatus,
+    this.approvalStatus,
   });
 
   factory MessageModel.fromJson(Map<String, dynamic> data) {
@@ -48,6 +54,8 @@ class MessageModel {
       attachmentSize: data['attachment_size'] as int?,
       thumbnailUrl: data['thumbnail_url'] as String?,
       metadata: data['metadata'] as Map<String, dynamic>?,
+      syncStatus: _parseSyncStatus(data['sync_status']),
+      approvalStatus: data['approval_status'] as String?,
     );
   }
 
@@ -86,6 +94,22 @@ class MessageModel {
     }
   }
 
+  static MessageSyncStatus? _parseSyncStatus(String? statusStr) {
+    switch (statusStr?.toLowerCase()) {
+      case 'pending':
+        return MessageSyncStatus.pending;
+      case 'failed':
+      case 'permanently_failed':
+        return MessageSyncStatus.failed;
+      case 'pending_approval':
+        return MessageSyncStatus.pendingApproval;
+      case 'synced':
+        return MessageSyncStatus.synced;
+      default:
+        return null; // Messages from server don't have sync status
+    }
+  }
+
   MessageModel copyWith({
     String? id,
     String? senderId,
@@ -100,6 +124,8 @@ class MessageModel {
     int? attachmentSize,
     String? thumbnailUrl,
     Map<String, dynamic>? metadata,
+    MessageSyncStatus? syncStatus,
+    String? approvalStatus,
   }) {
     return MessageModel(
       id: id ?? this.id,
@@ -115,6 +141,8 @@ class MessageModel {
       attachmentSize: attachmentSize ?? this.attachmentSize,
       thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
       metadata: metadata ?? this.metadata,
+      syncStatus: syncStatus ?? this.syncStatus,
+      approvalStatus: approvalStatus ?? this.approvalStatus,
     );
   }
 

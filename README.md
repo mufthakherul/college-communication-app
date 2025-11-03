@@ -184,7 +184,11 @@ flutter run
 - 📚 **Books Library** - 🆕 Digital library with borrowing system
 - 🎓 **Student Tools** - 🆕 GPA Calculator, Study Timer, and more
 - 👤 **Role-Based Access** - Admin, Teacher, and Student roles
-- 🔐 **Secure Authentication** - Appwrite Authentication with email/password
+- 🔐 **Secure Authentication** - 🆕 Enhanced with session persistence
+  - Email/password authentication via Appwrite
+  - Session persistence with SharedPreferences
+  - Automatic session restoration
+  - Improved profile update reliability
 - 🌙 **Dark Mode** - Eye-friendly theme support
 - 🔍 **Full-Text Search** - Fast search with relevance ranking
 - 📝 **Markdown Support** - Rich text formatting in notices
@@ -198,6 +202,14 @@ flutter run
   - Retry logic with exponential backoff
   - Priority-based action queue (max 100)
   - Background sync every 15 minutes
+- 💬 **Offline Chat** - 🆕 Send messages without internet
+  - Local SQLite storage for offline messages
+  - Automatic sync when connection restored
+  - P2P messages sync directly (no approval)
+  - Group messages require admin/teacher approval
+  - Message status indicators (pending, synced, failed)
+  - Sync statistics dashboard
+  - See [OFFLINE_CHAT_GUIDE.md](OFFLINE_CHAT_GUIDE.md) for details
 - 💾 **Intelligent Caching** - Fast and efficient data access
   - Time-based expiry (5min, 1hr, 1day)
   - 50MB cache limit with auto-cleanup
