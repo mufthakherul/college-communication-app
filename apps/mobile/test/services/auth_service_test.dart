@@ -1,48 +1,58 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:campus_mesh/services/auth_service.dart';
 
-// TODO: Update tests to use Supabase mocks
-// Supabase testing documentation: https://supabase.com/docs/reference/dart/testing
+// TODO: Update tests to use Appwrite mocks
 // For now, these are placeholder tests demonstrating expected behavior
 
 void main() {
+  group('AuthService Singleton Tests', () {
+    test('AuthService should return same instance', () {
+      final instance1 = AuthService();
+      final instance2 = AuthService();
+      
+      expect(identical(instance1, instance2), isTrue,
+          reason: 'AuthService should be a singleton');
+    });
+  });
+
   group('AuthService Tests', () {
-    // Note: These tests demonstrate the expected behavior of Supabase Auth
+    // Note: These tests demonstrate the expected behavior of Appwrite Auth
     // In a real implementation, you would:
-    // 1. Mock the Supabase client
+    // 1. Mock the Appwrite client
     // 2. Inject the mock into AuthService
     // 3. Test each service method directly
 
-    test('Supabase Auth mock - should return current user when signed in', () {
+    test('Appwrite Auth mock - should return current user when signed in', () {
       // This test validates our mock setup
       expect(true, isTrue);
     });
 
-    test('Supabase Auth mock - sign in should work with valid credentials', () {
+    test('Appwrite Auth mock - sign in should work with valid credentials', () {
       // This test validates sign in flow
       expect(true, isTrue);
     });
 
-    test('Supabase Auth mock - register should create new user', () {
+    test('Appwrite Auth mock - register should create new user', () {
       // This test validates registration flow
       expect(true, isTrue);
     });
 
-    test('Supabase Auth mock - sign out should complete successfully', () {
+    test('Appwrite Auth mock - sign out should complete successfully', () {
       // This test validates sign out flow
       expect(true, isTrue);
     });
 
-    test('Supabase Auth mock - password reset should send email', () {
+    test('Appwrite Auth mock - password reset should send email', () {
       // This test validates password reset flow
       expect(true, isTrue);
     });
 
-    test('Supabase Auth mock - get user profile should return data', () {
+    test('Appwrite Auth mock - get user profile should return data', () {
       // This test validates profile retrieval
       expect(true, isTrue);
     });
 
-    test('Firebase Auth mock - update profile should save changes', () {
+    test('Appwrite Auth mock - update profile should save changes', () {
       // This test validates profile updates
       expect(true, isTrue);
     });
