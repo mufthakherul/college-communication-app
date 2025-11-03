@@ -449,6 +449,30 @@ Query.greaterThan('created_at', '2024-01-01')
 Query.equal('status', ['active']) // Don't wrap single values in array
 ```
 
+### Issue: "document_invalid_structure" or "Unknown attribute"
+
+**Cause:** Required attributes not created in collection  
+**Solution:** Ensure all attributes are created in Appwrite Console
+
+This error typically occurs during registration when trying to create a user profile. To fix:
+
+1. Go to Appwrite Console → Databases → rpi_communication → users collection
+2. Click **Attributes** tab
+3. Verify all required attributes exist:
+   - email (string, 255, required)
+   - display_name (string, 255, required)
+   - phone_number (string, 20, optional)
+   - role (enum, required, default: student)
+   - is_active (boolean, required, default: true)
+   - created_at (datetime, required)
+   - updated_at (datetime, required)
+4. Create any missing attributes following the schema in Step 4 above
+
+**Common missing attributes:**
+- `email` - Most common cause of this error
+- `phone_number` - Often forgotten
+- `created_at` / `updated_at` - Required datetime fields
+
 ### Issue: "Attribute already exists"
 
 **Cause:** Trying to create duplicate attribute  
