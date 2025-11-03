@@ -21,8 +21,8 @@ This checklist helps you set up and configure Appwrite for the RPI Communication
 
 ### Project Creation
 - [ ] Create new project in Appwrite Console
-- [ ] Note your Project ID: `____________________`
-- [ ] Note your API Endpoint: `____________________`
+- [ ] Note your Project ID: `[YOUR_PROJECT_ID]` (e.g., 6904cfb1001e5253725b)
+- [ ] Note your API Endpoint: `[YOUR_ENDPOINT]` (e.g., https://sgp.cloud.appwrite.io/v1)
 - [ ] Select appropriate region (e.g., Singapore for Asia)
 - [ ] Enable required services:
   - [ ] Authentication
@@ -144,7 +144,7 @@ This checklist helps you set up and configure Appwrite for the RPI Communication
 
 ### Bucket 1: Profile Images
 - [ ] Create bucket: `profile-images`
-- [ ] Set max file size: 5 MB (5242880 bytes)
+- [ ] Set max file size: 5 MB (5,242,880 bytes)
 - [ ] Set allowed extensions: `jpg`, `jpeg`, `png`, `gif`, `webp`
 - [ ] Enable compression
 - [ ] Enable encryption
@@ -156,7 +156,7 @@ This checklist helps you set up and configure Appwrite for the RPI Communication
 
 ### Bucket 2: Notice Attachments
 - [ ] Create bucket: `notice-attachments`
-- [ ] Set max file size: 10 MB (10485760 bytes)
+- [ ] Set max file size: 10 MB (10,485,760 bytes)
 - [ ] Set allowed extensions: `jpg`, `jpeg`, `png`, `pdf`, `doc`, `docx`, `xls`, `xlsx`
 - [ ] Enable encryption
 - [ ] Configure permissions:
@@ -167,7 +167,7 @@ This checklist helps you set up and configure Appwrite for the RPI Communication
 
 ### Bucket 3: Message Attachments
 - [ ] Create bucket: `message-attachments`
-- [ ] Set max file size: 25 MB (26214400 bytes)
+- [ ] Set max file size: 25 MB (26,214,400 bytes)
 - [ ] Set allowed extensions: `jpg`, `jpeg`, `png`, `pdf`, `doc`, `docx`, `zip`
 - [ ] Enable encryption
 - [ ] Configure permissions (use document-level in code):
@@ -178,7 +178,7 @@ This checklist helps you set up and configure Appwrite for the RPI Communication
 
 ### Bucket 4: Book Covers
 - [ ] Create bucket: `book-covers`
-- [ ] Set max file size: 2 MB (2097152 bytes)
+- [ ] Set max file size: 2 MB (2,097,152 bytes)
 - [ ] Set allowed extensions: `jpg`, `jpeg`, `png`, `webp`
 - [ ] Enable compression
 - [ ] Enable encryption
@@ -190,7 +190,7 @@ This checklist helps you set up and configure Appwrite for the RPI Communication
 
 ### Bucket 5: Book Files
 - [ ] Create bucket: `book-files`
-- [ ] Set max file size: 100 MB (104857600 bytes)
+- [ ] Set max file size: 100 MB (104,857,600 bytes)
 - [ ] Set allowed extensions: `pdf`
 - [ ] Enable encryption
 - [ ] Configure permissions:
