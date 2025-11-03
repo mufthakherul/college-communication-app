@@ -91,7 +91,7 @@ class MessageService {
           );
         } catch (e) {
           // Continue to show local messages even if online fetch fails
-          print('Failed to fetch online messages: $e');
+          debugPrint('Failed to fetch online messages: $e');
         }
       }
 
@@ -117,7 +117,7 @@ class MessageService {
           ));
         }
       } catch (e) {
-        print('Failed to fetch local messages: $e');
+        debugPrint('Failed to fetch local messages: $e');
       }
 
       // Sort by created_at

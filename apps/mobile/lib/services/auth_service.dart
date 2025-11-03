@@ -276,9 +276,11 @@ class AuthService {
     try {
       // Ensure we have a valid session first
       if (_currentUserId == null) {
-        // Try to restore session before failing
-        await initialize();
-        if (_currentUserId == null) {
+        // Try to get current user from Appwrite without full initialization
+        try {
+          final user = await _appwrite.account.get();
+          _currentUserId = user.$id;
+        } catch (e) {
           throw Exception('No user signed in. Please log in again.');
         }
       }

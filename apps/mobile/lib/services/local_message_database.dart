@@ -45,7 +45,7 @@ class LocalMessageDatabase {
         group_id TEXT,
         created_at TEXT NOT NULL,
         sync_status TEXT NOT NULL DEFAULT 'pending',
-        approval_status TEXT DEFAULT 'pending',
+        approval_status TEXT,
         approved_by TEXT,
         approved_at TEXT,
         synced_at TEXT,
