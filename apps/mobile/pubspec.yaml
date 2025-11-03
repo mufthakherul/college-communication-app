@@ -35,6 +35,8 @@ dependencies:
   path_provider: ^2.1.1
   path: ^1.8.3
   archive: ^3.4.9
+  package_info_plus: ^5.0.1
+  device_info_plus: ^9.1.1
   # File handling
   file_picker: ^6.1.1
   image_picker: ^1.0.7

@@ -260,6 +260,17 @@ class _CampusMeshAppState extends State<CampusMeshApp> {
       theme: ThemeService.lightTheme,
       darkTheme: ThemeService.darkTheme,
       themeMode: _themeService.themeMode,
+      builder: (context, child) {
+        // Show debug banner in debug mode
+        if (kDebugMode && child != null) {
+          return Banner(
+            message: 'DEBUG',
+            location: BannerLocation.topEnd,
+            child: child,
+          );
+        }
+        return child ?? const SizedBox.shrink();
+      },
       home: FutureBuilder<bool>(
         future: AuthService().isAuthenticated(),
         builder: (context, snapshot) {
