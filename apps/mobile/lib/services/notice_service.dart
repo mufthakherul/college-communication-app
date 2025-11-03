@@ -101,6 +101,9 @@ class NoticeService {
     }
   }
 
+  // System user ID for automated notices
+  static const String systemUserId = 'system_automated';
+
   // Create notice
   Future<String> createNotice({
     required String title,
@@ -142,7 +145,7 @@ class NoticeService {
           'content': sanitizedContent,
           'type': type.name,
           'target_audience': targetAudience,
-          'author_id': currentUserId ?? 'system',
+          'author_id': currentUserId ?? systemUserId,
           'expires_at': expiresAt?.toIso8601String(),
           'is_active': true,
           'created_at': DateTime.now().toIso8601String(),

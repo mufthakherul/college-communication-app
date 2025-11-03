@@ -231,42 +231,45 @@ class WebsiteScraperService {
 
   /// Convert relative URL to absolute URL
   String _makeAbsoluteUrl(String url) {
+    const baseUrl = 'https://rangpur.polytech.gov.bd';
+    
     if (url.isEmpty) return _websiteUrl;
     if (url.startsWith('http')) return url;
     if (url.startsWith('/')) {
-      return 'https://rangpur.polytech.gov.bd$url';
+      return '$baseUrl$url';
     }
-    return 'https://rangpur.polytech.gov.bd/$url';
+    return '$baseUrl/$url';
   }
+
+  // Pre-compiled regex patterns for date parsing
+  static final _datePatternDDMMYYYY = RegExp(r'(\d{1,2})[/-](\d{1,2})[/-](\d{4})');
+  static final _datePatternYYYYMMDD = RegExp(r'(\d{4})[/-](\d{1,2})[/-](\d{1,2})');
 
   /// Parse date from text
   DateTime? _parseDate(String? dateText) {
     if (dateText == null || dateText.isEmpty) return null;
     
     try {
-      // Try various date formats
-      final patterns = [
-        RegExp(r'(\d{1,2})[/-](\d{1,2})[/-](\d{4})'), // DD/MM/YYYY or DD-MM-YYYY
-        RegExp(r'(\d{4})[/-](\d{1,2})[/-](\d{1,2})'), // YYYY/MM/DD or YYYY-MM-DD
-      ];
+      // Try YYYY-MM-DD format
+      final matchYYYY = _datePatternYYYYMMDD.firstMatch(dateText);
+      if (matchYYYY != null) {
+        try {
+          return DateTime.parse(dateText);
+        } catch (e) {
+          debugPrint('Error parsing YYYY-MM-DD date: $e');
+        }
+      }
       
-      for (final pattern in patterns) {
-        final match = pattern.firstMatch(dateText);
-        if (match != null) {
-          try {
-            if (dateText.contains(RegExp(r'(\d{4})[/-](\d{1,2})[/-](\d{1,2})'))) {
-              // YYYY-MM-DD format
-              return DateTime.parse(dateText);
-            } else {
-              // DD/MM/YYYY format
-              final day = int.parse(match.group(1)!);
-              final month = int.parse(match.group(2)!);
-              final year = int.parse(match.group(3)!);
-              return DateTime(year, month, day);
-            }
-          } catch (e) {
-            debugPrint('Error parsing date components: $e');
-          }
+      // Try DD/MM/YYYY format
+      final matchDD = _datePatternDDMMYYYY.firstMatch(dateText);
+      if (matchDD != null) {
+        try {
+          final day = int.parse(matchDD.group(1)!);
+          final month = int.parse(matchDD.group(2)!);
+          final year = int.parse(matchDD.group(3)!);
+          return DateTime(year, month, day);
+        } catch (e) {
+          debugPrint('Error parsing DD/MM/YYYY date: $e');
         }
       }
     } catch (e) {
