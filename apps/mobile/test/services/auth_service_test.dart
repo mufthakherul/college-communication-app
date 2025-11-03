@@ -5,6 +5,8 @@ import 'package:campus_mesh/services/auth_service.dart';
 // For now, these are placeholder tests demonstrating expected behavior
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('AuthService Singleton Tests', () {
     test('AuthService should return same instance', () {
       final instance1 = AuthService();
