@@ -33,7 +33,7 @@ A comprehensive college communication platform for **Rangpur Polytechnic Institu
 **⚠️ IMPORTANT:** Appwrite has been significantly updated with new services and features. Please review:
 
 - **[APPWRITE_UPDATED_GUIDE.md](APPWRITE_UPDATED_GUIDE.md)** - 🆕 **Latest comprehensive guide**
-  - Updated SDK (v13.0.0)
+  - Updated SDK (v12.0.4 - compatible with Flutter SDK)
   - Database with advanced queries
   - Real-time subscriptions
   - Functions (serverless)

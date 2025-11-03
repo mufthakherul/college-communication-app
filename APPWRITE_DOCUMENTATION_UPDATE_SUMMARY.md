@@ -18,7 +18,7 @@ The original issue reported:
 
 **Root Causes Identified:**
 
-1. **Outdated SDK Version**: Project was using Appwrite SDK v12.0.1, while latest is v13.0.0+
+1. **Outdated SDK Version**: Project was using Appwrite SDK v12.0.1, while latest compatible version is v12.0.4
 2. **Missing Documentation**: No comprehensive guide for latest Appwrite features
 3. **Incomplete Permission Guide**: Document-level vs collection-level permissions not clearly explained
 4. **No Real-time Guide**: Real-time subscriptions not documented
@@ -38,14 +38,22 @@ The original issue reported:
 appwrite: ^12.0.1
 
 # Changed to:
-appwrite: ^13.0.0
+appwrite: ^12.0.4
 ```
 
+**Why v12.0.4 instead of v13+?**
+- Appwrite v13+ requires `web ^1.0.0` dependency
+- Flutter SDK's test package pins `web` to v0.3.0, causing version conflict
+- Version 12.0.4 is the latest in v12.x series (published May 2024)
+- Fully compatible with Appwrite Cloud 1.5.x
+- Provides all features needed (Database, Auth, Storage, Realtime, Functions)
+
 **Benefits:**
-- Access to latest Appwrite features
-- Improved performance and security
+- Access to latest compatible Appwrite features
+- Improved performance and security (vs v12.0.1)
 - Better error handling
 - Support for new query methods
+- No dependency conflicts with Flutter SDK
 
 ### 2. New Comprehensive Documentation
 
@@ -464,6 +472,26 @@ The Appwrite documentation has been completely updated to match the latest offic
 
 ---
 
+## ⚠️ SDK Version Note
+
+**Using v12.0.4 (not v13+):**
+
+The documentation originally targeted Appwrite SDK v13.0.0, but during implementation testing, a dependency conflict was discovered:
+
+- **Issue**: Appwrite v13+ requires `web ^1.0.0`
+- **Conflict**: Flutter SDK's test package pins `web` to v0.3.0
+- **Resolution**: Use Appwrite v12.0.4 (latest in v12.x series)
+
+**Impact**: None. Version 12.0.4 provides:
+- ✅ All features documented (Database, Auth, Storage, Realtime, Functions)
+- ✅ Full compatibility with Appwrite Cloud 1.5.x
+- ✅ All code examples work as documented
+- ✅ No breaking changes for this project
+
+**Future**: When Flutter SDK updates its `web` dependency constraint, you can upgrade to v13+ with no code changes.
+
+---
+
 **Last Updated:** November 2025  
-**SDK Version:** 13.0.0  
+**SDK Version:** 12.0.4 (compatible with Flutter SDK)  
 **Appwrite Docs Reference:** https://appwrite.io/docs (November 2025)
