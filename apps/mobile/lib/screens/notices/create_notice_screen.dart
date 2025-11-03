@@ -68,7 +68,7 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
                 const SizedBox(height: 12),
                 const Divider(),
                 const SizedBox(height: 8),
-                Text(
+                SelectableText(
                   'Error details: ${e.toString()}',
                   style: const TextStyle(fontSize: 12, color: Colors.grey),
                 ),

@@ -43,7 +43,7 @@ void main() async {
                   ),
                   if (kDebugMode) ...[
                     const SizedBox(height: 16),
-                    Text(
+                    SelectableText(
                       'Error: $e',
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 12, color: Colors.grey),
@@ -145,7 +145,7 @@ Future<void> _initializeApp() async {
                   ),
                   if (kDebugMode) ...[
                     const SizedBox(height: 16),
-                    Text(
+                    SelectableText(
                       'Error: $e',
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 12, color: Colors.grey),
@@ -260,6 +260,17 @@ class _CampusMeshAppState extends State<CampusMeshApp> {
       theme: ThemeService.lightTheme,
       darkTheme: ThemeService.darkTheme,
       themeMode: _themeService.themeMode,
+      builder: (context, child) {
+        // Show debug banner in debug mode
+        if (kDebugMode && child != null) {
+          return Banner(
+            message: 'DEBUG',
+            location: BannerLocation.topEnd,
+            child: child,
+          );
+        }
+        return child ?? const SizedBox.shrink();
+      },
       home: FutureBuilder<bool>(
         future: AuthService().isAuthenticated(),
         builder: (context, snapshot) {
@@ -307,7 +318,7 @@ class SecurityBlockedApp extends StatelessWidget {
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
-                Text(
+                SelectableText(
                   message,
                   textAlign: TextAlign.center,
                   style: const TextStyle(fontSize: 16),
