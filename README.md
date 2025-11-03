@@ -28,6 +28,23 @@ A comprehensive college communication platform for **Rangpur Polytechnic Institu
 
 **Appwrite offers FREE Pro plan for educational projects!**
 
+### 🆕 Updated Documentation Available
+
+**⚠️ IMPORTANT:** Appwrite has been significantly updated with new services and features. Please review:
+
+**📋 Prerequisites:**
+- **Dart SDK 3.3.0+** required for Appwrite v12.0.4
+- See [DART_SDK_UPGRADE_GUIDE.md](DART_SDK_UPGRADE_GUIDE.md) if you need to upgrade
+- Or use Appwrite v12.0.2 with Dart 3.0+ (see upgrade guide for details)
+
+- **[APPWRITE_UPDATED_GUIDE.md](APPWRITE_UPDATED_GUIDE.md)** - 🆕 **Latest comprehensive guide**
+  - Updated SDK (v12.0.4 - requires Dart 3.3.0+)
+  - Database with advanced queries
+  - Real-time subscriptions
+  - Functions (serverless)
+  - Enhanced permissions
+  - Complete examples
+
 **What You Get:**
 - ✅ **Free Pro Plan** ($15/month value) for students
 - ✅ **10 GB database storage** (10x more than most free tiers)
@@ -37,9 +54,10 @@ A comprehensive college communication platform for **Rangpur Polytechnic Institu
 - ✅ **Learning resources** and workshops
 
 **Get Started:**
-1. 🚀 **Quick Deploy**: [DEPLOYMENT_QUICKSTART.md](DEPLOYMENT_QUICKSTART.md) - 30 minutes setup
-2. 📖 **Full Guide**: [PRODUCTION_DEPLOYMENT_GUIDE.md](PRODUCTION_DEPLOYMENT_GUIDE.md) - Complete documentation
-3. 🎓 **Apply for benefits**: https://appwrite.io/education
+1. 📚 **Latest Features**: [APPWRITE_UPDATED_GUIDE.md](APPWRITE_UPDATED_GUIDE.md) - **START HERE** for updated info
+2. 🚀 **Quick Deploy**: [DEPLOYMENT_QUICKSTART.md](DEPLOYMENT_QUICKSTART.md) - 30 minutes setup
+3. 📖 **Full Guide**: [PRODUCTION_DEPLOYMENT_GUIDE.md](PRODUCTION_DEPLOYMENT_GUIDE.md) - Complete documentation
+4. 🎓 **Apply for benefits**: https://appwrite.io/education
 
 ---
 
@@ -239,11 +257,45 @@ flutter run
 
 ## 📖 Documentation
 
+### 🆕 Appwrite Setup & Configuration (UPDATED - November 2025)
+
+**Important:** Appwrite has been significantly updated. Use these latest guides:
+
+1. **[APPWRITE_UPDATED_GUIDE.md](APPWRITE_UPDATED_GUIDE.md)** - 📚 **START HERE**
+   - Complete guide with latest Appwrite features
+   - Database, Auth, Storage, Realtime, Functions
+   - Updated SDK (v13.0.0)
+   - Real-time subscriptions
+   - Advanced permissions
+   - Security best practices
+
+2. **[APPWRITE_DATABASE_QUICKSTART.md](APPWRITE_DATABASE_QUICKSTART.md)** - ⚡ Quick Reference
+   - Step-by-step database setup
+   - Collection configuration with permissions
+   - Storage bucket setup
+   - Testing guide
+
+3. **[APPWRITE_CONFIGURATION_CHECKLIST.md](APPWRITE_CONFIGURATION_CHECKLIST.md)** - ✅ Complete Checklist
+   - Phase-by-phase setup checklist
+   - Verification steps
+   - Troubleshooting guide
+   - Success criteria
+
+4. **[APPWRITE_COLLECTIONS_SCHEMA.md](APPWRITE_COLLECTIONS_SCHEMA.md)** - 📊 Schema Reference
+   - All collections with attributes
+   - Permissions configuration
+   - Indexes setup
+
+5. **[APPWRITE_SETUP_INSTRUCTIONS.md](APPWRITE_SETUP_INSTRUCTIONS.md)** - 🔧 Project-Specific Setup
+   - Your project credentials
+   - Collection creation steps
+   - Bucket configuration
+
 ### Backend Setup & Migration 🎓
-- [**Appwrite Educational Benefits**](APPWRITE_EDUCATIONAL_BENEFITS.md) - **🆕 Get free Pro plan for students!**
-- [**Backend Comparison**](BACKEND_COMPARISON.md) - **🆕 Supabase vs Appwrite analysis**
-- [**Appwrite Migration Guide**](APPWRITE_MIGRATION_GUIDE.md) - **🆕 Step-by-step migration**
-- [Supabase Setup Guide](SUPABASE_SETUP_GUIDE.md) - **Current backend setup**
+- [**Appwrite Educational Benefits**](APPWRITE_EDUCATIONAL_BENEFITS.md) - Get free Pro plan for students!
+- [**Backend Comparison**](BACKEND_COMPARISON.md) - Supabase vs Appwrite analysis
+- [**Appwrite Migration Guide**](APPWRITE_MIGRATION_GUIDE.md) - Migration strategy overview
+- [Supabase Setup Guide](SUPABASE_SETUP_GUIDE.md) - Alternative backend option
 
 ### Setup & Getting Started
 - [Supabase Setup Guide](SUPABASE_SETUP_GUIDE.md) - **Connect to Supabase (current backend)**

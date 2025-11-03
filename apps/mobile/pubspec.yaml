@@ -6,13 +6,13 @@ publish_to: 'none'
 version: 2.0.0+2
 
 environment:
-  sdk: '>=3.0.0 <4.0.0'
+  sdk: '>=3.3.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
   # Appwrite dependencies
-  appwrite: ^12.0.1
+  appwrite: ^12.0.4
   url_launcher: ^6.2.1
   webview_flutter: ^4.4.2
   shared_preferences: ^2.2.2
@@ -35,8 +35,8 @@ dependencies:
   path_provider: ^2.1.1
   path: ^1.8.3
   archive: ^3.4.9
-  package_info_plus: ^4.2.0
-  device_info_plus: ^9.1.1
+  package_info_plus: ^8.0.0
+  device_info_plus: ^10.0.0
   # File handling
   file_picker: ^6.1.1
   image_picker: ^1.0.7
