@@ -5,7 +5,6 @@ import 'package:campus_mesh/services/cache_service.dart';
 import 'package:campus_mesh/services/offline_queue_service.dart';
 import 'package:campus_mesh/services/connectivity_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
-import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/services/debug_logger_service.dart';
 import 'dart:io';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -69,7 +68,7 @@ class _DebugConsoleScreenState extends State<DebugConsoleScreen> {
       }
 
       // Get connectivity status
-      final connectivityStatus = await _connectivityService.checkConnectivity();
+      final isConnected = _connectivityService.isOnline;
 
       // Get cache stats
       final cacheStats = await _cacheService.getStatistics();
@@ -82,7 +81,7 @@ class _DebugConsoleScreenState extends State<DebugConsoleScreen> {
 
       // Get auth status
       final isAuthenticated = await _authService.isAuthenticated();
-      final currentUser = await _authService.getCurrentUser();
+      final currentUser = await _authService.currentUser;
 
       // Get debug logger stats
       final loggerStats = _debugLogger.getStatistics();
@@ -97,9 +96,8 @@ class _DebugConsoleScreenState extends State<DebugConsoleScreen> {
           },
           'device': deviceData,
           'connectivity': {
-            'status': connectivityStatus.toString(),
-            'isConnected':
-                connectivityStatus.toString() != 'ConnectivityResult.none',
+            'status': isConnected ? 'Online' : 'Offline',
+            'isConnected': isConnected,
           },
           'auth': {
             'isAuthenticated': isAuthenticated,
