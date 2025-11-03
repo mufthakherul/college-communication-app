@@ -230,12 +230,13 @@ class AnalyticsDashboardService {
       }
 
       // Get top users
+      // TODO: Optimize by fetching all users in a single query instead of individual queries
       final sortedUsers = userMessageCounts.entries.toList()
         ..sort((a, b) => b.value.compareTo(a.value));
       
       final mostActive = <ActiveUser>[];
       for (final entry in sortedUsers.take(10)) {
-        // Fetch user name
+        // Fetch user name (N+1 query - acceptable for top 10 users, consider caching for optimization)
         try {
           final user = await _appwrite.databases.getDocument(
             databaseId: AppwriteConfig.databaseId,
@@ -340,6 +341,14 @@ class AnalyticsDashboardService {
   }
 
   /// Get user activity data for admin dashboard
+  /// 
+  /// Note: This method makes individual queries for each user's stats.
+  /// For large user bases (>100 users), consider implementing:
+  /// 1. Server-side aggregation with Appwrite Functions
+  /// 2. Caching with periodic updates
+  /// 3. Pagination with on-demand loading
+  /// 
+  /// Current implementation is suitable for small-to-medium deployments (<100 users)
   Future<List<UserActivityData>> getUserActivityData({int limit = 50}) async {
     try {
       final users = await _appwrite.databases.listDocuments(
@@ -353,6 +362,7 @@ class AnalyticsDashboardService {
 
       final List<UserActivityData> activityData = [];
 
+      // TODO: Optimize with batch queries or server-side aggregation for large user bases
       for (final doc in users.documents) {
         final data = doc.data;
         final userId = doc.$id;
