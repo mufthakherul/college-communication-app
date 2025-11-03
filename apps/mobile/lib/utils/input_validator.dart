@@ -192,6 +192,9 @@ class InputValidator {
   static bool isValidDocumentId(String? id) {
     if (id == null || id.isEmpty) return false;
 
+    // Allow Appwrite's unique() function
+    if (id == 'unique()') return true;
+
     // Appwrite allows alphanumeric, underscore, and hyphen, 1-36 characters
     final idRegex = RegExp(r'^[a-zA-Z0-9_-]{1,36}$');
 
