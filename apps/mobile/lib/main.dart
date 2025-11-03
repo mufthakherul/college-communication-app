@@ -11,6 +11,7 @@ import 'package:campus_mesh/services/onesignal_service.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/services/security_service.dart';
+import 'package:campus_mesh/services/offline_message_sync_service.dart';
 
 void main() async {
   // Wrap entire initialization in error handler
@@ -221,6 +222,15 @@ Future<void> _initializeApp() async {
   } catch (e) {
     debugPrint('Failed to initialize background sync: $e');
     // Continue without background sync
+  }
+
+  // Initialize offline message sync
+  try {
+    final offlineMessageSyncService = OfflineMessageSyncService();
+    await offlineMessageSyncService.initialize();
+  } catch (e) {
+    debugPrint('Failed to initialize offline message sync: $e');
+    // Continue without offline message sync
   }
 
   runApp(const CampusMeshApp());
