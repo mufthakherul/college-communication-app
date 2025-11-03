@@ -215,6 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
         tooltip: 'QR Code',
         child: const Icon(Icons.qr_code_2),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
     );
   }
 }
