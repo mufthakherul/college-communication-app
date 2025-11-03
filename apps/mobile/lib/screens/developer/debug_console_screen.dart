@@ -26,7 +26,7 @@ class _DebugConsoleScreenState extends State<DebugConsoleScreen> {
   final _connectivityService = ConnectivityService();
   final _authService = AuthService();
   final _debugLogger = DebugLoggerService();
-  
+
   Map<String, dynamic> _debugInfo = {};
   bool _isLoading = true;
 
@@ -44,7 +44,7 @@ class _DebugConsoleScreenState extends State<DebugConsoleScreen> {
     try {
       final packageInfo = await PackageInfo.fromPlatform();
       final deviceInfo = DeviceInfoPlugin();
-      
+
       Map<String, dynamic> deviceData = {};
       if (Platform.isAndroid) {
         final androidInfo = await deviceInfo.androidInfo;
@@ -70,20 +70,20 @@ class _DebugConsoleScreenState extends State<DebugConsoleScreen> {
 
       // Get connectivity status
       final connectivityStatus = await _connectivityService.checkConnectivity();
-      
+
       // Get cache stats
       final cacheStats = await _cacheService.getStatistics();
-      
+
       // Get offline queue stats
       final queueStats = _offlineQueueService.getAnalytics();
-      
+
       // Get pending actions count
       final pendingActionsCount = _offlineQueueService.pendingActions.length;
-      
+
       // Get auth status
       final isAuthenticated = await _authService.isAuthenticated();
       final currentUser = await _authService.getCurrentUser();
-      
+
       // Get debug logger stats
       final loggerStats = _debugLogger.getStatistics();
 
@@ -98,7 +98,8 @@ class _DebugConsoleScreenState extends State<DebugConsoleScreen> {
           'device': deviceData,
           'connectivity': {
             'status': connectivityStatus.toString(),
-            'isConnected': connectivityStatus.toString() != 'ConnectivityResult.none',
+            'isConnected':
+                connectivityStatus.toString() != 'ConnectivityResult.none',
           },
           'auth': {
             'isAuthenticated': isAuthenticated,
@@ -144,7 +145,7 @@ class _DebugConsoleScreenState extends State<DebugConsoleScreen> {
     buffer.writeln('=== DEBUG CONSOLE INFO ===');
     buffer.writeln('Generated: ${DateTime.now().toIso8601String()}');
     buffer.writeln();
-    
+
     _debugInfo.forEach((key, value) {
       buffer.writeln('[$key]');
       if (value is Map) {
@@ -290,7 +291,7 @@ class _DebugConsoleScreenState extends State<DebugConsoleScreen> {
 
   Widget _buildLogsSection() {
     final logs = _debugLogger.getLogs();
-    
+
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       child: ExpansionTile(

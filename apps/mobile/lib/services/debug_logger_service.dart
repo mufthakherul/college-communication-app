@@ -28,7 +28,8 @@ class DebugLoggerService {
     }
 
     // Also print to console
-    debugPrint('[${level.name.toUpperCase()}]${tag != null ? ' [$tag]' : ''} $message');
+    debugPrint(
+        '[${level.name.toUpperCase()}]${tag != null ? ' [$tag]' : ''} $message');
   }
 
   /// Log info level message
@@ -42,13 +43,14 @@ class DebugLoggerService {
   }
 
   /// Log error level message
-  void error(String message, {String? tag, Object? error, StackTrace? stackTrace}) {
+  void error(String message,
+      {String? tag, Object? error, StackTrace? stackTrace}) {
     if (error != null) {
       log('$message: $error', level: LogLevel.error, tag: tag);
     } else {
       log(message, level: LogLevel.error, tag: tag);
     }
-    
+
     if (stackTrace != null && kDebugMode) {
       debugPrint('Stack trace: $stackTrace');
     }
@@ -86,11 +88,13 @@ class DebugLoggerService {
 
     // Count by level
     for (final level in LogLevel.values) {
-      stats['${level.name}Count'] = _logs.where((log) => log.level == level).length;
+      stats['${level.name}Count'] =
+          _logs.where((log) => log.level == level).length;
     }
 
     // Get unique tags
-    final tags = _logs.map((log) => log.tag).where((tag) => tag != null).toSet();
+    final tags =
+        _logs.map((log) => log.tag).where((tag) => tag != null).toSet();
     stats['uniqueTags'] = tags.length;
 
     return stats;
