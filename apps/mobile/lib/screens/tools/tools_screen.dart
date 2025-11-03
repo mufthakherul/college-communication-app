@@ -6,6 +6,7 @@ import 'package:campus_mesh/screens/tools/timetable_screen.dart';
 import 'package:campus_mesh/screens/tools/events_screen.dart';
 import 'package:campus_mesh/screens/tools/unit_converter_screen.dart';
 import 'package:campus_mesh/screens/tools/notes_screen.dart';
+import 'package:campus_mesh/screens/ai_chat/ai_chat_history_screen.dart';
 
 class ToolsScreen extends StatelessWidget {
   const ToolsScreen({super.key});
@@ -22,9 +23,16 @@ class ToolsScreen extends StatelessWidget {
         children: [
           _buildToolCard(
             context,
+            'AI Chatbot',
+            Icons.smart_toy,
+            Colors.blue,
+            const AIChatHistoryScreen(),
+          ),
+          _buildToolCard(
+            context,
             'Assignments',
             Icons.assignment,
-            Colors.blue,
+            Colors.blueAccent,
             const AssignmentTrackerScreen(),
           ),
           _buildToolCard(
