@@ -33,7 +33,7 @@ class NoticeModel {
 
   factory NoticeModel.fromJson(Map<String, dynamic> data) {
     return NoticeModel(
-      id: data['id'] ?? '',
+      id: data['id'] ?? data['\$id'] ?? '',
       title: data['title'] ?? '',
       content: data['content'] ?? '',
       type: _parseType(data['type']),
