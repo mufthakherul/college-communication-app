@@ -48,12 +48,17 @@ appwrite: ^12.0.4
 - Fully compatible with Appwrite Cloud 1.5.x
 - Provides all features needed (Database, Auth, Storage, Realtime, Functions)
 
+**Additional Dependencies Updated:**
+- `package_info_plus`: ^4.2.0 → ^8.0.0 (required by Appwrite v12.0.4)
+- `device_info_plus`: ^9.1.1 → ^10.0.0 (required by Appwrite v12.0.4)
+
 **Benefits:**
 - Access to latest compatible Appwrite features
 - Improved performance and security (vs v12.0.1)
 - Better error handling
 - Support for new query methods
 - No dependency conflicts with Flutter SDK
+- Compatible with latest package_info_plus and device_info_plus APIs
 
 ### 2. New Comprehensive Documentation
 
