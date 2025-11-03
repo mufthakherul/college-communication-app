@@ -232,7 +232,7 @@ class MessageService {
 
       final messageId = ID.unique();
       final now = DateTime.now().toIso8601String();
-      
+
       // Check if online
       if (!_connectivityService.isOnline) {
         // Save locally when offline

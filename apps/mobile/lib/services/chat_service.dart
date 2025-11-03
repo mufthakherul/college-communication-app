@@ -211,7 +211,7 @@ class ChatService {
         final chat = docs.documents.first;
         final participantIds =
             List<String>.from(chat.data['participant_ids'] ?? []);
-        
+
         if (!participantIds.contains(currentUserId)) {
           participantIds.add(currentUserId);
           await _appwrite.databases.updateDocument(
