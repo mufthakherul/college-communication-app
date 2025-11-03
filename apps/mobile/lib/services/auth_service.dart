@@ -160,7 +160,6 @@ class AuthService {
             'phone_number': phoneNumber.trim(),
             'role': 'student', // Default role
             'is_active': true,
-            'email_verified': false, // New field for email verification
             'created_at': DateTime.now().toIso8601String(),
             'updated_at': DateTime.now().toIso8601String(),
           },
@@ -185,6 +184,10 @@ class AuthService {
         } else if (dbError.toString().contains('collection_not_found')) {
           throw Exception(
               'Database configuration error. Please contact support with error: Collection not found.');
+        } else if (dbError.toString().contains('document_invalid_structure') ||
+            dbError.toString().contains('Unknown attribute')) {
+          throw Exception(
+              'Database not configured. Please ensure all required attributes are created in the users collection. See APPWRITE_DATABASE_QUICKSTART.md for setup instructions.');
         } else if (dbError.toString().contains('unauthorized')) {
           throw Exception('Database permission error. Please contact support.');
         }
@@ -302,11 +305,7 @@ class AuthService {
         userId: userId,
         secret: secret,
       );
-
-      // Update user profile to mark email as verified
-      if (_currentUserId != null) {
-        await updateUserProfile({'email_verified': true});
-      }
+      // Email verification status is tracked by Appwrite Auth, not in user profile
     } on AppwriteException catch (e) {
       throw Exception('Failed to verify email: ${e.message}');
     } catch (e) {

@@ -45,6 +45,14 @@ This checklist helps you set up and configure Appwrite for the RPI Communication
 #### Users Collection
 - [ ] Create collection: `users`
 - [ ] Add all 14 attributes (see [APPWRITE_DATABASE_QUICKSTART.md](APPWRITE_DATABASE_QUICKSTART.md))
+  - **Critical attributes** (registration will fail if missing):
+    - [ ] email (string, 255, required)
+    - [ ] display_name (string, 255, required)
+    - [ ] phone_number (string, 20, optional)
+    - [ ] role (enum, required, default: student)
+    - [ ] is_active (boolean, required, default: true)
+    - [ ] created_at (datetime, required)
+    - [ ] updated_at (datetime, required)
 - [ ] Set `role` enum values: `student`, `teacher`, `admin`
 - [ ] Create indexes:
   - [ ] `email` (unique, asc)
@@ -55,6 +63,7 @@ This checklist helps you set up and configure Appwrite for the RPI Communication
   - [ ] Create: `users`
   - [ ] Update: `user:{$userId}`
   - [ ] Delete: `label:admin`
+- [ ] **Verify attributes created**: Go to Attributes tab and count - should have 14 attributes total
 
 #### Notices Collection
 - [ ] Create collection: `notices`
