@@ -378,8 +378,7 @@ class _NoticesScreenState extends State<NoticesScreen>
             ),
           );
         },
-      ),
-    );
+      );
   }
 
   Widget _buildLoadingSkeleton() {
