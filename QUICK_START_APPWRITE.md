@@ -17,12 +17,14 @@ The Appwrite documentation has been completely updated to address the difference
 - Real-time subscriptions not documented
 
 **What's been fixed?**
-- ✅ SDK updated to v13.0.0
+- ✅ SDK updated to v12.0.4 (latest compatible with Flutter SDK)
 - ✅ Comprehensive guides for all Appwrite features
 - ✅ Complete permission system documentation
 - ✅ Real-time subscriptions guide
 - ✅ Functions service documentation
 - ✅ Step-by-step setup guides
+
+**Note:** Using v12.0.4 instead of v13+ due to Flutter SDK dependency constraints. All features documented work perfectly with v12.0.4.
 
 ---
 

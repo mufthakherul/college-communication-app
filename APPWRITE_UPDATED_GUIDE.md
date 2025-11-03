@@ -6,8 +6,10 @@ This guide provides the latest information about Appwrite services and how to pr
 
 **Last Updated:** November 2025  
 **Appwrite Cloud Version:** 1.5.x  
-**SDK Version:** 13.0.0+  
+**SDK Version:** 12.0.4 (v12.x series - compatible with Flutter SDK)  
 **Official Docs:** https://appwrite.io/docs
+
+**Note on SDK Version:** This guide uses Appwrite SDK v12.0.4, which is the latest stable version compatible with Flutter SDK's dependencies. While newer versions (v13+) exist, they require `web ^1.0.0` which conflicts with Flutter's test package that pins `web` to v0.3.0. Version 12.0.4 provides all the features needed and is fully compatible with the latest Appwrite Cloud (1.5.x).
 
 ---
 
@@ -46,8 +48,10 @@ Update your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  appwrite: ^13.0.0  # Latest stable version
+  appwrite: ^12.0.4  # Latest v12.x - compatible with Flutter SDK
 ```
+
+**Why v12.0.4?** Appwrite v13+ requires `web ^1.0.0`, which conflicts with Flutter's test package (pins `web` to v0.3.0). Version 12.0.4 is fully compatible with Appwrite Cloud 1.5.x and provides all the features documented here.
 
 Run:
 ```bash
