@@ -7,6 +7,12 @@ import 'package:campus_mesh/screens/tools/events_screen.dart';
 import 'package:campus_mesh/screens/tools/unit_converter_screen.dart';
 import 'package:campus_mesh/screens/tools/notes_screen.dart';
 import 'package:campus_mesh/screens/ai_chat/ai_chat_history_screen.dart';
+import 'package:campus_mesh/screens/tools/calculator_screen.dart';
+import 'package:campus_mesh/screens/tools/attendance_tracker_screen.dart';
+import 'package:campus_mesh/screens/tools/exam_countdown_screen.dart';
+import 'package:campus_mesh/screens/tools/expense_tracker_screen.dart';
+import 'package:campus_mesh/screens/tools/dictionary_screen.dart';
+import 'package:campus_mesh/screens/tools/periodic_table_screen.dart';
 
 class ToolsScreen extends StatelessWidget {
   const ToolsScreen({super.key});
@@ -27,6 +33,48 @@ class ToolsScreen extends StatelessWidget {
             Icons.smart_toy,
             Colors.blue,
             const AIChatHistoryScreen(),
+          ),
+          _buildToolCard(
+            context,
+            'Calculator',
+            Icons.calculate,
+            Colors.deepPurple,
+            const CalculatorScreen(),
+          ),
+          _buildToolCard(
+            context,
+            'Attendance',
+            Icons.event_available,
+            Colors.cyan,
+            const AttendanceTrackerScreen(),
+          ),
+          _buildToolCard(
+            context,
+            'Exam Countdown',
+            Icons.event_note,
+            Colors.redAccent,
+            const ExamCountdownScreen(),
+          ),
+          _buildToolCard(
+            context,
+            'Expense Tracker',
+            Icons.account_balance_wallet,
+            Colors.lightGreen,
+            const ExpenseTrackerScreen(),
+          ),
+          _buildToolCard(
+            context,
+            'Dictionary',
+            Icons.book,
+            Colors.brown,
+            const DictionaryScreen(),
+          ),
+          _buildToolCard(
+            context,
+            'Periodic Table',
+            Icons.science,
+            Colors.deepOrange,
+            const PeriodicTableScreen(),
           ),
           _buildToolCard(
             context,
@@ -52,7 +100,7 @@ class ToolsScreen extends StatelessWidget {
           _buildToolCard(
             context,
             'GPA Calculator',
-            Icons.calculate,
+            Icons.school,
             Colors.purple,
             const GPACalculatorScreen(),
           ),
