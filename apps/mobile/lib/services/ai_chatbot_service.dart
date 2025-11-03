@@ -15,6 +15,9 @@ class AIChatbotService {
   GenerativeModel? _model;
   String? _currentApiKey;
   
+  // Model version constant
+  static const String _modelVersion = 'gemini-1.5-flash';
+  
   // Custom system instruction for better responses
   static const String _systemInstruction = '''
 You are an AI assistant for a college communication app called "Campus Mesh" used at Rangpur Polytechnic Institute.
@@ -62,7 +65,7 @@ Always maintain a respectful and supportive tone.
   Future<bool> validateApiKey(String apiKey) async {
     try {
       final testModel = GenerativeModel(
-        model: 'gemini-1.5-flash',
+        model: _modelVersion,
         apiKey: apiKey,
         systemInstruction: Content.system(_systemInstruction),
       );
@@ -83,7 +86,7 @@ Always maintain a respectful and supportive tone.
     if (_currentApiKey == null || _currentApiKey!.isEmpty) return;
     
     _model = GenerativeModel(
-      model: 'gemini-1.5-flash',
+      model: _modelVersion,
       apiKey: _currentApiKey!,
       systemInstruction: Content.system(_systemInstruction),
       generationConfig: GenerationConfig(
@@ -114,10 +117,14 @@ Always maintain a respectful and supportive tone.
       // Get chat history for context
       final messages = await _database.getMessages(sessionId);
       
-      // Build conversation history
+      // Build conversation history with proper roles
       final history = <Content>[];
       for (var msg in messages.take(20)) { // Limit to last 20 messages for context
-        history.add(Content.text(msg.content));
+        if (msg.isUser) {
+          history.add(Content.text(msg.content));
+        } else {
+          history.add(Content.model([TextPart(msg.content)]));
+        }
       }
       
       // Add current message
@@ -217,10 +224,14 @@ Always maintain a respectful and supportive tone.
       // Get chat history for context
       final messages = await _database.getMessages(sessionId);
       
-      // Build conversation history
+      // Build conversation history with proper roles
       final history = <Content>[];
       for (var msg in messages.take(20)) {
-        history.add(Content.text(msg.content));
+        if (msg.isUser) {
+          history.add(Content.text(msg.content));
+        } else {
+          history.add(Content.model([TextPart(msg.content)]));
+        }
       }
       
       // Add current message
