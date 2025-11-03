@@ -50,8 +50,8 @@ class AIChatDatabase {
         ''');
 
         // Create indexes
-        await db.execute(
-            'CREATE INDEX idx_sessions_userId ON sessions (userId)');
+        await db
+            .execute('CREATE INDEX idx_sessions_userId ON sessions (userId)');
         await db.execute(
             'CREATE INDEX idx_messages_sessionId ON messages (sessionId)');
       },
