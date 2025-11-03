@@ -9,9 +9,12 @@ void main() {
     test('AuthService should return same instance', () {
       final instance1 = AuthService();
       final instance2 = AuthService();
-      
-      expect(identical(instance1, instance2), isTrue,
-          reason: 'AuthService should be a singleton');
+
+      expect(
+        identical(instance1, instance2),
+        isTrue,
+        reason: 'AuthService should be a singleton',
+      );
     });
   });
 
