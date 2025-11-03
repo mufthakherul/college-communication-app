@@ -13,6 +13,8 @@ import 'package:campus_mesh/screens/tools/exam_countdown_screen.dart';
 import 'package:campus_mesh/screens/tools/expense_tracker_screen.dart';
 import 'package:campus_mesh/screens/tools/dictionary_screen.dart';
 import 'package:campus_mesh/screens/tools/periodic_table_screen.dart';
+import 'package:campus_mesh/screens/tools/formula_sheet_screen.dart';
+import 'package:campus_mesh/screens/tools/world_clock_screen.dart';
 
 class ToolsScreen extends StatelessWidget {
   const ToolsScreen({super.key});
@@ -131,6 +133,20 @@ class ToolsScreen extends StatelessWidget {
             Icons.link,
             Colors.indigo,
             const ImportantLinksScreen(),
+          ),
+          _buildToolCard(
+            context,
+            'Formula Sheet',
+            Icons.functions,
+            Colors.teal,
+            const FormulaSheetScreen(),
+          ),
+          _buildToolCard(
+            context,
+            'World Clock',
+            Icons.public,
+            Colors.blueGrey,
+            const WorldClockScreen(),
           ),
         ],
       ),
