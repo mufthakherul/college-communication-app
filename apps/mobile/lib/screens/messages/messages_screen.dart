@@ -216,6 +216,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                   ),
                   onTap: () async {
                     // Navigate to chat screen
+                    final navigator = Navigator.of(context);
                     final userId =
                         message.senderId == _authService.currentUserId
                             ? message.recipientId
@@ -243,7 +244,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                     }
 
                     if (otherUser != null && mounted) {
-                      Navigator.of(context).push(
+                      navigator.push(
                         MaterialPageRoute(
                           builder: (context) =>
                               ChatScreen(otherUser: otherUser!),
