@@ -136,9 +136,39 @@ jobs:
       - name: Run notice scraping tests
         working-directory: apps/mobile
         run: |
-          echo "Running notice scraping tests to ensure scraper functionality..."
-          flutter test test/services/website_scraper_service_test.dart --reporter expanded
+          echo "========================================="
+          echo "🔍 NOTICE SCRAPING VERIFICATION TEST"
+          echo "========================================="
+          echo "Testing website scraper service..."
+          echo ""
+          flutter test test/services/website_scraper_service_test.dart --reporter expanded 2>&1 | tee scraper_test_output.txt
+          echo ""
+          echo "========================================="
           echo "✅ Notice scraping tests completed"
+          echo "========================================="
+          
+      - name: Display test summary
+        if: always()
+        working-directory: apps/mobile
+        run: |
+          echo ""
+          echo "📊 TEST SUMMARY"
+          echo "========================================="
+          if [ -f "scraper_test_output.txt" ]; then
+            echo "Test output captured successfully"
+            # Show any scraped notice details from the output
+            if grep -q "LATEST NOTICE DETAILS" scraper_test_output.txt; then
+              echo "✅ Notices were successfully scraped and verified"
+              echo ""
+              echo "Last scraped notice information:"
+              sed -n '/LATEST NOTICE DETAILS/,/^-/p' scraper_test_output.txt | head -20
+            else
+              echo "⚠️  Check test output for details"
+            fi
+          else
+            echo "Test output file not found"
+          fi
+          echo "========================================="
 
       - name: Verify scraper service exists
         working-directory: apps/mobile

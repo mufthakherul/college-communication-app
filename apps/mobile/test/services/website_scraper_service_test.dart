@@ -73,15 +73,50 @@ void main() {
         expect(receivedNotices, isA<List<ScrapedNotice>>(),
           reason: 'Received data should be a list of ScrapedNotice');
         
-        // If notices were found, verify their structure
+        // Print scraping results for verification
+        print('\n========================================');
+        print('✅ NOTICE SCRAPING TEST RESULTS');
+        print('========================================');
+        print('Total notices scraped: ${receivedNotices!.length}');
+        
+        // If notices were found, verify their structure and display details
         if (receivedNotices!.isNotEmpty) {
-          final firstNotice = receivedNotices!.first;
-          expect(firstNotice.id, isNotEmpty, 
+          print('\n📋 LATEST NOTICE DETAILS:');
+          print('----------------------------------------');
+          
+          final latestNotice = receivedNotices!.first;
+          print('ID: ${latestNotice.id}');
+          print('Title: ${latestNotice.title}');
+          print('Description: ${latestNotice.description}');
+          print('URL: ${latestNotice.url}');
+          print('Published Date: ${latestNotice.publishedDate}');
+          print('Source: ${latestNotice.source}');
+          print('----------------------------------------');
+          
+          // Show all notices in brief
+          if (receivedNotices!.length > 1) {
+            print('\n📄 ALL SCRAPED NOTICES:');
+            for (int i = 0; i < receivedNotices!.length; i++) {
+              final notice = receivedNotices![i];
+              print('${i + 1}. ${notice.title} (${notice.publishedDate.toLocal().toString().split(' ')[0]})');
+            }
+          }
+          print('========================================\n');
+          
+          // Verify structure
+          expect(latestNotice.id, isNotEmpty, 
             reason: 'Notice should have an ID');
-          expect(firstNotice.title, isNotEmpty, 
+          expect(latestNotice.title, isNotEmpty, 
             reason: 'Notice should have a title');
-          expect(firstNotice.source, equals('College Website'),
+          expect(latestNotice.source, equals('College Website'),
             reason: 'Notice source should be College Website');
+        } else {
+          print('⚠️  No notices found on the website');
+          print('This could mean:');
+          print('  - The website has no notices currently');
+          print('  - The HTML structure has changed');
+          print('  - Network/connectivity issues');
+          print('========================================\n');
         }
       }
     }, timeout: const Timeout(Duration(seconds: 40)));
