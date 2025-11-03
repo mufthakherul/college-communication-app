@@ -108,8 +108,10 @@ class WebsiteScraperService {
         return await _fetchNoticesFromHtml();
       } catch (htmlError) {
         debugPrint('HTML scraping also failed: $htmlError');
-        // Return cached notices on error
-        return await _getCachedNotices();
+        // Return cached notices on error and emit to stream
+        final cachedNotices = await _getCachedNotices();
+        _noticesController.add(cachedNotices);
+        return cachedNotices;
       }
     }
   }
