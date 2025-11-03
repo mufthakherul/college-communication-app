@@ -254,7 +254,7 @@ class AuthService {
     try {
       await _appwrite.account.deleteSession(sessionId: 'current');
       _currentUserId = null;
-      
+
       // Clear from local storage
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove(_userIdKey);
