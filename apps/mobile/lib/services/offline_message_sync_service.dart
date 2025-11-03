@@ -27,7 +27,7 @@ class OfflineMessageSyncService {
   Future<void> initialize() async {
     // Start periodic sync when online
     _syncTimer = Timer.periodic(_syncInterval, (_) => syncMessages());
-    
+
     // Listen to connectivity changes
     _connectivityService.connectivityStream.listen((isOnline) {
       if (isOnline) {
@@ -66,10 +66,10 @@ class OfflineMessageSyncService {
         } catch (e) {
           debugPrint('Failed to sync message ${message['id']}: $e');
           failureCount++;
-          
+
           // Increment retry count
           await _localDb.incrementRetryCount(message['id']);
-          
+
           // Update error message
           await _localDb.updateMessageSyncStatus(
             message['id'],
@@ -206,12 +206,12 @@ class OfflineMessageSyncService {
   /// Check and update approval status for pending group messages
   Future<void> checkApprovalStatus() async {
     try {
-      final pendingApprovalMessages = await _localDb.database.then((db) =>
-          db.query(
-            'local_messages',
-            where: 'approval_status = ?',
-            whereArgs: ['pending'],
-          ));
+      final pendingApprovalMessages =
+          await _localDb.database.then((db) => db.query(
+                'local_messages',
+                where: 'approval_status = ?',
+                whereArgs: ['pending'],
+              ));
 
       for (final message in pendingApprovalMessages) {
         try {

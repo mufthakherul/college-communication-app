@@ -263,14 +263,11 @@ class _ChatManagementScreenState extends State<ChatManagementScreen> {
                                   ),
                                 IconButton(
                                   icon: Icon(
-                                    isRestricted
-                                        ? Icons.lock_open
-                                        : Icons.lock,
+                                    isRestricted ? Icons.lock_open : Icons.lock,
                                   ),
                                   onPressed: () => _toggleRestriction(chat),
-                                  tooltip: isRestricted
-                                      ? 'Unrestrict'
-                                      : 'Restrict',
+                                  tooltip:
+                                      isRestricted ? 'Unrestrict' : 'Restrict',
                                 ),
                               ],
                             ),
