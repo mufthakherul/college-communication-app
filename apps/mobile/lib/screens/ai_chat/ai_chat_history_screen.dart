@@ -168,12 +168,14 @@ class _AIChatHistoryScreenState extends State<AIChatHistoryScreen> {
       );
 
       if (result == 'change') {
+        if (!mounted) return;
         final success = await Navigator.push<bool>(
           context,
           MaterialPageRoute(
             builder: (context) => const ApiKeyInputScreen(),
           ),
         );
+        if (!mounted) return;
         if (success == true) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('API key updated')),
@@ -181,6 +183,7 @@ class _AIChatHistoryScreenState extends State<AIChatHistoryScreen> {
         }
       } else if (result == 'remove') {
         await _aiService.clearApiKey();
+        if (!mounted) return;
         setState(() => _hasApiKey = false);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('API key removed')),
@@ -188,6 +191,7 @@ class _AIChatHistoryScreenState extends State<AIChatHistoryScreen> {
       }
     } else {
       // Add API key
+      if (!mounted) return;
       final result = await Navigator.push<bool>(
         context,
         MaterialPageRoute(
@@ -195,6 +199,7 @@ class _AIChatHistoryScreenState extends State<AIChatHistoryScreen> {
         ),
       );
 
+      if (!mounted) return;
       if (result == true) {
         setState(() => _hasApiKey = true);
         ScaffoldMessenger.of(context).showSnackBar(

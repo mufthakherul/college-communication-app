@@ -67,7 +67,6 @@ Always maintain a respectful and supportive tone.
       final testModel = GenerativeModel(
         model: _modelVersion,
         apiKey: apiKey,
-        systemInstruction: Content.system(_systemInstruction),
       );
       
       // Test with a simple prompt
@@ -88,7 +87,6 @@ Always maintain a respectful and supportive tone.
     _model = GenerativeModel(
       model: _modelVersion,
       apiKey: _currentApiKey!,
-      systemInstruction: Content.system(_systemInstruction),
       generationConfig: GenerationConfig(
         temperature: 0.7,
         topK: 40,
@@ -119,7 +117,16 @@ Always maintain a respectful and supportive tone.
       
       // Build conversation history with proper roles
       final history = <Content>[];
-      for (var msg in messages.take(20)) { // Limit to last 20 messages for context
+      
+      // Add system instruction as first user message if this is first message
+      if (messages.isEmpty) {
+        history.add(Content.text(_systemInstruction));
+        history.add(Content.model([
+          TextPart('I understand. I am here to assist students, teachers, and staff at Rangpur Polytechnic Institute. How can I help you today?')
+        ]));
+      }
+      
+      for (final msg in messages.take(20)) { // Limit to last 20 messages for context
         if (msg.isUser) {
           history.add(Content.text(msg.content));
         } else {
@@ -226,7 +233,7 @@ Always maintain a respectful and supportive tone.
       
       // Build conversation history with proper roles
       final history = <Content>[];
-      for (var msg in messages.take(20)) {
+      for (final msg in messages.take(20)) {
         if (msg.isUser) {
           history.add(Content.text(msg.content));
         } else {

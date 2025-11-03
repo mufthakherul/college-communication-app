@@ -52,6 +52,8 @@ class WebsiteScraperService {
         headers: {
           'User-Agent': 'Mozilla/5.0 (compatible; RPICommunicationApp/1.0)',
           'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept': 'application/json, text/javascript, */*; q=0.01',
+          'X-Requested-With': 'XMLHttpRequest',
         },
         body: {
           'draw': '1',
@@ -62,14 +64,27 @@ class WebsiteScraperService {
           'subdomain': '',
           'content_type': 'notices',
         },
-      ).timeout(const Duration(seconds: 30));
+      ).timeout(
+        const Duration(seconds: 30),
+        onTimeout: () {
+          debugPrint('API request timed out, attempting HTML scraping...');
+          throw TimeoutException('API request timed out');
+        },
+      );
 
       if (response.statusCode != 200) {
-        throw Exception('Failed to load website: ${response.statusCode}');
+        debugPrint('API returned status ${response.statusCode}, falling back to HTML scraping');
+        return await _fetchNoticesFromHtml();
       }
 
       // Parse JSON response from DataTables API
       final notices = _parseNoticesFromApi(response.body);
+      
+      // If API parsing fails or returns no data, try HTML scraping
+      if (notices.isEmpty) {
+        debugPrint('API returned no notices, trying HTML scraping...');
+        return await _fetchNoticesFromHtml();
+      }
 
       // Cache the results
       await _cacheNotices(notices);
@@ -86,9 +101,116 @@ class WebsiteScraperService {
     } catch (e) {
       debugPrint('Error fetching website notices: $e');
 
-      // Return cached notices on error
-      return await _getCachedNotices();
+      // Try HTML scraping as fallback if API fails
+      try {
+        debugPrint('Attempting HTML scraping fallback...');
+        return await _fetchNoticesFromHtml();
+      } catch (htmlError) {
+        debugPrint('HTML scraping also failed: $htmlError');
+        // Return cached notices on error
+        return await _getCachedNotices();
+      }
     }
+  }
+  
+  /// Fallback method: Fetch notices by scraping HTML directly
+  Future<List<ScrapedNotice>> _fetchNoticesFromHtml() async {
+    try {
+      debugPrint('Fetching notices via HTML scraping...');
+      
+      final response = await http.get(
+        Uri.parse(_websiteUrl),
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (compatible; RPICommunicationApp/1.0)',
+        },
+      ).timeout(const Duration(seconds: 30));
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to load website: ${response.statusCode}');
+      }
+
+      // Parse HTML
+      final notices = _parseNoticesFromHtml(response.body);
+      
+      // Cache the results if successful
+      if (notices.isNotEmpty) {
+        await _cacheNotices(notices);
+        
+        // Update last check time
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setInt(_lastCheckKey, DateTime.now().millisecondsSinceEpoch);
+        
+        // Notify listeners
+        _noticesController.add(notices);
+      }
+      
+      debugPrint('Fetched ${notices.length} notices via HTML scraping');
+      return notices;
+    } catch (e) {
+      debugPrint('Error scraping HTML: $e');
+      rethrow;
+    }
+  }
+  
+  /// Parse notices from HTML page
+  List<ScrapedNotice> _parseNoticesFromHtml(String htmlContent) {
+    final notices = <ScrapedNotice>[];
+    
+    try {
+      final document = html_parser.parse(htmlContent);
+      
+      // Look for table rows in the notices table
+      // The structure may vary, so we try multiple selectors
+      final tableRows = document.querySelectorAll('table tbody tr');
+      
+      for (final row in tableRows) {
+        try {
+          final cells = row.querySelectorAll('td');
+          if (cells.length >= 3) {
+            // Extract title and link from second column
+            final titleCell = cells[1];
+            final titleLink = titleCell.querySelector('a');
+            
+            String title = '';
+            String url = '';
+            
+            if (titleLink != null) {
+              title = titleLink.text.trim();
+              url = titleLink.attributes['href'] ?? '';
+            } else {
+              title = titleCell.text.trim();
+            }
+            
+            if (title.isEmpty) continue;
+            
+            // Extract date from third column
+            final dateText = cells[2].text.trim();
+            final publishedDate = _parseDate(dateText) ?? DateTime.now();
+            
+            // Generate unique ID
+            final id = 'notice_${title.hashCode}_${publishedDate.millisecondsSinceEpoch}';
+            
+            notices.add(ScrapedNotice(
+              id: id,
+              title: title,
+              description: title,
+              url: _makeAbsoluteUrl(url),
+              publishedDate: publishedDate,
+              source: 'College Website',
+            ));
+          }
+        } catch (e) {
+          debugPrint('Error parsing table row: $e');
+          continue;
+        }
+      }
+      
+      debugPrint('Parsed ${notices.length} notices from HTML');
+    } catch (e) {
+      debugPrint('Error parsing HTML document: $e');
+    }
+    
+    return notices;
   }
 
   /// Parse notices from DataTables API JSON response
@@ -332,8 +454,17 @@ class WebsiteScraperService {
   }
 
   void dispose() {
-    stopPeriodicCheck();
-    _noticesController.close();
+    try {
+      stopPeriodicCheck();
+    } catch (e) {
+      debugPrint('Error stopping periodic check: $e');
+    }
+    
+    try {
+      _noticesController.close();
+    } catch (e) {
+      debugPrint('Error closing notices controller: $e');
+    }
   }
 }
 
