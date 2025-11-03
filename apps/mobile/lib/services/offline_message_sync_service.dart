@@ -129,10 +129,19 @@ class OfflineMessageSyncService {
     final messageId = localMessage['id'] as String;
 
     try {
-      // Send message to Appwrite
-      await _messageService.sendMessage(
-        recipientId: localMessage['recipient_id'] as String,
-        content: localMessage['content'] as String,
+      // Send message directly to Appwrite (avoid circular dependency)
+      await _appwrite.databases.createDocument(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.messagesCollectionId,
+        documentId: ID.unique(),
+        data: {
+          'sender_id': localMessage['sender_id'],
+          'recipient_id': localMessage['recipient_id'],
+          'content': localMessage['content'],
+          'type': localMessage['type'],
+          'read': false,
+          'created_at': localMessage['created_at'],
+        },
       );
 
       // Mark as synced
