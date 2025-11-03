@@ -264,7 +264,7 @@ class AuthService {
       // Clear from local storage
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove(_userIdKey);
-      
+
       // Clear AI chatbot API key (but keep chat history)
       // User will need to re-enter API key after login
       try {

@@ -11,13 +11,13 @@ class AIChatbotService {
 
   final _secureStorage = SecureStorageService();
   final _database = AIChatDatabase();
-  
+
   GenerativeModel? _model;
   String? _currentApiKey;
-  
+
   // Model version constant
   static const String _modelVersion = 'gemini-1.5-flash';
-  
+
   // Custom system instruction for better responses
   static const String _systemInstruction = '''
 You are an AI assistant for a college communication app called "Campus Mesh" used at Rangpur Polytechnic Institute.
@@ -68,12 +68,11 @@ Always maintain a respectful and supportive tone.
         model: _modelVersion,
         apiKey: apiKey,
       );
-      
+
       // Test with a simple prompt
-      final response = await testModel.generateContent([
-        Content.text('Respond with "OK" if you receive this message.')
-      ]);
-      
+      final response = await testModel.generateContent(
+          [Content.text('Respond with "OK" if you receive this message.')]);
+
       return response.text != null && response.text!.isNotEmpty;
     } catch (e) {
       return false;
@@ -83,7 +82,7 @@ Always maintain a respectful and supportive tone.
   // Initialize the Gemini model
   void _initializeModel() {
     if (_currentApiKey == null || _currentApiKey!.isEmpty) return;
-    
+
     _model = GenerativeModel(
       model: _modelVersion,
       apiKey: _currentApiKey!,
@@ -114,33 +113,36 @@ Always maintain a respectful and supportive tone.
     try {
       // Get chat history for context
       final messages = await _database.getMessages(sessionId);
-      
+
       // Build conversation history with proper roles
       final history = <Content>[];
-      
+
       // Add system instruction as first user message if this is first message
       if (messages.isEmpty) {
         history.add(Content.text(_systemInstruction));
         history.add(Content.model([
-          TextPart('I understand. I am here to assist students, teachers, and staff at Rangpur Polytechnic Institute. How can I help you today?')
+          TextPart(
+              'I understand. I am here to assist students, teachers, and staff at Rangpur Polytechnic Institute. How can I help you today?')
         ]));
       }
-      
-      for (final msg in messages.take(20)) { // Limit to last 20 messages for context
+
+      for (final msg in messages.take(20)) {
+        // Limit to last 20 messages for context
         if (msg.isUser) {
           history.add(Content.text(msg.content));
         } else {
           history.add(Content.model([TextPart(msg.content)]));
         }
       }
-      
+
       // Add current message
       history.add(Content.text(message));
-      
+
       // Generate response
       final response = await _model!.generateContent(history);
-      
-      return response.text ?? 'I apologize, but I could not generate a response. Please try again.';
+
+      return response.text ??
+          'I apologize, but I could not generate a response. Please try again.';
     } catch (e) {
       throw Exception('Failed to get AI response: $e');
     }
@@ -156,7 +158,7 @@ Always maintain a respectful and supportive tone.
       lastMessageAt: DateTime.now(),
       messageCount: 0,
     );
-    
+
     await _database.createSession(session);
     return session;
   }
@@ -179,7 +181,7 @@ Always maintain a respectful and supportive tone.
   // Save a message
   Future<void> saveMessage(AIChatMessage message) async {
     await _database.addMessage(message);
-    
+
     // Update session
     final session = await _database.getSession(message.sessionId);
     if (session != null) {
@@ -212,7 +214,7 @@ Always maintain a respectful and supportive tone.
     if (firstMessage.length <= 40) {
       return firstMessage;
     }
-    
+
     // Take first 40 characters and add ellipsis
     return '${firstMessage.substring(0, 40)}...';
   }
@@ -230,7 +232,7 @@ Always maintain a respectful and supportive tone.
     try {
       // Get chat history for context
       final messages = await _database.getMessages(sessionId);
-      
+
       // Build conversation history with proper roles
       final history = <Content>[];
       for (final msg in messages.take(20)) {
@@ -240,13 +242,13 @@ Always maintain a respectful and supportive tone.
           history.add(Content.model([TextPart(msg.content)]));
         }
       }
-      
+
       // Add current message
       history.add(Content.text(message));
-      
+
       // Generate streaming response
       final response = _model!.generateContentStream(history);
-      
+
       await for (final chunk in response) {
         if (chunk.text != null) {
           yield chunk.text!;
