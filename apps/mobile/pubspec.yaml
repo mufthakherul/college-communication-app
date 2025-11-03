@@ -49,6 +49,8 @@ dependencies:
   crypto: ^3.0.3
   # HTTP client
   http: ^1.1.0
+  # HTML parser for web scraping
+  html: ^0.15.4
 
 dev_dependencies:
   flutter_test:
