@@ -32,8 +32,13 @@ A comprehensive college communication platform for **Rangpur Polytechnic Institu
 
 **⚠️ IMPORTANT:** Appwrite has been significantly updated with new services and features. Please review:
 
+**📋 Prerequisites:**
+- **Dart SDK 3.3.0+** required for Appwrite v12.0.4
+- See [DART_SDK_UPGRADE_GUIDE.md](DART_SDK_UPGRADE_GUIDE.md) if you need to upgrade
+- Or use Appwrite v12.0.2 with Dart 3.0+ (see upgrade guide for details)
+
 - **[APPWRITE_UPDATED_GUIDE.md](APPWRITE_UPDATED_GUIDE.md)** - 🆕 **Latest comprehensive guide**
-  - Updated SDK (v12.0.4 - compatible with Flutter SDK)
+  - Updated SDK (v12.0.4 - requires Dart 3.3.0+)
   - Database with advanced queries
   - Real-time subscriptions
   - Functions (serverless)
