@@ -128,10 +128,10 @@ The app is primarily designed for **Appwrite** backend:
 - ✅ Easy self-hosting option if needed
 
 **Get Started:**
-1. 📚 Learn about benefits: [APPWRITE_EDUCATIONAL_BENEFITS.md](APPWRITE_EDUCATIONAL_BENEFITS.md)
-2. 📊 Compare backends: [BACKEND_COMPARISON.md](BACKEND_COMPARISON.md)
-3. 🚀 Migration guide: [APPWRITE_MIGRATION_GUIDE.md](APPWRITE_MIGRATION_GUIDE.md)
-4. 🎓 Apply now: https://appwrite.io/education
+1. 📚 Setup Guide: [docs/APPWRITE_GUIDE.md](docs/APPWRITE_GUIDE.md) - Complete Appwrite setup
+2. 🚀 Quick Start: [docs/QUICK_START.md](docs/QUICK_START.md) - Get running in 30 minutes
+3. 🎓 Apply for benefits: https://appwrite.io/education
+4. 📖 Archived guides: See `archive_docs/` for historical documentation
 
 ---
 
@@ -169,7 +169,7 @@ The app is primarily designed for **Appwrite** backend:
 - ✅ **Security Tests**: Biometric & secure storage validation
 - ✅ **Logger Tests**: All logging functionality verified
 
-See [NEW_FEATURES_v2.1.md](NEW_FEATURES_v2.1.md) for complete details.
+See [IMPLEMENTATION_SUMMARY_v2.1.md](IMPLEMENTATION_SUMMARY_v2.1.md) for complete implementation details.
 
 ### Previous Release v1.0.0
 
@@ -182,10 +182,10 @@ See [NEW_FEATURES_v2.1.md](NEW_FEATURES_v2.1.md) for complete details.
 
 **Complete Documentation** 📚
 - ✅ [Production Deployment Guide](PRODUCTION_DEPLOYMENT_GUIDE.md) - Complete step-by-step guide
-- ✅ [Quick Start Guide](DEPLOYMENT_QUICKSTART.md) - Deploy in 30 minutes
+- ✅ [Quick Start Guide](docs/QUICK_START.md) - Get started in 30 minutes
 - ✅ [Security Policy](SECURITY.md) - Security features and best practices
-- ✅ [Pre-Production Checklist](PRE_PRODUCTION_CHECKLIST.md) - Validation checklist
-- ✅ [Release Summary](PRODUCTION_RELEASE_SUMMARY.md) - Complete release overview
+- ✅ [Appwrite Setup](docs/APPWRITE_GUIDE.md) - Backend configuration guide
+- ✅ [Implementation Summary](IMPLEMENTATION_SUMMARY_v2.1.md) - Complete implementation overview
 
 **Production Ready** ✅
 - ✅ Tested and verified
@@ -198,10 +198,10 @@ See [NEW_FEATURES_v2.1.md](NEW_FEATURES_v2.1.md) for complete details.
 
 Choose your path:
 
-- **🚀 Quick Deploy** (30 min): [DEPLOYMENT_QUICKSTART.md](DEPLOYMENT_QUICKSTART.md)
+- **🚀 Quick Start** (30 min): [docs/QUICK_START.md](docs/QUICK_START.md)
 - **📖 Complete Guide** (45 min): [PRODUCTION_DEPLOYMENT_GUIDE.md](PRODUCTION_DEPLOYMENT_GUIDE.md)
-- **✅ Pre-Flight Check**: [PRE_PRODUCTION_CHECKLIST.md](PRE_PRODUCTION_CHECKLIST.md)
-- **📊 Release Details**: [PRODUCTION_RELEASE_SUMMARY.md](PRODUCTION_RELEASE_SUMMARY.md)
+- **🔧 Appwrite Setup**: [docs/APPWRITE_GUIDE.md](docs/APPWRITE_GUIDE.md)
+- **📊 Implementation Status**: [IMPLEMENTATION_SUMMARY_v2.1.md](IMPLEMENTATION_SUMMARY_v2.1.md)
 
 ---
 
@@ -213,7 +213,7 @@ Choose your path:
 2. Download the APK artifact from the latest successful run
 3. Or check the [Releases Page](../../releases) for stable versions
 
-See the complete [APK Build Guide](APK_BUILD_GUIDE.md) for detailed instructions.
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) or the archived [APK Build Guide](archive_docs/APK_BUILD_GUIDE.md) for detailed instructions.
 
 ## 🚀 Quick Start
 
@@ -263,7 +263,7 @@ flutter run
   - Group messages require admin/teacher approval
   - Message status indicators (pending, synced, failed)
   - Sync statistics dashboard
-  - See [OFFLINE_CHAT_GUIDE.md](OFFLINE_CHAT_GUIDE.md) for details
+  - See [docs/NETWORKING_GUIDE.md](docs/NETWORKING_GUIDE.md) for details
 - 💾 **Intelligent Caching** - Fast and efficient data access
   - Time-based expiry (5min, 1hr, 1day)
   - 50MB cache limit with auto-cleanup
@@ -301,7 +301,7 @@ flutter run
   - Secure local storage for chats
   - API key cleared on logout for security
   - Multiple chat sessions support
-  - See [AI_CHATBOT_GUIDE.md](AI_CHATBOT_GUIDE.md) for details
+  - See archived [AI_CHATBOT_GUIDE.md](archive_docs/AI_CHATBOT_GUIDE.md) for details
 - 📝 **Assignment Tracker** - Coming soon
 - 📅 **Class Timetable** - Coming soon
 - 🎉 **College Events** - Coming soon

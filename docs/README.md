@@ -1,148 +1,169 @@
-# Campus Mesh
+# RPI Communication App - Documentation
 
-A comprehensive college communication platform built with Flutter and Firebase, designed to streamline communication between students, teachers, and administrators.
+Welcome to the RPI Communication App documentation! This directory contains comprehensive guides for setting up, developing, and deploying the application.
 
-## 🌟 Features
+## 🚀 Getting Started
 
-- **Real-time Messaging**: Secure communication between users
-- **Notice Board**: Digital announcements and notices
-- **User Management**: Role-based access control (Students, Teachers, Admins)
-- **File Sharing**: Secure file attachments and sharing
-- **Push Notifications**: Real-time notifications for important updates
-- **Analytics Dashboard**: Usage analytics for administrators
-- **Multi-platform**: Works on iOS, Android, and Web
+Start here if you're new to the project:
 
-## 🏗️ Architecture
+1. **[QUICK_START.md](QUICK_START.md)** - Get up and running in 30 minutes
+2. **[APPWRITE_GUIDE.md](APPWRITE_GUIDE.md)** - Complete Appwrite backend setup
+3. **[ARCHITECTURE.md](ARCHITECTURE.md)** - Understand the system architecture
 
-Campus Mesh follows a modern, scalable architecture:
+## 📚 Core Documentation
 
-- **Frontend**: Flutter (Dart) - Cross-platform mobile and web app
-- **Backend**: Firebase Cloud Functions (TypeScript) - Serverless functions
-- **Database**: Cloud Firestore - NoSQL document database
-- **Storage**: Firebase Storage - File storage and sharing
-- **Authentication**: Firebase Auth - User authentication and management
-- **Hosting**: Firebase Hosting - Web app hosting
+### Setup & Configuration
 
-## 🚀 Quick Start
+- **[QUICK_START.md](QUICK_START.md)** - Quick setup guide for new developers
+- **[APPWRITE_GUIDE.md](APPWRITE_GUIDE.md)** - Complete Appwrite configuration guide
+  - Account setup & educational benefits
+  - Database schema & collections
+  - Authentication & storage
+  - Real-time subscriptions
+  - Troubleshooting
+- **[CONFIGURATION_GUIDE.md](CONFIGURATION_GUIDE.md)** - App configuration options
+- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Deployment instructions
+
+### Architecture & Development
+
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture overview
+- **[API.md](API.md)** - API reference and endpoints
+- **[NETWORKING_GUIDE.md](NETWORKING_GUIDE.md)** - Networking & offline features
+  - Mesh networking setup
+  - Offline chat system
+  - Network detection
+  - Troubleshooting
+
+### Testing & Quality
+
+- **[TESTING_GUIDE.md](TESTING_GUIDE.md)** - Testing strategies and guides
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** - How to contribute to the project
+- **[TROUBLESHOOTING.md](TROUBLESHOOTING.md)** - Common issues and solutions
+
+### User Documentation
+
+- **[USER_GUIDE.md](USER_GUIDE.md)** - Guide for students and users
+- **[TEACHER_GUIDE.md](TEACHER_GUIDE.md)** - Guide for teachers and staff
+- **[ACCESSIBILITY.md](ACCESSIBILITY.md)** - Accessibility features
+
+### Database & Seeding
+
+- **[SEEDING.md](SEEDING.md)** - Database seeding instructions
+
+## 🏗️ Project Architecture
+
+The RPI Communication App is built with:
+
+- **Frontend**: Flutter (Dart) - Cross-platform mobile app
+- **Backend**: Appwrite - Backend-as-a-Service
+- **Database**: Appwrite Database (NoSQL)
+- **Storage**: Appwrite Storage
+- **Authentication**: Appwrite Auth
+- **Real-time**: Appwrite Realtime subscriptions
+
+### Key Features
+
+- 📢 Real-time messaging and notices
+- 🌐 Mesh networking for offline communication
+- 🔐 Secure authentication with biometric support
+- 📊 Advanced analytics dashboard
+- 💾 Intelligent caching and offline support
+- 🔍 Full-text search capabilities
+
+## 📖 Additional Resources
+
+### In Repository Root
+- **[../README.md](../README.md)** - Main project README
+- **[../SECURITY.md](../SECURITY.md)** - Security policy and features
+- **[../PRODUCTION_DEPLOYMENT_GUIDE.md](../PRODUCTION_DEPLOYMENT_GUIDE.md)** - Production deployment guide
+- **[../IMPLEMENTATION_SUMMARY_v2.1.md](../IMPLEMENTATION_SUMMARY_v2.1.md)** - Latest implementation status
+
+### Archived Documentation
+- **[../archive_docs/](../archive_docs/)** - Historical documentation and references
+  - Archived Appwrite guides
+  - Archived networking documentation
+  - Version-specific implementation summaries
+  - Bug fix documentation
+  - Historical reports and checklists
+
+## 🛠️ Development Tools
 
 ### Prerequisites
 
-- Flutter SDK (>= 3.0.0)
-- Node.js (>= 18.0.0)
-- Firebase CLI
+- Flutter SDK 3.x or higher
+- Dart SDK 3.3.0+
+- Android Studio / VS Code
 - Git
+- Appwrite account (free educational tier available)
 
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/mufthakherul/college-communication-app.git
-   cd college-communication-app
-   ```
-
-2. **Set up development environment**
-   ```bash
-   ./scripts/setup-dev.sh
-   ```
-
-3. **Run the mobile app**
-   ```bash
-   cd apps/mobile
-   flutter run
-   ```
-
-4. **Access Firebase Emulator UI**
-   Open http://localhost:4000 in your browser
-
-## 📱 Mobile App
-
-The mobile app is built with Flutter and provides:
-
-- User authentication and profile management
-- Real-time messaging interface
-- Notice board with rich content
-- File upload and download
-- Push notification handling
-
-### Development
+### Setup Commands
 
 ```bash
-cd apps/mobile
+# Clone repository
+git clone https://github.com/mufthakherul/college-communication-app.git
+cd college-communication-app
+
+# Install dependencies
 flutter pub get
+
+# Run the app
 flutter run
 ```
 
-## ⚡ Firebase Functions
-
-Cloud Functions handle:
-
-- User management and authentication
-- Notice creation and management
-- Message processing
-- File upload validation
-- Analytics data collection
-- Admin approval workflows
-
-### Development
-
-```bash
-cd functions
-npm install
-npm run serve
-```
-
-## 🚀 Deployment
-
-### Staging
-```bash
-./scripts/deploy.sh staging
-```
-
-### Production
-```bash
-./scripts/deploy.sh production
-```
-
-## 📖 Documentation
-
-- [Architecture Overview](docs/ARCHITECTURE.md)
-- [API Reference](docs/API.md)
-- [Security Guidelines](docs/SECURITY.md)
-- [Deployment Guide](docs/DEPLOYMENT.md)
-- [Contributing Guidelines](docs/CONTRIBUTING.md)
-- [Troubleshooting](docs/TROUBLESHOOTING.md)
-
 ## 🔒 Security
 
-Campus Mesh implements comprehensive security measures:
+The app implements comprehensive security measures:
 
-- Role-based access control
-- Secure file upload validation
-- Input sanitization and validation
-- Firestore security rules
-- Storage security rules
+- ProGuard code obfuscation
+- Hardware-backed secure storage
+- Biometric authentication
+- Root/jailbreak detection
+- Encrypted local storage
 - HTTPS-only communication
+
+See [../SECURITY.md](../SECURITY.md) for complete security documentation.
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guidelines](docs/CONTRIBUTING.md) for details.
+We welcome contributions! Please follow these steps:
 
-## 📄 License
+1. Read [CONTRIBUTING.md](CONTRIBUTING.md)
+2. Fork the repository
+3. Create a feature branch
+4. Make your changes
+5. Submit a pull request
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## 📞 Support
 
-## 🆘 Support
+- **Issues**: [GitHub Issues](https://github.com/mufthakherul/college-communication-app/issues)
+- **Documentation**: This docs folder
+- **Appwrite Support**: https://appwrite.io/discord
 
-- Documentation: [docs/](docs/)
-- Issues: [GitHub Issues](https://github.com/mufthakherul/college-communication-app/issues)
-- Discussions: [GitHub Discussions](https://github.com/mufthakherul/college-communication-app/discussions)
+## 📄 Project Structure
 
-## 🙏 Acknowledgments
+```
+college-communication-app/
+├── apps/mobile/          # Flutter mobile application
+├── backend/             # Backend utilities and scripts
+├── docs/               # Documentation (this folder)
+│   ├── QUICK_START.md
+│   ├── APPWRITE_GUIDE.md
+│   ├── NETWORKING_GUIDE.md
+│   ├── ARCHITECTURE.md
+│   └── ...
+├── archive_docs/       # Historical documentation
+├── scripts/           # Build and deployment scripts
+└── README.md         # Main project README
+```
 
-- Flutter team for the amazing framework
-- Firebase team for the backend infrastructure
-- Open source community for inspiration and tools
+## 🆕 What's New
+
+For the latest changes and features, see:
+- [IMPLEMENTATION_SUMMARY_v2.1.md](../IMPLEMENTATION_SUMMARY_v2.1.md) - Latest implementation
+- [archive_docs/](../archive_docs/) - Historical changes
 
 ---
 
-Made with ❤️ for educational institutions worldwide.
+**Made with ❤️ for Rangpur Polytechnic Institute**
+
+For questions or issues, please open a [GitHub Issue](https://github.com/mufthakherul/college-communication-app/issues).
