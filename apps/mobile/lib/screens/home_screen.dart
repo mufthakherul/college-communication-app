@@ -163,9 +163,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     TextButton(
                       onPressed: () async {
+                        final navigator = Navigator.of(context);
                         await _demoModeService.disableDemoMode();
                         if (mounted) {
-                          Navigator.of(context).pushReplacementNamed('/');
+                          navigator.pushReplacementNamed('/');
                         }
                       },
                       style: TextButton.styleFrom(
