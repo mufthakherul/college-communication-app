@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:campus_mesh/services/website_scraper_service.dart';
-import 'package:campus_mesh/models/notification_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -200,47 +199,34 @@ void main() {
 
   group('WebsiteScraperService HTML Parsing', () {
     test('should parse notices with valid structure', () {
-      // This tests the HTML parsing logic
-      // In a real implementation, you would:
-      // 1. Create mock HTML content
-      // 2. Parse it using the service's internal method
-      // 3. Verify the extracted notices
-      
-      // For now, this is a placeholder that should be implemented
-      // when the service exposes parsing methods or through integration tests
-      expect(true, isTrue);
-    });
+      // TODO: Implement HTML parsing test with mock HTML
+      // This requires exposing the internal parsing method or using mock HTTP responses
+    }, skip: 'Placeholder - requires refactoring to expose parsing method');
 
     test('should handle malformed HTML gracefully', () {
-      // Test that malformed HTML doesn't crash the parser
-      expect(true, isTrue);
-    });
+      // TODO: Test that malformed HTML doesn't crash the parser
+    }, skip: 'Placeholder - requires refactoring to expose parsing method');
 
     test('should extract absolute URLs from relative paths', () {
-      // Test URL normalization
-      expect(true, isTrue);
-    });
+      // TODO: Test URL normalization logic
+    }, skip: 'Placeholder - requires refactoring to expose URL helper method');
 
     test('should parse various date formats', () {
-      // Test date parsing logic
-      expect(true, isTrue);
-    });
+      // TODO: Test date parsing logic with various formats
+    }, skip: 'Placeholder - requires refactoring to expose date parsing method');
   });
 
   group('WebsiteScraperService Integration', () {
     test('should integrate with NoticeService', () {
-      // Verify that scraped notices can be stored in the notice service
-      expect(true, isTrue);
-    });
+      // TODO: Verify that scraped notices can be stored in the notice service
+    }, skip: 'Placeholder - requires NoticeService mock or integration setup');
 
     test('should not duplicate notices on multiple scrapes', () {
-      // Verify that the same notice isn't added multiple times
-      expect(true, isTrue);
-    });
+      // TODO: Verify that the same notice isn't added multiple times
+    }, skip: 'Placeholder - requires multiple scrape simulation');
 
     test('should update existing notices if content changes', () {
-      // Verify that notices are updated when website content changes
-      expect(true, isTrue);
-    });
+      // TODO: Verify that notices are updated when website content changes
+    }, skip: 'Placeholder - requires mock HTTP responses with different content');
   });
 }
