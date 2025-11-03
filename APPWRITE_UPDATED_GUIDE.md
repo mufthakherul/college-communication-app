@@ -5,7 +5,7 @@
 This guide provides the latest information about Appwrite services and how to properly configure them for the RPI Communication App. This document addresses the differences between older documentation and the current Appwrite platform.
 
 **Last Updated:** November 2025  
-**Appwrite Cloud Version:** Latest  
+**Appwrite Cloud Version:** 1.5.x  
 **SDK Version:** 13.0.0+  
 **Official Docs:** https://appwrite.io/docs
 

@@ -259,7 +259,7 @@ Bucket ID: profile-images
 Name: Profile Images
 
 Settings:
-- Maximum file size: 5 MB (5242880 bytes)
+- Maximum file size: 5 MB (5,242,880 bytes)
 - Allowed file extensions: jpg, jpeg, png, gif, webp
 - Compression: Enabled
 - Encryption: Enabled
@@ -278,7 +278,7 @@ Bucket ID: notice-attachments
 Name: Notice Attachments
 
 Settings:
-- Maximum file size: 10 MB (10485760 bytes)
+- Maximum file size: 10 MB (10,485,760 bytes)
 - Allowed file extensions: jpg, jpeg, png, pdf, doc, docx, xls, xlsx
 - Encryption: Enabled
 
@@ -296,7 +296,7 @@ Bucket ID: message-attachments
 Name: Message Attachments
 
 Settings:
-- Maximum file size: 25 MB (26214400 bytes)
+- Maximum file size: 25 MB (26,214,400 bytes)
 - Allowed file extensions: jpg, jpeg, png, pdf, doc, docx, zip
 - Encryption: Enabled
 
@@ -314,7 +314,7 @@ Bucket ID: book-covers
 Name: Book Covers
 
 Settings:
-- Maximum file size: 2 MB (2097152 bytes)
+- Maximum file size: 2 MB (2,097,152 bytes)
 - Allowed file extensions: jpg, jpeg, png, webp
 - Compression: Enabled
 - Encryption: Enabled
@@ -333,7 +333,7 @@ Bucket ID: book-files
 Name: Book Files (PDFs)
 
 Settings:
-- Maximum file size: 100 MB (104857600 bytes)
+- Maximum file size: 100 MB (104,857,600 bytes)
 - Allowed file extensions: pdf
 - Encryption: Enabled
 
