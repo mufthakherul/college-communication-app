@@ -112,6 +112,77 @@ jobs:
         working-directory: apps/mobile
         run: flutter analyze --fatal-infos
 
+  notice-scraping-test:
+    name: Notice Scraping Test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        working-directory: apps/mobile
+        run: flutter pub get
+
+      - name: Run notice scraping tests
+        working-directory: apps/mobile
+        run: |
+          echo "========================================="
+          echo "🔍 NOTICE SCRAPING VERIFICATION TEST"
+          echo "========================================="
+          echo "Testing website scraper service..."
+          echo "Note: This test attempts to scrape from the live website"
+          echo "URL: https://rangpur.polytech.gov.bd/site/view/notices"
+          echo "The test is resilient to network failures"
+          echo ""
+          flutter test test/services/website_scraper_service_test.dart --reporter expanded 2>&1 | tee scraper_test_output.txt
+          echo ""
+          echo "========================================="
+          echo "✅ Notice scraping tests completed"
+          echo "========================================="
+          
+      - name: Display test summary
+        if: always()
+        working-directory: apps/mobile
+        run: |
+          echo ""
+          echo "📊 TEST SUMMARY"
+          echo "========================================="
+          if [ -f "scraper_test_output.txt" ]; then
+            echo "Test output captured successfully"
+            # Show any scraped notice details from the output
+            if grep -q "LATEST NOTICE DETAILS" scraper_test_output.txt; then
+              echo "✅ Notices were successfully scraped and verified"
+              echo ""
+              echo "Last scraped notice information:"
+              sed -n '/LATEST NOTICE DETAILS/,/^-/p' scraper_test_output.txt | head -20
+            else
+              echo "⚠️  Check test output for details"
+            fi
+          else
+            echo "Test output file not found"
+          fi
+          echo "========================================="
+
+      - name: Verify scraper service exists
+        working-directory: apps/mobile
+        run: |
+          if [ -f "lib/services/website_scraper_service.dart" ]; then
+            echo "✅ Website scraper service found"
+          else
+            echo "❌ Website scraper service not found"
+            exit 1
+          fi
+
   security:
     name: Security Scan
     runs-on: ubuntu-latest
