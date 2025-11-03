@@ -100,7 +100,7 @@ class MessageService {
         final localMessages =
             await _localDb.getConversationMessages(currentUserId, otherUserId);
         for (final localMsg in localMessages) {
-          // Convert to MessageModel
+          // Convert to MessageModel with sync status
           allMessages.add(MessageModel(
             id: localMsg['id'] as String,
             senderId: localMsg['sender_id'] as String,
@@ -112,6 +112,8 @@ class MessageService {
             ),
             read: false,
             createdAt: DateTime.parse(localMsg['created_at'] as String),
+            syncStatus: _parseSyncStatus(localMsg['sync_status'] as String?),
+            approvalStatus: localMsg['approval_status'] as String?,
           ));
         }
       } catch (e) {
@@ -363,6 +365,23 @@ class MessageService {
       _unreadCountController?.add(docs.total);
     } catch (e) {
       _unreadCountController?.add(0);
+    }
+  }
+
+  // Parse sync status
+  MessageSyncStatus? _parseSyncStatus(String? statusStr) {
+    switch (statusStr?.toLowerCase()) {
+      case 'pending':
+        return MessageSyncStatus.pending;
+      case 'failed':
+      case 'permanently_failed':
+        return MessageSyncStatus.failed;
+      case 'pending_approval':
+        return MessageSyncStatus.pendingApproval;
+      case 'synced':
+        return MessageSyncStatus.synced;
+      default:
+        return null;
     }
   }
 
