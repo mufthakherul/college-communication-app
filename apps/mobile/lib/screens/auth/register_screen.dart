@@ -94,7 +94,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           context: context,
           builder: (context) => AlertDialog(
             title: Text(errorMessage),
-            content: Text(errorDetails),
+            content: SelectableText(errorDetails),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),

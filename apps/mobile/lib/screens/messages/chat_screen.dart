@@ -132,7 +132,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           color: Colors.red,
                         ),
                         const SizedBox(height: 16),
-                        Text('Error: ${snapshot.error}'),
+                        SelectableText('Error: ${snapshot.error}'),
                       ],
                     ),
                   );
