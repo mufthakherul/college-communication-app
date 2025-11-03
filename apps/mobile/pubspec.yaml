@@ -37,6 +37,8 @@ dependencies:
   archive: ^3.4.9
   package_info_plus: ^8.0.0
   device_info_plus: ^10.0.0
+  # Local database for offline storage
+  sqflite: ^2.3.0
   # File handling
   file_picker: ^6.1.1
   image_picker: ^1.0.7
