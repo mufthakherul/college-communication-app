@@ -5,6 +5,9 @@ import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/appwrite_config.dart';
 import 'package:campus_mesh/utils/input_validator.dart';
 import 'package:appwrite/appwrite.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart';
+import 'dart:convert';
 
 /// Search service for full-text search across notices, messages, and more
 /// Note: Simplified implementation using Appwrite search capabilities
@@ -13,6 +16,10 @@ class SearchService {
   final _authService = AuthService();
 
   String? get _currentUserId => _authService.currentUserId;
+  
+  // Search history constants
+  static const String _searchHistoryKey = 'search_history';
+  static const int _maxSearchHistorySize = 20;
 
   /// Search notices using Appwrite search
   /// Returns notices ranked by relevance
@@ -287,19 +294,79 @@ class SearchService {
     }
   }
 
-  /// Get recent searches (can be stored locally)
-  List<String> getRecentSearches() {
-    // TODO: Implement local storage for search history
-    return [];
+  /// Get recent searches from local storage
+  Future<List<String>> getRecentSearches() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final historyJson = prefs.getString(_searchHistoryKey);
+      
+      if (historyJson == null) {
+        return [];
+      }
+      
+      final List<dynamic> decoded = jsonDecode(historyJson);
+      return decoded.cast<String>();
+    } catch (e) {
+      debugPrint('Error loading search history: $e');
+      return [];
+    }
   }
 
   /// Save search query to history
+  /// Automatically removes duplicates and maintains max size
   Future<void> saveSearchQuery(String query) async {
-    // TODO: Implement local storage for search history
+    try {
+      // Sanitize and validate query
+      final sanitizedQuery = query.trim();
+      if (sanitizedQuery.isEmpty || sanitizedQuery.length < 2) {
+        return; // Don't save very short queries
+      }
+      
+      final prefs = await SharedPreferences.getInstance();
+      List<String> history = await getRecentSearches();
+      
+      // Remove duplicate if exists
+      history.remove(sanitizedQuery);
+      
+      // Add new query at the beginning
+      history.insert(0, sanitizedQuery);
+      
+      // Limit history size
+      if (history.length > _maxSearchHistorySize) {
+        history = history.sublist(0, _maxSearchHistorySize);
+      }
+      
+      // Save to preferences
+      await prefs.setString(_searchHistoryKey, jsonEncode(history));
+      debugPrint('Search history saved: $sanitizedQuery');
+    } catch (e) {
+      debugPrint('Error saving search query: $e');
+    }
+  }
+  
+  /// Remove a specific query from search history
+  Future<void> removeSearchQuery(String query) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      List<String> history = await getRecentSearches();
+      
+      history.remove(query);
+      
+      await prefs.setString(_searchHistoryKey, jsonEncode(history));
+      debugPrint('Removed from search history: $query');
+    } catch (e) {
+      debugPrint('Error removing search query: $e');
+    }
   }
 
-  /// Clear search history
+  /// Clear all search history
   Future<void> clearSearchHistory() async {
-    // TODO: Implement clearing of search history
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(_searchHistoryKey);
+      debugPrint('Search history cleared');
+    } catch (e) {
+      debugPrint('Error clearing search history: $e');
+    }
   }
 }
