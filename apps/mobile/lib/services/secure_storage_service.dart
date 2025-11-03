@@ -214,4 +214,19 @@ class SecureStorageService {
   Future<bool> removeSessionData() async {
     return await removeSecureValue('session_data');
   }
+
+  /// Generic write method for compatibility
+  Future<void> write(String key, String value) async {
+    await setSecureValue(key, value);
+  }
+
+  /// Generic read method for compatibility
+  Future<String?> read(String key) async {
+    return await getSecureValue(key);
+  }
+
+  /// Generic delete method for compatibility
+  Future<void> delete(String key) async {
+    await removeSecureValue(key);
+  }
 }

@@ -5,6 +5,7 @@ import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/appwrite_config.dart';
 import 'package:campus_mesh/utils/input_validator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:campus_mesh/services/ai_chatbot_service.dart';
 
 class AuthService {
   // Singleton pattern
@@ -263,6 +264,15 @@ class AuthService {
       // Clear from local storage
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove(_userIdKey);
+      
+      // Clear AI chatbot API key (but keep chat history)
+      // User will need to re-enter API key after login
+      try {
+        final aiService = AIChatbotService();
+        await aiService.clearApiKey();
+      } catch (e) {
+        debugPrint('Failed to clear AI API key: $e');
+      }
     } on AppwriteException catch (e) {
       throw Exception('Failed to sign out: ${e.message}');
     } catch (e) {
