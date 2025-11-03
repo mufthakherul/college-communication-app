@@ -173,9 +173,64 @@ flutter pub get
 
 ### Issue: "Cannot upgrade Flutter/Dart in CI/CD"
 
-**Solution:** 
-- Update your CI/CD Flutter version in workflow files
-- Or use Appwrite v12.0.2 as documented above
+**Solution:** Update your CI/CD Flutter version in workflow files
+
+**For GitHub Actions:**
+Edit `.github/workflows/*.yml` files:
+```yaml
+- name: Setup Flutter
+  uses: subosito/flutter-action@v2
+  with:
+    flutter-version: '3.19.0'  # Changed from 3.16.0 to get Dart 3.3.0+
+    channel: 'stable'
+    cache: true
+```
+
+**For Other CI Systems:**
+- **GitLab CI**: Update Flutter Docker image to `cirrusci/flutter:3.19.0`
+- **CircleCI**: Use Flutter 3.19.0+ in executor
+- **Jenkins**: Update Flutter installation to 3.19.0+
+
+Or use Appwrite v12.0.2 as documented above if you cannot update CI/CD.
+
+---
+
+## 🔧 Updating GitHub Actions Workflows
+
+If you're using GitHub Actions for CI/CD, update your workflow files to use Flutter 3.19.0+:
+
+### Files to Update
+
+1. `.github/workflows/build-apk.yml`
+2. `.github/workflows/test.yml`
+3. Any other workflows that use Flutter
+
+### Change Required
+
+```yaml
+# Before (Flutter 3.16.0 with Dart 3.2.0)
+- name: Setup Flutter
+  uses: subosito/flutter-action@v2
+  with:
+    flutter-version: '3.16.0'
+    channel: 'stable'
+    cache: true
+
+# After (Flutter 3.19.0 with Dart 3.3.0+)
+- name: Setup Flutter
+  uses: subosito/flutter-action@v2
+  with:
+    flutter-version: '3.19.0'  # Includes Dart 3.3.0+
+    channel: 'stable'
+    cache: true
+```
+
+### Verify
+
+After updating, push your changes and check the workflow runs:
+1. Go to **Actions** tab in GitHub
+2. Verify workflows complete successfully
+3. Check the log shows Dart 3.3.0+
 
 ---
 
