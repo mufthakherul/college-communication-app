@@ -15,12 +15,16 @@ A comprehensive college communication platform for **Rangpur Polytechnic Institu
 
 ### Production Features ✅
 
-- ✅ **Enhanced Security**: ProGuard obfuscation, root detection, secure storage
+- ✅ **Enhanced Security**: ProGuard obfuscation, root detection, hardware-backed secure storage
+- ✅ **Biometric Authentication**: Fingerprint, Face ID, Touch ID support
+- ✅ **Advanced Analytics**: Comprehensive dashboard with chart-ready data
+- ✅ **Comprehensive Logging**: Multi-level logging with file persistence
 - ✅ **Demo Mode Disabled**: Production builds are secure
 - ✅ **Comprehensive Deployment Guide**: Step-by-step Appwrite setup
 - ✅ **No Security Vulnerabilities**: All dependencies verified
 - ✅ **APK Signing Ready**: Complete signing configuration
 - ✅ **Zero Cost**: 100% free with Appwrite educational benefits
+- ✅ **100+ Lint Rules**: Strict code quality enforcement
 
 ---
 
@@ -114,14 +118,47 @@ The app is currently configured to use Supabase. Follow the step-by-step guide: 
 
 ---
 
-## 🎯 Production Release v1.0.0
+## 🎯 Latest Release v2.1.0
 
-### What's New in This Release
+### What's New in v2.1.0 (November 2025) 🆕
+
+**Security Enhancements** 🔒
+- ✅ **Biometric Authentication**: Fingerprint, Face ID, Touch ID support
+- ✅ **Hardware-Backed Encryption**: Uses Android KeyStore & iOS Keychain
+- ✅ **Enhanced Secure Storage**: Enterprise-grade data protection
+- ✅ **Automatic Migration**: Seamless upgrade from XOR to hardware encryption
+- ✅ **100+ Lint Rules**: Comprehensive code quality enforcement
+
+**Analytics & Monitoring** 📊
+- ✅ **Advanced Analytics Dashboard**: Notice, message, and user analytics
+- ✅ **Growth Tracking**: 90-day historical trends
+- ✅ **Chart-Ready Data**: fl_chart compatible format
+- ✅ **User Activity Tracking**: Engagement metrics
+- ✅ **System Health Monitoring**: Real-time platform metrics
+
+**Logging & Debugging** 📝
+- ✅ **Comprehensive Logger**: Multi-level logging (debug, info, warning, error, fatal)
+- ✅ **File Persistence**: Log rotation and export
+- ✅ **Search & Filter**: Advanced log querying
+- ✅ **Statistics**: Log analysis and reporting
+
+**Search Improvements** 🔍
+- ✅ **Search History**: Persistent search history with smart deduplication
+- ✅ **Quick Access**: Recent searches for faster re-search
+- ✅ **Privacy Controls**: Clear individual or all searches
+
+**Testing** 🧪
+- ✅ **49 New Unit Tests**: Comprehensive test coverage
+- ✅ **Security Tests**: Biometric & secure storage validation
+- ✅ **Logger Tests**: All logging functionality verified
+
+See [NEW_FEATURES_v2.1.md](NEW_FEATURES_v2.1.md) for complete details.
+
+### Previous Release v1.0.0
 
 **Security Enhancements** 🔒
 - ✅ ProGuard obfuscation with custom dictionary
 - ✅ Root detection and integrity checks
-- ✅ Secure encrypted storage for sensitive data
 - ✅ Demo mode disabled in production builds
 - ✅ Runtime security validation on startup
 - ✅ No security vulnerabilities in dependencies

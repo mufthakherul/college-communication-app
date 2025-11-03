@@ -47,12 +47,16 @@ dependencies:
   onesignal_flutter: ^5.0.0
   # Security
   crypto: ^3.0.3
+  flutter_secure_storage: ^9.0.0
+  local_auth: ^2.1.8
   # HTTP client
   http: ^1.1.0
   # HTML parser for web scraping
   html: ^0.15.4
   # Google Gemini AI
   google_generative_ai: ^0.2.2
+  # Charts for analytics
+  fl_chart: ^0.66.0
 
 dev_dependencies:
   flutter_test:
