@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:campus_mesh/services/website_scraper_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -43,7 +44,7 @@ void main() {
       // This test verifies that the scraper can fetch notices
       // Note: This is an integration test that requires network access
       // The test passes even if network is unavailable (returns cached/empty list)
-      
+
       bool noticesReceived = false;
       List<ScrapedNotice>? receivedNotices;
       bool errorOccurred = false;
@@ -73,76 +74,79 @@ void main() {
 
       // Verify that service responded (even if with empty list due to network issues)
       // This makes the test resilient to network failures
-      expect(noticesReceived || errorOccurred, isTrue, 
-        reason: 'Service should respond (either with data or handle errors gracefully)');
-      
-      // Print scraping results for verification
-      print('\n========================================');
-      print('✅ NOTICE SCRAPING TEST RESULTS');
-      print('========================================');
-      
+      expect(noticesReceived || errorOccurred, isTrue,
+          reason:
+              'Service should respond (either with data or handle errors gracefully)');
+
+      // Log scraping results for verification (using debugPrint for test output)
+      debugPrint('\n========================================');
+      debugPrint('✅ NOTICE SCRAPING TEST RESULTS');
+      debugPrint('========================================');
+
       if (errorOccurred) {
-        print('⚠️  Network error occurred: $errorMessage');
-        print('This is acceptable in CI environments with limited network access');
-        print('========================================\n');
+        debugPrint('⚠️  Network error occurred: $errorMessage');
+        debugPrint(
+            'This is acceptable in CI environments with limited network access');
+        debugPrint('========================================\n');
       } else if (receivedNotices != null) {
         expect(receivedNotices, isA<List<ScrapedNotice>>(),
-          reason: 'Received data should be a list of ScrapedNotice');
-        
-        print('Total notices scraped: ${receivedNotices!.length}');
-        
+            reason: 'Received data should be a list of ScrapedNotice');
+
+        debugPrint('Total notices scraped: ${receivedNotices!.length}');
+
         // If notices were found, verify their structure and display details
         if (receivedNotices!.isNotEmpty) {
-          print('\n📋 LATEST NOTICE DETAILS:');
-          print('----------------------------------------');
-          
+          debugPrint('\n📋 LATEST NOTICE DETAILS:');
+          debugPrint('----------------------------------------');
+
           final latestNotice = receivedNotices!.first;
-          print('ID: ${latestNotice.id}');
-          print('Title: ${latestNotice.title}');
-          print('Description: ${latestNotice.description}');
-          print('URL: ${latestNotice.url}');
-          print('Published Date: ${latestNotice.publishedDate}');
-          print('Source: ${latestNotice.source}');
-          print('----------------------------------------');
-          
+          debugPrint('ID: ${latestNotice.id}');
+          debugPrint('Title: ${latestNotice.title}');
+          debugPrint('Description: ${latestNotice.description}');
+          debugPrint('URL: ${latestNotice.url}');
+          debugPrint('Published Date: ${latestNotice.publishedDate}');
+          debugPrint('Source: ${latestNotice.source}');
+          debugPrint('----------------------------------------');
+
           // Show all notices in brief
           if (receivedNotices!.length > 1) {
-            print('\n📄 ALL SCRAPED NOTICES:');
+            debugPrint('\n📄 ALL SCRAPED NOTICES:');
             for (int i = 0; i < receivedNotices!.length; i++) {
               final notice = receivedNotices![i];
-              print('${i + 1}. ${notice.title} (${notice.publishedDate.toLocal().toString().split(' ')[0]})');
+              debugPrint(
+                  '${i + 1}. ${notice.title} (${notice.publishedDate.toLocal().toString().split(' ')[0]})');
             }
           }
-          print('========================================\n');
-          
+          debugPrint('========================================\n');
+
           // Verify structure
-          expect(latestNotice.id, isNotEmpty, 
-            reason: 'Notice should have an ID');
-          expect(latestNotice.title, isNotEmpty, 
-            reason: 'Notice should have a title');
+          expect(latestNotice.id, isNotEmpty,
+              reason: 'Notice should have an ID');
+          expect(latestNotice.title, isNotEmpty,
+              reason: 'Notice should have a title');
           expect(latestNotice.source, equals('College Website'),
-            reason: 'Notice source should be College Website');
+              reason: 'Notice source should be College Website');
         } else {
-          print('⚠️  No notices found on the website');
-          print('This could mean:');
-          print('  - The website has no notices currently');
-          print('  - The HTML structure has changed');
-          print('  - Network/connectivity issues');
-          print('========================================\n');
+          debugPrint('⚠️  No notices found on the website');
+          debugPrint('This could mean:');
+          debugPrint('  - The website has no notices currently');
+          debugPrint('  - The HTML structure has changed');
+          debugPrint('  - Network/connectivity issues');
+          debugPrint('========================================\n');
         }
       } else {
-        print('⚠️  Service did not emit notices within timeout period');
-        print('Test still passes as service is working correctly');
-        print('========================================\n');
+        debugPrint('⚠️  Service did not emit notices within timeout period');
+        debugPrint('Test still passes as service is working correctly');
+        debugPrint('========================================\n');
       }
     }, timeout: const Timeout(Duration(seconds: 40)));
 
     test('should handle network errors gracefully', () async {
       // Test that the service handles errors without crashing
       // When network is unavailable, it should return cached notices or empty list
-      
+
       bool streamEmitted = false;
-      
+
       final subscription = scraperService.noticesStream.listen(
         (notices) {
           streamEmitted = true;
@@ -156,25 +160,23 @@ void main() {
 
       // Start periodic check
       scraperService.startPeriodicCheck();
-      
+
       // Wait briefly
       await Future.delayed(const Duration(seconds: 2));
-      
+
       scraperService.stopPeriodicCheck();
       await subscription.cancel();
 
       // The stream should emit at least once (even if empty list)
       expect(streamEmitted, isTrue,
-        reason: 'Service should emit to stream even on errors');
+          reason: 'Service should emit to stream even on errors');
     }, timeout: const Timeout(Duration(seconds: 10)));
 
     test('should cache scraped notices', () async {
       // Verify that notices are cached using SharedPreferences
-      
-      List<ScrapedNotice>? cachedNotices;
-      
+
       final subscription = scraperService.noticesStream.listen((notices) {
-        cachedNotices = notices;
+        // Listen to stream to trigger fetch
       });
 
       // Fetch notices
@@ -185,15 +187,15 @@ void main() {
 
       // Check if SharedPreferences has cached data
       final prefs = await SharedPreferences.getInstance();
-      final cacheKey = 'scraped_notices_cache';
-      final lastCheckKey = 'last_scrape_check';
-      
+      const cacheKey = 'scraped_notices_cache';
+      const lastCheckKey = 'last_scrape_check';
+
       // At least one of these should be set after a fetch attempt
       final hasCacheKey = prefs.containsKey(cacheKey);
       final hasLastCheckKey = prefs.containsKey(lastCheckKey);
-      
+
       expect(hasCacheKey || hasLastCheckKey, isTrue,
-        reason: 'Service should cache fetch results or timestamp');
+          reason: 'Service should cache fetch results or timestamp');
     }, timeout: const Timeout(Duration(seconds: 15)));
   });
 
@@ -213,7 +215,9 @@ void main() {
 
     test('should parse various date formats', () {
       // TODO: Test date parsing logic with various formats
-    }, skip: 'Placeholder - requires refactoring to expose date parsing method');
+    },
+        skip:
+            'Placeholder - requires refactoring to expose date parsing method');
   });
 
   group('WebsiteScraperService Integration', () {
@@ -227,6 +231,8 @@ void main() {
 
     test('should update existing notices if content changes', () {
       // TODO: Verify that notices are updated when website content changes
-    }, skip: 'Placeholder - requires mock HTTP responses with different content');
+    },
+        skip:
+            'Placeholder - requires mock HTTP responses with different content');
   });
 }
