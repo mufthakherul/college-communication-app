@@ -112,6 +112,44 @@ jobs:
         working-directory: apps/mobile
         run: flutter analyze --fatal-infos
 
+  notice-scraping-test:
+    name: Notice Scraping Test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+          cache: true
+
+      - name: Get dependencies
+        working-directory: apps/mobile
+        run: flutter pub get
+
+      - name: Run notice scraping tests
+        working-directory: apps/mobile
+        run: |
+          echo "Running notice scraping tests to ensure scraper functionality..."
+          flutter test test/services/website_scraper_service_test.dart --reporter expanded
+          echo "✅ Notice scraping tests completed"
+
+      - name: Verify scraper service exists
+        working-directory: apps/mobile
+        run: |
+          if [ -f "lib/services/website_scraper_service.dart" ]; then
+            echo "✅ Website scraper service found"
+          else
+            echo "❌ Website scraper service not found"
+            exit 1
+          fi
+
   security:
     name: Security Scan
     runs-on: ubuntu-latest
