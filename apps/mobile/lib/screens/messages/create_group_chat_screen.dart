@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/services/chat_service.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
@@ -26,7 +25,7 @@ class _CreateGroupChatScreenState extends State<CreateGroupChatScreen> {
 
   List<UserModel> _allUsers = [];
   List<UserModel> _filteredUsers = [];
-  List<UserModel> _selectedUsers = [];
+  final List<UserModel> _selectedUsers = [];
   bool _isLoading = true;
   bool _isCreating = false;
   String _errorMessage = '';

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:appwrite/appwrite.dart';
 import 'package:campus_mesh/models/message_model.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
