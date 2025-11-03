@@ -1,5 +1,7 @@
 enum NoticeType { announcement, event, urgent }
 
+enum NoticeSource { admin, scraped }
+
 class NoticeModel {
   final String id;
   final String title;
@@ -11,6 +13,8 @@ class NoticeModel {
   final DateTime? updatedAt;
   final DateTime? expiresAt;
   final bool isActive;
+  final NoticeSource source;
+  final String? sourceUrl; // For scraped notices
 
   NoticeModel({
     required this.id,
@@ -23,6 +27,8 @@ class NoticeModel {
     this.updatedAt,
     this.expiresAt,
     this.isActive = true,
+    this.source = NoticeSource.admin,
+    this.sourceUrl,
   });
 
   factory NoticeModel.fromJson(Map<String, dynamic> data) {
@@ -44,6 +50,8 @@ class NoticeModel {
           ? DateTime.parse(data['expires_at'])
           : null,
       isActive: data['is_active'] ?? data['isActive'] ?? true,
+      source: _parseSource(data['source']),
+      sourceUrl: data['source_url'] ?? data['sourceUrl'],
     );
   }
 
@@ -58,6 +66,8 @@ class NoticeModel {
       'updated_at': updatedAt?.toIso8601String(),
       'expires_at': expiresAt?.toIso8601String(),
       'is_active': isActive,
+      'source': source.name,
+      'source_url': sourceUrl,
     };
   }
 
@@ -70,6 +80,16 @@ class NoticeModel {
       case 'announcement':
       default:
         return NoticeType.announcement;
+    }
+  }
+
+  static NoticeSource _parseSource(String? sourceStr) {
+    switch (sourceStr?.toLowerCase()) {
+      case 'scraped':
+        return NoticeSource.scraped;
+      case 'admin':
+      default:
+        return NoticeSource.admin;
     }
   }
 

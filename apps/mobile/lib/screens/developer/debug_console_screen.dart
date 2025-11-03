@@ -80,8 +80,12 @@ class _DebugConsoleScreenState extends State<DebugConsoleScreen> {
       final pendingActionsCount = _offlineQueueService.pendingActions.length;
 
       // Get auth status
+      await _authService.initialize();
       final isAuthenticated = await _authService.isAuthenticated();
-      final currentUser = await _authService.currentUser;
+      final currentUserId = _authService.currentUserId;
+      final currentUser = currentUserId != null
+          ? await _authService.getUserProfile(currentUserId)
+          : null;
 
       // Get debug logger stats
       final loggerStats = _debugLogger.getStatistics();
