@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/services/theme_service.dart';
 import 'package:campus_mesh/screens/auth/login_screen.dart';
 import 'package:campus_mesh/screens/developer/developer_info_screen.dart';
+import 'package:campus_mesh/screens/developer/debug_console_screen.dart';
 import 'package:campus_mesh/screens/settings/sync_settings_screen.dart';
 import 'package:campus_mesh/screens/settings/mesh_network_screen.dart';
 import 'package:campus_mesh/screens/profile/edit_profile_screen.dart';
@@ -266,6 +268,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     );
                   },
                 ),
+                if (kDebugMode)
+                  ListTile(
+                    leading: Icon(
+                      Icons.bug_report,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    title: const Text('Debug Console'),
+                    subtitle: const Text('Detailed debugging information'),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const DebugConsoleScreen(),
+                        ),
+                      );
+                    },
+                  ),
                 const Divider(height: 32),
                 Padding(
                   padding: const EdgeInsets.all(16),
