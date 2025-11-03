@@ -240,6 +240,14 @@ flutter run
   - Stopwatch mode
   - Customizable durations
   - Session tracking
+- 🤖 **AI Chatbot** - 🆕 Intelligent assistant powered by Gemini
+  - User-provided Gemini Flash API key
+  - Context-aware conversations
+  - Educational focus with custom instructions
+  - Secure local storage for chats
+  - API key cleared on logout for security
+  - Multiple chat sessions support
+  - See [AI_CHATBOT_GUIDE.md](AI_CHATBOT_GUIDE.md) for details
 - 📝 **Assignment Tracker** - Coming soon
 - 📅 **Class Timetable** - Coming soon
 - 🎉 **College Events** - Coming soon
@@ -318,6 +326,7 @@ flutter run
 - [Phase 2 & 3 Implementation](PHASE2_PHASE3_IMPLEMENTATION.md) - **🆕 Complete feature overview**
 - [Edge Functions Guide](EDGE_FUNCTIONS_GUIDE.md) - **🆕 Serverless functions deployment**
 - [Analytics Setup Guide](ANALYTICS_SETUP_GUIDE.md) - **🆕 Analytics, Sentry, OneSignal**
+- [AI Chatbot Guide](AI_CHATBOT_GUIDE.md) - **🆕 AI assistant setup and usage**
 
 ### Technical Documentation
 - [Mesh Network Guide](MESH_NETWORK_GUIDE.md) - **Peer-to-peer communication**
