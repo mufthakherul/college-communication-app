@@ -51,15 +51,25 @@ class _MessagesScreenState extends State<MessagesScreen> {
       return messages;
     }
 
-    return messages.where((message) {
-      final contentMatch = message.content.toLowerCase().contains(
-            _searchQuery.toLowerCase(),
-          );
-      final recipientMatch = message.recipientId.toLowerCase().contains(
-            _searchQuery.toLowerCase(),
-          );
-      return contentMatch || recipientMatch;
-    }).toList();
+    try {
+      return messages.where((message) {
+        try {
+          final contentMatch = message.content.toLowerCase().contains(
+                _searchQuery.toLowerCase(),
+              );
+          final recipientMatch = message.recipientId.toLowerCase().contains(
+                _searchQuery.toLowerCase(),
+              );
+          return contentMatch || recipientMatch;
+        } catch (e) {
+          // If there's an error filtering this message, exclude it
+          return false;
+        }
+      }).toList();
+    } catch (e) {
+      // If filtering fails entirely, return original messages
+      return messages;
+    }
   }
 
   @override
@@ -162,20 +172,32 @@ class _MessagesScreenState extends State<MessagesScreen> {
             );
           }
 
-          // Group messages by conversation
+          // Group messages by conversation with null safety
           final Map<String, MessageModel> conversations = {};
           for (final message in messages) {
+            // Skip messages with null createdAt
+            if (message.createdAt == null) continue;
+            
             final otherUserId = message.recipientId;
-            if (!conversations.containsKey(otherUserId) ||
-                (conversations[otherUserId]!.createdAt!.isBefore(
-                      message.createdAt!,
-                    ))) {
+            if (!conversations.containsKey(otherUserId)) {
               conversations[otherUserId] = message;
+            } else {
+              final existingMessage = conversations[otherUserId];
+              if (existingMessage?.createdAt != null &&
+                  existingMessage!.createdAt!.isBefore(message.createdAt!)) {
+                conversations[otherUserId] = message;
+              }
             }
           }
 
-          final conversationList = conversations.values.toList()
-            ..sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+          final conversationList = conversations.values.toList();
+          // Sort with null safety
+          conversationList.sort((a, b) {
+            if (a.createdAt == null && b.createdAt == null) return 0;
+            if (a.createdAt == null) return 1;
+            if (b.createdAt == null) return -1;
+            return b.createdAt!.compareTo(a.createdAt!);
+          });
 
           return RefreshIndicator(
             onRefresh: _handleRefresh,

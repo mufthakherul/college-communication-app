@@ -35,6 +35,19 @@ class _ChatScreenState extends State<ChatScreen> {
     final content = _messageController.text.trim();
     if (content.isEmpty || _isSending) return;
 
+    // Validate recipient ID before sending
+    if (widget.otherUser.uid.isEmpty) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Invalid recipient. Please try again.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+      return;
+    }
+
     setState(() => _isSending = true);
 
     try {
@@ -59,6 +72,7 @@ class _ChatScreenState extends State<ChatScreen> {
           SnackBar(
             content: Text('Failed to send message: ${e.toString()}'),
             backgroundColor: Colors.red,
+            duration: const Duration(seconds: 5),
           ),
         );
       }
