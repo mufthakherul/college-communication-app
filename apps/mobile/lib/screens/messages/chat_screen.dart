@@ -3,6 +3,7 @@ import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/models/message_model.dart';
 import 'package:campus_mesh/services/message_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
+import 'package:campus_mesh/services/connectivity_service.dart';
 
 /// Screen for chatting with a specific user
 class ChatScreen extends StatefulWidget {
@@ -17,6 +18,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final _messageService = MessageService();
   final _authService = AuthService();
+  final _connectivityService = ConnectivityService();
   final _messageController = TextEditingController();
   final _scrollController = ScrollController();
 
@@ -113,6 +115,35 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: Column(
         children: [
+          // Offline indicator
+          StreamBuilder<bool>(
+            stream: _connectivityService.connectivityStream,
+            builder: (context, snapshot) {
+              final isOnline = snapshot.data ?? true;
+              if (isOnline) return const SizedBox.shrink();
+
+              return Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                color: Colors.orange[700],
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.cloud_off, size: 16, color: Colors.white),
+                    SizedBox(width: 8),
+                    Text(
+                      'Offline - Messages will sync when online',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
           Expanded(
             child: StreamBuilder<List<MessageModel>>(
               stream: _messageService.getMessages(widget.otherUser.uid),
@@ -233,17 +264,55 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ),
             const SizedBox(height: 4),
-            Text(
-              _formatTime(message.createdAt),
-              style: TextStyle(
-                color: isMe ? Colors.white70 : Colors.black54,
-                fontSize: 11,
-              ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  _formatTime(message.createdAt),
+                  style: TextStyle(
+                    color: isMe ? Colors.white70 : Colors.black54,
+                    fontSize: 11,
+                  ),
+                ),
+                if (isMe && message.syncStatus != null) ...[
+                  const SizedBox(width: 4),
+                  _buildSyncStatusIcon(message.syncStatus!),
+                ],
+              ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  Widget _buildSyncStatusIcon(MessageSyncStatus status) {
+    switch (status) {
+      case MessageSyncStatus.pending:
+        return const Icon(
+          Icons.schedule,
+          size: 14,
+          color: Colors.white70,
+        );
+      case MessageSyncStatus.pendingApproval:
+        return const Icon(
+          Icons.hourglass_empty,
+          size: 14,
+          color: Colors.orange,
+        );
+      case MessageSyncStatus.failed:
+        return const Icon(
+          Icons.error_outline,
+          size: 14,
+          color: Colors.red,
+        );
+      case MessageSyncStatus.synced:
+        return const Icon(
+          Icons.done_all,
+          size: 14,
+          color: Colors.white70,
+        );
+    }
   }
 
   Widget _buildMessageInput() {
