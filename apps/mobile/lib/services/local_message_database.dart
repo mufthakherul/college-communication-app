@@ -82,10 +82,12 @@ class LocalMessageDatabase {
   /// Save message locally
   Future<void> saveMessage(Map<String, dynamic> message) async {
     final db = await database;
+    // Use ignore to prevent overwriting existing messages
+    // This prevents data loss if message exists from another source
     await db.insert(
       'local_messages',
       message,
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      conflictAlgorithm: ConflictAlgorithm.ignore,
     );
     debugPrint('Message saved locally: ${message['id']}');
   }

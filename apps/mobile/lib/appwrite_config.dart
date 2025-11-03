@@ -17,6 +17,7 @@ class AppwriteConfig {
   static const String usersCollectionId = 'users';
   static const String noticesCollectionId = 'notices';
   static const String messagesCollectionId = 'messages';
+  static const String messagesPendingCollectionId = 'messages_pending';
   static const String notificationsCollectionId = 'notifications';
   static const String approvalRequestsCollectionId = 'approval_requests';
   static const String userActivityCollectionId = 'user_activity';

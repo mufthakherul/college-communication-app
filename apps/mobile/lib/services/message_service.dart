@@ -266,8 +266,9 @@ class MessageService {
 
       return document.$id;
     } on AppwriteException catch (e) {
-      // If network error, save locally for later sync
-      if (e.code == 0 || e.message?.contains('network') == true) {
+      // If network error (code 0) or timeout, save locally for later sync
+      // Common network-related error codes: 0 (network error), 408 (timeout), 503 (service unavailable)
+      if (e.code == 0 || e.code == 408 || e.code == 503) {
         final messageId = ID.unique();
         final currentUserId = _currentUserId;
         if (currentUserId != null) {
