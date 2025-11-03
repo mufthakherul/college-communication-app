@@ -15,54 +15,111 @@ import 'package:campus_mesh/screens/tools/dictionary_screen.dart';
 import 'package:campus_mesh/screens/tools/periodic_table_screen.dart';
 import 'package:campus_mesh/screens/tools/formula_sheet_screen.dart';
 import 'package:campus_mesh/screens/tools/world_clock_screen.dart';
+import 'package:campus_mesh/screens/tools/binary_converter_screen.dart';
+import 'package:campus_mesh/screens/tools/ascii_table_screen.dart';
+import 'package:campus_mesh/screens/tools/code_snippet_manager_screen.dart';
+import 'package:campus_mesh/screens/tools/ip_calculator_screen.dart';
 
-class ToolsScreen extends StatelessWidget {
+class ToolsScreen extends StatefulWidget {
   const ToolsScreen({super.key});
+
+  @override
+  State<ToolsScreen> createState() => _ToolsScreenState();
+}
+
+class _ToolsScreenState extends State<ToolsScreen> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 5, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Student Tools')),
-      body: GridView.count(
+      appBar: AppBar(
+        title: const Text('Student Tools'),
+        bottom: TabBar(
+          controller: _tabController,
+          isScrollable: true,
+          tabs: const [
+            Tab(icon: Icon(Icons.star), text: 'All'),
+            Tab(icon: Icon(Icons.computer), text: 'CST'),
+            Tab(icon: Icon(Icons.school), text: 'Academic'),
+            Tab(icon: Icon(Icons.access_time), text: 'Productivity'),
+            Tab(icon: Icon(Icons.apps), text: 'Utilities'),
+          ],
+        ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          _buildAllToolsGrid(),
+          _buildCSTToolsGrid(),
+          _buildAcademicToolsGrid(),
+          _buildProductivityToolsGrid(),
+          _buildUtilitiesGrid(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAllToolsGrid() {
+    return GridView.count(
         crossAxisCount: 2,
         padding: const EdgeInsets.all(16),
         mainAxisSpacing: 16,
         crossAxisSpacing: 16,
         children: [
+          // CST Tools
           _buildToolCard(
             context,
-            'AI Chatbot',
-            Icons.smart_toy,
-            Colors.blue,
-            const AIChatHistoryScreen(),
+            'Binary Converter',
+            Icons.transform,
+            Colors.teal,
+            const BinaryConverterScreen(),
+            'CST',
           ),
+          _buildToolCard(
+            context,
+            'ASCII Table',
+            Icons.grid_on,
+            Colors.indigo,
+            const ASCIITableScreen(),
+            'CST',
+          ),
+          _buildToolCard(
+            context,
+            'Code Snippets',
+            Icons.code,
+            Colors.deepPurple,
+            const CodeSnippetManagerScreen(),
+            'CST',
+          ),
+          _buildToolCard(
+            context,
+            'IP Calculator',
+            Icons.router,
+            Colors.blueGrey,
+            const IPCalculatorScreen(),
+            'CST',
+          ),
+          // Academic Tools
           _buildToolCard(
             context,
             'Calculator',
             Icons.calculate,
-            Colors.deepPurple,
+            Colors.blue,
             const CalculatorScreen(),
-          ),
-          _buildToolCard(
-            context,
-            'Attendance',
-            Icons.event_available,
-            Colors.cyan,
-            const AttendanceTrackerScreen(),
-          ),
-          _buildToolCard(
-            context,
-            'Exam Countdown',
-            Icons.event_note,
-            Colors.redAccent,
-            const ExamCountdownScreen(),
-          ),
-          _buildToolCard(
-            context,
-            'Expense Tracker',
-            Icons.account_balance_wallet,
-            Colors.lightGreen,
-            const ExpenseTrackerScreen(),
+            'Academic',
           ),
           _buildToolCard(
             context,
@@ -70,6 +127,7 @@ class ToolsScreen extends StatelessWidget {
             Icons.book,
             Colors.brown,
             const DictionaryScreen(),
+            'Academic',
           ),
           _buildToolCard(
             context,
@@ -77,6 +135,40 @@ class ToolsScreen extends StatelessWidget {
             Icons.science,
             Colors.deepOrange,
             const PeriodicTableScreen(),
+            'Academic',
+          ),
+          _buildToolCard(
+            context,
+            'Formula Sheet',
+            Icons.functions,
+            Colors.purple,
+            const FormulaSheetScreen(),
+            'Academic',
+          ),
+          _buildToolCard(
+            context,
+            'GPA Calculator',
+            Icons.school,
+            Colors.indigo,
+            const GPACalculatorScreen(),
+            'Academic',
+          ),
+          // Productivity Tools
+          _buildToolCard(
+            context,
+            'Attendance',
+            Icons.event_available,
+            Colors.cyan,
+            const AttendanceTrackerScreen(),
+            'Productivity',
+          ),
+          _buildToolCard(
+            context,
+            'Exam Countdown',
+            Icons.event_note,
+            Colors.redAccent,
+            const ExamCountdownScreen(),
+            'Productivity',
           ),
           _buildToolCard(
             context,
@@ -84,6 +176,7 @@ class ToolsScreen extends StatelessWidget {
             Icons.assignment,
             Colors.blueAccent,
             const AssignmentTrackerScreen(),
+            'Productivity',
           ),
           _buildToolCard(
             context,
@@ -91,6 +184,7 @@ class ToolsScreen extends StatelessWidget {
             Icons.schedule,
             Colors.green,
             const TimetableScreen(),
+            'Productivity',
           ),
           _buildToolCard(
             context,
@@ -98,13 +192,7 @@ class ToolsScreen extends StatelessWidget {
             Icons.event,
             Colors.orange,
             const EventsScreen(),
-          ),
-          _buildToolCard(
-            context,
-            'GPA Calculator',
-            Icons.school,
-            Colors.purple,
-            const GPACalculatorScreen(),
+            'Productivity',
           ),
           _buildToolCard(
             context,
@@ -112,13 +200,7 @@ class ToolsScreen extends StatelessWidget {
             Icons.timer,
             Colors.teal,
             const StudyTimerScreen(),
-          ),
-          _buildToolCard(
-            context,
-            'Unit Converter',
-            Icons.swap_horiz,
-            Colors.pink,
-            const UnitConverterScreen(),
+            'Productivity',
           ),
           _buildToolCard(
             context,
@@ -126,20 +208,32 @@ class ToolsScreen extends StatelessWidget {
             Icons.note,
             Colors.amber,
             const NotesScreen(),
+            'Productivity',
+          ),
+          // Utility Tools
+          _buildToolCard(
+            context,
+            'AI Chatbot',
+            Icons.smart_toy,
+            Colors.blue,
+            const AIChatHistoryScreen(),
+            'Utilities',
           ),
           _buildToolCard(
             context,
-            'Important Links',
-            Icons.link,
-            Colors.indigo,
-            const ImportantLinksScreen(),
+            'Expense Tracker',
+            Icons.account_balance_wallet,
+            Colors.lightGreen,
+            const ExpenseTrackerScreen(),
+            'Utilities',
           ),
           _buildToolCard(
             context,
-            'Formula Sheet',
-            Icons.functions,
-            Colors.teal,
-            const FormulaSheetScreen(),
+            'Unit Converter',
+            Icons.swap_horiz,
+            Colors.pink,
+            const UnitConverterScreen(),
+            'Utilities',
           ),
           _buildToolCard(
             context,
@@ -147,9 +241,245 @@ class ToolsScreen extends StatelessWidget {
             Icons.public,
             Colors.blueGrey,
             const WorldClockScreen(),
+            'Utilities',
+          ),
+          _buildToolCard(
+            context,
+            'Important Links',
+            Icons.link,
+            Colors.indigo,
+            const ImportantLinksScreen(),
+            'Utilities',
           ),
         ],
-      ),
+      );
+  }
+
+  Widget _buildCSTToolsGrid() {
+    return GridView.count(
+      crossAxisCount: 2,
+      padding: const EdgeInsets.all(16),
+      mainAxisSpacing: 16,
+      crossAxisSpacing: 16,
+      children: [
+        _buildToolCard(
+          context,
+          'Binary Converter',
+          Icons.transform,
+          Colors.teal,
+          const BinaryConverterScreen(),
+          'CST',
+        ),
+        _buildToolCard(
+          context,
+          'ASCII Table',
+          Icons.grid_on,
+          Colors.indigo,
+          const ASCIITableScreen(),
+          'CST',
+        ),
+        _buildToolCard(
+          context,
+          'Code Snippets',
+          Icons.code,
+          Colors.deepPurple,
+          const CodeSnippetManagerScreen(),
+          'CST',
+        ),
+        _buildToolCard(
+          context,
+          'IP Calculator',
+          Icons.router,
+          Colors.blueGrey,
+          const IPCalculatorScreen(),
+          'CST',
+        ),
+        _buildToolCard(
+          context,
+          'Calculator',
+          Icons.calculate,
+          Colors.blue,
+          const CalculatorScreen(),
+          'CST',
+        ),
+        _buildToolCard(
+          context,
+          'Unit Converter',
+          Icons.swap_horiz,
+          Colors.pink,
+          const UnitConverterScreen(),
+          'CST',
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAcademicToolsGrid() {
+    return GridView.count(
+      crossAxisCount: 2,
+      padding: const EdgeInsets.all(16),
+      mainAxisSpacing: 16,
+      crossAxisSpacing: 16,
+      children: [
+        _buildToolCard(
+          context,
+          'Calculator',
+          Icons.calculate,
+          Colors.blue,
+          const CalculatorScreen(),
+          'Academic',
+        ),
+        _buildToolCard(
+          context,
+          'Dictionary',
+          Icons.book,
+          Colors.brown,
+          const DictionaryScreen(),
+          'Academic',
+        ),
+        _buildToolCard(
+          context,
+          'Periodic Table',
+          Icons.science,
+          Colors.deepOrange,
+          const PeriodicTableScreen(),
+          'Academic',
+        ),
+        _buildToolCard(
+          context,
+          'Formula Sheet',
+          Icons.functions,
+          Colors.purple,
+          const FormulaSheetScreen(),
+          'Academic',
+        ),
+        _buildToolCard(
+          context,
+          'GPA Calculator',
+          Icons.school,
+          Colors.indigo,
+          const GPACalculatorScreen(),
+          'Academic',
+        ),
+      ],
+    );
+  }
+
+  Widget _buildProductivityToolsGrid() {
+    return GridView.count(
+      crossAxisCount: 2,
+      padding: const EdgeInsets.all(16),
+      mainAxisSpacing: 16,
+      crossAxisSpacing: 16,
+      children: [
+        _buildToolCard(
+          context,
+          'Attendance',
+          Icons.event_available,
+          Colors.cyan,
+          const AttendanceTrackerScreen(),
+          'Productivity',
+        ),
+        _buildToolCard(
+          context,
+          'Exam Countdown',
+          Icons.event_note,
+          Colors.redAccent,
+          const ExamCountdownScreen(),
+          'Productivity',
+        ),
+        _buildToolCard(
+          context,
+          'Assignments',
+          Icons.assignment,
+          Colors.blueAccent,
+          const AssignmentTrackerScreen(),
+          'Productivity',
+        ),
+        _buildToolCard(
+          context,
+          'Timetable',
+          Icons.schedule,
+          Colors.green,
+          const TimetableScreen(),
+          'Productivity',
+        ),
+        _buildToolCard(
+          context,
+          'Events',
+          Icons.event,
+          Colors.orange,
+          const EventsScreen(),
+          'Productivity',
+        ),
+        _buildToolCard(
+          context,
+          'Study Timer',
+          Icons.timer,
+          Colors.teal,
+          const StudyTimerScreen(),
+          'Productivity',
+        ),
+        _buildToolCard(
+          context,
+          'Quick Notes',
+          Icons.note,
+          Colors.amber,
+          const NotesScreen(),
+          'Productivity',
+        ),
+      ],
+    );
+  }
+
+  Widget _buildUtilitiesGrid() {
+    return GridView.count(
+      crossAxisCount: 2,
+      padding: const EdgeInsets.all(16),
+      mainAxisSpacing: 16,
+      crossAxisSpacing: 16,
+      children: [
+        _buildToolCard(
+          context,
+          'AI Chatbot',
+          Icons.smart_toy,
+          Colors.blue,
+          const AIChatHistoryScreen(),
+          'Utilities',
+        ),
+        _buildToolCard(
+          context,
+          'Expense Tracker',
+          Icons.account_balance_wallet,
+          Colors.lightGreen,
+          const ExpenseTrackerScreen(),
+          'Utilities',
+        ),
+        _buildToolCard(
+          context,
+          'Unit Converter',
+          Icons.swap_horiz,
+          Colors.pink,
+          const UnitConverterScreen(),
+          'Utilities',
+        ),
+        _buildToolCard(
+          context,
+          'World Clock',
+          Icons.public,
+          Colors.blueGrey,
+          const WorldClockScreen(),
+          'Utilities',
+        ),
+        _buildToolCard(
+          context,
+          'Important Links',
+          Icons.link,
+          Colors.indigo,
+          const ImportantLinksScreen(),
+          'Utilities',
+        ),
+      ],
     );
   }
 
@@ -159,6 +489,7 @@ class ToolsScreen extends StatelessWidget {
     IconData icon,
     Color color,
     Widget destination,
+    String category,
   ) {
     return Card(
       elevation: 2,
@@ -180,12 +511,32 @@ class ToolsScreen extends StatelessWidget {
               ),
               child: Icon(icon, size: 48, color: color),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
             Text(
               title,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
+            if (category.isNotEmpty) ...[
+              const SizedBox(height: 4),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Text(
+                  category,
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: color,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),
