@@ -110,27 +110,28 @@ class WebsiteScraperService {
         final elements = document.querySelectorAll(selector);
         if (elements.isNotEmpty) {
           noticeElements = elements;
-          debugPrint('Found ${elements.length} notices using selector: $selector');
+          debugPrint(
+              'Found ${elements.length} notices using selector: $selector');
           break;
         }
       }
 
       if (noticeElements == null || noticeElements.isEmpty) {
-        debugPrint('No notices found with any selector. Trying alternative parsing...');
-        
+        debugPrint(
+            'No notices found with any selector. Trying alternative parsing...');
+
         // Try to find any links in the content area that look like notices
         final links = document.querySelectorAll('a');
         for (final link in links) {
           final text = link.text.trim();
           final href = link.attributes['href'] ?? '';
-          
+
           // Filter for notice-like content
-          if (text.isNotEmpty && 
-              text.length > 10 && 
-              (text.toLowerCase().contains('notice') || 
-               text.toLowerCase().contains('announcement') ||
-               href.toLowerCase().contains('notice'))) {
-            
+          if (text.isNotEmpty &&
+              text.length > 10 &&
+              (text.toLowerCase().contains('notice') ||
+                  text.toLowerCase().contains('announcement') ||
+                  href.toLowerCase().contains('notice'))) {
             notices.add(ScrapedNotice(
               id: 'notice_${DateTime.now().millisecondsSinceEpoch}_${notices.length}',
               title: text.length > 100 ? '${text.substring(0, 97)}...' : text,
@@ -141,8 +142,9 @@ class WebsiteScraperService {
             ));
           }
         }
-        
-        debugPrint('Found ${notices.length} notice links using fallback method');
+
+        debugPrint(
+            'Found ${notices.length} notice links using fallback method');
         return notices;
       }
 
@@ -160,7 +162,7 @@ class WebsiteScraperService {
             'strong',
             'a',
           ];
-          
+
           for (final selector in titleSelectors) {
             final titleElement = element.querySelector(selector);
             if (titleElement != null && titleElement.text.trim().isNotEmpty) {
@@ -168,7 +170,7 @@ class WebsiteScraperService {
               break;
             }
           }
-          
+
           if (title.isEmpty) {
             title = element.text.trim().split('\n').first;
           }
@@ -186,7 +188,7 @@ class WebsiteScraperService {
             'span.date',
             'td:last-child',
           ];
-          
+
           for (final selector in dateSelectors) {
             final dateElement = element.querySelector(selector);
             if (dateElement != null) {
@@ -232,7 +234,7 @@ class WebsiteScraperService {
   /// Convert relative URL to absolute URL
   String _makeAbsoluteUrl(String url) {
     const baseUrl = 'https://rangpur.polytech.gov.bd';
-    
+
     if (url.isEmpty) return _websiteUrl;
     if (url.startsWith('http')) return url;
     if (url.startsWith('/')) {
@@ -242,13 +244,15 @@ class WebsiteScraperService {
   }
 
   // Pre-compiled regex patterns for date parsing
-  static final _datePatternDDMMYYYY = RegExp(r'(\d{1,2})[/-](\d{1,2})[/-](\d{4})');
-  static final _datePatternYYYYMMDD = RegExp(r'(\d{4})[/-](\d{1,2})[/-](\d{1,2})');
+  static final _datePatternDDMMYYYY =
+      RegExp(r'(\d{1,2})[/-](\d{1,2})[/-](\d{4})');
+  static final _datePatternYYYYMMDD =
+      RegExp(r'(\d{4})[/-](\d{1,2})[/-](\d{1,2})');
 
   /// Parse date from text
   DateTime? _parseDate(String? dateText) {
     if (dateText == null || dateText.isEmpty) return null;
-    
+
     try {
       // Try YYYY-MM-DD format
       final matchYYYY = _datePatternYYYYMMDD.firstMatch(dateText);
@@ -259,7 +263,7 @@ class WebsiteScraperService {
           debugPrint('Error parsing YYYY-MM-DD date: $e');
         }
       }
-      
+
       // Try DD/MM/YYYY format
       final matchDD = _datePatternDDMMYYYY.firstMatch(dateText);
       if (matchDD != null) {
@@ -275,7 +279,7 @@ class WebsiteScraperService {
     } catch (e) {
       debugPrint('Error parsing date: $e');
     }
-    
+
     return null;
   }
 
@@ -340,9 +344,9 @@ class WebsiteScraperService {
   ) async {
     try {
       final notices = await getNotices(forceRefresh: true);
-      
+
       debugPrint('Syncing ${notices.length} scraped notices to database...');
-      
+
       for (final notice in notices) {
         try {
           await createNoticeCallback(
@@ -358,7 +362,7 @@ class WebsiteScraperService {
           // Continue with next notice even if one fails
         }
       }
-      
+
       debugPrint('Finished syncing scraped notices to database');
     } catch (e) {
       debugPrint('Error syncing scraped notices: $e');
