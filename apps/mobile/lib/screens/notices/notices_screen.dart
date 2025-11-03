@@ -3,6 +3,7 @@ import 'package:campus_mesh/models/notice_model.dart';
 import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/services/notice_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
+import 'package:campus_mesh/services/website_scraper_service.dart';
 import 'package:campus_mesh/screens/notices/notice_detail_screen.dart';
 import 'package:campus_mesh/screens/notices/create_notice_screen.dart';
 
@@ -17,16 +18,21 @@ class _NoticesScreenState extends State<NoticesScreen>
     with SingleTickerProviderStateMixin {
   final _noticeService = NoticeService();
   final _authService = AuthService();
+  final _scraperService = WebsiteScraperService();
   final _searchController = TextEditingController();
   late TabController _tabController;
   UserModel? _currentUser;
   bool _isSearching = false;
   String _searchQuery = '';
+  bool _isSyncing = false;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      if (mounted) setState(() {});
+    });
     _loadCurrentUser();
   }
 
@@ -47,6 +53,71 @@ class _NoticesScreenState extends State<NoticesScreen>
   Future<void> _handleRefresh() async {
     // Wait for the stream to update (simulate refresh)
     await Future.delayed(const Duration(milliseconds: 500));
+  }
+
+  Future<void> _syncWebsiteNotices() async {
+    if (_isSyncing) return;
+
+    setState(() => _isSyncing = true);
+
+    try {
+      final notices = await _scraperService.getNotices(forceRefresh: true);
+
+      if (!mounted) return;
+
+      if (notices.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('No notices found on college website'),
+            duration: Duration(seconds: 3),
+          ),
+        );
+        return;
+      }
+
+      // Sync notices to database
+      int successCount = 0;
+      for (final notice in notices) {
+        try {
+          await _noticeService.createNotice(
+            title: notice.title,
+            content: notice.description,
+            type: NoticeType.announcement,
+            targetAudience: 'all',
+            source: NoticeSource.scraped,
+            sourceUrl: notice.url,
+          );
+          successCount++;
+        } catch (e) {
+          // Skip notices that already exist or fail
+          continue;
+        }
+      }
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Synced $successCount of ${notices.length} notices from college website',
+          ),
+          duration: const Duration(seconds: 3),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to sync notices: ${e.toString()}'),
+          duration: const Duration(seconds: 5),
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isSyncing = false);
+      }
+    }
   }
 
   bool get _canCreateNotice {
@@ -112,6 +183,18 @@ class _NoticesScreenState extends State<NoticesScreen>
               )
             : const Text('Notices'),
         actions: [
+          if (_tabController.index == 1 && !_isSearching)
+            IconButton(
+              icon: _isSyncing
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : const Icon(Icons.sync),
+              tooltip: 'Sync from college website',
+              onPressed: _isSyncing ? null : _syncWebsiteNotices,
+            ),
           IconButton(
             icon: Icon(_isSearching ? Icons.close : Icons.search),
             tooltip: _isSearching ? 'Close search' : 'Search notices',
