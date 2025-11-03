@@ -171,7 +171,7 @@ class OfflineMessageSyncService {
       // Upload message to pending collection (waiting for approval)
       final document = await _appwrite.databases.createDocument(
         databaseId: AppwriteConfig.databaseId,
-        collectionId: '${AppwriteConfig.messagesCollectionId}_pending',
+        collectionId: AppwriteConfig.messagesPendingCollectionId,
         documentId: ID.unique(),
         data: {
           'local_message_id': messageId,
@@ -222,7 +222,7 @@ class OfflineMessageSyncService {
           final messageId = message['id'] as String;
           final docs = await _appwrite.databases.listDocuments(
             databaseId: AppwriteConfig.databaseId,
-            collectionId: '${AppwriteConfig.messagesCollectionId}_pending',
+            collectionId: AppwriteConfig.messagesPendingCollectionId,
             queries: [
               Query.equal('local_message_id', messageId),
               Query.limit(1),
