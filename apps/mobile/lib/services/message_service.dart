@@ -24,7 +24,7 @@ class MessageService {
   // Get messages between current user and another user
   Stream<List<MessageModel>> getMessages(String otherUserId) {
     final currentUserId = _currentUserId;
-    if (currentUserId == null || !InputValidator.isValidUuid(otherUserId)) {
+    if (currentUserId == null || !InputValidator.isValidDocumentId(otherUserId)) {
       return Stream.value([]);
     }
 
@@ -57,6 +57,14 @@ class MessageService {
 
     try {
       final allMessages = <MessageModel>[];
+      
+      // Validate user IDs to prevent crashes
+      if (!InputValidator.isValidDocumentId(otherUserId) && 
+          !InputValidator.isValidUuid(otherUserId)) {
+        debugPrint('Invalid otherUserId format: $otherUserId');
+        _messagesController?.add([]);
+        return;
+      }
 
       // Fetch online messages if connected
       if (_connectivityService.isOnline) {
@@ -122,19 +130,26 @@ class MessageService {
         debugPrint('Failed to fetch local messages: $e');
       }
 
-      // Sort by created_at
-      allMessages.sort((a, b) {
-        final aTime = a.createdAt;
-        final bTime = b.createdAt;
-        if (aTime == null && bTime == null) return 0;
-        if (aTime == null) return 1;
-        if (bTime == null) return -1;
-        return aTime.compareTo(bTime);
-      });
+      // Sort by created_at with error handling
+      try {
+        allMessages.sort((a, b) {
+          final aTime = a.createdAt;
+          final bTime = b.createdAt;
+          if (aTime == null && bTime == null) return 0;
+          if (aTime == null) return 1;
+          if (bTime == null) return -1;
+          return aTime.compareTo(bTime);
+        });
+      } catch (sortError) {
+        debugPrint('Error sorting messages: $sortError');
+        // Continue with unsorted messages
+      }
 
       _messagesController?.add(allMessages);
     } catch (e) {
-      _messagesController?.addError(e);
+      debugPrint('Error fetching messages: $e');
+      // Don't propagate error, just log it and return empty list
+      _messagesController?.add([]);
     }
   }
 
@@ -178,19 +193,25 @@ class MessageService {
           ),
         ];
 
-        allMessages.sort((a, b) {
-          final aTime = a.createdAt;
-          final bTime = b.createdAt;
-          if (aTime == null && bTime == null) return 0;
-          if (aTime == null) return 1;
-          if (bTime == null) return -1;
-          return bTime.compareTo(aTime);
-        });
+        try {
+          allMessages.sort((a, b) {
+            final aTime = a.createdAt;
+            final bTime = b.createdAt;
+            if (aTime == null && bTime == null) return 0;
+            if (aTime == null) return 1;
+            if (bTime == null) return -1;
+            return bTime.compareTo(aTime);
+          });
+        } catch (sortError) {
+          debugPrint('Error sorting recent conversations: $sortError');
+          // Continue with unsorted messages
+        }
 
         final messages = allMessages.take(50).toList();
 
         yield messages;
       } catch (e) {
+        debugPrint('Error fetching recent conversations: $e');
         yield [];
       }
 
@@ -212,8 +233,9 @@ class MessageService {
         throw Exception('User must be authenticated to send messages');
       }
 
-      // Validate recipient ID format
-      if (!InputValidator.isValidUuid(recipientId)) {
+      // Validate recipient ID format - accept both UUID and Appwrite document IDs
+      if (!InputValidator.isValidDocumentId(recipientId) && 
+          !InputValidator.isValidUuid(recipientId)) {
         throw Exception('Invalid recipient ID format');
       }
 
@@ -393,11 +415,30 @@ class MessageService {
 
   // Clean up
   void dispose() {
-    _stopMessagesPolling();
-    _stopUnreadCountPolling();
-    _messagesController?.close();
+    try {
+      _stopMessagesPolling();
+    } catch (e) {
+      debugPrint('Error stopping messages polling: $e');
+    }
+    
+    try {
+      _stopUnreadCountPolling();
+    } catch (e) {
+      debugPrint('Error stopping unread count polling: $e');
+    }
+    
+    try {
+      _messagesController?.close();
+    } catch (e) {
+      debugPrint('Error closing messages controller: $e');
+    }
     _messagesController = null;
-    _unreadCountController?.close();
+    
+    try {
+      _unreadCountController?.close();
+    } catch (e) {
+      debugPrint('Error closing unread count controller: $e');
+    }
     _unreadCountController = null;
   }
 }
