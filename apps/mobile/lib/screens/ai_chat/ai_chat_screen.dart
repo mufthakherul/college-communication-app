@@ -134,7 +134,10 @@ class _AIChatScreenState extends State<AIChatScreen> {
     if (_messages.length == 1) {
       final title = await _aiService.generateSessionTitle(text);
       await _aiService.updateSessionTitle(_session!.id, title);
-      _session = await _aiService.getSession(_session!.id);
+      // Update local session object instead of re-fetching from database
+      setState(() {
+        _session = _session!.copyWith(title: title);
+      });
     }
 
     // Scroll to bottom
