@@ -70,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
           context: context,
           builder: (context) => AlertDialog(
             title: Text(errorMessage),
-            content: Text(errorDetails),
+            content: SelectableText(errorDetails),
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
