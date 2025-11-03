@@ -64,7 +64,7 @@ class _AIChatHistoryScreenState extends State<AIChatHistoryScreen> {
       );
 
       if (result != true) return;
-      
+
       setState(() => _hasApiKey = true);
     }
 
@@ -95,7 +95,7 @@ class _AIChatHistoryScreenState extends State<AIChatHistoryScreen> {
       );
 
       if (result != true) return;
-      
+
       setState(() => _hasApiKey = true);
     }
 

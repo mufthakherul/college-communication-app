@@ -24,7 +24,8 @@ class MessageService {
   // Get messages between current user and another user
   Stream<List<MessageModel>> getMessages(String otherUserId) {
     final currentUserId = _currentUserId;
-    if (currentUserId == null || !InputValidator.isValidDocumentId(otherUserId)) {
+    if (currentUserId == null ||
+        !InputValidator.isValidDocumentId(otherUserId)) {
       return Stream.value([]);
     }
 
@@ -57,9 +58,9 @@ class MessageService {
 
     try {
       final allMessages = <MessageModel>[];
-      
+
       // Validate user IDs to prevent crashes
-      if (!InputValidator.isValidDocumentId(otherUserId) && 
+      if (!InputValidator.isValidDocumentId(otherUserId) &&
           !InputValidator.isValidUuid(otherUserId)) {
         debugPrint('Invalid otherUserId format: $otherUserId');
         _messagesController?.add([]);
@@ -234,7 +235,7 @@ class MessageService {
       }
 
       // Validate recipient ID format - accept both UUID and Appwrite document IDs
-      if (!InputValidator.isValidDocumentId(recipientId) && 
+      if (!InputValidator.isValidDocumentId(recipientId) &&
           !InputValidator.isValidUuid(recipientId)) {
         throw Exception('Invalid recipient ID format');
       }
@@ -420,20 +421,20 @@ class MessageService {
     } catch (e) {
       debugPrint('Error stopping messages polling: $e');
     }
-    
+
     try {
       _stopUnreadCountPolling();
     } catch (e) {
       debugPrint('Error stopping unread count polling: $e');
     }
-    
+
     try {
       _messagesController?.close();
     } catch (e) {
       debugPrint('Error closing messages controller: $e');
     }
     _messagesController = null;
-    
+
     try {
       _unreadCountController?.close();
     } catch (e) {

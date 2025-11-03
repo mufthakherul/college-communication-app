@@ -12,7 +12,7 @@ class _ApiKeyInputScreenState extends State<ApiKeyInputScreen> {
   final _formKey = GlobalKey<FormState>();
   final _apiKeyController = TextEditingController();
   final _aiService = AIChatbotService();
-  
+
   bool _isLoading = false;
   bool _obscureText = true;
   String? _errorMessage;
@@ -36,7 +36,7 @@ class _ApiKeyInputScreenState extends State<ApiKeyInputScreen> {
     try {
       // Validate the API key
       final isValid = await _aiService.validateApiKey(apiKey);
-      
+
       if (!isValid) {
         setState(() {
           _errorMessage = 'Invalid API key. Please check and try again.';

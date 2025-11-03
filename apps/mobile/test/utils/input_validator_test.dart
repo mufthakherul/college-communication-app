@@ -47,8 +47,7 @@ void main() {
     test('should sanitize message content', () {
       expect(InputValidator.sanitizeMessage('Hello world'), 'Hello world');
       expect(InputValidator.sanitizeMessage('  Hello  '), 'Hello');
-      expect(
-          InputValidator.sanitizeMessage('Test\nmultiline\nmessage'),
+      expect(InputValidator.sanitizeMessage('Test\nmultiline\nmessage'),
           'Test\nmultiline\nmessage');
     });
 
@@ -81,7 +80,8 @@ void main() {
 
     test('should remove special characters from search', () {
       expect(InputValidator.sanitizeSearchQuery('test<script>'), 'testscript');
-      expect(InputValidator.sanitizeSearchQuery('test@example'), 'test@example');
+      expect(
+          InputValidator.sanitizeSearchQuery('test@example'), 'test@example');
       expect(InputValidator.sanitizeSearchQuery('test!'), 'test!');
     });
 
