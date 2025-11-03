@@ -249,135 +249,135 @@ class _NoticesScreenState extends State<NoticesScreen>
 
   Widget _buildNoticesList(NoticeSource source) {
     return StreamBuilder<List<NoticeModel>>(
-        stream: source == NoticeSource.admin
-            ? _noticeService.getAdminNotices()
-            : _noticeService.getScrapedNotices(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return _buildLoadingSkeleton();
-          }
+      stream: source == NoticeSource.admin
+          ? _noticeService.getAdminNotices()
+          : _noticeService.getScrapedNotices(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return _buildLoadingSkeleton();
+        }
 
-          if (snapshot.hasError) {
-            return _buildErrorState(snapshot.error.toString());
-          }
+        if (snapshot.hasError) {
+          return _buildErrorState(snapshot.error.toString());
+        }
 
-          final allNotices = snapshot.data ?? [];
-          final notices = _filterNotices(allNotices);
+        final allNotices = snapshot.data ?? [];
+        final notices = _filterNotices(allNotices);
 
-          if (notices.isEmpty) {
-            final emptyMessage = source == NoticeSource.admin
-                ? 'No admin or teacher notices yet'
-                : 'No notices from college website yet';
-            return RefreshIndicator(
-              onRefresh: _handleRefresh,
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height - 300,
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          source == NoticeSource.admin
-                              ? Icons.inbox
-                              : Icons.public,
-                          size: 64,
-                          color: Colors.grey,
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          emptyMessage,
-                          style:
-                              const TextStyle(fontSize: 18, color: Colors.grey),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 8),
-                        const Text(
-                          'Pull down to refresh',
-                          style: TextStyle(fontSize: 14, color: Colors.grey),
-                        ),
-                      ],
-                    ),
+        if (notices.isEmpty) {
+          final emptyMessage = source == NoticeSource.admin
+              ? 'No admin or teacher notices yet'
+              : 'No notices from college website yet';
+          return RefreshIndicator(
+            onRefresh: _handleRefresh,
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height - 300,
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        source == NoticeSource.admin
+                            ? Icons.inbox
+                            : Icons.public,
+                        size: 64,
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        emptyMessage,
+                        style:
+                            const TextStyle(fontSize: 18, color: Colors.grey),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Pull down to refresh',
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            );
-          }
-
-          return RefreshIndicator(
-            onRefresh: _handleRefresh,
-            child: ListView.builder(
-              padding: const EdgeInsets.all(8),
-              itemCount: notices.length,
-              itemBuilder: (context, index) {
-                final notice = notices[index];
-                final color = _getNoticeColor(notice.type);
-                final icon = _getNoticeIcon(notice.type);
-
-                return Card(
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 4,
-                    horizontal: 8,
-                  ),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: color.withOpacity(0.2),
-                      child: Icon(icon, color: color),
-                    ),
-                    title: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            notice.title,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        if (notice.source == NoticeSource.scraped)
-                          const Padding(
-                            padding: EdgeInsets.only(left: 4),
-                            child: Icon(
-                              Icons.link,
-                              size: 16,
-                              color: Colors.blue,
-                            ),
-                          ),
-                      ],
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 4),
-                        Text(
-                          notice.content,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 4),
-                        if (notice.createdAt != null)
-                          Text(
-                            _formatDate(notice.createdAt!),
-                            style: Theme.of(context).textTheme.bodySmall,
-                          ),
-                      ],
-                    ),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              NoticeDetailScreen(noticeId: notice.id),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              },
             ),
           );
-        },
+        }
+
+        return RefreshIndicator(
+          onRefresh: _handleRefresh,
+          child: ListView.builder(
+            padding: const EdgeInsets.all(8),
+            itemCount: notices.length,
+            itemBuilder: (context, index) {
+              final notice = notices[index];
+              final color = _getNoticeColor(notice.type);
+              final icon = _getNoticeIcon(notice.type);
+
+              return Card(
+                margin: const EdgeInsets.symmetric(
+                  vertical: 4,
+                  horizontal: 8,
+                ),
+                child: ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: color.withOpacity(0.2),
+                    child: Icon(icon, color: color),
+                  ),
+                  title: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          notice.title,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      if (notice.source == NoticeSource.scraped)
+                        const Padding(
+                          padding: EdgeInsets.only(left: 4),
+                          child: Icon(
+                            Icons.link,
+                            size: 16,
+                            color: Colors.blue,
+                          ),
+                        ),
+                    ],
+                  ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 4),
+                      Text(
+                        notice.content,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      if (notice.createdAt != null)
+                        Text(
+                          _formatDate(notice.createdAt!),
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                    ],
+                  ),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            NoticeDetailScreen(noticeId: notice.id),
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
