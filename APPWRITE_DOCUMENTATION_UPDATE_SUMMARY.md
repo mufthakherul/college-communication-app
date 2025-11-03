@@ -48,6 +48,10 @@ appwrite: ^12.0.4
 - Fully compatible with Appwrite Cloud 1.5.x
 - Provides all features needed (Database, Auth, Storage, Realtime, Functions)
 
+**Dart SDK Requirement:**
+- Minimum Dart SDK: 3.0.0 → **3.3.0** (required by Appwrite v12.0.4's dependencies)
+- Appwrite v12.0.4 uses `web_socket_channel ^2.4.5` which requires Dart SDK >=3.3.0
+
 **Additional Dependencies Updated:**
 - `package_info_plus`: ^4.2.0 → ^8.0.0 (required by Appwrite v12.0.4)
 - `device_info_plus`: ^9.1.1 → ^10.0.0 (required by Appwrite v12.0.4)
@@ -59,6 +63,15 @@ appwrite: ^12.0.4
 - Support for new query methods
 - No dependency conflicts with Flutter SDK
 - Compatible with latest package_info_plus and device_info_plus APIs
+
+**If you cannot upgrade to Dart 3.3.0:**
+Use Appwrite v12.0.2 instead:
+```yaml
+appwrite: ^12.0.2
+package_info_plus: ^5.0.1
+device_info_plus: ^9.1.2
+```
+This version works with Dart SDK >=3.0.0 and provides most features.
 
 ### 2. New Comprehensive Documentation
 

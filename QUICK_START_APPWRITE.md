@@ -10,6 +10,11 @@ This guide will help you get your Appwrite database configured in **under 1 hour
 
 The Appwrite documentation has been completely updated to address the differences between the old project docs and the official Appwrite documentation.
 
+**Prerequisites:**
+- ✅ **Dart SDK 3.3.0+** - Required for Appwrite v12.0.4
+  - Check: `dart --version`
+  - If you have Dart 3.0-3.2, see [DART_SDK_UPGRADE_GUIDE.md](DART_SDK_UPGRADE_GUIDE.md)
+
 **What was the problem?**
 - Old documentation used Appwrite SDK v12.0.1
 - Missing information about new services (Realtime, Functions, etc.)
@@ -17,7 +22,7 @@ The Appwrite documentation has been completely updated to address the difference
 - Real-time subscriptions not documented
 
 **What's been fixed?**
-- ✅ SDK updated to v12.0.4 (latest compatible with Flutter SDK)
+- ✅ SDK updated to v12.0.4 (requires Dart 3.3.0+)
 - ✅ Comprehensive guides for all Appwrite features
 - ✅ Complete permission system documentation
 - ✅ Real-time subscriptions guide
