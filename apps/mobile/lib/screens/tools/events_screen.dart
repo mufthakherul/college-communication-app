@@ -111,7 +111,7 @@ class _EventsScreenState extends State<EventsScreen> {
         }
 
         if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
+          return Center(child: SelectableText('Error: ${snapshot.error}'));
         }
 
         final events = snapshot.data ?? [];
@@ -152,7 +152,7 @@ class _EventsScreenState extends State<EventsScreen> {
         }
 
         if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
+          return Center(child: SelectableText('Error: ${snapshot.error}'));
         }
 
         final events = snapshot.data ?? [];
