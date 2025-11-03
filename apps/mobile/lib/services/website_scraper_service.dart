@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as html_parser;
-import 'package:html/dom.dart' as dom;
 import 'package:campus_mesh/models/notification_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,6 +16,8 @@ class WebsiteScraperService {
 
   static const String _websiteUrl =
       'https://rangpur.polytech.gov.bd/site/view/notices';
+  static const String _apiUrl =
+      'https://rangpur.polytech.gov.bd/api/datatable/notices_view.php';
   static const String _cacheKey = 'scraped_notices_cache';
   static const String _lastCheckKey = 'last_scrape_check';
 
@@ -41,16 +42,25 @@ class WebsiteScraperService {
   /// Fetch notices from website
   Future<List<ScrapedNotice>> _fetchNotices() async {
     try {
-      debugPrint('Fetching notices from website...');
+      debugPrint('Fetching notices from website API...');
 
-      // Note: Since we cannot directly parse HTML without additional packages,
-      // we'll implement a basic approach using HTTP client
-      // For production, consider using packages like html or web_scraper
-
-      final response = await http.get(
-        Uri.parse(_websiteUrl),
+      // The website uses DataTables with server-side processing
+      // Data is loaded via AJAX from the API endpoint
+      // We need to make a POST request to the DataTables API
+      final response = await http.post(
+        Uri.parse(_apiUrl),
         headers: {
           'User-Agent': 'Mozilla/5.0 (compatible; RPICommunicationApp/1.0)',
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: {
+          'draw': '1',
+          'start': '0',
+          'length': '20', // Fetch 20 notices at a time
+          'domain_id': '',
+          'lang': 'bn',
+          'subdomain': '',
+          'content_type': 'notices',
         },
       ).timeout(const Duration(seconds: 30));
 
@@ -58,10 +68,8 @@ class WebsiteScraperService {
         throw Exception('Failed to load website: ${response.statusCode}');
       }
 
-      // Parse HTML to extract notices
-      // This is a simplified implementation
-      // In production, use a proper HTML parser
-      final notices = _parseNoticesFromHtml(response.body);
+      // Parse JSON response from DataTables API
+      final notices = _parseNoticesFromApi(response.body);
 
       // Cache the results
       await _cacheNotices(notices);
@@ -73,7 +81,7 @@ class WebsiteScraperService {
       // Notify listeners
       _noticesController.add(notices);
 
-      debugPrint('Fetched ${notices.length} notices from website');
+      debugPrint('Fetched ${notices.length} notices from website API');
       return notices;
     } catch (e) {
       debugPrint('Error fetching website notices: $e');
@@ -83,147 +91,66 @@ class WebsiteScraperService {
     }
   }
 
-  /// Parse notices from HTML content
-  /// Parses the Rangpur Polytechnic website notices
-  List<ScrapedNotice> _parseNoticesFromHtml(String html) {
+  /// Parse notices from DataTables API JSON response
+  List<ScrapedNotice> _parseNoticesFromApi(String jsonString) {
     final notices = <ScrapedNotice>[];
 
     try {
-      // Parse the HTML document
-      final document = html_parser.parse(html);
+      final jsonData = json.decode(jsonString) as Map<String, dynamic>;
 
-      // Try different selectors to find notices
-      // Common patterns for notice listings
-      final noticeSelectors = [
-        '.notice-item',
-        '.notice',
-        'table.notice-table tr',
-        '.post-item',
-        'article',
-        '.content-item',
-      ];
+      // DataTables API returns data in the "data" array
+      // Each row is an array: [serial, title_with_link, date, download_link]
+      if (jsonData['data'] != null && jsonData['data'] is List) {
+        final dataRows = jsonData['data'] as List<dynamic>;
 
-      List<dom.Element>? noticeElements;
+        for (final row in dataRows) {
+          if (row is List && row.length >= 3) {
+            try {
+              // Parse the title column which contains HTML with link
+              final titleHtml = row[1].toString();
+              final titleDoc = html_parser.parse(titleHtml);
+              final titleLink = titleDoc.querySelector('a');
 
-      // Try each selector until we find one that works
-      for (final selector in noticeSelectors) {
-        final elements = document.querySelectorAll(selector);
-        if (elements.isNotEmpty) {
-          noticeElements = elements;
-          debugPrint('Found ${elements.length} notices using selector: $selector');
-          break;
-        }
-      }
+              String title = '';
+              String url = '';
 
-      if (noticeElements == null || noticeElements.isEmpty) {
-        debugPrint('No notices found with any selector. Trying alternative parsing...');
-        
-        // Try to find any links in the content area that look like notices
-        final links = document.querySelectorAll('a');
-        for (final link in links) {
-          final text = link.text.trim();
-          final href = link.attributes['href'] ?? '';
-          
-          // Filter for notice-like content
-          if (text.isNotEmpty && 
-              text.length > 10 && 
-              (text.toLowerCase().contains('notice') || 
-               text.toLowerCase().contains('announcement') ||
-               href.toLowerCase().contains('notice'))) {
-            
-            notices.add(ScrapedNotice(
-              id: 'notice_${DateTime.now().millisecondsSinceEpoch}_${notices.length}',
-              title: text.length > 100 ? '${text.substring(0, 97)}...' : text,
-              description: text,
-              url: _makeAbsoluteUrl(href),
-              publishedDate: DateTime.now(),
-              source: 'College Website',
-            ));
-          }
-        }
-        
-        debugPrint('Found ${notices.length} notice links using fallback method');
-        return notices;
-      }
-
-      // Parse each notice element
-      for (final element in noticeElements) {
-        try {
-          // Extract title - try different selectors
-          String title = '';
-          final titleSelectors = [
-            '.notice-title',
-            '.title',
-            'h3',
-            'h4',
-            'td:first-child',
-            'strong',
-            'a',
-          ];
-          
-          for (final selector in titleSelectors) {
-            final titleElement = element.querySelector(selector);
-            if (titleElement != null && titleElement.text.trim().isNotEmpty) {
-              title = titleElement.text.trim();
-              break;
-            }
-          }
-          
-          if (title.isEmpty) {
-            title = element.text.trim().split('\n').first;
-          }
-
-          // Extract link
-          final linkElement = element.querySelector('a');
-          final href = linkElement?.attributes['href'] ?? '';
-
-          // Extract date - try different selectors
-          DateTime publishedDate = DateTime.now();
-          final dateSelectors = [
-            '.notice-date',
-            '.date',
-            'time',
-            'span.date',
-            'td:last-child',
-          ];
-          
-          for (final selector in dateSelectors) {
-            final dateElement = element.querySelector(selector);
-            if (dateElement != null) {
-              final dateText = dateElement.text.trim();
-              final parsedDate = _parseDate(dateText);
-              if (parsedDate != null) {
-                publishedDate = parsedDate;
-                break;
+              if (titleLink != null) {
+                title = titleLink.text.trim();
+                url = titleLink.attributes['href'] ?? '';
+              } else {
+                // Fallback: extract text without HTML
+                title = titleDoc.body?.text.trim() ?? '';
               }
+
+              if (title.isEmpty) continue;
+
+              // Parse the date from column 2
+              final dateText = row[2].toString().trim();
+              final publishedDate = _parseDate(dateText) ?? DateTime.now();
+
+              // Generate a unique ID based on title and date
+              final id =
+                  'notice_${title.hashCode}_${publishedDate.millisecondsSinceEpoch}';
+
+              notices.add(ScrapedNotice(
+                id: id,
+                title: title,
+                description: title, // Use title as description
+                url: _makeAbsoluteUrl(url),
+                publishedDate: publishedDate,
+                source: 'College Website',
+              ));
+            } catch (e) {
+              debugPrint('Error parsing notice row: $e');
+              continue;
             }
           }
-
-          // Extract description
-          String description = element.text.trim();
-          if (description.length > 200) {
-            description = '${description.substring(0, 197)}...';
-          }
-
-          if (title.isNotEmpty) {
-            notices.add(ScrapedNotice(
-              id: 'notice_${publishedDate.millisecondsSinceEpoch}_${notices.length}',
-              title: title,
-              description: description,
-              url: _makeAbsoluteUrl(href),
-              publishedDate: publishedDate,
-              source: 'College Website',
-            ));
-          }
-        } catch (e) {
-          debugPrint('Error parsing notice element: $e');
-          continue;
         }
       }
 
-      debugPrint('Successfully parsed ${notices.length} notices from HTML');
+      debugPrint('Parsed ${notices.length} notices from API response');
     } catch (e) {
-      debugPrint('Error parsing HTML: $e');
+      debugPrint('Error parsing API response: $e');
     }
 
     return notices;
@@ -232,7 +159,7 @@ class WebsiteScraperService {
   /// Convert relative URL to absolute URL
   String _makeAbsoluteUrl(String url) {
     const baseUrl = 'https://rangpur.polytech.gov.bd';
-    
+
     if (url.isEmpty) return _websiteUrl;
     if (url.startsWith('http')) return url;
     if (url.startsWith('/')) {
@@ -242,13 +169,15 @@ class WebsiteScraperService {
   }
 
   // Pre-compiled regex patterns for date parsing
-  static final _datePatternDDMMYYYY = RegExp(r'(\d{1,2})[/-](\d{1,2})[/-](\d{4})');
-  static final _datePatternYYYYMMDD = RegExp(r'(\d{4})[/-](\d{1,2})[/-](\d{1,2})');
+  static final _datePatternDDMMYYYY =
+      RegExp(r'(\d{1,2})[/-](\d{1,2})[/-](\d{4})');
+  static final _datePatternYYYYMMDD =
+      RegExp(r'(\d{4})[/-](\d{1,2})[/-](\d{1,2})');
 
   /// Parse date from text
   DateTime? _parseDate(String? dateText) {
     if (dateText == null || dateText.isEmpty) return null;
-    
+
     try {
       // Try YYYY-MM-DD format
       final matchYYYY = _datePatternYYYYMMDD.firstMatch(dateText);
@@ -259,7 +188,7 @@ class WebsiteScraperService {
           debugPrint('Error parsing YYYY-MM-DD date: $e');
         }
       }
-      
+
       // Try DD/MM/YYYY format
       final matchDD = _datePatternDDMMYYYY.firstMatch(dateText);
       if (matchDD != null) {
@@ -275,7 +204,7 @@ class WebsiteScraperService {
     } catch (e) {
       debugPrint('Error parsing date: $e');
     }
-    
+
     return null;
   }
 
@@ -340,9 +269,9 @@ class WebsiteScraperService {
   ) async {
     try {
       final notices = await getNotices(forceRefresh: true);
-      
+
       debugPrint('Syncing ${notices.length} scraped notices to database...');
-      
+
       for (final notice in notices) {
         try {
           await createNoticeCallback(
@@ -358,7 +287,7 @@ class WebsiteScraperService {
           // Continue with next notice even if one fails
         }
       }
-      
+
       debugPrint('Finished syncing scraped notices to database');
     } catch (e) {
       debugPrint('Error syncing scraped notices: $e');

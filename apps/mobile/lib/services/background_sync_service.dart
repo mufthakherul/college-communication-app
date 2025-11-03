@@ -91,7 +91,7 @@ Future<void> _syncWebsiteNotices() async {
     // 3. Sync them to the database
     // However, this requires proper initialization of services
     // which is complex in a background task context
-    
+
     if (kDebugMode) {
       print('Background website notices sync completed');
     }
