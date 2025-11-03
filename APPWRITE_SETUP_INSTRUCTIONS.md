@@ -1,5 +1,16 @@
 # Appwrite Setup Instructions for RPI Communication App
 
+## 📚 Documentation Updates
+
+**⚠️ IMPORTANT:** Appwrite has significantly evolved since the original documentation was created. For the latest information about Appwrite services, features, and best practices, please refer to:
+
+- **[APPWRITE_UPDATED_GUIDE.md](APPWRITE_UPDATED_GUIDE.md)** - 🆕 Comprehensive guide with latest Appwrite features
+- **[Official Appwrite Docs](https://appwrite.io/docs)** - Latest official documentation
+
+This document provides setup instructions specific to your project configuration.
+
+---
+
 ## ✅ Your Appwrite Educational Credentials
 
 - **Organization:** GitHub Student Organization
@@ -11,6 +22,8 @@
 ## 🎯 Next Steps: Database Setup
 
 Since you already have Appwrite educational benefits approved, you now need to set up the database structure in your Appwrite project.
+
+**Note:** This guide follows the simplified setup process. For detailed information about Appwrite's latest features (Database, Auth, Storage, Realtime, Functions, Permissions), see [APPWRITE_UPDATED_GUIDE.md](APPWRITE_UPDATED_GUIDE.md).
 
 ### Step 1: Access Appwrite Console
 

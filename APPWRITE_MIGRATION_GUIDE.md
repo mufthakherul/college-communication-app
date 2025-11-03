@@ -1,5 +1,22 @@
 # Appwrite Migration Guide for RPI Communication App
 
+## 📚 Updated Documentation Available
+
+**⚠️ IMPORTANT:** This migration guide references older Appwrite features. For the latest Appwrite capabilities, please review:
+
+- **[APPWRITE_UPDATED_GUIDE.md](APPWRITE_UPDATED_GUIDE.md)** - 🆕 Comprehensive guide with:
+  - Latest SDK (v13.0.0)
+  - New services (Database, Auth, Storage, Realtime, Functions)
+  - Updated permissions system
+  - Real-time subscriptions
+  - Complete code examples
+  - Security best practices
+
+**Use this guide for:** Migration strategy and process overview  
+**Use the updated guide for:** Technical implementation and latest features
+
+---
+
 ## 🎓 Overview
 
 Appwrite has offered educational benefits to host this project! This guide will help you migrate from Supabase to Appwrite to take advantage of these benefits while maintaining all functionality.

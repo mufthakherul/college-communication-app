@@ -2,9 +2,35 @@
 
 This document describes all the collections required for the RPI Communication App.
 
+**📚 For Latest Appwrite Features:** See [APPWRITE_UPDATED_GUIDE.md](APPWRITE_UPDATED_GUIDE.md) for comprehensive information about:
+- Latest Database features and queries
+- Real-time subscriptions
+- Advanced permissions (document-level & collection-level)
+- Functions service
+- Storage service updates
+- Complete SDK documentation
+
 ## Database ID
 - **Database Name**: `rpi_communication`
 - **Database ID**: `rpi_communication`
+
+## Permission System Overview
+
+Appwrite uses a granular permission system. Each document and collection can have specific permissions:
+
+**Permission Types:**
+- **Read**: View documents
+- **Create**: Add new documents
+- **Update**: Modify existing documents
+- **Delete**: Remove documents
+
+**Permission Roles:**
+- `any` - Anyone (including guests)
+- `users` - Any authenticated user
+- `user:[USER_ID]` - Specific user only
+- `label:[LABEL]` - Custom role label (e.g., `label:admin`, `label:teacher`)
+
+For detailed permission examples and best practices, see [APPWRITE_UPDATED_GUIDE.md](APPWRITE_UPDATED_GUIDE.md#-security--permissions-best-practices).
 
 ## Collections
 

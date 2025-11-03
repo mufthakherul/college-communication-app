@@ -28,6 +28,18 @@ A comprehensive college communication platform for **Rangpur Polytechnic Institu
 
 **Appwrite offers FREE Pro plan for educational projects!**
 
+### 🆕 Updated Documentation Available
+
+**⚠️ IMPORTANT:** Appwrite has been significantly updated with new services and features. Please review:
+
+- **[APPWRITE_UPDATED_GUIDE.md](APPWRITE_UPDATED_GUIDE.md)** - 🆕 **Latest comprehensive guide**
+  - Updated SDK (v13.0.0)
+  - Database with advanced queries
+  - Real-time subscriptions
+  - Functions (serverless)
+  - Enhanced permissions
+  - Complete examples
+
 **What You Get:**
 - ✅ **Free Pro Plan** ($15/month value) for students
 - ✅ **10 GB database storage** (10x more than most free tiers)
@@ -37,9 +49,10 @@ A comprehensive college communication platform for **Rangpur Polytechnic Institu
 - ✅ **Learning resources** and workshops
 
 **Get Started:**
-1. 🚀 **Quick Deploy**: [DEPLOYMENT_QUICKSTART.md](DEPLOYMENT_QUICKSTART.md) - 30 minutes setup
-2. 📖 **Full Guide**: [PRODUCTION_DEPLOYMENT_GUIDE.md](PRODUCTION_DEPLOYMENT_GUIDE.md) - Complete documentation
-3. 🎓 **Apply for benefits**: https://appwrite.io/education
+1. 📚 **Latest Features**: [APPWRITE_UPDATED_GUIDE.md](APPWRITE_UPDATED_GUIDE.md) - **START HERE** for updated info
+2. 🚀 **Quick Deploy**: [DEPLOYMENT_QUICKSTART.md](DEPLOYMENT_QUICKSTART.md) - 30 minutes setup
+3. 📖 **Full Guide**: [PRODUCTION_DEPLOYMENT_GUIDE.md](PRODUCTION_DEPLOYMENT_GUIDE.md) - Complete documentation
+4. 🎓 **Apply for benefits**: https://appwrite.io/education
 
 ---
 
