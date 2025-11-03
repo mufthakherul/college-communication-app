@@ -81,7 +81,8 @@ class OfflineMessageSyncService {
           final retryCount = (message['retry_count'] as int?) ?? 0;
           if (retryCount >= _maxRetries) {
             debugPrint(
-              'Message ${message['id']} exceeded max retries, marking as permanently failed',
+              'Message ${message['id']} exceeded max retries, '
+              'marking as permanently failed',
             );
             await _localDb.updateMessageSyncStatus(
               message['id'],

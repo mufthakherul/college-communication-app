@@ -43,7 +43,9 @@ class AuthService {
         final prefs = await SharedPreferences.getInstance();
         final cachedUserId = prefs.getString(_userIdKey);
         if (cachedUserId != null) {
-          debugPrint('Found cached user ID: $cachedUserId, but no active session');
+          debugPrint(
+            'Found cached user ID: $cachedUserId, but no active session',
+          );
         }
       } catch (storageError) {
         debugPrint('Error accessing local storage: $storageError');
@@ -195,20 +197,29 @@ class AuthService {
         // Provide specific error messages
         if (dbError.toString().contains('document_already_exists')) {
           throw Exception(
-              'An account with this email already exists. Please sign in instead.');
+            'An account with this email already exists. '
+            'Please sign in instead.',
+          );
         } else if (dbError.toString().contains('collection_not_found')) {
           throw Exception(
-              'Database configuration error. Please contact support with error: Collection not found.');
+            'Database configuration error. '
+            'Please contact support with error: Collection not found.',
+          );
         } else if (dbError.toString().contains('document_invalid_structure') ||
             dbError.toString().contains('Unknown attribute')) {
           throw Exception(
-              'Database not configured. Please ensure all required attributes are created in the users collection. See APPWRITE_DATABASE_QUICKSTART.md for setup instructions.');
+            'Database not configured. '
+            'Please ensure all required attributes are created '
+            'in the users collection. '
+            'See APPWRITE_DATABASE_QUICKSTART.md for setup instructions.',
+          );
         } else if (dbError.toString().contains('unauthorized')) {
           throw Exception('Database permission error. Please contact support.');
         }
 
         throw Exception(
-          'Failed to create user profile. Error: ${dbError.toString().length > 100 ? dbError.toString().substring(0, 100) : dbError}',
+          'Failed to create user profile. Error: '
+          '${dbError.toString().length > 100 ? dbError.toString().substring(0, 100) : dbError}',
         );
       }
 

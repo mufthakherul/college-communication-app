@@ -237,8 +237,9 @@ class _ChatManagementScreenState extends State<ChatManagementScreen> {
                                 if (isRestricted)
                                   Text(
                                     'Restricted: ${chat['restriction_reason'] ?? 'No reason'}',
-                                    style:
-                                        const TextStyle(color: Colors.red),
+                                    style: const TextStyle(
+                                      color: Colors.red,
+                                    ),
                                   ),
                                 if (inviteCode != null)
                                   Text(

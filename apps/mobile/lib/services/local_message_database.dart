@@ -5,7 +5,8 @@ import 'package:flutter/foundation.dart';
 
 /// Local database service for storing messages offline
 class LocalMessageDatabase {
-  static final LocalMessageDatabase _instance = LocalMessageDatabase._internal();
+  static final LocalMessageDatabase _instance =
+      LocalMessageDatabase._internal();
   factory LocalMessageDatabase() => _instance;
   LocalMessageDatabase._internal();
 
@@ -111,7 +112,9 @@ class LocalMessageDatabase {
     final db = await database;
     return await db.query(
       'local_messages',
-      where: '(sender_id = ? AND recipient_id = ?) OR (sender_id = ? AND recipient_id = ?)',
+      where:
+          '(sender_id = ? AND recipient_id = ?) OR '
+          '(sender_id = ? AND recipient_id = ?)',
       whereArgs: [userId1, userId2, userId2, userId1],
       orderBy: 'created_at ASC',
     );

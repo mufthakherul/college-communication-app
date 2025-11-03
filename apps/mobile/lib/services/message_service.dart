@@ -88,7 +88,8 @@ class MessageService {
             sentDocs.documents.map((doc) => MessageModel.fromJson(doc.data)),
           );
           allMessages.addAll(
-            receivedDocs.documents.map((doc) => MessageModel.fromJson(doc.data)),
+            receivedDocs.documents
+                .map((doc) => MessageModel.fromJson(doc.data)),
           );
         } catch (e) {
           // Continue to show local messages even if online fetch fails
@@ -224,7 +225,9 @@ class MessageService {
 
       if (sanitizedContent.length > InputValidator.maxMessageLength) {
         throw Exception(
-            'Message is too long (max ${InputValidator.maxMessageLength} characters)');
+          'Message is too long '
+          '(max ${InputValidator.maxMessageLength} characters)',
+        );
       }
 
       final messageId = ID.unique();
@@ -268,7 +271,8 @@ class MessageService {
       return document.$id;
     } on AppwriteException catch (e) {
       // If network error (code 0) or timeout, save locally for later sync
-      // Common network-related error codes: 0 (network error), 408 (timeout), 503 (service unavailable)
+      // Common network-related error codes:
+      // 0 (network error), 408 (timeout), 503 (service unavailable)
       if (e.code == 0 || e.code == 408 || e.code == 503) {
         final messageId = ID.unique();
         final currentUserId = _currentUserId;
