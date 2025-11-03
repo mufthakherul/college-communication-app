@@ -4,9 +4,11 @@ import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/appwrite_config.dart';
 import 'package:campus_mesh/utils/input_validator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   final _appwrite = AppwriteService();
+  static const String _userIdKey = 'current_user_id';
 
   // Get current user ID
   String? _currentUserId;
@@ -29,10 +31,23 @@ class AuthService {
       final user = await _appwrite.account.get();
       _currentUserId = user.$id;
 
+      // Save to local storage for quick access
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_userIdKey, user.$id);
+
       // Session exists, user is authenticated
       debugPrint('Session restored for user: ${user.$id}');
     } catch (e) {
-      // No active session
+      // No active session, try to load from local storage
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        final cachedUserId = prefs.getString(_userIdKey);
+        if (cachedUserId != null) {
+          debugPrint('Found cached user ID: $cachedUserId, but no active session');
+        }
+      } catch (storageError) {
+        debugPrint('Error accessing local storage: $storageError');
+      }
       _currentUserId = null;
       debugPrint('No active session found');
     }
@@ -228,6 +243,10 @@ class AuthService {
     try {
       await _appwrite.account.deleteSession(sessionId: 'current');
       _currentUserId = null;
+      
+      // Clear from local storage
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(_userIdKey);
     } on AppwriteException catch (e) {
       throw Exception('Failed to sign out: ${e.message}');
     } catch (e) {
@@ -255,7 +274,14 @@ class AuthService {
   // Update user profile
   Future<void> updateUserProfile(Map<String, dynamic> updates) async {
     try {
-      if (_currentUserId == null) throw Exception('No user signed in');
+      // Ensure we have a valid session first
+      if (_currentUserId == null) {
+        // Try to restore session before failing
+        await initialize();
+        if (_currentUserId == null) {
+          throw Exception('No user signed in. Please log in again.');
+        }
+      }
 
       await _appwrite.databases.updateDocument(
         databaseId: AppwriteConfig.databaseId,
@@ -264,6 +290,11 @@ class AuthService {
         data: {...updates, 'updated_at': DateTime.now().toIso8601String()},
       );
     } on AppwriteException catch (e) {
+      // Handle session expiry specifically
+      if (e.code == 401) {
+        _currentUserId = null;
+        throw Exception('Session expired. Please log in again.');
+      }
       throw Exception('Failed to update user profile: ${e.message}');
     } catch (e) {
       throw Exception('Failed to update user profile: $e');
