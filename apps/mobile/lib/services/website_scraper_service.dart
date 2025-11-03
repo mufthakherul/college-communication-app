@@ -108,6 +108,15 @@ class WebsiteScraperService {
         return await _fetchNoticesFromHtml();
       } catch (htmlError) {
         debugPrint('HTML scraping also failed: $htmlError');
+        
+        // Update last check time even on failure to prevent excessive retries
+        try {
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setInt(_lastCheckKey, DateTime.now().millisecondsSinceEpoch);
+        } catch (prefsError) {
+          debugPrint('Error updating last check time: $prefsError');
+        }
+        
         // Return cached notices on error and emit to stream
         final cachedNotices = await _getCachedNotices();
         _noticesController.add(cachedNotices);
