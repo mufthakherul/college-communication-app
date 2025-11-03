@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:html/parser.dart' as html_parser;
+import 'package:html/dom.dart' as dom;
 import 'package:campus_mesh/models/notification_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -82,44 +84,196 @@ class WebsiteScraperService {
   }
 
   /// Parse notices from HTML content
-  /// This is a simplified implementation
-  /// For production, use a proper HTML parser like html package
+  /// Parses the Rangpur Polytechnic website notices
   List<ScrapedNotice> _parseNoticesFromHtml(String html) {
     final notices = <ScrapedNotice>[];
 
     try {
-      // TODO: Implement proper HTML parsing using 'html' package
-      // This is a placeholder that returns empty list
-      //
-      // Recommended approach:
-      // 1. Add dependency: html: ^0.15.4
-      // 2. Parse HTML: var document = parse(html);
-      // 3. Find notice elements: document.querySelectorAll('.notice-item');
-      // 4. Extract title, date, link from each element
-      // 5. Create ScrapedNotice objects from extracted data
-      //
-      // Example (uncomment when html package is added):
-      // var document = parse(html);
-      // var noticeElements = document.querySelectorAll('.notice-item');
-      // for (var element in noticeElements) {
-      //   notices.add(ScrapedNotice(
-      //     id: element.attributes['id'] ?? 'notice_${DateTime.now().millisecondsSinceEpoch}',
-      //     title: element.querySelector('.notice-title')?.text ?? '',
-      //     description: element.querySelector('.notice-desc')?.text ?? '',
-      //     url: element.querySelector('a')?.attributes['href'] ?? _websiteUrl,
-      //     publishedDate: _parseDate(element.querySelector('.notice-date')?.text),
-      //     source: 'Website',
-      //   ));
-      // }
+      // Parse the HTML document
+      final document = html_parser.parse(html);
 
-      debugPrint(
-        'HTML parsing not yet implemented. Add html package for full functionality.',
-      );
+      // Try different selectors to find notices
+      // Common patterns for notice listings
+      final noticeSelectors = [
+        '.notice-item',
+        '.notice',
+        'table.notice-table tr',
+        '.post-item',
+        'article',
+        '.content-item',
+      ];
+
+      List<dom.Element>? noticeElements;
+
+      // Try each selector until we find one that works
+      for (final selector in noticeSelectors) {
+        final elements = document.querySelectorAll(selector);
+        if (elements.isNotEmpty) {
+          noticeElements = elements;
+          debugPrint('Found ${elements.length} notices using selector: $selector');
+          break;
+        }
+      }
+
+      if (noticeElements == null || noticeElements.isEmpty) {
+        debugPrint('No notices found with any selector. Trying alternative parsing...');
+        
+        // Try to find any links in the content area that look like notices
+        final links = document.querySelectorAll('a');
+        for (final link in links) {
+          final text = link.text.trim();
+          final href = link.attributes['href'] ?? '';
+          
+          // Filter for notice-like content
+          if (text.isNotEmpty && 
+              text.length > 10 && 
+              (text.toLowerCase().contains('notice') || 
+               text.toLowerCase().contains('announcement') ||
+               href.toLowerCase().contains('notice'))) {
+            
+            notices.add(ScrapedNotice(
+              id: 'notice_${DateTime.now().millisecondsSinceEpoch}_${notices.length}',
+              title: text.length > 100 ? '${text.substring(0, 97)}...' : text,
+              description: text,
+              url: _makeAbsoluteUrl(href),
+              publishedDate: DateTime.now(),
+              source: 'College Website',
+            ));
+          }
+        }
+        
+        debugPrint('Found ${notices.length} notice links using fallback method');
+        return notices;
+      }
+
+      // Parse each notice element
+      for (final element in noticeElements) {
+        try {
+          // Extract title - try different selectors
+          String title = '';
+          final titleSelectors = [
+            '.notice-title',
+            '.title',
+            'h3',
+            'h4',
+            'td:first-child',
+            'strong',
+            'a',
+          ];
+          
+          for (final selector in titleSelectors) {
+            final titleElement = element.querySelector(selector);
+            if (titleElement != null && titleElement.text.trim().isNotEmpty) {
+              title = titleElement.text.trim();
+              break;
+            }
+          }
+          
+          if (title.isEmpty) {
+            title = element.text.trim().split('\n').first;
+          }
+
+          // Extract link
+          final linkElement = element.querySelector('a');
+          final href = linkElement?.attributes['href'] ?? '';
+
+          // Extract date - try different selectors
+          DateTime publishedDate = DateTime.now();
+          final dateSelectors = [
+            '.notice-date',
+            '.date',
+            'time',
+            'span.date',
+            'td:last-child',
+          ];
+          
+          for (final selector in dateSelectors) {
+            final dateElement = element.querySelector(selector);
+            if (dateElement != null) {
+              final dateText = dateElement.text.trim();
+              final parsedDate = _parseDate(dateText);
+              if (parsedDate != null) {
+                publishedDate = parsedDate;
+                break;
+              }
+            }
+          }
+
+          // Extract description
+          String description = element.text.trim();
+          if (description.length > 200) {
+            description = '${description.substring(0, 197)}...';
+          }
+
+          if (title.isNotEmpty) {
+            notices.add(ScrapedNotice(
+              id: 'notice_${publishedDate.millisecondsSinceEpoch}_${notices.length}',
+              title: title,
+              description: description,
+              url: _makeAbsoluteUrl(href),
+              publishedDate: publishedDate,
+              source: 'College Website',
+            ));
+          }
+        } catch (e) {
+          debugPrint('Error parsing notice element: $e');
+          continue;
+        }
+      }
+
+      debugPrint('Successfully parsed ${notices.length} notices from HTML');
     } catch (e) {
       debugPrint('Error parsing HTML: $e');
     }
 
     return notices;
+  }
+
+  /// Convert relative URL to absolute URL
+  String _makeAbsoluteUrl(String url) {
+    if (url.isEmpty) return _websiteUrl;
+    if (url.startsWith('http')) return url;
+    if (url.startsWith('/')) {
+      return 'https://rangpur.polytech.gov.bd$url';
+    }
+    return 'https://rangpur.polytech.gov.bd/$url';
+  }
+
+  /// Parse date from text
+  DateTime? _parseDate(String? dateText) {
+    if (dateText == null || dateText.isEmpty) return null;
+    
+    try {
+      // Try various date formats
+      final patterns = [
+        RegExp(r'(\d{1,2})[/-](\d{1,2})[/-](\d{4})'), // DD/MM/YYYY or DD-MM-YYYY
+        RegExp(r'(\d{4})[/-](\d{1,2})[/-](\d{1,2})'), // YYYY/MM/DD or YYYY-MM-DD
+      ];
+      
+      for (final pattern in patterns) {
+        final match = pattern.firstMatch(dateText);
+        if (match != null) {
+          try {
+            if (dateText.contains(RegExp(r'(\d{4})[/-](\d{1,2})[/-](\d{1,2})'))) {
+              // YYYY-MM-DD format
+              return DateTime.parse(dateText);
+            } else {
+              // DD/MM/YYYY format
+              final day = int.parse(match.group(1)!);
+              final month = int.parse(match.group(2)!);
+              final year = int.parse(match.group(3)!);
+              return DateTime(year, month, day);
+            }
+          } catch (e) {
+            debugPrint('Error parsing date components: $e');
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint('Error parsing date: $e');
+    }
+    
+    return null;
   }
 
   /// Cache notices locally
@@ -166,6 +320,46 @@ class WebsiteScraperService {
     }
 
     return await _getCachedNotices();
+  }
+
+  /// Sync scraped notices to the database
+  /// This method should be called by NoticeService to persist scraped notices
+  Future<void> syncToDatabase(
+    Future<String> Function({
+      required String title,
+      required String content,
+      required String type,
+      required String targetAudience,
+      DateTime? expiresAt,
+      required String source,
+      String? sourceUrl,
+    }) createNoticeCallback,
+  ) async {
+    try {
+      final notices = await getNotices(forceRefresh: true);
+      
+      debugPrint('Syncing ${notices.length} scraped notices to database...');
+      
+      for (final notice in notices) {
+        try {
+          await createNoticeCallback(
+            title: notice.title,
+            content: notice.description,
+            type: 'announcement',
+            targetAudience: 'all',
+            source: 'scraped',
+            sourceUrl: notice.url,
+          );
+        } catch (e) {
+          debugPrint('Error syncing notice "${notice.title}": $e');
+          // Continue with next notice even if one fails
+        }
+      }
+      
+      debugPrint('Finished syncing scraped notices to database');
+    } catch (e) {
+      debugPrint('Error syncing scraped notices: $e');
+    }
   }
 
   /// Get time of last successful check

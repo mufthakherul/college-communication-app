@@ -13,10 +13,12 @@ class NoticesScreen extends StatefulWidget {
   State<NoticesScreen> createState() => _NoticesScreenState();
 }
 
-class _NoticesScreenState extends State<NoticesScreen> {
+class _NoticesScreenState extends State<NoticesScreen>
+    with SingleTickerProviderStateMixin {
   final _noticeService = NoticeService();
   final _authService = AuthService();
   final _searchController = TextEditingController();
+  late TabController _tabController;
   UserModel? _currentUser;
   bool _isSearching = false;
   String _searchQuery = '';
@@ -24,12 +26,14 @@ class _NoticesScreenState extends State<NoticesScreen> {
   @override
   void initState() {
     super.initState();
+    _tabController = TabController(length: 2, vsync: this);
     _loadCurrentUser();
   }
 
   @override
   void dispose() {
     _searchController.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -134,9 +138,37 @@ class _NoticesScreenState extends State<NoticesScreen> {
               },
             ),
         ],
+        bottom: _isSearching
+            ? null
+            : TabBar(
+                controller: _tabController,
+                tabs: const [
+                  Tab(
+                    icon: Icon(Icons.admin_panel_settings),
+                    text: 'Admin/Teacher',
+                  ),
+                  Tab(
+                    icon: Icon(Icons.public),
+                    text: 'College Website',
+                  ),
+                ],
+              ),
       ),
-      body: StreamBuilder<List<NoticeModel>>(
-        stream: _noticeService.getNotices(),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          _buildNoticesList(NoticeSource.admin),
+          _buildNoticesList(NoticeSource.scraped),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNoticesList(NoticeSource source) {
+    return StreamBuilder<List<NoticeModel>>(
+        stream: source == NoticeSource.admin
+            ? _noticeService.getAdminNotices()
+            : _noticeService.getScrapedNotices(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return _buildLoadingSkeleton();
@@ -150,24 +182,35 @@ class _NoticesScreenState extends State<NoticesScreen> {
           final notices = _filterNotices(allNotices);
 
           if (notices.isEmpty) {
+            final emptyMessage = source == NoticeSource.admin
+                ? 'No admin or teacher notices yet'
+                : 'No notices from college website yet';
             return RefreshIndicator(
               onRefresh: _handleRefresh,
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
                 child: SizedBox(
-                  height: MediaQuery.of(context).size.height - 200,
-                  child: const Center(
+                  height: MediaQuery.of(context).size.height - 300,
+                  child: Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.inbox, size: 64, color: Colors.grey),
-                        SizedBox(height: 16),
-                        Text(
-                          'No notices yet',
-                          style: TextStyle(fontSize: 18, color: Colors.grey),
+                        Icon(
+                          source == NoticeSource.admin
+                              ? Icons.inbox
+                              : Icons.public,
+                          size: 64,
+                          color: Colors.grey,
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 16),
                         Text(
+                          emptyMessage,
+                          style:
+                              const TextStyle(fontSize: 18, color: Colors.grey),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 8),
+                        const Text(
                           'Pull down to refresh',
                           style: TextStyle(fontSize: 14, color: Colors.grey),
                         ),
@@ -199,11 +242,26 @@ class _NoticesScreenState extends State<NoticesScreen> {
                       backgroundColor: color.withOpacity(0.2),
                       child: Icon(icon, color: color),
                     ),
-                    title: Text(
-                      notice.title,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    title: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            notice.title,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        if (notice.source == NoticeSource.scraped)
+                          const Padding(
+                            padding: EdgeInsets.only(left: 4),
+                            child: Icon(
+                              Icons.link,
+                              size: 16,
+                              color: Colors.blue,
+                            ),
+                          ),
+                      ],
                     ),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

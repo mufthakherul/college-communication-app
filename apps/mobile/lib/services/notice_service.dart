@@ -67,6 +67,23 @@ class NoticeService {
     });
   }
 
+  // Get notices by source
+  Stream<List<NoticeModel>> getNoticesBySource(NoticeSource source) {
+    return getNotices().map((notices) {
+      return notices.where((notice) => notice.source == source).toList();
+    });
+  }
+
+  // Get admin-created notices
+  Stream<List<NoticeModel>> getAdminNotices() {
+    return getNoticesBySource(NoticeSource.admin);
+  }
+
+  // Get scraped notices from college website
+  Stream<List<NoticeModel>> getScrapedNotices() {
+    return getNoticesBySource(NoticeSource.scraped);
+  }
+
   // Get single notice
   Future<NoticeModel?> getNotice(String noticeId) async {
     try {
@@ -91,10 +108,12 @@ class NoticeService {
     required NoticeType type,
     required String targetAudience,
     DateTime? expiresAt,
+    NoticeSource source = NoticeSource.admin,
+    String? sourceUrl,
   }) async {
     try {
       final currentUserId = _currentUserId;
-      if (currentUserId == null) {
+      if (currentUserId == null && source == NoticeSource.admin) {
         throw Exception('User must be authenticated to create notices');
       }
 
@@ -123,11 +142,13 @@ class NoticeService {
           'content': sanitizedContent,
           'type': type.name,
           'target_audience': targetAudience,
-          'author_id': currentUserId,
+          'author_id': currentUserId ?? 'system',
           'expires_at': expiresAt?.toIso8601String(),
           'is_active': true,
           'created_at': DateTime.now().toIso8601String(),
           'updated_at': DateTime.now().toIso8601String(),
+          'source': source.name,
+          'source_url': sourceUrl,
         },
       );
 
