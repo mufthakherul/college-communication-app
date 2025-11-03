@@ -177,7 +177,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
           for (final message in messages) {
             // Skip messages with null createdAt
             if (message.createdAt == null) continue;
-            
+
             final otherUserId = message.recipientId;
             if (!conversations.containsKey(otherUserId)) {
               conversations[otherUserId] = message;
