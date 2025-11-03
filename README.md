@@ -252,11 +252,45 @@ flutter run
 
 ## 📖 Documentation
 
+### 🆕 Appwrite Setup & Configuration (UPDATED - November 2025)
+
+**Important:** Appwrite has been significantly updated. Use these latest guides:
+
+1. **[APPWRITE_UPDATED_GUIDE.md](APPWRITE_UPDATED_GUIDE.md)** - 📚 **START HERE**
+   - Complete guide with latest Appwrite features
+   - Database, Auth, Storage, Realtime, Functions
+   - Updated SDK (v13.0.0)
+   - Real-time subscriptions
+   - Advanced permissions
+   - Security best practices
+
+2. **[APPWRITE_DATABASE_QUICKSTART.md](APPWRITE_DATABASE_QUICKSTART.md)** - ⚡ Quick Reference
+   - Step-by-step database setup
+   - Collection configuration with permissions
+   - Storage bucket setup
+   - Testing guide
+
+3. **[APPWRITE_CONFIGURATION_CHECKLIST.md](APPWRITE_CONFIGURATION_CHECKLIST.md)** - ✅ Complete Checklist
+   - Phase-by-phase setup checklist
+   - Verification steps
+   - Troubleshooting guide
+   - Success criteria
+
+4. **[APPWRITE_COLLECTIONS_SCHEMA.md](APPWRITE_COLLECTIONS_SCHEMA.md)** - 📊 Schema Reference
+   - All collections with attributes
+   - Permissions configuration
+   - Indexes setup
+
+5. **[APPWRITE_SETUP_INSTRUCTIONS.md](APPWRITE_SETUP_INSTRUCTIONS.md)** - 🔧 Project-Specific Setup
+   - Your project credentials
+   - Collection creation steps
+   - Bucket configuration
+
 ### Backend Setup & Migration 🎓
-- [**Appwrite Educational Benefits**](APPWRITE_EDUCATIONAL_BENEFITS.md) - **🆕 Get free Pro plan for students!**
-- [**Backend Comparison**](BACKEND_COMPARISON.md) - **🆕 Supabase vs Appwrite analysis**
-- [**Appwrite Migration Guide**](APPWRITE_MIGRATION_GUIDE.md) - **🆕 Step-by-step migration**
-- [Supabase Setup Guide](SUPABASE_SETUP_GUIDE.md) - **Current backend setup**
+- [**Appwrite Educational Benefits**](APPWRITE_EDUCATIONAL_BENEFITS.md) - Get free Pro plan for students!
+- [**Backend Comparison**](BACKEND_COMPARISON.md) - Supabase vs Appwrite analysis
+- [**Appwrite Migration Guide**](APPWRITE_MIGRATION_GUIDE.md) - Migration strategy overview
+- [Supabase Setup Guide](SUPABASE_SETUP_GUIDE.md) - Alternative backend option
 
 ### Setup & Getting Started
 - [Supabase Setup Guide](SUPABASE_SETUP_GUIDE.md) - **Connect to Supabase (current backend)**
