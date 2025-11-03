@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:campus_mesh/services/offline_message_sync_service.dart';
-import 'package:campus_mesh/services/local_message_database.dart';
 import 'package:campus_mesh/services/connectivity_service.dart';
 
 /// Screen to display offline message sync status and statistics
@@ -14,7 +13,6 @@ class OfflineSyncStatusScreen extends StatefulWidget {
 
 class _OfflineSyncStatusScreenState extends State<OfflineSyncStatusScreen> {
   final _syncService = OfflineMessageSyncService();
-  final _localDb = LocalMessageDatabase();
   final _connectivityService = ConnectivityService();
 
   bool _isLoading = true;

@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:campus_mesh/services/chat_service.dart';
 import 'package:campus_mesh/services/local_chat_database.dart';
 import 'package:campus_mesh/services/auth_service.dart';
-import 'package:campus_mesh/models/user_model.dart';
 
 /// Screen for admins/teachers to manage chats
 class ChatManagementScreen extends StatefulWidget {
@@ -199,7 +198,8 @@ class _ChatManagementScreenState extends State<ChatManagementScreen> {
                       itemCount: _chats.length,
                       itemBuilder: (context, index) {
                         final chat = _chats[index];
-                        final isRestricted = (chat['is_restricted'] as int) == 1;
+                        final isRestricted =
+                            (chat['is_restricted'] as int) == 1;
                         final type = chat['type'] as String;
                         final name = chat['name'] as String?;
                         final inviteCode = chat['invite_code'] as String?;
@@ -230,12 +230,15 @@ class _ChatManagementScreenState extends State<ChatManagementScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  type == 'p2p' ? 'Direct Message' : 'Group Chat',
+                                  type == 'p2p'
+                                      ? 'Direct Message'
+                                      : 'Group Chat',
                                 ),
                                 if (isRestricted)
                                   Text(
                                     'Restricted: ${chat['restriction_reason'] ?? 'No reason'}',
-                                    style: const TextStyle(color: Colors.red),
+                                    style:
+                                        const TextStyle(color: Colors.red),
                                   ),
                                 if (inviteCode != null)
                                   Text(
@@ -253,7 +256,8 @@ class _ChatManagementScreenState extends State<ChatManagementScreen> {
                                 if (inviteCode != null)
                                   IconButton(
                                     icon: const Icon(Icons.share),
-                                    onPressed: () => _showInviteCode(inviteCode),
+                                    onPressed: () =>
+                                        _showInviteCode(inviteCode),
                                     tooltip: 'Share invite',
                                   ),
                                 IconButton(

@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:campus_mesh/services/local_message_database.dart';
-import 'package:campus_mesh/services/message_service.dart';
 import 'package:campus_mesh/services/connectivity_service.dart';
-import 'package:campus_mesh/services/auth_service.dart';
 import 'package:appwrite/appwrite.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/appwrite_config.dart';
@@ -16,9 +14,7 @@ class OfflineMessageSyncService {
   OfflineMessageSyncService._internal();
 
   final _localDb = LocalMessageDatabase();
-  final _messageService = MessageService();
   final _connectivityService = ConnectivityService();
-  final _authService = AuthService();
   final _appwrite = AppwriteService();
 
   bool _isSyncing = false;
