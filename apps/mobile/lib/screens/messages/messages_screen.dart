@@ -338,7 +338,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                       context: context,
                       builder: (context) => AlertDialog(
                         title: const Text('Error Details'),
-                        content: Text(error),
+                        content: SelectableText(error),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.of(context).pop(),

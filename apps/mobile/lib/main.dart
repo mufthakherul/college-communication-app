@@ -43,7 +43,7 @@ void main() async {
                   ),
                   if (kDebugMode) ...[
                     const SizedBox(height: 16),
-                    Text(
+                    SelectableText(
                       'Error: $e',
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 12, color: Colors.grey),
@@ -145,7 +145,7 @@ Future<void> _initializeApp() async {
                   ),
                   if (kDebugMode) ...[
                     const SizedBox(height: 16),
-                    Text(
+                    SelectableText(
                       'Error: $e',
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 12, color: Colors.grey),
@@ -307,7 +307,7 @@ class SecurityBlockedApp extends StatelessWidget {
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
-                Text(
+                SelectableText(
                   message,
                   textAlign: TextAlign.center,
                   style: const TextStyle(fontSize: 16),
