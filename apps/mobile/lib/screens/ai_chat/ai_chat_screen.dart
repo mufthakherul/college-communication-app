@@ -79,9 +79,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
         }
       }
 
-      if (_session == null) {
-        _session = await _aiService.createSession(_currentUserId!);
-      }
+      _session ??= await _aiService.createSession(_currentUserId!);
 
       setState(() => _isLoading = false);
 
