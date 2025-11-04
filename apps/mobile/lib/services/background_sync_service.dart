@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:workmanager/workmanager.dart';
 import 'package:campus_mesh/services/offline_queue_service.dart';
 import 'package:campus_mesh/services/connectivity_service.dart';
+import 'package:campus_mesh/services/app_logger_service.dart';
 
 /// Background callback for WorkManager
 @pragma('vm:entry-point')
@@ -9,7 +10,7 @@ void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     try {
       if (kDebugMode) {
-        print('Background sync task started: $task');
+        logger.info('Background sync task started: $task', category: 'BackgroundSync');
       }
 
       switch (task) {
@@ -24,14 +25,14 @@ void callbackDispatcher() {
           break;
         default:
           if (kDebugMode) {
-            print('Unknown task: $task');
+            logger.warning('Unknown task: $task', category: 'BackgroundSync');
           }
       }
 
       return Future.value(true);
     } catch (e) {
       if (kDebugMode) {
-        print('Background task failed: $e');
+        logger.error('Background task failed', category: 'BackgroundSync', error: e);
       }
       return Future.value(false);
     }
@@ -52,16 +53,16 @@ Future<void> _syncOfflineQueue() async {
       await offlineQueueService.processQueue();
 
       if (kDebugMode) {
-        print('Background queue sync completed');
+        logger.info('Background queue sync completed', category: 'BackgroundSync');
       }
     } else {
       if (kDebugMode) {
-        print('Skipping background sync: offline');
+        logger.info('Skipping background sync: offline', category: 'BackgroundSync');
       }
     }
   } catch (e) {
     if (kDebugMode) {
-      print('Error in background sync: $e');
+      logger.error('Error in background sync', category: 'BackgroundSync', error: e);
     }
   }
 }
@@ -72,11 +73,11 @@ Future<void> _cleanupCache() async {
     // Cache cleanup logic would go here
     // This is a placeholder for future implementation
     if (kDebugMode) {
-      print('Background cache cleanup completed');
+      logger.info('Background cache cleanup completed', category: 'BackgroundSync');
     }
   } catch (e) {
     if (kDebugMode) {
-      print('Error in cache cleanup: $e');
+      logger.error('Error in cache cleanup', category: 'BackgroundSync', error: e);
     }
   }
 }
@@ -93,11 +94,11 @@ Future<void> _syncWebsiteNotices() async {
     // which is complex in a background task context
 
     if (kDebugMode) {
-      print('Background website notices sync completed');
+      logger.info('Background website notices sync completed', category: 'BackgroundSync');
     }
   } catch (e) {
     if (kDebugMode) {
-      print('Error syncing website notices: $e');
+      logger.error('Error syncing website notices', category: 'BackgroundSync', error: e);
     }
   }
 }
@@ -124,11 +125,11 @@ class BackgroundSyncService {
       _isInitialized = true;
 
       if (kDebugMode) {
-        print('Background sync service initialized');
+        logger.info('Background sync service initialized', category: 'BackgroundSync');
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error initializing background sync: $e');
+        logger.error('Error initializing background sync', category: 'BackgroundSync', error: e);
       }
     }
   }
@@ -154,13 +155,14 @@ class BackgroundSyncService {
       );
 
       if (kDebugMode) {
-        print(
+        logger.info(
           'Registered periodic offline queue sync: ${frequency.inMinutes}min',
+          category: 'BackgroundSync',
         );
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error registering offline queue sync: $e');
+        logger.error('Error registering offline queue sync', category: 'BackgroundSync', error: e);
       }
     }
   }
@@ -186,11 +188,11 @@ class BackgroundSyncService {
       );
 
       if (kDebugMode) {
-        print('Registered periodic cache cleanup: ${frequency.inHours}h');
+        logger.info('Registered periodic cache cleanup: ${frequency.inHours}h', category: 'BackgroundSync');
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error registering cache cleanup: $e');
+        logger.error('Error registering cache cleanup', category: 'BackgroundSync', error: e);
       }
     }
   }
@@ -210,11 +212,11 @@ class BackgroundSyncService {
       );
 
       if (kDebugMode) {
-        print('Registered one-time sync with delay: ${delay.inSeconds}s');
+        logger.info('Registered one-time sync with delay: ${delay.inSeconds}s', category: 'BackgroundSync');
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error registering one-time sync: $e');
+        logger.error('Error registering one-time sync', category: 'BackgroundSync', error: e);
       }
     }
   }
@@ -227,11 +229,11 @@ class BackgroundSyncService {
       await Workmanager().cancelAll();
 
       if (kDebugMode) {
-        print('Cancelled all background tasks');
+        logger.info('Cancelled all background tasks', category: 'BackgroundSync');
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error cancelling tasks: $e');
+        logger.error('Error cancelling tasks', category: 'BackgroundSync', error: e);
       }
     }
   }
@@ -257,13 +259,14 @@ class BackgroundSyncService {
       );
 
       if (kDebugMode) {
-        print(
+        logger.info(
           'Registered periodic website notices sync: ${frequency.inHours}h',
+          category: 'BackgroundSync',
         );
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error registering website notices sync: $e');
+        logger.error('Error registering website notices sync', category: 'BackgroundSync', error: e);
       }
     }
   }
@@ -276,11 +279,11 @@ class BackgroundSyncService {
       await Workmanager().cancelByUniqueName(taskId);
 
       if (kDebugMode) {
-        print('Cancelled task: $taskId');
+        logger.info('Cancelled task: $taskId', category: 'BackgroundSync');
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error cancelling task: $e');
+        logger.error('Error cancelling task', category: 'BackgroundSync', error: e);
       }
     }
   }

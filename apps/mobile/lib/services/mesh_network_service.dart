@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:campus_mesh/services/app_logger_service.dart';
 
 /// Connection type for mesh network
 enum MeshConnectionType {
@@ -297,11 +298,11 @@ class MeshNetworkService {
       _isAdvertising = true;
 
       if (kDebugMode) {
-        print('Started advertising mesh network');
+        logger.debug('Started advertising mesh network', category: 'MeshNetwork');
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error starting advertising: $e');
+        logger.error('Error starting advertising', category: 'MeshNetwork', error: e);
       }
     }
   }
@@ -315,11 +316,11 @@ class MeshNetworkService {
       _isAdvertising = false;
 
       if (kDebugMode) {
-        print('Stopped advertising');
+        logger.debug('Stopped advertising', category: 'MeshNetwork');
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error stopping advertising: $e');
+        logger.error('Error stopping advertising', category: 'MeshNetwork', error: e);
       }
     }
   }
@@ -359,9 +360,9 @@ class MeshNetworkService {
     }
 
     if (kDebugMode) {
-      print('Generated pairing QR code with token: $pairingToken');
-      print('Purposes: ${purposes?.map((p) => p.name).join(", ")}');
-      print('Expires: ${expiresAt ?? "Never"}');
+      logger.debug('Generated pairing QR code with token: $pairingToken', category: 'MeshNetwork');
+      logger.debug('Purposes: ${purposes?.map((p) => p.name).join(", ")}', category: 'MeshNetwork');
+      logger.debug('Expires: ${expiresAt ?? "Never"}', category: 'MeshNetwork');
     }
 
     return pairingData;
@@ -374,7 +375,7 @@ class MeshNetworkService {
 
       if (pairingData.isExpired) {
         if (kDebugMode) {
-          print('Pairing QR code expired');
+          logger.warning('Pairing QR code expired', category: 'MeshNetwork');
         }
         return false;
       }
@@ -382,7 +383,7 @@ class MeshNetworkService {
       // Check if already connected
       if (_connectedNodes.containsKey(pairingData.deviceId)) {
         if (kDebugMode) {
-          print('Already connected to device: ${pairingData.deviceName}');
+          logger.info('Already connected to device: ${pairingData.deviceName}', category: 'MeshNetwork');
         }
         return true;
       }
@@ -391,13 +392,13 @@ class MeshNetworkService {
       await _connectToDeviceWithPairing(pairingData);
 
       if (kDebugMode) {
-        print('Successfully paired with device: ${pairingData.deviceName}');
+        logger.info('Successfully paired with device: ${pairingData.deviceName}', category: 'MeshNetwork');
       }
 
       return true;
     } catch (e) {
       if (kDebugMode) {
-        print('Error pairing with QR code: $e');
+        logger.error('Error pairing with QR code', category: 'MeshNetwork', error: e);
       }
       return false;
     }
@@ -433,7 +434,7 @@ class MeshNetworkService {
         return;
       } catch (e) {
         if (kDebugMode) {
-          print('Failed to connect via ${connectionType.name}: $e');
+          logger.warning('Failed to connect via ${connectionType.name}', category: 'MeshNetwork', metadata: {'error': e.toString()});
         }
         continue;
       }
@@ -466,7 +467,7 @@ class MeshNetworkService {
     }
 
     if (kDebugMode) {
-      print('Established ${connectionType.name} connection with $deviceName');
+      logger.info('Established ${connectionType.name} connection with $deviceName', category: 'MeshNetwork');
     }
   }
 
@@ -539,7 +540,7 @@ class MeshNetworkService {
   void setAutoConnect(bool enabled) {
     _autoConnectEnabled = enabled;
     if (kDebugMode) {
-      print('Auto-connect ${enabled ? "enabled" : "disabled"}');
+      logger.info('Auto-connect ${enabled ? "enabled" : "disabled"}', category: 'MeshNetwork');
     }
   }
 
@@ -559,7 +560,7 @@ class MeshNetworkService {
       _nodeController.add(connectedNodes);
 
       if (kDebugMode) {
-        print('Node made visible: ${node.name}');
+        logger.info('Node made visible: ${node.name}', category: 'MeshNetwork');
       }
     }
   }
@@ -574,11 +575,11 @@ class MeshNetworkService {
       _isDiscovering = true;
 
       if (kDebugMode) {
-        print('Started discovering devices');
+        logger.debug('Started discovering devices', category: 'MeshNetwork');
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error starting discovery: $e');
+        logger.error('Error starting discovery', category: 'MeshNetwork', error: e);
       }
     }
   }
@@ -592,11 +593,11 @@ class MeshNetworkService {
       _isDiscovering = false;
 
       if (kDebugMode) {
-        print('Stopped discovering');
+        logger.debug('Stopped discovering', category: 'MeshNetwork');
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error stopping discovery: $e');
+        logger.error('Error stopping discovery', category: 'MeshNetwork', error: e);
       }
     }
   }
@@ -611,12 +612,12 @@ class MeshNetworkService {
         _nodeController.add(connectedNodes);
 
         if (kDebugMode) {
-          print('Disconnected from device: ${node.name}');
+          logger.info('Disconnected from device: ${node.name}', category: 'MeshNetwork');
         }
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error disconnecting: $e');
+        logger.error('Error disconnecting', category: 'MeshNetwork', error: e);
       }
     }
   }
@@ -634,11 +635,11 @@ class MeshNetworkService {
       // await _nearbyConnections?.sendMessage(recipientId, jsonEncode(message.toJson()));
 
       if (kDebugMode) {
-        print('Sent message to ${node.name}: ${message.type}');
+        logger.debug('Sent message to ${node.name}: ${message.type}', category: 'MeshNetwork');
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error sending message: $e');
+        logger.error('Error sending message', category: 'MeshNetwork', error: e);
       }
       rethrow;
     }
@@ -655,7 +656,7 @@ class MeshNetworkService {
           await sendMessage(node.id, routedMessage);
         } catch (e) {
           if (kDebugMode) {
-            print('Failed to send to ${node.name}: $e');
+            logger.warning('Failed to send to ${node.name}', category: 'MeshNetwork', metadata: {'error': e.toString()});
           }
         }
       }
@@ -693,7 +694,7 @@ class MeshNetworkService {
     });
 
     if (kDebugMode) {
-      print('Mesh network enabled');
+      logger.info('Mesh network enabled', category: 'MeshNetwork');
     }
   }
 
@@ -709,7 +710,7 @@ class MeshNetworkService {
     }
 
     if (kDebugMode) {
-      print('Mesh network disabled');
+      logger.info('Mesh network disabled', category: 'MeshNetwork');
     }
   }
 
