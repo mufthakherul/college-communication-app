@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:campus_mesh/services/app_logger_service.dart';
 import 'package:path/path.dart' as path;
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/appwrite_config.dart';
@@ -50,7 +51,7 @@ class MessageAttachmentsService {
       final filePath = '$userId/$uniqueFileName';
 
       if (kDebugMode) {
-        print('Uploading attachment: $fileName (${_formatFileSize(fileSize)})');
+        logger.info('Uploading attachment: $fileName (${_formatFileSize(fileSize)})', category: 'MessageAttachments');
       }
 
       // Upload to Appwrite storage
@@ -72,7 +73,7 @@ class MessageAttachmentsService {
       }
 
       if (kDebugMode) {
-        print('Upload successful: $fileUrl');
+        logger.info('Upload successful: $fileUrl', category: 'MessageAttachments');
       }
 
       return {
@@ -86,7 +87,7 @@ class MessageAttachmentsService {
       };
     } catch (e) {
       if (kDebugMode) {
-        print('Error uploading attachment: $e');
+        logger.error('uploading attachment', category: 'MessageAttachments', error: e);
       }
       rethrow;
     }
@@ -98,11 +99,11 @@ class MessageAttachmentsService {
       await _appwrite.storage.deleteFile(bucketId: _bucketId, fileId: fileId);
 
       if (kDebugMode) {
-        print('Deleted attachment: $fileId');
+        logger.info('Deleted attachment: $fileId', category: 'MessageAttachments');
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error deleting attachment: $e');
+        logger.error('deleting attachment', category: 'MessageAttachments', error: e);
       }
       rethrow;
     }
@@ -117,7 +118,7 @@ class MessageAttachmentsService {
   }) async {
     try {
       if (kDebugMode) {
-        print('Downloading attachment: $fileName');
+        logger.info('Downloading attachment: $fileName', category: 'MessageAttachments');
       }
 
       // Download file from Appwrite
@@ -131,13 +132,13 @@ class MessageAttachmentsService {
       await file.writeAsBytes(bytes);
 
       if (kDebugMode) {
-        print('Downloaded to: ${file.path}');
+        logger.info('Downloaded to: ${file.path}', category: 'MessageAttachments');
       }
 
       return file;
     } catch (e) {
       if (kDebugMode) {
-        print('Error downloading attachment: $e');
+        logger.error('downloading attachment', category: 'MessageAttachments', error: e);
       }
       rethrow;
     }

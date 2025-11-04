@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:campus_mesh/services/app_logger_service.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:archive/archive_io.dart';
 
@@ -283,8 +284,9 @@ class CacheService {
 
     if (sizeMB > _maxCacheSizeMB) {
       if (kDebugMode) {
-        print(
+        logger.warning(
           'Cache size ${sizeMB.toStringAsFixed(2)} MB exceeds limit $_maxCacheSizeMB MB',
+          category: 'Cache',
         );
       }
 
@@ -342,8 +344,9 @@ class CacheService {
           final originalSize = utf8.encode(data).length;
           final compressedSize = compressed.length;
           final ratio = (1 - compressedSize / originalSize) * 100;
-          print(
+          logger.debug(
             'Compressed cache: $key (${ratio.toStringAsFixed(1)}% reduction)',
+            category: 'Cache',
           );
         }
       }
