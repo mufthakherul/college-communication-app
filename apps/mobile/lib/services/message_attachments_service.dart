@@ -38,7 +38,8 @@ class MessageAttachmentsService {
       final fileSize = await file.length();
       if (fileSize > _maxFileSizeBytes) {
         throw Exception(
-          'File size (${_formatFileSize(fileSize)}) exceeds maximum allowed size ($_maxFileSizeMB MB)',
+          'File size (${_formatFileSize(fileSize)}) '
+          'exceeds maximum allowed size ($_maxFileSizeMB MB)',
         );
       }
 
@@ -65,8 +66,9 @@ class MessageAttachmentsService {
       );
 
       // Get file URL
-      final fileUrl =
-          '${AppwriteConfig.endpoint}/storage/buckets/$_bucketId/files/${uploadedFile.$id}/view?project=${AppwriteConfig.projectId}';
+      final fileUrl = '${AppwriteConfig.endpoint}/storage/buckets/'
+          '$_bucketId/files/${uploadedFile.$id}/view?'
+          'project=${AppwriteConfig.projectId}';
 
       // Generate thumbnail for images/videos if needed
       String? thumbnailUrl;

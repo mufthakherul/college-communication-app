@@ -285,7 +285,8 @@ class CacheService {
     if (sizeMB > _maxCacheSizeMB) {
       if (kDebugMode) {
         logger.warning(
-          'Cache size ${sizeMB.toStringAsFixed(2)} MB exceeds limit $_maxCacheSizeMB MB',
+          'Cache size ${sizeMB.toStringAsFixed(2)} MB '
+          'exceeds limit $_maxCacheSizeMB MB',
           category: 'Cache',
         );
       }

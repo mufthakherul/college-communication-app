@@ -510,7 +510,8 @@ class MeshNetworkService {
 
   /// Generate unique pairing token
   String _generatePairingToken() {
-    return '${_deviceId}_${DateTime.now().millisecondsSinceEpoch}_${_generateRandomString(8)}';
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    return '${_deviceId}_${timestamp}_${_generateRandomString(8)}';
   }
 
   /// Generate random string
