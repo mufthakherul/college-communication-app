@@ -116,19 +116,27 @@ struct Node* createNode(int data) {
   }
 
   List<CodeSnippet> get _filteredSnippets {
-    var filtered = _selectedLanguage == 'All' 
-        ? _snippets 
+    var filtered = _selectedLanguage == 'All'
+        ? _snippets
         : _snippets.where((s) => s.language == _selectedLanguage).toList();
-    
+
     if (_searchQuery.isNotEmpty) {
-      filtered = filtered.where((s) => 
-        s.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-        s.description.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-        s.code.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-        s.tags.any((tag) => tag.toLowerCase().contains(_searchQuery.toLowerCase()))
-      ).toList();
+      filtered = filtered
+          .where(
+            (s) =>
+                s.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+                s.description.toLowerCase().contains(
+                  _searchQuery.toLowerCase(),
+                ) ||
+                s.code.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+                s.tags.any(
+                  (tag) =>
+                      tag.toLowerCase().contains(_searchQuery.toLowerCase()),
+                ),
+          )
+          .toList();
     }
-    
+
     return filtered;
   }
 
@@ -189,9 +197,7 @@ struct Node* createNode(int data) {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Code Snippets'),
-      ),
+      appBar: AppBar(title: const Text('Code Snippets')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : Column(
@@ -224,7 +230,7 @@ struct Node* createNode(int data) {
                     },
                   ),
                 ),
-                
+
                 // Language Filter
                 Container(
                   height: 50,
@@ -257,13 +263,18 @@ struct Node* createNode(int data) {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.code,
-                                  size: 64, color: Colors.grey[400]),
+                              Icon(
+                                Icons.code,
+                                size: 64,
+                                color: Colors.grey[400],
+                              ),
                               const SizedBox(height: 16),
                               const Text(
                                 'No snippets yet',
-                                style:
-                                    TextStyle(fontSize: 18, color: Colors.grey),
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.grey,
+                                ),
                               ),
                               const SizedBox(height: 8),
                               const Text(
@@ -299,8 +310,10 @@ struct Node* createNode(int data) {
           backgroundColor: Colors.blue[100],
           child: Text(
             snippet.language.substring(0, 1),
-            style:
-                TextStyle(color: Colors.blue[700], fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: Colors.blue[700],
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         title: Text(
@@ -315,12 +328,16 @@ struct Node* createNode(int data) {
               const SizedBox(height: 4),
               Wrap(
                 spacing: 4,
-                children: snippet.tags.map((tag) => Chip(
-                  label: Text(tag, style: const TextStyle(fontSize: 10)),
-                  backgroundColor: Colors.grey[200],
-                  padding: const EdgeInsets.all(2),
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                )).toList(),
+                children: snippet.tags
+                    .map(
+                      (tag) => Chip(
+                        label: Text(tag, style: const TextStyle(fontSize: 10)),
+                        backgroundColor: Colors.grey[200],
+                        padding: const EdgeInsets.all(2),
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                    )
+                    .toList(),
               ),
             ],
           ],
@@ -363,7 +380,8 @@ struct Node* createNode(int data) {
                         Clipboard.setData(ClipboardData(text: snippet.code));
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                              content: Text('Code copied to clipboard')),
+                            content: Text('Code copied to clipboard'),
+                          ),
                         );
                       },
                     ),
@@ -403,20 +421,20 @@ class CodeSnippet {
   });
 
   Map<String, dynamic> toJson() => {
-        'title': title,
-        'language': language,
-        'code': code,
-        'description': description,
-        'tags': tags,
-      };
+    'title': title,
+    'language': language,
+    'code': code,
+    'description': description,
+    'tags': tags,
+  };
 
   factory CodeSnippet.fromJson(Map<String, dynamic> json) => CodeSnippet(
-        title: json['title'],
-        language: json['language'],
-        code: json['code'],
-        description: json['description'],
-        tags: List<String>.from(json['tags'] ?? []),
-      );
+    title: json['title'],
+    language: json['language'],
+    code: json['code'],
+    description: json['description'],
+    tags: List<String>.from(json['tags'] ?? []),
+  );
 }
 
 class _SnippetDialog extends StatefulWidget {
@@ -445,8 +463,9 @@ class _SnippetDialogState extends State<_SnippetDialog> {
     super.initState();
     _titleController = TextEditingController(text: widget.snippet?.title ?? '');
     _codeController = TextEditingController(text: widget.snippet?.code ?? '');
-    _descController =
-        TextEditingController(text: widget.snippet?.description ?? '');
+    _descController = TextEditingController(
+      text: widget.snippet?.description ?? '',
+    );
     _selectedLanguage = widget.snippet?.language ?? widget.languages[0];
   }
 
@@ -510,12 +529,14 @@ class _SnippetDialogState extends State<_SnippetDialog> {
           onPressed: () {
             if (_titleController.text.isNotEmpty &&
                 _codeController.text.isNotEmpty) {
-              widget.onSave(CodeSnippet(
-                title: _titleController.text,
-                language: _selectedLanguage,
-                code: _codeController.text,
-                description: _descController.text,
-              ));
+              widget.onSave(
+                CodeSnippet(
+                  title: _titleController.text,
+                  language: _selectedLanguage,
+                  code: _codeController.text,
+                  description: _descController.text,
+                ),
+              );
               Navigator.pop(context);
             }
           },

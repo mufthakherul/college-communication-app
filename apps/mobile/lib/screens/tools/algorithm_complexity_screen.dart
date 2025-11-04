@@ -4,12 +4,13 @@ class AlgorithmComplexityScreen extends StatefulWidget {
   const AlgorithmComplexityScreen({super.key});
 
   @override
-  State<AlgorithmComplexityScreen> createState() => _AlgorithmComplexityScreenState();
+  State<AlgorithmComplexityScreen> createState() =>
+      _AlgorithmComplexityScreenState();
 }
 
 class _AlgorithmComplexityScreenState extends State<AlgorithmComplexityScreen> {
   String _selectedCategory = 'Sorting';
-  
+
   final Map<String, List<AlgorithmInfo>> _algorithms = {
     'Sorting': [
       AlgorithmInfo(
@@ -18,7 +19,8 @@ class _AlgorithmComplexityScreenState extends State<AlgorithmComplexityScreen> {
         averageTime: 'O(n²)',
         worstTime: 'O(n²)',
         space: 'O(1)',
-        description: 'Simple comparison-based sorting. Repeatedly swaps adjacent elements.',
+        description:
+            'Simple comparison-based sorting. Repeatedly swaps adjacent elements.',
         stable: true,
       ),
       AlgorithmInfo(
@@ -27,7 +29,8 @@ class _AlgorithmComplexityScreenState extends State<AlgorithmComplexityScreen> {
         averageTime: 'O(n log n)',
         worstTime: 'O(n²)',
         space: 'O(log n)',
-        description: 'Divide-and-conquer algorithm. Uses pivot for partitioning.',
+        description:
+            'Divide-and-conquer algorithm. Uses pivot for partitioning.',
         stable: false,
       ),
       AlgorithmInfo(
@@ -36,7 +39,8 @@ class _AlgorithmComplexityScreenState extends State<AlgorithmComplexityScreen> {
         averageTime: 'O(n log n)',
         worstTime: 'O(n log n)',
         space: 'O(n)',
-        description: 'Divide-and-conquer algorithm. Always divides array in half.',
+        description:
+            'Divide-and-conquer algorithm. Always divides array in half.',
         stable: true,
       ),
       AlgorithmInfo(
@@ -63,7 +67,8 @@ class _AlgorithmComplexityScreenState extends State<AlgorithmComplexityScreen> {
         averageTime: 'O(n²)',
         worstTime: 'O(n²)',
         space: 'O(1)',
-        description: 'Repeatedly finds minimum element and places it at beginning.',
+        description:
+            'Repeatedly finds minimum element and places it at beginning.',
         stable: false,
       ),
     ],
@@ -204,9 +209,7 @@ class _AlgorithmComplexityScreenState extends State<AlgorithmComplexityScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Algorithm Complexity'),
-      ),
+      appBar: AppBar(title: const Text('Algorithm Complexity')),
       body: Column(
         children: [
           _buildInfoCard(),
@@ -266,7 +269,7 @@ class _AlgorithmComplexityScreenState extends State<AlgorithmComplexityScreen> {
 
   Widget _buildAlgorithmsList() {
     final algorithms = _algorithms[_selectedCategory] ?? [];
-    
+
     return ListView.builder(
       padding: const EdgeInsets.all(16),
       itemCount: algorithms.length,
@@ -304,16 +307,33 @@ class _AlgorithmComplexityScreenState extends State<AlgorithmComplexityScreen> {
                   children: [
                     Text(
                       algo.description,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.grey[700],
-                      ),
+                      style: TextStyle(fontSize: 13, color: Colors.grey[700]),
                     ),
                     const SizedBox(height: 16),
-                    _buildComplexityRow('Best Case', algo.bestTime, Icons.trending_down, Colors.green),
-                    _buildComplexityRow('Average Case', algo.averageTime, Icons.trending_flat, Colors.orange),
-                    _buildComplexityRow('Worst Case', algo.worstTime, Icons.trending_up, Colors.red),
-                    _buildComplexityRow('Space', algo.space, Icons.storage, Colors.blue),
+                    _buildComplexityRow(
+                      'Best Case',
+                      algo.bestTime,
+                      Icons.trending_down,
+                      Colors.green,
+                    ),
+                    _buildComplexityRow(
+                      'Average Case',
+                      algo.averageTime,
+                      Icons.trending_flat,
+                      Colors.orange,
+                    ),
+                    _buildComplexityRow(
+                      'Worst Case',
+                      algo.worstTime,
+                      Icons.trending_up,
+                      Colors.red,
+                    ),
+                    _buildComplexityRow(
+                      'Space',
+                      algo.space,
+                      Icons.storage,
+                      Colors.blue,
+                    ),
                     const SizedBox(height: 8),
                     Row(
                       children: [
@@ -342,7 +362,12 @@ class _AlgorithmComplexityScreenState extends State<AlgorithmComplexityScreen> {
     );
   }
 
-  Widget _buildComplexityRow(String label, String value, IconData icon, Color color) {
+  Widget _buildComplexityRow(
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
@@ -351,10 +376,7 @@ class _AlgorithmComplexityScreenState extends State<AlgorithmComplexityScreen> {
           const SizedBox(width: 8),
           SizedBox(
             width: 100,
-            child: Text(
-              label,
-              style: const TextStyle(fontSize: 12),
-            ),
+            child: Text(label, style: const TextStyle(fontSize: 12)),
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -379,11 +401,16 @@ class _AlgorithmComplexityScreenState extends State<AlgorithmComplexityScreen> {
 
   Color _getComplexityColor(String complexity) {
     if (complexity.contains('O(1)')) return Colors.green;
-    if (complexity.contains('O(log') || complexity.contains('O(√n)')) return Colors.lightGreen;
-    if (complexity.contains('O(n)') && !complexity.contains('²') && !complexity.contains('³')) return Colors.blue;
+    if (complexity.contains('O(log') || complexity.contains('O(√n)'))
+      return Colors.lightGreen;
+    if (complexity.contains('O(n)') &&
+        !complexity.contains('²') &&
+        !complexity.contains('³'))
+      return Colors.blue;
     if (complexity.contains('O(n log n)')) return Colors.orange;
     if (complexity.contains('O(n²)')) return Colors.deepOrange;
-    if (complexity.contains('O(n³)') || complexity.contains('O(2')) return Colors.red;
+    if (complexity.contains('O(n³)') || complexity.contains('O(2'))
+      return Colors.red;
     return Colors.grey;
   }
 
@@ -402,12 +429,42 @@ class _AlgorithmComplexityScreenState extends State<AlgorithmComplexityScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildGuideRow('O(1)', 'Constant', Colors.green, 'Best - Direct access'),
-                _buildGuideRow('O(log n)', 'Logarithmic', Colors.lightGreen, 'Excellent - Binary search'),
-                _buildGuideRow('O(n)', 'Linear', Colors.blue, 'Good - Single pass'),
-                _buildGuideRow('O(n log n)', 'Linearithmic', Colors.orange, 'Fair - Efficient sorting'),
-                _buildGuideRow('O(n²)', 'Quadratic', Colors.deepOrange, 'Bad - Nested loops'),
-                _buildGuideRow('O(2ⁿ)', 'Exponential', Colors.red, 'Horrible - Avoid!'),
+                _buildGuideRow(
+                  'O(1)',
+                  'Constant',
+                  Colors.green,
+                  'Best - Direct access',
+                ),
+                _buildGuideRow(
+                  'O(log n)',
+                  'Logarithmic',
+                  Colors.lightGreen,
+                  'Excellent - Binary search',
+                ),
+                _buildGuideRow(
+                  'O(n)',
+                  'Linear',
+                  Colors.blue,
+                  'Good - Single pass',
+                ),
+                _buildGuideRow(
+                  'O(n log n)',
+                  'Linearithmic',
+                  Colors.orange,
+                  'Fair - Efficient sorting',
+                ),
+                _buildGuideRow(
+                  'O(n²)',
+                  'Quadratic',
+                  Colors.deepOrange,
+                  'Bad - Nested loops',
+                ),
+                _buildGuideRow(
+                  'O(2ⁿ)',
+                  'Exponential',
+                  Colors.red,
+                  'Horrible - Avoid!',
+                ),
               ],
             ),
           ),
@@ -416,7 +473,12 @@ class _AlgorithmComplexityScreenState extends State<AlgorithmComplexityScreen> {
     );
   }
 
-  Widget _buildGuideRow(String notation, String name, Color color, String description) {
+  Widget _buildGuideRow(
+    String notation,
+    String name,
+    Color color,
+    String description,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
@@ -453,10 +515,7 @@ class _AlgorithmComplexityScreenState extends State<AlgorithmComplexityScreen> {
                 ),
                 Text(
                   description,
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: Colors.grey[600],
-                  ),
+                  style: TextStyle(fontSize: 10, color: Colors.grey[600]),
                 ),
               ],
             ),

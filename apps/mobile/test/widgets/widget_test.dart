@@ -12,11 +12,7 @@ void main() {
           useMaterial3: true,
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         ),
-        home: const Scaffold(
-          body: Center(
-            child: Text('Test App'),
-          ),
-        ),
+        home: const Scaffold(body: Center(child: Text('Test App'))),
       ),
     );
 
@@ -36,11 +32,7 @@ void main() {
     // Create a simple widget that shows a loading indicator
     await tester.pumpWidget(
       const MaterialApp(
-        home: Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(),
-          ),
-        ),
+        home: Scaffold(body: Center(child: CircularProgressIndicator())),
       ),
     );
 
@@ -56,11 +48,7 @@ void main() {
     // Create a simple widget with text
     await tester.pumpWidget(
       const MaterialApp(
-        home: Scaffold(
-          body: Center(
-            child: Text(testText),
-          ),
-        ),
+        home: Scaffold(body: Center(child: Text(testText))),
       ),
     );
 

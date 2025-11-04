@@ -50,10 +50,12 @@ class AIChatDatabase {
         ''');
 
         // Create indexes
-        await db
-            .execute('CREATE INDEX idx_sessions_userId ON sessions (userId)');
         await db.execute(
-            'CREATE INDEX idx_messages_sessionId ON messages (sessionId)');
+          'CREATE INDEX idx_sessions_userId ON sessions (userId)',
+        );
+        await db.execute(
+          'CREATE INDEX idx_messages_sessionId ON messages (sessionId)',
+        );
       },
     );
   }
@@ -100,11 +102,7 @@ class AIChatDatabase {
 
   Future<void> deleteSession(String sessionId) async {
     final db = await database;
-    await db.delete(
-      'sessions',
-      where: 'id = ?',
-      whereArgs: [sessionId],
-    );
+    await db.delete('sessions', where: 'id = ?', whereArgs: [sessionId]);
   }
 
   // Message operations
@@ -127,20 +125,12 @@ class AIChatDatabase {
 
   Future<void> deleteMessage(String messageId) async {
     final db = await database;
-    await db.delete(
-      'messages',
-      where: 'id = ?',
-      whereArgs: [messageId],
-    );
+    await db.delete('messages', where: 'id = ?', whereArgs: [messageId]);
   }
 
   Future<void> deleteAllMessagesInSession(String sessionId) async {
     final db = await database;
-    await db.delete(
-      'messages',
-      where: 'sessionId = ?',
-      whereArgs: [sessionId],
-    );
+    await db.delete('messages', where: 'sessionId = ?', whereArgs: [sessionId]);
   }
 
   // Clear all data (for logout)

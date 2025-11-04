@@ -12,12 +12,12 @@ class HashGeneratorScreen extends StatefulWidget {
 
 class _HashGeneratorScreenState extends State<HashGeneratorScreen> {
   final TextEditingController _inputController = TextEditingController();
-  
+
   String _md5Hash = '';
   String _sha1Hash = '';
   String _sha256Hash = '';
   String _sha512Hash = '';
-  
+
   bool _uppercase = false;
 
   void _generateHashes() {
@@ -32,13 +32,13 @@ class _HashGeneratorScreenState extends State<HashGeneratorScreen> {
     }
 
     final bytes = utf8.encode(_inputController.text);
-    
+
     setState(() {
       _md5Hash = md5.convert(bytes).toString();
       _sha1Hash = sha1.convert(bytes).toString();
       _sha256Hash = sha256.convert(bytes).toString();
       _sha512Hash = sha512.convert(bytes).toString();
-      
+
       if (_uppercase) {
         _md5Hash = _md5Hash.toUpperCase();
         _sha1Hash = _sha1Hash.toUpperCase();
@@ -50,17 +50,15 @@ class _HashGeneratorScreenState extends State<HashGeneratorScreen> {
 
   void _copyHash(String hash, String type) {
     Clipboard.setData(ClipboardData(text: hash));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('$type hash copied to clipboard')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('$type hash copied to clipboard')));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Hash Generator'),
-      ),
+      appBar: AppBar(title: const Text('Hash Generator')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -201,14 +199,17 @@ class _HashGeneratorScreenState extends State<HashGeneratorScreen> {
         onPressed: _generateHashes,
         icon: const Icon(Icons.fingerprint),
         label: const Text('Generate Hashes'),
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.all(16),
-        ),
+        style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(16)),
       ),
     );
   }
 
-  Widget _buildHashCard(String title, String hash, Color color, String description) {
+  Widget _buildHashCard(
+    String title,
+    String hash,
+    Color color,
+    String description,
+  ) {
     return Card(
       elevation: 2,
       child: Padding(
@@ -219,7 +220,10 @@ class _HashGeneratorScreenState extends State<HashGeneratorScreen> {
             Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: color.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(20),
@@ -236,10 +240,7 @@ class _HashGeneratorScreenState extends State<HashGeneratorScreen> {
                 const Spacer(),
                 Text(
                   '${hash.length} chars',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey[600],
-                  ),
+                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                 ),
               ],
             ),
@@ -290,10 +291,7 @@ class _HashGeneratorScreenState extends State<HashGeneratorScreen> {
           children: [
             const Text(
               'Algorithm Comparison',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
             const SizedBox(height: 12),
             Table(
@@ -311,29 +309,48 @@ class _HashGeneratorScreenState extends State<HashGeneratorScreen> {
                       padding: EdgeInsets.all(8),
                       child: Text(
                         'Algorithm',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.all(8),
                       child: Text(
                         'Length',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                     Padding(
                       padding: EdgeInsets.all(8),
                       child: Text(
                         'Security',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                   ],
                 ),
                 _buildComparisonRow('MD5', '128-bit', 'Weak', Colors.red),
                 _buildComparisonRow('SHA-1', '160-bit', 'Weak', Colors.orange),
-                _buildComparisonRow('SHA-256', '256-bit', 'Strong', Colors.green),
-                _buildComparisonRow('SHA-512', '512-bit', 'Strongest', Colors.green),
+                _buildComparisonRow(
+                  'SHA-256',
+                  '256-bit',
+                  'Strong',
+                  Colors.green,
+                ),
+                _buildComparisonRow(
+                  'SHA-512',
+                  '512-bit',
+                  'Strongest',
+                  Colors.green,
+                ),
               ],
             ),
             const SizedBox(height: 12),
@@ -345,7 +362,11 @@ class _HashGeneratorScreenState extends State<HashGeneratorScreen> {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.lightbulb_outline, size: 16, color: Colors.amber[700]),
+                  Icon(
+                    Icons.lightbulb_outline,
+                    size: 16,
+                    color: Colors.amber[700],
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
@@ -362,7 +383,12 @@ class _HashGeneratorScreenState extends State<HashGeneratorScreen> {
     );
   }
 
-  TableRow _buildComparisonRow(String algo, String length, String security, Color color) {
+  TableRow _buildComparisonRow(
+    String algo,
+    String length,
+    String security,
+    Color color,
+  ) {
     return TableRow(
       children: [
         Padding(
@@ -380,10 +406,7 @@ class _HashGeneratorScreenState extends State<HashGeneratorScreen> {
               Container(
                 width: 8,
                 height: 8,
-                decoration: BoxDecoration(
-                  color: color,
-                  shape: BoxShape.circle,
-                ),
+                decoration: BoxDecoration(color: color, shape: BoxShape.circle),
               ),
               const SizedBox(width: 4),
               Text(security, style: const TextStyle(fontSize: 12)),

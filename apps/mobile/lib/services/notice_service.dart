@@ -51,8 +51,9 @@ class NoticeService {
         ],
       );
 
-      final notices =
-          docs.documents.map((doc) => NoticeModel.fromJson(doc.data)).toList();
+      final notices = docs.documents
+          .map((doc) => NoticeModel.fromJson(doc.data))
+          .toList();
 
       _noticesController?.add(notices);
     } catch (e) {
@@ -133,7 +134,8 @@ class NoticeService {
 
       if (sanitizedTitle.length > InputValidator.maxTitleLength) {
         throw Exception(
-            'Notice title is too long (max ${InputValidator.maxTitleLength} characters)');
+          'Notice title is too long (max ${InputValidator.maxTitleLength} characters)',
+        );
       }
 
       final document = await _appwrite.databases.createDocument(

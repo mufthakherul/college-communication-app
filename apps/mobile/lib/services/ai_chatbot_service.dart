@@ -64,14 +64,12 @@ Always maintain a respectful and supportive tone.
   // Validate API key
   Future<bool> validateApiKey(String apiKey) async {
     try {
-      final testModel = GenerativeModel(
-        model: _modelVersion,
-        apiKey: apiKey,
-      );
+      final testModel = GenerativeModel(model: _modelVersion, apiKey: apiKey);
 
       // Test with a simple prompt
-      final response = await testModel.generateContent(
-          [Content.text('Respond with "OK" if you receive this message.')]);
+      final response = await testModel.generateContent([
+        Content.text('Respond with "OK" if you receive this message.'),
+      ]);
 
       return response.text != null && response.text!.isNotEmpty;
     } catch (e) {
@@ -120,10 +118,13 @@ Always maintain a respectful and supportive tone.
       // Add system instruction as first user message if this is first message
       if (messages.isEmpty) {
         history.add(Content.text(_systemInstruction));
-        history.add(Content.model([
-          TextPart(
-              'I understand. I am here to assist students, teachers, and staff at Rangpur Polytechnic Institute. How can I help you today?')
-        ]));
+        history.add(
+          Content.model([
+            TextPart(
+              'I understand. I am here to assist students, teachers, and staff at Rangpur Polytechnic Institute. How can I help you today?',
+            ),
+          ]),
+        );
       }
 
       for (final msg in messages.take(20)) {

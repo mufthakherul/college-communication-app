@@ -66,7 +66,8 @@ class ConnectivityService {
   Future<void> _handleConnectivityChange(
     List<ConnectivityResult> results,
   ) async {
-    final hasConnection = results.isNotEmpty &&
+    final hasConnection =
+        results.isNotEmpty &&
         results.any((result) => result != ConnectivityResult.none);
 
     final wasOnline = _isOnline;
@@ -78,7 +79,8 @@ class ConnectivityService {
         debugPrint('Connectivity changed: ${_isOnline ? "Online" : "Offline"}');
         if (_isOnline) {
           debugPrint(
-              'Connection types: ${results.map((r) => r.name).join(", ")}');
+            'Connection types: ${results.map((r) => r.name).join(", ")}',
+          );
         }
       }
     }
@@ -144,7 +146,8 @@ class ConnectivityService {
       );
       if (kDebugMode) {
         debugPrint(
-            'Connectivity manually set: ${_isOnline ? "Online" : "Offline"}');
+          'Connectivity manually set: ${_isOnline ? "Online" : "Offline"}',
+        );
       }
     }
   }

@@ -12,20 +12,22 @@ class _RegexTesterScreenState extends State<RegexTesterScreen> {
   final TextEditingController _regexController = TextEditingController();
   final TextEditingController _testStringController = TextEditingController();
   final TextEditingController _replacementController = TextEditingController();
-  
+
   bool _caseSensitive = true;
   bool _multiline = false;
   bool _dotAll = false;
-  
+
   List<RegExpMatch> _matches = [];
   String _error = '';
   String _replacedText = '';
-  
+
   final Map<String, String> _commonPatterns = {
     'Email': r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
     'Phone (US)': r'^\+?1?\d{10}$',
-    'URL': r'https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)',
-    'IPv4': r'^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$',
+    'URL':
+        r'https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)',
+    'IPv4':
+        r'^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$',
     'Date (YYYY-MM-DD)': r'^\d{4}-\d{2}-\d{2}$',
     'Time (HH:MM)': r'^([01]?[0-9]|2[0-3]):[0-5][0-9]$',
     'Hex Color': r'^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',
@@ -54,7 +56,7 @@ class _RegexTesterScreenState extends State<RegexTesterScreen> {
 
       setState(() {
         _matches = regex.allMatches(_testStringController.text).toList();
-        
+
         // Perform replacement if replacement text is provided
         if (_replacementController.text.isNotEmpty) {
           _replacedText = _testStringController.text.replaceAll(
@@ -197,9 +199,15 @@ class _RegexTesterScreenState extends State<RegexTesterScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Options:', style: TextStyle(fontWeight: FontWeight.bold)),
+            const Text(
+              'Options:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             CheckboxListTile(
-              title: const Text('Case Sensitive', style: TextStyle(fontSize: 14)),
+              title: const Text(
+                'Case Sensitive',
+                style: TextStyle(fontSize: 14),
+              ),
               value: _caseSensitive,
               dense: true,
               onChanged: (value) {
@@ -209,7 +217,10 @@ class _RegexTesterScreenState extends State<RegexTesterScreen> {
             ),
             CheckboxListTile(
               title: const Text('Multiline', style: TextStyle(fontSize: 14)),
-              subtitle: const Text('^/$ match line starts/ends', style: TextStyle(fontSize: 11)),
+              subtitle: const Text(
+                r'^/$ match line starts/ends',
+                style: TextStyle(fontSize: 11),
+              ),
               value: _multiline,
               dense: true,
               onChanged: (value) {
@@ -219,7 +230,10 @@ class _RegexTesterScreenState extends State<RegexTesterScreen> {
             ),
             CheckboxListTile(
               title: const Text('Dot All', style: TextStyle(fontSize: 14)),
-              subtitle: const Text('. matches newlines', style: TextStyle(fontSize: 11)),
+              subtitle: const Text(
+                '. matches newlines',
+                style: TextStyle(fontSize: 11),
+              ),
               value: _dotAll,
               dense: true,
               onChanged: (value) {
@@ -267,9 +281,7 @@ class _RegexTesterScreenState extends State<RegexTesterScreen> {
         onPressed: _testRegex,
         icon: const Icon(Icons.play_arrow),
         label: const Text('Test Regex'),
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.all(16),
-        ),
+        style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(16)),
       ),
     );
   }
@@ -284,10 +296,7 @@ class _RegexTesterScreenState extends State<RegexTesterScreen> {
             Icon(Icons.error_outline, color: Colors.red[700]),
             const SizedBox(width: 8),
             Expanded(
-              child: Text(
-                _error,
-                style: TextStyle(color: Colors.red[700]),
-              ),
+              child: Text(_error, style: TextStyle(color: Colors.red[700])),
             ),
           ],
         ),
@@ -347,7 +356,9 @@ class _RegexTesterScreenState extends State<RegexTesterScreen> {
                     trailing: IconButton(
                       icon: const Icon(Icons.copy, size: 18),
                       onPressed: () {
-                        Clipboard.setData(ClipboardData(text: match.group(0) ?? ''));
+                        Clipboard.setData(
+                          ClipboardData(text: match.group(0) ?? ''),
+                        );
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Match copied')),
                         );
@@ -376,10 +387,7 @@ class _RegexTesterScreenState extends State<RegexTesterScreen> {
                 const SizedBox(width: 8),
                 const Text(
                   'Replacement Result',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ],
             ),
@@ -432,13 +440,19 @@ class _RegexTesterScreenState extends State<RegexTesterScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: const [
-              Text('Character Classes:', style: TextStyle(fontWeight: FontWeight.bold)),
+              Text(
+                'Character Classes:',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               Text(r'\d - Digit (0-9)'),
               Text(r'\w - Word character (a-z, A-Z, 0-9, _)'),
               Text(r'\s - Whitespace'),
               Text(r'. - Any character'),
               SizedBox(height: 12),
-              Text('Quantifiers:', style: TextStyle(fontWeight: FontWeight.bold)),
+              Text(
+                'Quantifiers:',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               Text(r'* - 0 or more'),
               Text(r'+ - 1 or more'),
               Text(r'? - 0 or 1'),

@@ -112,7 +112,8 @@ class LocalMessageDatabase {
     final db = await database;
     return await db.query(
       'local_messages',
-      where: '(sender_id = ? AND recipient_id = ?) OR '
+      where:
+          '(sender_id = ? AND recipient_id = ?) OR '
           '(sender_id = ? AND recipient_id = ?)',
       whereArgs: [userId1, userId2, userId2, userId1],
       orderBy: 'created_at ASC',
@@ -138,9 +139,7 @@ class LocalMessageDatabase {
     String? error,
   }) async {
     final db = await database;
-    final data = <String, dynamic>{
-      'sync_status': status,
-    };
+    final data = <String, dynamic>{'sync_status': status};
     if (syncedAt != null) data['synced_at'] = syncedAt;
     if (error != null) data['last_error'] = error;
 
@@ -161,9 +160,7 @@ class LocalMessageDatabase {
     String? approvedAt,
   }) async {
     final db = await database;
-    final data = <String, dynamic>{
-      'approval_status': status,
-    };
+    final data = <String, dynamic>{'approval_status': status};
     if (approvedBy != null) data['approved_by'] = approvedBy;
     if (approvedAt != null) data['approved_at'] = approvedAt;
 
@@ -179,18 +176,22 @@ class LocalMessageDatabase {
   /// Increment retry count
   Future<void> incrementRetryCount(String messageId) async {
     final db = await database;
-    await db.rawUpdate('''
+    await db.rawUpdate(
+      '''
       UPDATE local_messages 
       SET retry_count = retry_count + 1 
       WHERE id = ?
-    ''', [messageId]);
+    ''',
+      [messageId],
+    );
   }
 
   /// Delete synced messages older than specified days
   Future<int> cleanupSyncedMessages({int daysToKeep = 7}) async {
     final db = await database;
-    final cutoffDate =
-        DateTime.now().subtract(Duration(days: daysToKeep)).toIso8601String();
+    final cutoffDate = DateTime.now()
+        .subtract(Duration(days: daysToKeep))
+        .toIso8601String();
 
     return await db.delete(
       'local_messages',
@@ -214,11 +215,7 @@ class LocalMessageDatabase {
   /// Delete message
   Future<void> deleteMessage(String messageId) async {
     final db = await database;
-    await db.delete(
-      'local_messages',
-      where: 'id = ?',
-      whereArgs: [messageId],
-    );
+    await db.delete('local_messages', where: 'id = ?', whereArgs: [messageId]);
     debugPrint('Message deleted: $messageId');
   }
 

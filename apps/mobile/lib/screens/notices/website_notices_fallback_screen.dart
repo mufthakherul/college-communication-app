@@ -72,17 +72,15 @@ class _WebsiteNoticesFallbackScreenState
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Could not open website in browser'),
-            ),
+            const SnackBar(content: Text('Could not open website in browser')),
           );
         }
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${e.toString()}')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
       }
     }
   }
@@ -212,10 +210,7 @@ class _WebsiteNoticesFallbackScreenState
           children: [
             const Text(
               'Website Notices Fallback',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
             const Text(
@@ -272,5 +267,4 @@ class _WebsiteNoticesFallbackScreenState
       ),
     );
   }
-
 }

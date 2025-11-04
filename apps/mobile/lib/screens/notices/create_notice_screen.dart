@@ -35,7 +35,7 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
     try {
       final authService = AuthService();
       final currentUser = await authService.currentUser;
-      
+
       if (currentUser == null) {
         if (mounted) {
           _showPermissionError('You must be logged in to create notices');
@@ -44,12 +44,12 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
       }
 
       // Check if user has appropriate role
-      if (currentUser.role != UserRole.admin && 
+      if (currentUser.role != UserRole.admin &&
           currentUser.role != UserRole.teacher) {
         if (mounted) {
           _showPermissionError(
             'Only admins and teachers can create notices.\n'
-            'Your current role: ${currentUser.role.name}'
+            'Your current role: ${currentUser.role.name}',
           );
         }
       }
@@ -113,7 +113,8 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
     } catch (e) {
       if (mounted) {
         final errorMessage = e.toString();
-        final isPermissionError = errorMessage.toLowerCase().contains('permission') ||
+        final isPermissionError =
+            errorMessage.toLowerCase().contains('permission') ||
             errorMessage.toLowerCase().contains('authenticated') ||
             errorMessage.toLowerCase().contains('unauthorized');
 
@@ -127,9 +128,7 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
                   color: isPermissionError ? Colors.orange : Colors.red,
                 ),
                 const SizedBox(width: 12),
-                const Expanded(
-                  child: Text('Failed to Create Notice'),
-                ),
+                const Expanded(child: Text('Failed to Create Notice')),
               ],
             ),
             content: Column(
@@ -139,10 +138,7 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
                 if (isPermissionError) ...[
                   const Text(
                     'Permission Denied',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   const SizedBox(height: 12),
                   const Text(
@@ -384,10 +380,7 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
             children: [
               const Text(
                 'Who can create notices?',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               const SizedBox(height: 8),
               const Text('• Admins'),
@@ -397,10 +390,7 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
               const SizedBox(height: 12),
               const Text(
                 'Notice Types',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               const SizedBox(height: 8),
               _buildNoticeTypeInfo(
@@ -428,10 +418,7 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
               const SizedBox(height: 12),
               const Text(
                 'Tips',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
               const SizedBox(height: 8),
               const Text('• Use clear and concise titles'),
@@ -470,16 +457,10 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                title,
-                style: const TextStyle(fontWeight: FontWeight.w600),
-              ),
+              Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
               Text(
                 description,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey.shade600,
-                ),
+                style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
               ),
             ],
           ),

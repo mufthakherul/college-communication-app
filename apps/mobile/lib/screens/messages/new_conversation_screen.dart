@@ -203,8 +203,9 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
     return ListTile(
       leading: CircleAvatar(
         backgroundColor: _getColorForRole(user.role),
-        backgroundImage:
-            user.photoURL.isNotEmpty ? NetworkImage(user.photoURL) : null,
+        backgroundImage: user.photoURL.isNotEmpty
+            ? NetworkImage(user.photoURL)
+            : null,
         child: user.photoURL.isNotEmpty
             ? null
             : Text(

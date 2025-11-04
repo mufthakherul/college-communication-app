@@ -77,7 +77,7 @@ class SecurityService {
     // This check can cause FileSystemException on some devices
     // Re-enable after thorough testing on target devices
     return true;
-    
+
     /* DISABLED FOR STABILITY
     try {
       if (Platform.isAndroid) {

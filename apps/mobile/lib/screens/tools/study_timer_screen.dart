@@ -34,8 +34,9 @@ class _StudyTimerScreenState extends State<StudyTimerScreen> {
 
         // Check if Pomodoro session completed
         if (_isPomodoroMode) {
-          final targetSeconds =
-              _isWorkSession ? _workMinutes * 60 : _breakMinutes * 60;
+          final targetSeconds = _isWorkSession
+              ? _workMinutes * 60
+              : _breakMinutes * 60;
 
           if (_seconds >= targetSeconds) {
             _completeSession();

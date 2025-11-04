@@ -23,11 +23,7 @@ class LocalChatDatabase {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'campus_mesh_chats.db');
 
-    return await openDatabase(
-      path,
-      version: 1,
-      onCreate: _onCreate,
-    );
+    return await openDatabase(path, version: 1, onCreate: _onCreate);
   }
 
   /// Create database tables
@@ -119,17 +115,10 @@ class LocalChatDatabase {
     String? syncedAt,
   }) async {
     final db = await database;
-    final data = <String, dynamic>{
-      'sync_status': status,
-    };
+    final data = <String, dynamic>{'sync_status': status};
     if (syncedAt != null) data['synced_at'] = syncedAt;
 
-    await db.update(
-      'local_chats',
-      data,
-      where: 'id = ?',
-      whereArgs: [chatId],
-    );
+    await db.update('local_chats', data, where: 'id = ?', whereArgs: [chatId]);
     debugPrint('Chat $chatId sync status updated to $status');
   }
 
@@ -149,12 +138,7 @@ class LocalChatDatabase {
       'restriction_reason': reason,
     };
 
-    await db.update(
-      'local_chats',
-      data,
-      where: 'id = ?',
-      whereArgs: [chatId],
-    );
+    await db.update('local_chats', data, where: 'id = ?', whereArgs: [chatId]);
     debugPrint('Chat $chatId restriction updated: $isRestricted');
   }
 
@@ -167,10 +151,7 @@ class LocalChatDatabase {
     final db = await database;
     await db.update(
       'local_chats',
-      {
-        'last_message': message,
-        'last_message_at': timestamp,
-      },
+      {'last_message': message, 'last_message_at': timestamp},
       where: 'id = ?',
       whereArgs: [chatId],
     );
@@ -191,11 +172,7 @@ class LocalChatDatabase {
   /// Delete chat
   Future<void> deleteChat(String chatId) async {
     final db = await database;
-    await db.delete(
-      'local_chats',
-      where: 'id = ?',
-      whereArgs: [chatId],
-    );
+    await db.delete('local_chats', where: 'id = ?', whereArgs: [chatId]);
     debugPrint('Chat deleted: $chatId');
   }
 

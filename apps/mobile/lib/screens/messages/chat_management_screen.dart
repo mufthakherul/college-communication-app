@@ -124,10 +124,7 @@ class _ChatManagementScreenState extends State<ChatManagementScreen> {
             const SizedBox(height: 8),
             SelectableText(
               url,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.blue[700],
-              ),
+              style: TextStyle(fontSize: 12, color: Colors.blue[700]),
             ),
           ],
         ),
@@ -147,9 +144,7 @@ class _ChatManagementScreenState extends State<ChatManagementScreen> {
             onPressed: () {
               Clipboard.setData(ClipboardData(text: url));
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Invite URL copied to clipboard'),
-                ),
+                const SnackBar(content: Text('Invite URL copied to clipboard')),
               );
             },
             child: const Text('Copy URL'),
@@ -166,9 +161,7 @@ class _ChatManagementScreenState extends State<ChatManagementScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Manage Chats'),
-      ),
+      appBar: AppBar(title: const Text('Manage Chats')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
@@ -211,8 +204,9 @@ class _ChatManagementScreenState extends State<ChatManagementScreen> {
                           ),
                           child: ListTile(
                             leading: CircleAvatar(
-                              backgroundColor:
-                                  isRestricted ? Colors.red : Colors.blue,
+                              backgroundColor: isRestricted
+                                  ? Colors.red
+                                  : Colors.blue,
                               child: Icon(
                                 type == 'p2p' ? Icons.person : Icons.group,
                                 color: Colors.white,
@@ -237,9 +231,7 @@ class _ChatManagementScreenState extends State<ChatManagementScreen> {
                                 if (isRestricted)
                                   Text(
                                     'Restricted: ${chat['restriction_reason'] ?? 'No reason'}',
-                                    style: const TextStyle(
-                                      color: Colors.red,
-                                    ),
+                                    style: const TextStyle(color: Colors.red),
                                   ),
                                 if (inviteCode != null)
                                   Text(
@@ -266,8 +258,9 @@ class _ChatManagementScreenState extends State<ChatManagementScreen> {
                                     isRestricted ? Icons.lock_open : Icons.lock,
                                   ),
                                   onPressed: () => _toggleRestriction(chat),
-                                  tooltip:
-                                      isRestricted ? 'Unrestrict' : 'Restrict',
+                                  tooltip: isRestricted
+                                      ? 'Unrestrict'
+                                      : 'Restrict',
                                 ),
                               ],
                             ),
