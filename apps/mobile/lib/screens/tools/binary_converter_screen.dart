@@ -164,7 +164,8 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
     if (binary.isEmpty) return '';
     try {
       int value = int.parse(binary, radix: 2);
-      if (value >= (1 << (bits - 1))) {
+      // Check if value requires more than 'bits' to represent
+      if (value >= (1 << bits)) {
         return 'Overflow for $bits-bit';
       }
       // Invert and add 1
