@@ -50,9 +50,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
         if (mounted) {
           final result = await Navigator.push<bool>(
             context,
-            MaterialPageRoute(
-              builder: (context) => const ApiKeyInputScreen(),
-            ),
+            MaterialPageRoute(builder: (context) => const ApiKeyInputScreen()),
           );
 
           if (result != true) {
@@ -96,9 +94,9 @@ class _AIChatScreenState extends State<AIChatScreen> {
     } catch (e) {
       setState(() => _isLoading = false);
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error: $e')));
         Navigator.pop(context);
       }
     }
@@ -166,9 +164,9 @@ class _AIChatScreenState extends State<AIChatScreen> {
       _scrollToBottom();
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error: $e')));
       }
     } finally {
       setState(() => _isSending = false);
@@ -299,11 +297,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.smart_toy,
-            size: 80,
-            color: Colors.grey[400],
-          ),
+          Icon(Icons.smart_toy, size: 80, color: Colors.grey[400]),
           const SizedBox(height: 16),
           Text(
             'Start a conversation',
@@ -316,10 +310,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
           const SizedBox(height: 8),
           Text(
             'Ask me anything!',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[500],
-            ),
+            style: TextStyle(fontSize: 16, color: Colors.grey[500]),
           ),
         ],
       ),

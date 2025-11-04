@@ -234,10 +234,7 @@ class _DebugConsoleScreenState extends State<DebugConsoleScreen> {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       child: ExpansionTile(
-        title: Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         initiallyExpanded: true,
         children: [
           Padding(
@@ -266,9 +263,7 @@ class _DebugConsoleScreenState extends State<DebugConsoleScreen> {
                             flex: 3,
                             child: SelectableText(
                               '${entry.value}',
-                              style: const TextStyle(
-                                fontFamily: 'monospace',
-                              ),
+                              style: const TextStyle(fontFamily: 'monospace'),
                             ),
                           ),
                           IconButton(

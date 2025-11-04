@@ -97,8 +97,9 @@ class MessageService {
             sentDocs.documents.map((doc) => MessageModel.fromJson(doc.data)),
           );
           allMessages.addAll(
-            receivedDocs.documents
-                .map((doc) => MessageModel.fromJson(doc.data)),
+            receivedDocs.documents.map(
+              (doc) => MessageModel.fromJson(doc.data),
+            ),
           );
         } catch (e) {
           // Continue to show local messages even if online fetch fails
@@ -108,24 +109,28 @@ class MessageService {
 
       // Fetch local messages (pending sync)
       try {
-        final localMessages =
-            await _localDb.getConversationMessages(currentUserId, otherUserId);
+        final localMessages = await _localDb.getConversationMessages(
+          currentUserId,
+          otherUserId,
+        );
         for (final localMsg in localMessages) {
           // Convert to MessageModel with sync status
-          allMessages.add(MessageModel(
-            id: localMsg['id'] as String,
-            senderId: localMsg['sender_id'] as String,
-            recipientId: localMsg['recipient_id'] as String,
-            content: localMsg['content'] as String,
-            type: MessageType.values.firstWhere(
-              (t) => t.name == localMsg['type'],
-              orElse: () => MessageType.text,
+          allMessages.add(
+            MessageModel(
+              id: localMsg['id'] as String,
+              senderId: localMsg['sender_id'] as String,
+              recipientId: localMsg['recipient_id'] as String,
+              content: localMsg['content'] as String,
+              type: MessageType.values.firstWhere(
+                (t) => t.name == localMsg['type'],
+                orElse: () => MessageType.text,
+              ),
+              read: false,
+              createdAt: DateTime.parse(localMsg['created_at'] as String),
+              syncStatus: _parseSyncStatus(localMsg['sync_status'] as String?),
+              approvalStatus: localMsg['approval_status'] as String?,
             ),
-            read: false,
-            createdAt: DateTime.parse(localMsg['created_at'] as String),
-            syncStatus: _parseSyncStatus(localMsg['sync_status'] as String?),
-            approvalStatus: localMsg['approval_status'] as String?,
-          ));
+          );
         }
       } catch (e) {
         debugPrint('Failed to fetch local messages: $e');

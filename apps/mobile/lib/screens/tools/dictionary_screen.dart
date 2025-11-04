@@ -218,10 +218,10 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
             child: _isSearching
                 ? const Center(child: CircularProgressIndicator())
                 : _selectedWord == null
-                    ? _buildSearchHistory()
-                    : _definition != null
-                        ? _buildDefinitionView()
-                        : _buildNotFoundView(),
+                ? _buildSearchHistory()
+                : _definition != null
+                ? _buildDefinitionView()
+                : _buildNotFoundView(),
           ),
         ],
       ),
@@ -264,18 +264,20 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
             ),
           ),
         ),
-        ..._searchHistory.map((word) => Card(
-              margin: const EdgeInsets.only(bottom: 8),
-              child: ListTile(
-                leading: const Icon(Icons.history),
-                title: Text(word),
-                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                onTap: () {
-                  _searchController.text = word;
-                  _searchWord(word);
-                },
-              ),
-            )),
+        ..._searchHistory.map(
+          (word) => Card(
+            margin: const EdgeInsets.only(bottom: 8),
+            child: ListTile(
+              leading: const Icon(Icons.history),
+              title: Text(word),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              onTap: () {
+                _searchController.text = word;
+                _searchWord(word);
+              },
+            ),
+          ),
+        ),
         const SizedBox(height: 16),
         const Divider(),
         Padding(
@@ -357,10 +359,7 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
           // Definition
           const Text(
             'Definition',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Text(
@@ -373,10 +372,7 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
           if (_definition!['example'] != null) ...[
             const Text(
               'Example',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Container(
@@ -404,10 +400,7 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
               (_definition!['synonyms'] as List).isNotEmpty) ...[
             const Text(
               'Synonyms',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Wrap(

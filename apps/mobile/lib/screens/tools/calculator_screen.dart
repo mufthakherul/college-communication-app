@@ -177,10 +177,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
       appBar: AppBar(
         title: const Text('Calculator'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.history),
-            onPressed: _showHistory,
-          ),
+          IconButton(icon: const Icon(Icons.history), onPressed: _showHistory),
           IconButton(
             icon: Icon(_isScientific ? Icons.calculate : Icons.functions),
             onPressed: () => setState(() => _isScientific = !_isScientific),

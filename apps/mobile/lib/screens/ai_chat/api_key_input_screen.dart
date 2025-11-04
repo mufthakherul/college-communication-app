@@ -63,10 +63,7 @@ class _ApiKeyInputScreenState extends State<ApiKeyInputScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Gemini API Key'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('Gemini API Key'), centerTitle: true),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
@@ -75,18 +72,11 @@ class _ApiKeyInputScreenState extends State<ApiKeyInputScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Icon(
-                  Icons.smart_toy,
-                  size: 80,
-                  color: Colors.blue,
-                ),
+                const Icon(Icons.smart_toy, size: 80, color: Colors.blue),
                 const SizedBox(height: 24),
                 const Text(
                   'AI Chatbot Setup',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 16),
@@ -173,28 +163,19 @@ class _ApiKeyInputScreenState extends State<ApiKeyInputScreen> {
                 const SizedBox(height: 16),
                 const Text(
                   'How to get your API key:',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 12),
                 _buildInstructionStep(
                   '1',
                   'Visit Google AI Studio at ai.google.dev',
                 ),
-                _buildInstructionStep(
-                  '2',
-                  'Sign in with your Google account',
-                ),
+                _buildInstructionStep('2', 'Sign in with your Google account'),
                 _buildInstructionStep(
                   '3',
                   'Click "Get API Key" and create a new key',
                 ),
-                _buildInstructionStep(
-                  '4',
-                  'Copy the key and paste it above',
-                ),
+                _buildInstructionStep('4', 'Copy the key and paste it above'),
                 const SizedBox(height: 24),
                 Container(
                   padding: const EdgeInsets.all(16),

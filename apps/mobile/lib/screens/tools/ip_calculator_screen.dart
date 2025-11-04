@@ -10,11 +10,12 @@ class IPCalculatorScreen extends StatefulWidget {
 class _IPCalculatorScreenState extends State<IPCalculatorScreen>
     with SingleTickerProviderStateMixin {
   final TextEditingController _ipController = TextEditingController();
-  final TextEditingController _cidrController =
-      TextEditingController(text: '24');
-      
+  final TextEditingController _cidrController = TextEditingController(
+    text: '24',
+  );
+
   late TabController _tabController;
-  
+
   // IPv4 results
   String? _networkAddress;
   String? _broadcastAddress;
@@ -26,13 +27,13 @@ class _IPCalculatorScreenState extends State<IPCalculatorScreen>
   String? _ipType;
   String? _firstHost;
   String? _lastHost;
-  
+
   // IPv6 results
   String? _ipv6Expanded;
   String? _ipv6Compressed;
   String? _ipv6Network;
   String? _ipv6Type;
-  
+
   @override
   void initState() {
     super.initState();
@@ -121,20 +122,20 @@ class _IPCalculatorScreenState extends State<IPCalculatorScreen>
   }
 
   void _showError(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   void _calculateIPv6() {
     final ip = _ipController.text.trim();
     final prefix = int.tryParse(_cidrController.text.trim()) ?? 64;
-    
+
     if (!_isValidIPv6(ip)) {
       _showError('Invalid IPv6 address');
       return;
     }
-    
+
     setState(() {
       _ipv6Expanded = _expandIPv6(ip);
       _ipv6Compressed = _compressIPv6(_ipv6Expanded!);
@@ -142,30 +143,32 @@ class _IPCalculatorScreenState extends State<IPCalculatorScreen>
       _ipv6Type = _getIPv6Type(_ipv6Expanded!);
     });
   }
-  
+
   bool _isValidIPv6(String ip) {
     final ipv6Pattern = RegExp(
       r'^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:))$',
     );
     return ipv6Pattern.hasMatch(ip);
   }
-  
+
   String _expandIPv6(String ip) {
     // Expand :: notation
     if (ip.contains('::')) {
       final parts = ip.split('::');
       final left = parts[0].split(':').where((s) => s.isNotEmpty).toList();
-      final right = parts.length > 1 ? parts[1].split(':').where((s) => s.isNotEmpty).toList() : [];
+      final right = parts.length > 1
+          ? parts[1].split(':').where((s) => s.isNotEmpty).toList()
+          : [];
       final missing = 8 - left.length - right.length;
       final expanded = [...left, ...List.filled(missing, '0'), ...right];
       ip = expanded.join(':');
     }
-    
+
     // Pad each section to 4 digits
     final sections = ip.split(':');
     return sections.map((s) => s.padLeft(4, '0')).join(':');
   }
-  
+
   String _compressIPv6(String ip) {
     // Find longest run of zeros
     final sections = ip.split(':');
@@ -173,7 +176,7 @@ class _IPCalculatorScreenState extends State<IPCalculatorScreen>
     var maxZeroLen = 0;
     var currentZeroStart = -1;
     var currentZeroLen = 0;
-    
+
     for (var i = 0; i < sections.length; i++) {
       if (sections[i] == '0000') {
         if (currentZeroStart == -1) currentZeroStart = i;
@@ -187,30 +190,32 @@ class _IPCalculatorScreenState extends State<IPCalculatorScreen>
         currentZeroLen = 0;
       }
     }
-    
+
     if (currentZeroLen > maxZeroLen) {
       maxZeroStart = currentZeroStart;
       maxZeroLen = currentZeroLen;
     }
-    
+
     // Compress
     if (maxZeroLen > 1) {
       final before = sections.sublist(0, maxZeroStart);
       final after = sections.sublist(maxZeroStart + maxZeroLen);
       return '${before.join(':')}::${after.join(':')}';
     }
-    
+
     // Remove leading zeros
-    return sections.map((s) {
-      final trimmed = s.replaceFirst(RegExp(r'^0+'), '');
-      return trimmed.isEmpty ? '0' : trimmed;
-    }).join(':');
+    return sections
+        .map((s) {
+          final trimmed = s.replaceFirst(RegExp(r'^0+'), '');
+          return trimmed.isEmpty ? '0' : trimmed;
+        })
+        .join(':');
   }
-  
+
   String _calculateIPv6Network(String ip, int prefix) {
     final sections = ip.split(':');
     final bits = sections.map((s) => int.parse(s, radix: 16)).toList();
-    
+
     // Calculate network address
     for (var i = 0; i < 8; i++) {
       final bitsInSection = prefix - (i * 16);
@@ -221,10 +226,10 @@ class _IPCalculatorScreenState extends State<IPCalculatorScreen>
         bits[i] = bits[i] & mask;
       }
     }
-    
+
     return bits.map((b) => b.toRadixString(16).padLeft(4, '0')).join(':');
   }
-  
+
   String _getIPv6Type(String ip) {
     if (ip.startsWith('fe80:')) return 'Link-Local';
     if (ip.startsWith('fc00:') || ip.startsWith('fd00:')) return 'Unique Local';
@@ -249,117 +254,127 @@ class _IPCalculatorScreenState extends State<IPCalculatorScreen>
       ),
       body: TabBarView(
         controller: _tabController,
-        children: [
-          _buildIPv4Tab(),
-          _buildIPv6Tab(),
-        ],
+        children: [_buildIPv4Tab(), _buildIPv6Tab()],
       ),
     );
   }
-  
+
   Widget _buildIPv4Tab() {
     return SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Info Card
-            Card(
-              color: Colors.blue[50],
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    Icon(Icons.info_outline, color: Colors.blue[700]),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        'Calculate network details from IP address and CIDR notation',
-                        style: TextStyle(fontSize: 12, color: Colors.grey[700]),
-                      ),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Info Card
+          Card(
+            color: Colors.blue[50],
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Icon(Icons.info_outline, color: Colors.blue[700]),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Calculate network details from IP address and CIDR notation',
+                      style: TextStyle(fontSize: 12, color: Colors.grey[700]),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 24),
+          ),
+          const SizedBox(height: 24),
 
-            // Input Fields
-            TextField(
-              controller: _ipController,
-              decoration: const InputDecoration(
-                labelText: 'IP Address',
-                hintText: '192.168.1.1',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.computer),
+          // Input Fields
+          TextField(
+            controller: _ipController,
+            decoration: const InputDecoration(
+              labelText: 'IP Address',
+              hintText: '192.168.1.1',
+              border: OutlineInputBorder(),
+              prefixIcon: Icon(Icons.computer),
+            ),
+            keyboardType: TextInputType.number,
+          ),
+          const SizedBox(height: 16),
+          TextField(
+            controller: _cidrController,
+            decoration: const InputDecoration(
+              labelText: 'CIDR (0-32)',
+              hintText: '24',
+              border: OutlineInputBorder(),
+              prefixIcon: Icon(Icons.network_check),
+            ),
+            keyboardType: TextInputType.number,
+          ),
+          const SizedBox(height: 24),
+
+          // Calculate Button
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: _calculate,
+              icon: const Icon(Icons.calculate),
+              label: const Text('Calculate'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(16),
               ),
-              keyboardType: TextInputType.number,
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // Results
+          if (_networkAddress != null) ...[
+            const Text(
+              'Network Information',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
-            TextField(
-              controller: _cidrController,
-              decoration: const InputDecoration(
-                labelText: 'CIDR (0-32)',
-                hintText: '24',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.network_check),
-              ),
-              keyboardType: TextInputType.number,
+            _buildResultCard('Network Address', _networkAddress!, Icons.router),
+            _buildResultCard(
+              'Broadcast Address',
+              _broadcastAddress!,
+              Icons.broadcast_on_personal,
             ),
-            const SizedBox(height: 24),
-
-            // Calculate Button
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                onPressed: _calculate,
-                icon: const Icon(Icons.calculate),
-                label: const Text('Calculate'),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.all(16),
-                ),
-              ),
+            _buildResultCard('Subnet Mask', _subnetMask!, Icons.filter_list),
+            _buildResultCard(
+              'Wildcard Mask',
+              _wildcardMask!,
+              Icons.filter_none,
             ),
-            const SizedBox(height: 24),
-
-            // Results
-            if (_networkAddress != null) ...[
-              const Text(
-                'Network Information',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-              _buildResultCard(
-                  'Network Address', _networkAddress!, Icons.router),
-              _buildResultCard('Broadcast Address', _broadcastAddress!,
-                  Icons.broadcast_on_personal),
-              _buildResultCard('Subnet Mask', _subnetMask!, Icons.filter_list),
-              _buildResultCard(
-                  'Wildcard Mask', _wildcardMask!, Icons.filter_none),
-              const SizedBox(height: 16),
-              const Text(
-                'Host Information',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-              _buildResultCard(
-                  'First Usable Host', _firstHost!, Icons.play_arrow),
-              _buildResultCard('Last Usable Host', _lastHost!, Icons.stop),
-              _buildResultCard(
-                  'Total Hosts', _totalHosts!.toString(), Icons.devices),
-              _buildResultCard(
-                  'Usable Hosts', _usableHosts!.toString(), Icons.computer),
-              const SizedBox(height: 16),
-              const Text(
-                'IP Classification',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-              _buildResultCard('IP Class', _ipClass!, Icons.category),
-              _buildResultCard('IP Type', _ipType!, Icons.security),
-            ],
+            const SizedBox(height: 16),
+            const Text(
+              'Host Information',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            _buildResultCard(
+              'First Usable Host',
+              _firstHost!,
+              Icons.play_arrow,
+            ),
+            _buildResultCard('Last Usable Host', _lastHost!, Icons.stop),
+            _buildResultCard(
+              'Total Hosts',
+              _totalHosts!.toString(),
+              Icons.devices,
+            ),
+            _buildResultCard(
+              'Usable Hosts',
+              _usableHosts!.toString(),
+              Icons.computer,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'IP Classification',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            _buildResultCard('IP Class', _ipClass!, Icons.category),
+            _buildResultCard('IP Type', _ipType!, Icons.security),
           ],
-        ),
+        ],
       ),
     );
   }
@@ -375,10 +390,7 @@ class _IPCalculatorScreenState extends State<IPCalculatorScreen>
         title: Text(label),
         subtitle: Text(
           value,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         ),
       ),
     );
@@ -466,7 +478,7 @@ class _IPCalculatorScreenState extends State<IPCalculatorScreen>
       ),
     );
   }
-  
+
   Widget _buildIPv6Examples() {
     return Card(
       child: Padding(
@@ -488,7 +500,7 @@ class _IPCalculatorScreenState extends State<IPCalculatorScreen>
       ),
     );
   }
-  
+
   Widget _buildExampleRow(String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -502,10 +514,7 @@ class _IPCalculatorScreenState extends State<IPCalculatorScreen>
             ),
           ),
           Expanded(
-            child: Text(
-              value,
-              style: const TextStyle(fontFamily: 'Courier'),
-            ),
+            child: Text(value, style: const TextStyle(fontFamily: 'Courier')),
           ),
         ],
       ),

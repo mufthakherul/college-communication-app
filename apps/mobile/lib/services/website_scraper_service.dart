@@ -47,34 +47,37 @@ class WebsiteScraperService {
       // The website uses DataTables with server-side processing
       // Data is loaded via AJAX from the API endpoint
       // We need to make a POST request to the DataTables API
-      final response = await http.post(
-        Uri.parse(_apiUrl),
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (compatible; RPICommunicationApp/1.0)',
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Accept': 'application/json, text/javascript, */*; q=0.01',
-          'X-Requested-With': 'XMLHttpRequest',
-        },
-        body: {
-          'draw': '1',
-          'start': '0',
-          'length': '20', // Fetch 20 notices at a time
-          'domain_id': '',
-          'lang': 'bn',
-          'subdomain': '',
-          'content_type': 'notices',
-        },
-      ).timeout(
-        const Duration(seconds: 30),
-        onTimeout: () {
-          debugPrint('API request timed out, attempting HTML scraping...');
-          throw TimeoutException('API request timed out');
-        },
-      );
+      final response = await http
+          .post(
+            Uri.parse(_apiUrl),
+            headers: {
+              'User-Agent': 'Mozilla/5.0 (compatible; RPICommunicationApp/1.0)',
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Accept': 'application/json, text/javascript, */*; q=0.01',
+              'X-Requested-With': 'XMLHttpRequest',
+            },
+            body: {
+              'draw': '1',
+              'start': '0',
+              'length': '20', // Fetch 20 notices at a time
+              'domain_id': '',
+              'lang': 'bn',
+              'subdomain': '',
+              'content_type': 'notices',
+            },
+          )
+          .timeout(
+            const Duration(seconds: 30),
+            onTimeout: () {
+              debugPrint('API request timed out, attempting HTML scraping...');
+              throw TimeoutException('API request timed out');
+            },
+          );
 
       if (response.statusCode != 200) {
         debugPrint(
-            'API returned status ${response.statusCode}, falling back to HTML scraping');
+          'API returned status ${response.statusCode}, falling back to HTML scraping',
+        );
         return await _fetchNoticesFromHtml();
       }
 
@@ -113,7 +116,9 @@ class WebsiteScraperService {
         try {
           final prefs = await SharedPreferences.getInstance();
           await prefs.setInt(
-              _lastCheckKey, DateTime.now().millisecondsSinceEpoch);
+            _lastCheckKey,
+            DateTime.now().millisecondsSinceEpoch,
+          );
         } catch (prefsError) {
           debugPrint('Error updating last check time: $prefsError');
         }
@@ -131,12 +136,14 @@ class WebsiteScraperService {
     try {
       debugPrint('Fetching notices via HTML scraping...');
 
-      final response = await http.get(
-        Uri.parse(_websiteUrl),
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (compatible; RPICommunicationApp/1.0)',
-        },
-      ).timeout(const Duration(seconds: 30));
+      final response = await http
+          .get(
+            Uri.parse(_websiteUrl),
+            headers: {
+              'User-Agent': 'Mozilla/5.0 (compatible; RPICommunicationApp/1.0)',
+            },
+          )
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode != 200) {
         throw Exception('Failed to load website: ${response.statusCode}');
@@ -152,7 +159,9 @@ class WebsiteScraperService {
         // Update last check time
         final prefs = await SharedPreferences.getInstance();
         await prefs.setInt(
-            _lastCheckKey, DateTime.now().millisecondsSinceEpoch);
+          _lastCheckKey,
+          DateTime.now().millisecondsSinceEpoch,
+        );
 
         // Notify listeners
         _noticesController.add(notices);
@@ -205,14 +214,16 @@ class WebsiteScraperService {
             final id =
                 'notice_${title.hashCode}_${publishedDate.millisecondsSinceEpoch}';
 
-            notices.add(ScrapedNotice(
-              id: id,
-              title: title,
-              description: title,
-              url: _makeAbsoluteUrl(url),
-              publishedDate: publishedDate,
-              source: 'College Website',
-            ));
+            notices.add(
+              ScrapedNotice(
+                id: id,
+                title: title,
+                description: title,
+                url: _makeAbsoluteUrl(url),
+                publishedDate: publishedDate,
+                source: 'College Website',
+              ),
+            );
           }
         } catch (e) {
           debugPrint('Error parsing table row: $e');
@@ -269,14 +280,16 @@ class WebsiteScraperService {
               final id =
                   'notice_${title.hashCode}_${publishedDate.millisecondsSinceEpoch}';
 
-              notices.add(ScrapedNotice(
-                id: id,
-                title: title,
-                description: title, // Use title as description
-                url: _makeAbsoluteUrl(url),
-                publishedDate: publishedDate,
-                source: 'College Website',
-              ));
+              notices.add(
+                ScrapedNotice(
+                  id: id,
+                  title: title,
+                  description: title, // Use title as description
+                  url: _makeAbsoluteUrl(url),
+                  publishedDate: publishedDate,
+                  source: 'College Website',
+                ),
+              );
             } catch (e) {
               debugPrint('Error parsing notice row: $e');
               continue;
@@ -306,10 +319,12 @@ class WebsiteScraperService {
   }
 
   // Pre-compiled regex patterns for date parsing
-  static final _datePatternDDMMYYYY =
-      RegExp(r'(\d{1,2})[/-](\d{1,2})[/-](\d{4})');
-  static final _datePatternYYYYMMDD =
-      RegExp(r'(\d{4})[/-](\d{1,2})[/-](\d{1,2})');
+  static final _datePatternDDMMYYYY = RegExp(
+    r'(\d{1,2})[/-](\d{1,2})[/-](\d{4})',
+  );
+  static final _datePatternYYYYMMDD = RegExp(
+    r'(\d{4})[/-](\d{1,2})[/-](\d{1,2})',
+  );
 
   /// Parse date from text
   DateTime? _parseDate(String? dateText) {
@@ -402,7 +417,8 @@ class WebsiteScraperService {
       DateTime? expiresAt,
       required String source,
       String? sourceUrl,
-    }) createNoticeCallback,
+    })
+    createNoticeCallback,
   ) async {
     try {
       final notices = await getNotices(forceRefresh: true);
@@ -502,20 +518,20 @@ class ScrapedNotice {
   });
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'description': description,
-        'url': url,
-        'publishedDate': publishedDate.toIso8601String(),
-        'source': source,
-      };
+    'id': id,
+    'title': title,
+    'description': description,
+    'url': url,
+    'publishedDate': publishedDate.toIso8601String(),
+    'source': source,
+  };
 
   factory ScrapedNotice.fromJson(Map<String, dynamic> json) => ScrapedNotice(
-        id: json['id'] ?? '',
-        title: json['title'] ?? '',
-        description: json['description'] ?? '',
-        url: json['url'] ?? '',
-        publishedDate: DateTime.parse(json['publishedDate']),
-        source: json['source'] ?? 'Website',
-      );
+    id: json['id'] ?? '',
+    title: json['title'] ?? '',
+    description: json['description'] ?? '',
+    url: json['url'] ?? '',
+    publishedDate: DateTime.parse(json['publishedDate']),
+    source: json['source'] ?? 'Website',
+  );
 }

@@ -189,10 +189,7 @@ class OfflineMessageSyncService {
         syncedAt: DateTime.now().toIso8601String(),
       );
 
-      await _localDb.updateMessageApprovalStatus(
-        messageId,
-        'pending',
-      );
+      await _localDb.updateMessageApprovalStatus(messageId, 'pending');
 
       debugPrint(
         'Group message uploaded for approval: $messageId -> ${document.$id}',
@@ -206,12 +203,13 @@ class OfflineMessageSyncService {
   /// Check and update approval status for pending group messages
   Future<void> checkApprovalStatus() async {
     try {
-      final pendingApprovalMessages =
-          await _localDb.database.then((db) => db.query(
-                'local_messages',
-                where: 'approval_status = ?',
-                whereArgs: ['pending'],
-              ));
+      final pendingApprovalMessages = await _localDb.database.then(
+        (db) => db.query(
+          'local_messages',
+          where: 'approval_status = ?',
+          whereArgs: ['pending'],
+        ),
+      );
 
       for (final message in pendingApprovalMessages) {
         try {
@@ -239,10 +237,7 @@ class OfflineMessageSyncService {
                 approvedAt: pendingDoc.data['approved_at'] as String?,
               );
 
-              await _localDb.updateMessageSyncStatus(
-                messageId,
-                'synced',
-              );
+              await _localDb.updateMessageSyncStatus(messageId, 'synced');
 
               debugPrint('Message $messageId was approved');
             } else if (approvalStatus == 'rejected') {
@@ -253,10 +248,7 @@ class OfflineMessageSyncService {
                 approvedBy: pendingDoc.data['approved_by'] as String?,
               );
 
-              await _localDb.updateMessageSyncStatus(
-                messageId,
-                'rejected',
-              );
+              await _localDb.updateMessageSyncStatus(messageId, 'rejected');
 
               debugPrint('Message $messageId was rejected');
             }

@@ -84,11 +84,11 @@ class _PeriodicTableScreenState extends State<PeriodicTableScreen> {
                     physics: const NeverScrollableScrollPhysics(),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 18,
-                      mainAxisSpacing: 2,
-                      crossAxisSpacing: 2,
-                      childAspectRatio: 1,
-                    ),
+                          crossAxisCount: 18,
+                          mainAxisSpacing: 2,
+                          crossAxisSpacing: 2,
+                          childAspectRatio: 1,
+                        ),
                     itemCount: 18 * 7, // 7 periods, 18 groups
                     itemBuilder: (context, index) {
                       final period = (index ~/ 18) + 1;
@@ -208,10 +208,7 @@ class _PeriodicTableScreenState extends State<PeriodicTableScreen> {
                     ),
                     Text(
                       element.category,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
+                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                     ),
                   ],
                 ),
@@ -253,17 +250,11 @@ class _PeriodicTableScreenState extends State<PeriodicTableScreen> {
           children: [
             Text(
               label,
-              style: TextStyle(
-                fontSize: 10,
-                color: Colors.grey[600],
-              ),
+              style: TextStyle(fontSize: 10, color: Colors.grey[600]),
             ),
             Text(
               value,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             ),
           ],
         ),

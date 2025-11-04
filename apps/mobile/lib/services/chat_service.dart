@@ -19,8 +19,10 @@ class ChatService {
   String _generateInviteCode() {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     final random = Random.secure();
-    return List.generate(8, (index) => chars[random.nextInt(chars.length)])
-        .join();
+    return List.generate(
+      8,
+      (index) => chars[random.nextInt(chars.length)],
+    ).join();
   }
 
   /// Create P2P chat (works offline)
@@ -198,10 +200,7 @@ class ChatService {
         final docs = await _appwrite.databases.listDocuments(
           databaseId: AppwriteConfig.databaseId,
           collectionId: AppwriteConfig.studyGroupsCollectionId,
-          queries: [
-            Query.equal('invite_code', inviteCode),
-            Query.limit(1),
-          ],
+          queries: [Query.equal('invite_code', inviteCode), Query.limit(1)],
         );
 
         if (docs.documents.isEmpty) {
@@ -209,8 +208,9 @@ class ChatService {
         }
 
         final chat = docs.documents.first;
-        final participantIds =
-            List<String>.from(chat.data['participant_ids'] ?? []);
+        final participantIds = List<String>.from(
+          chat.data['participant_ids'] ?? [],
+        );
 
         if (!participantIds.contains(currentUserId)) {
           participantIds.add(currentUserId);

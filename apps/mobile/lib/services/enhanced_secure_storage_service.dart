@@ -64,7 +64,8 @@ class EnhancedSecureStorageService {
     try {
       final value = await _secureStorage.read(key: key);
       debugPrint(
-          'Secure storage: Read key $key ${value != null ? '(found)' : '(not found)'}');
+        'Secure storage: Read key $key ${value != null ? '(found)' : '(not found)'}',
+      );
       return value;
     } catch (e) {
       debugPrint('Secure storage read error for key $key: $e');
@@ -305,7 +306,8 @@ class EnhancedSecureStorageService {
       }
 
       debugPrint(
-          'Secure storage: Migration ${success ? 'successful' : 'failed'}');
+        'Secure storage: Migration ${success ? 'successful' : 'failed'}',
+      );
       return success;
     } catch (e) {
       debugPrint('Error during migration: $e');
