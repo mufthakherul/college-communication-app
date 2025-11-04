@@ -153,11 +153,18 @@ class MessageDeliveryService {
       _subscribeToTypingIndicators();
 
       if (kDebugMode) {
-        logger.info('Message delivery service initialized for user: $currentUserId', category: 'MessageDelivery');
+        logger.info(
+          'Message delivery service initialized for user: $currentUserId',
+          category: 'MessageDelivery',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error initializing message delivery service', category: 'MessageDelivery', error: e);
+        logger.error(
+          'Error initializing message delivery service',
+          category: 'MessageDelivery',
+          error: e,
+        );
       }
     }
   }
@@ -166,7 +173,10 @@ class MessageDeliveryService {
   void _subscribeToDeliveryUpdates() {
     // Stub implementation - would use Appwrite Realtime
     if (kDebugMode) {
-      logger.info('Subscribing to delivery updates (stub implementation)', category: 'MessageDelivery');
+      logger.info(
+        'Subscribing to delivery updates (stub implementation)',
+        category: 'MessageDelivery',
+      );
     }
   }
 
@@ -174,7 +184,10 @@ class MessageDeliveryService {
   void _subscribeToTypingIndicators() {
     // Stub implementation - would use Appwrite Realtime
     if (kDebugMode) {
-      logger.info('Subscribing to typing indicators (stub implementation)', category: 'MessageDelivery');
+      logger.info(
+        'Subscribing to typing indicators (stub implementation)',
+        category: 'MessageDelivery',
+      );
     }
   }
 
@@ -248,7 +261,11 @@ class MessageDeliveryService {
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error updating delivery status', category: 'MessageDelivery', error: e);
+        logger.error(
+          'Error updating delivery status',
+          category: 'MessageDelivery',
+          error: e,
+        );
       }
     }
   }
@@ -279,11 +296,18 @@ class MessageDeliveryService {
     try {
       // Stub implementation - would query Appwrite database
       if (kDebugMode) {
-        logger.info('Polling delivery status for ${pendingMessages.length} messages', category: 'MessageDelivery');
+        logger.info(
+          'Polling delivery status for ${pendingMessages.length} messages',
+          category: 'MessageDelivery',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error polling delivery status', category: 'MessageDelivery', error: e);
+        logger.error(
+          'Error polling delivery status',
+          category: 'MessageDelivery',
+          error: e,
+        );
       }
     }
   }
@@ -305,7 +329,11 @@ class MessageDeliveryService {
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error sending typing indicator', category: 'MessageDelivery', error: e);
+        logger.error(
+          'Error sending typing indicator',
+          category: 'MessageDelivery',
+          error: e,
+        );
       }
     }
   }
@@ -397,7 +425,10 @@ class MessageDeliveryService {
     });
 
     if (kDebugMode) {
-      logger.info('Cleared old tracking data older than $age', category: 'MessageDelivery');
+      logger.info(
+        'Cleared old tracking data older than $age',
+        category: 'MessageDelivery',
+      );
     }
   }
 

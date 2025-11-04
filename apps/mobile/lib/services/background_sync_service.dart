@@ -10,7 +10,10 @@ void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) async {
     try {
       if (kDebugMode) {
-        logger.info('Background sync task started: $task', category: 'BackgroundSync');
+        logger.info(
+          'Background sync task started: $task',
+          category: 'BackgroundSync',
+        );
       }
 
       switch (task) {
@@ -32,7 +35,11 @@ void callbackDispatcher() {
       return Future.value(true);
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Background task failed', category: 'BackgroundSync', error: e);
+        logger.error(
+          'Background task failed',
+          category: 'BackgroundSync',
+          error: e,
+        );
       }
       return Future.value(false);
     }
@@ -53,16 +60,26 @@ Future<void> _syncOfflineQueue() async {
       await offlineQueueService.processQueue();
 
       if (kDebugMode) {
-        logger.info('Background queue sync completed', category: 'BackgroundSync');
+        logger.info(
+          'Background queue sync completed',
+          category: 'BackgroundSync',
+        );
       }
     } else {
       if (kDebugMode) {
-        logger.info('Skipping background sync: offline', category: 'BackgroundSync');
+        logger.info(
+          'Skipping background sync: offline',
+          category: 'BackgroundSync',
+        );
       }
     }
   } catch (e) {
     if (kDebugMode) {
-      logger.error('Error in background sync', category: 'BackgroundSync', error: e);
+      logger.error(
+        'Error in background sync',
+        category: 'BackgroundSync',
+        error: e,
+      );
     }
   }
 }
@@ -73,11 +90,18 @@ Future<void> _cleanupCache() async {
     // Cache cleanup logic would go here
     // This is a placeholder for future implementation
     if (kDebugMode) {
-      logger.info('Background cache cleanup completed', category: 'BackgroundSync');
+      logger.info(
+        'Background cache cleanup completed',
+        category: 'BackgroundSync',
+      );
     }
   } catch (e) {
     if (kDebugMode) {
-      logger.error('Error in cache cleanup', category: 'BackgroundSync', error: e);
+      logger.error(
+        'Error in cache cleanup',
+        category: 'BackgroundSync',
+        error: e,
+      );
     }
   }
 }
@@ -94,11 +118,18 @@ Future<void> _syncWebsiteNotices() async {
     // which is complex in a background task context
 
     if (kDebugMode) {
-      logger.info('Background website notices sync completed', category: 'BackgroundSync');
+      logger.info(
+        'Background website notices sync completed',
+        category: 'BackgroundSync',
+      );
     }
   } catch (e) {
     if (kDebugMode) {
-      logger.error('Error syncing website notices', category: 'BackgroundSync', error: e);
+      logger.error(
+        'Error syncing website notices',
+        category: 'BackgroundSync',
+        error: e,
+      );
     }
   }
 }
@@ -125,11 +156,18 @@ class BackgroundSyncService {
       _isInitialized = true;
 
       if (kDebugMode) {
-        logger.info('Background sync service initialized', category: 'BackgroundSync');
+        logger.info(
+          'Background sync service initialized',
+          category: 'BackgroundSync',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error initializing background sync', category: 'BackgroundSync', error: e);
+        logger.error(
+          'Error initializing background sync',
+          category: 'BackgroundSync',
+          error: e,
+        );
       }
     }
   }
@@ -162,7 +200,11 @@ class BackgroundSyncService {
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error registering offline queue sync', category: 'BackgroundSync', error: e);
+        logger.error(
+          'Error registering offline queue sync',
+          category: 'BackgroundSync',
+          error: e,
+        );
       }
     }
   }
@@ -188,11 +230,18 @@ class BackgroundSyncService {
       );
 
       if (kDebugMode) {
-        logger.info('Registered periodic cache cleanup: ${frequency.inHours}h', category: 'BackgroundSync');
+        logger.info(
+          'Registered periodic cache cleanup: ${frequency.inHours}h',
+          category: 'BackgroundSync',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error registering cache cleanup', category: 'BackgroundSync', error: e);
+        logger.error(
+          'Error registering cache cleanup',
+          category: 'BackgroundSync',
+          error: e,
+        );
       }
     }
   }
@@ -212,11 +261,18 @@ class BackgroundSyncService {
       );
 
       if (kDebugMode) {
-        logger.info('Registered one-time sync with delay: ${delay.inSeconds}s', category: 'BackgroundSync');
+        logger.info(
+          'Registered one-time sync with delay: ${delay.inSeconds}s',
+          category: 'BackgroundSync',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error registering one-time sync', category: 'BackgroundSync', error: e);
+        logger.error(
+          'Error registering one-time sync',
+          category: 'BackgroundSync',
+          error: e,
+        );
       }
     }
   }
@@ -229,11 +285,18 @@ class BackgroundSyncService {
       await Workmanager().cancelAll();
 
       if (kDebugMode) {
-        logger.info('Cancelled all background tasks', category: 'BackgroundSync');
+        logger.info(
+          'Cancelled all background tasks',
+          category: 'BackgroundSync',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error cancelling tasks', category: 'BackgroundSync', error: e);
+        logger.error(
+          'Error cancelling tasks',
+          category: 'BackgroundSync',
+          error: e,
+        );
       }
     }
   }
@@ -266,7 +329,11 @@ class BackgroundSyncService {
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error registering website notices sync', category: 'BackgroundSync', error: e);
+        logger.error(
+          'Error registering website notices sync',
+          category: 'BackgroundSync',
+          error: e,
+        );
       }
     }
   }
@@ -283,7 +350,11 @@ class BackgroundSyncService {
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error cancelling task', category: 'BackgroundSync', error: e);
+        logger.error(
+          'Error cancelling task',
+          category: 'BackgroundSync',
+          error: e,
+        );
       }
     }
   }

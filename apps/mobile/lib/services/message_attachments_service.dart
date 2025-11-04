@@ -51,7 +51,10 @@ class MessageAttachmentsService {
       final filePath = '$userId/$uniqueFileName';
 
       if (kDebugMode) {
-        logger.info('Uploading attachment: $fileName (${_formatFileSize(fileSize)})', category: 'MessageAttachments');
+        logger.info(
+          'Uploading attachment: $fileName (${_formatFileSize(fileSize)})',
+          category: 'MessageAttachments',
+        );
       }
 
       // Upload to Appwrite storage
@@ -73,7 +76,10 @@ class MessageAttachmentsService {
       }
 
       if (kDebugMode) {
-        logger.info('Upload successful: $fileUrl', category: 'MessageAttachments');
+        logger.info(
+          'Upload successful: $fileUrl',
+          category: 'MessageAttachments',
+        );
       }
 
       return {
@@ -87,7 +93,11 @@ class MessageAttachmentsService {
       };
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error uploading attachment', category: 'MessageAttachments', error: e);
+        logger.error(
+          'Error uploading attachment',
+          category: 'MessageAttachments',
+          error: e,
+        );
       }
       rethrow;
     }
@@ -99,11 +109,18 @@ class MessageAttachmentsService {
       await _appwrite.storage.deleteFile(bucketId: _bucketId, fileId: fileId);
 
       if (kDebugMode) {
-        logger.info('Deleted attachment: $fileId', category: 'MessageAttachments');
+        logger.info(
+          'Deleted attachment: $fileId',
+          category: 'MessageAttachments',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error deleting attachment', category: 'MessageAttachments', error: e);
+        logger.error(
+          'Error deleting attachment',
+          category: 'MessageAttachments',
+          error: e,
+        );
       }
       rethrow;
     }
@@ -118,7 +135,10 @@ class MessageAttachmentsService {
   }) async {
     try {
       if (kDebugMode) {
-        logger.info('Downloading attachment: $fileName', category: 'MessageAttachments');
+        logger.info(
+          'Downloading attachment: $fileName',
+          category: 'MessageAttachments',
+        );
       }
 
       // Download file from Appwrite
@@ -132,13 +152,20 @@ class MessageAttachmentsService {
       await file.writeAsBytes(bytes);
 
       if (kDebugMode) {
-        logger.info('Downloaded to: ${file.path}', category: 'MessageAttachments');
+        logger.info(
+          'Downloaded to: ${file.path}',
+          category: 'MessageAttachments',
+        );
       }
 
       return file;
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error downloading attachment', category: 'MessageAttachments', error: e);
+        logger.error(
+          'Error downloading attachment',
+          category: 'MessageAttachments',
+          error: e,
+        );
       }
       rethrow;
     }
