@@ -11,6 +11,15 @@ void main() {
       expect(InputValidator.isValidDocumentId('msg-456'), isTrue);
       expect(InputValidator.isValidDocumentId('a1b2c3d4e5f6'), isTrue);
       expect(InputValidator.isValidDocumentId('123456789'), isTrue);
+      
+      // Test longer IDs that Appwrite can generate
+      expect(InputValidator.isValidDocumentId('a' * 37), isTrue); // 37 chars - should pass now
+      expect(InputValidator.isValidDocumentId('a' * 50), isTrue); // 50 chars
+      expect(InputValidator.isValidDocumentId('a' * 100), isTrue); // 100 chars
+      expect(InputValidator.isValidDocumentId('user_1234567890_abcdefghijklmnopqrstuvwxyz'), isTrue);
+      
+      // Test typical Appwrite ID.unique() format (longer IDs)
+      expect(InputValidator.isValidDocumentId('5f8a7b2c9d1e2f3g4h5i6j7k8l9m0n1o2p3q'), isTrue);
     });
 
     test('should reject invalid document IDs', () {
@@ -20,7 +29,7 @@ void main() {
       expect(InputValidator.isValidDocumentId('id with spaces'), isFalse);
       expect(InputValidator.isValidDocumentId('id@special'), isFalse);
       expect(InputValidator.isValidDocumentId('id#hash'), isFalse);
-      expect(InputValidator.isValidDocumentId('a' * 37), isFalse); // Too long
+      expect(InputValidator.isValidDocumentId('a' * 256), isFalse); // Too long (>255)
     });
   });
 
