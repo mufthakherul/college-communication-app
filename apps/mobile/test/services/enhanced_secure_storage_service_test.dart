@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
-  
+
   // Mock the FlutterSecureStorage by using a fake implementation
   FlutterSecureStorage.setMockInitialValues({});
 
