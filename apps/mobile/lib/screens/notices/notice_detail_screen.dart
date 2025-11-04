@@ -5,6 +5,7 @@ import 'package:campus_mesh/services/notice_service.dart';
 import 'package:campus_mesh/services/qr_data_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/screens/qr/qr_share_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NoticeDetailScreen extends StatelessWidget {
   final String noticeId;
@@ -181,6 +182,43 @@ class NoticeDetailScreen extends StatelessWidget {
                         title: const Text('Target Audience'),
                         subtitle: Text(notice.targetAudience),
                       ),
+                      // Show website link and developer profile for scraped notices
+                      if (notice.source == NoticeSource.scraped) ...[
+                        const Divider(),
+                        ListTile(
+                          leading: const Icon(Icons.source),
+                          title: const Text('Source'),
+                          subtitle: const Text('College Website'),
+                          trailing: const Icon(Icons.verified, color: Colors.blue),
+                        ),
+                        if (notice.sourceUrl != null &&
+                            notice.sourceUrl!.isNotEmpty) ...[
+                          ListTile(
+                            leading: const Icon(Icons.link),
+                            title: const Text('View on Website'),
+                            subtitle: Text(
+                              notice.sourceUrl!,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            trailing: const Icon(Icons.open_in_new),
+                            onTap: () => _launchURL(context, notice.sourceUrl!),
+                          ),
+                        ],
+                        const Divider(),
+                        ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.blue.shade100,
+                            child: const Icon(Icons.person, color: Colors.blue),
+                          ),
+                          title: const Text('Developed by'),
+                          subtitle: const Text('Mufthakherul'),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.info_outline),
+                            onPressed: () => _showDeveloperProfile(context),
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),
@@ -307,5 +345,154 @@ class NoticeDetailScreen extends StatelessWidget {
         MaterialPageRoute(builder: (context) => QRShareScreen(qrData: qrData)),
       );
     }
+  }
+
+  Future<void> _launchURL(BuildContext context, String url) async {
+    try {
+      final uri = Uri.parse(url);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Could not open URL: $url'),
+              action: SnackBarAction(
+                label: 'Copy',
+                onPressed: () {
+                  // URL copying would require clipboard package
+                },
+              ),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error opening link: ${e.toString()}')),
+        );
+      }
+    }
+  }
+
+  void _showDeveloperProfile(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Row(
+          children: [
+            CircleAvatar(
+              backgroundColor: Colors.blue,
+              child: Icon(Icons.person, color: Colors.white),
+            ),
+            SizedBox(width: 12),
+            Text('Developer Profile'),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Mufthakherul',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'Developer of RPI Communication App',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Divider(),
+            const SizedBox(height: 8),
+            _buildInfoRow(
+              Icons.school,
+              'College Website',
+              'rangpur.polytech.gov.bd',
+            ),
+            const SizedBox(height: 12),
+            _buildInfoRow(
+              Icons.info_outline,
+              'Notice Scraper',
+              'Automatically fetches notices from the college website',
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.blue.shade50,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.verified, color: Colors.blue, size: 20),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'This notice was automatically scraped from the official college website',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Close'),
+          ),
+          FilledButton.icon(
+            onPressed: () {
+              Navigator.of(context).pop();
+              _launchURL(
+                context,
+                'https://rangpur.polytech.gov.bd/site/view/notices',
+              );
+            },
+            icon: const Icon(Icons.open_in_new, size: 18),
+            label: const Text('Visit Website'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(IconData icon, String label, String value) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, size: 20, color: Colors.grey.shade600),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                value,
+                style: const TextStyle(fontSize: 14),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }

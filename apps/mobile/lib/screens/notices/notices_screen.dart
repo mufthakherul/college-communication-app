@@ -6,6 +6,7 @@ import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/services/website_scraper_service.dart';
 import 'package:campus_mesh/screens/notices/notice_detail_screen.dart';
 import 'package:campus_mesh/screens/notices/create_notice_screen.dart';
+import 'package:campus_mesh/screens/notices/website_notices_fallback_screen.dart';
 
 class NoticesScreen extends StatefulWidget {
   const NoticesScreen({super.key});
@@ -183,7 +184,7 @@ class _NoticesScreenState extends State<NoticesScreen>
               )
             : const Text('Notices'),
         actions: [
-          if (_tabController.index == 1 && !_isSearching)
+          if (_tabController.index == 1 && !_isSearching) ...[
             IconButton(
               icon: _isSyncing
                   ? const SizedBox(
@@ -195,6 +196,19 @@ class _NoticesScreenState extends State<NoticesScreen>
               tooltip: 'Sync from college website',
               onPressed: _isSyncing ? null : _syncWebsiteNotices,
             ),
+            IconButton(
+              icon: const Icon(Icons.public),
+              tooltip: 'View website notices',
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        const WebsiteNoticesFallbackScreen(),
+                  ),
+                );
+              },
+            ),
+          ],
           IconButton(
             icon: Icon(_isSearching ? Icons.close : Icons.search),
             tooltip: _isSearching ? 'Close search' : 'Search notices',
@@ -297,6 +311,58 @@ class _NoticesScreenState extends State<NoticesScreen>
                         'Pull down to refresh',
                         style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
+                      // Add fallback button for website notices
+                      if (source == NoticeSource.scraped) ...[
+                        const SizedBox(height: 24),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const WebsiteNoticesFallbackScreen(),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.public),
+                          label: const Text('View College Website'),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          'Or try syncing notices from the website',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey.shade600,
+                          ),
+                        ),
+                      ],
+                      // Add create notice button for admin tab
+                      if (source == NoticeSource.admin && _canCreateNotice) ...[
+                        const SizedBox(height: 24),
+                        ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const CreateNoticeScreen(),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.add),
+                          label: const Text('Create First Notice'),
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
+                            ),
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),
@@ -462,6 +528,22 @@ class _NoticesScreenState extends State<NoticesScreen>
                   icon: const Icon(Icons.refresh),
                   label: const Text('Retry'),
                 ),
+                // Add fallback option for website notices when on scraped tab
+                if (_tabController.index == 1) ...[
+                  const SizedBox(height: 12),
+                  OutlinedButton.icon(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const WebsiteNoticesFallbackScreen(),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.public),
+                    label: const Text('View Website Directly'),
+                  ),
+                ],
                 const SizedBox(height: 8),
                 TextButton(
                   onPressed: () {
