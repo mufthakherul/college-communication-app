@@ -135,7 +135,7 @@ class MessageReactionsService {
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('adding reaction', category: 'MessageReactions', error: e);
+        logger.error('Error adding reaction', category: 'MessageReactions', error: e);
       }
       rethrow;
     }
@@ -155,7 +155,7 @@ class MessageReactionsService {
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('removing reaction', category: 'MessageReactions', error: e);
+        logger.error('Error removing reaction', category: 'MessageReactions', error: e);
       }
       rethrow;
     }
@@ -177,7 +177,7 @@ class MessageReactionsService {
       return {};
     } catch (e) {
       if (kDebugMode) {
-        logger.error('getting reaction summary', category: 'MessageReactions', error: e);
+        logger.error('Error getting reaction summary', category: 'MessageReactions', error: e);
       }
       return {};
     }
@@ -196,7 +196,7 @@ class MessageReactionsService {
       return null;
     } catch (e) {
       if (kDebugMode) {
-        logger.error('getting user reaction', category: 'MessageReactions', error: e);
+        logger.error('Error getting user reaction', category: 'MessageReactions', error: e);
       }
       return null;
     }
@@ -212,7 +212,7 @@ class MessageReactionsService {
       return [];
     } catch (e) {
       if (kDebugMode) {
-        logger.error('getting reactions with users', category: 'MessageReactions', error: e);
+        logger.error('Error getting reactions with users', category: 'MessageReactions', error: e);
       }
       return [];
     }
@@ -228,7 +228,7 @@ class MessageReactionsService {
       return 0;
     } catch (e) {
       if (kDebugMode) {
-        logger.error('getting reaction count', category: 'MessageReactions', error: e);
+        logger.error('Error getting reaction count', category: 'MessageReactions', error: e);
       }
       return 0;
     }

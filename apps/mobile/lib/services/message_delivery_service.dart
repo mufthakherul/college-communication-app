@@ -157,7 +157,7 @@ class MessageDeliveryService {
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('initializing message delivery service', category: 'MessageDelivery', error: e);
+        logger.error('Error initializing message delivery service', category: 'MessageDelivery', error: e);
       }
     }
   }
@@ -248,7 +248,7 @@ class MessageDeliveryService {
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('updating delivery status', category: 'MessageDelivery', error: e);
+        logger.error('Error updating delivery status', category: 'MessageDelivery', error: e);
       }
     }
   }
@@ -283,7 +283,7 @@ class MessageDeliveryService {
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('polling delivery status', category: 'MessageDelivery', error: e);
+        logger.error('Error polling delivery status', category: 'MessageDelivery', error: e);
       }
     }
   }
@@ -305,7 +305,7 @@ class MessageDeliveryService {
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('sending typing indicator', category: 'MessageDelivery', error: e);
+        logger.error('Error sending typing indicator', category: 'MessageDelivery', error: e);
       }
     }
   }
