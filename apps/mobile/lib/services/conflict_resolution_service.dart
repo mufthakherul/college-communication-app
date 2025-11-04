@@ -148,7 +148,7 @@ class ConflictResolutionService {
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.info('Versioned update failed: $e', category: 'ConflictResolution');
+        logger.error('Error in versioned update', category: 'ConflictResolution', error: e);
       }
       rethrow;
     }
