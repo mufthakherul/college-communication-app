@@ -126,8 +126,8 @@ struct Node* createNode(int data) {
             (s) =>
                 s.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
                 s.description.toLowerCase().contains(
-                  _searchQuery.toLowerCase(),
-                ) ||
+                      _searchQuery.toLowerCase(),
+                    ) ||
                 s.code.toLowerCase().contains(_searchQuery.toLowerCase()) ||
                 s.tags.any(
                   (tag) =>
@@ -421,20 +421,20 @@ class CodeSnippet {
   });
 
   Map<String, dynamic> toJson() => {
-    'title': title,
-    'language': language,
-    'code': code,
-    'description': description,
-    'tags': tags,
-  };
+        'title': title,
+        'language': language,
+        'code': code,
+        'description': description,
+        'tags': tags,
+      };
 
   factory CodeSnippet.fromJson(Map<String, dynamic> json) => CodeSnippet(
-    title: json['title'],
-    language: json['language'],
-    code: json['code'],
-    description: json['description'],
-    tags: List<String>.from(json['tags'] ?? []),
-  );
+        title: json['title'],
+        language: json['language'],
+        code: json['code'],
+        description: json['description'],
+        tags: List<String>.from(json['tags'] ?? []),
+      );
 }
 
 class _SnippetDialog extends StatefulWidget {

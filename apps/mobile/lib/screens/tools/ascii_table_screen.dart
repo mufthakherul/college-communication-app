@@ -15,15 +15,15 @@ class _ASCIITableScreenState extends State<ASCIITableScreen> {
   bool _showExtended = false;
 
   List<ASCIIChar> get _asciiChars => List.generate(
-    _showExtended ? 256 : 128,
-    (index) => ASCIIChar(
-      decimal: index,
-      hex: index.toRadixString(16).toUpperCase(),
-      binary: index.toRadixString(2).padLeft(8, '0'),
-      char: _getDisplayChar(index),
-      description: _getDescription(index),
-    ),
-  );
+        _showExtended ? 256 : 128,
+        (index) => ASCIIChar(
+          decimal: index,
+          hex: index.toRadixString(16).toUpperCase(),
+          binary: index.toRadixString(2).padLeft(8, '0'),
+          char: _getDisplayChar(index),
+          description: _getDescription(index),
+        ),
+      );
 
   static String _getDisplayChar(int code) {
     if (code < 32) return ''; // Control characters

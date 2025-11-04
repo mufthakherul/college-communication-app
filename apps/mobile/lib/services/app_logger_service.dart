@@ -26,24 +26,24 @@ class LogEntry {
   });
 
   Map<String, dynamic> toJson() => {
-    'level': level.name,
-    'message': message,
-    'timestamp': timestamp.toIso8601String(),
-    'category': category,
-    'metadata': metadata,
-    'stackTrace': stackTrace?.toString(),
-  };
+        'level': level.name,
+        'message': message,
+        'timestamp': timestamp.toIso8601String(),
+        'category': category,
+        'metadata': metadata,
+        'stackTrace': stackTrace?.toString(),
+      };
 
   factory LogEntry.fromJson(Map<String, dynamic> json) => LogEntry(
-    level: LogLevel.values.byName(json['level']),
-    message: json['message'],
-    timestamp: DateTime.parse(json['timestamp']),
-    category: json['category'],
-    metadata: json['metadata'],
-    stackTrace: json['stackTrace'] != null
-        ? StackTrace.fromString(json['stackTrace'])
-        : null,
-  );
+        level: LogLevel.values.byName(json['level']),
+        message: json['message'],
+        timestamp: DateTime.parse(json['timestamp']),
+        category: json['category'],
+        metadata: json['metadata'],
+        stackTrace: json['stackTrace'] != null
+            ? StackTrace.fromString(json['stackTrace'])
+            : null,
+      );
 
   @override
   String toString() {
@@ -333,20 +333,16 @@ class AppLoggerService {
 
     // Count by level
     for (final level in LogLevel.values) {
-      stats['byLevel'][level.name] = _logs
-          .where((log) => log.level == level)
-          .length;
+      stats['byLevel'][level.name] =
+          _logs.where((log) => log.level == level).length;
     }
 
     // Count by category
-    final categories = _logs
-        .map((log) => log.category)
-        .whereType<String>()
-        .toSet();
+    final categories =
+        _logs.map((log) => log.category).whereType<String>().toSet();
     for (final category in categories) {
-      stats['byCategory'][category] = _logs
-          .where((log) => log.category == category)
-          .length;
+      stats['byCategory'][category] =
+          _logs.where((log) => log.category == category).length;
     }
 
     if (_logs.isNotEmpty) {
