@@ -87,7 +87,7 @@ class MessageAttachmentsService {
       };
     } catch (e) {
       if (kDebugMode) {
-        logger.error('uploading attachment', category: 'MessageAttachments', error: e);
+        logger.error('Error uploading attachment', category: 'MessageAttachments', error: e);
       }
       rethrow;
     }
@@ -103,7 +103,7 @@ class MessageAttachmentsService {
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('deleting attachment', category: 'MessageAttachments', error: e);
+        logger.error('Error deleting attachment', category: 'MessageAttachments', error: e);
       }
       rethrow;
     }
@@ -138,7 +138,7 @@ class MessageAttachmentsService {
       return file;
     } catch (e) {
       if (kDebugMode) {
-        logger.error('downloading attachment', category: 'MessageAttachments', error: e);
+        logger.error('Error downloading attachment', category: 'MessageAttachments', error: e);
       }
       rethrow;
     }

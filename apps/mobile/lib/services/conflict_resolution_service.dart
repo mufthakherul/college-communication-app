@@ -74,7 +74,7 @@ class ConflictResolutionService {
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('in conflict detection update', category: 'ConflictResolution', error: e);
+        logger.error('Error in conflict detection update', category: 'ConflictResolution', error: e);
       }
       rethrow;
     }
@@ -107,7 +107,7 @@ class ConflictResolutionService {
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('resolving conflict', category: 'ConflictResolution', error: e);
+        logger.error('Error resolving conflict', category: 'ConflictResolution', error: e);
       }
       rethrow;
     }
