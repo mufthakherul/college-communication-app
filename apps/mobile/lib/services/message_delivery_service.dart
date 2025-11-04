@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:campus_mesh/services/app_logger_service.dart';
 
 /// Message delivery status
 enum MessageDeliveryStatus {
@@ -152,11 +153,18 @@ class MessageDeliveryService {
       _subscribeToTypingIndicators();
 
       if (kDebugMode) {
-        print('Message delivery service initialized for user: $currentUserId');
+        logger.info(
+          'Message delivery service initialized for user: $currentUserId',
+          category: 'MessageDelivery',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error initializing message delivery service: $e');
+        logger.error(
+          'Error initializing message delivery service',
+          category: 'MessageDelivery',
+          error: e,
+        );
       }
     }
   }
@@ -165,7 +173,10 @@ class MessageDeliveryService {
   void _subscribeToDeliveryUpdates() {
     // Stub implementation - would use Appwrite Realtime
     if (kDebugMode) {
-      print('Subscribing to delivery updates (stub implementation)');
+      logger.info(
+        'Subscribing to delivery updates (stub implementation)',
+        category: 'MessageDelivery',
+      );
     }
   }
 
@@ -173,7 +184,10 @@ class MessageDeliveryService {
   void _subscribeToTypingIndicators() {
     // Stub implementation - would use Appwrite Realtime
     if (kDebugMode) {
-      print('Subscribing to typing indicators (stub implementation)');
+      logger.info(
+        'Subscribing to typing indicators (stub implementation)',
+        category: 'MessageDelivery',
+      );
     }
   }
 
@@ -240,13 +254,19 @@ class MessageDeliveryService {
     try {
       // Stub implementation - would update Appwrite database
       if (kDebugMode) {
-        print(
-          'Updated delivery status for ${tracking.messageId}: ${tracking.status.name}',
+        logger.debug(
+          'Updated delivery status for ${tracking.messageId}: '
+          '${tracking.status.name}',
+          category: 'MessageDelivery',
         );
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error updating delivery status: $e');
+        logger.error(
+          'Error updating delivery status',
+          category: 'MessageDelivery',
+          error: e,
+        );
       }
     }
   }
@@ -277,11 +297,18 @@ class MessageDeliveryService {
     try {
       // Stub implementation - would query Appwrite database
       if (kDebugMode) {
-        print('Polling delivery status for ${pendingMessages.length} messages');
+        logger.info(
+          'Polling delivery status for ${pendingMessages.length} messages',
+          category: 'MessageDelivery',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error polling delivery status: $e');
+        logger.error(
+          'Error polling delivery status',
+          category: 'MessageDelivery',
+          error: e,
+        );
       }
     }
   }
@@ -296,13 +323,19 @@ class MessageDeliveryService {
     try {
       // Stub implementation - would update Appwrite database
       if (kDebugMode) {
-        print(
-          'Sent typing indicator for conversation $conversationId: ${status.name}',
+        logger.debug(
+          'Sent typing indicator for conversation $conversationId: '
+          '${status.name}',
+          category: 'MessageDelivery',
         );
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error sending typing indicator: $e');
+        logger.error(
+          'Error sending typing indicator',
+          category: 'MessageDelivery',
+          error: e,
+        );
       }
     }
   }
@@ -394,7 +427,10 @@ class MessageDeliveryService {
     });
 
     if (kDebugMode) {
-      print('Cleared old tracking data older than $age');
+      logger.info(
+        'Cleared old tracking data older than $age',
+        category: 'MessageDelivery',
+      );
     }
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:campus_mesh/services/app_logger_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
 
 /// Available reaction emojis for messages
@@ -130,11 +131,18 @@ class MessageReactionsService {
 
       // Stub implementation - would require custom Appwrite collection for reactions
       if (kDebugMode) {
-        print('Added reaction ${reaction.emoji} to message $messageId');
+        logger.info(
+          'Added reaction ${reaction.emoji} to message $messageId',
+          category: 'MessageReactions',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error adding reaction: $e');
+        logger.error(
+          'Error adding reaction',
+          category: 'MessageReactions',
+          error: e,
+        );
       }
       rethrow;
     }
@@ -150,11 +158,18 @@ class MessageReactionsService {
 
       // Stub implementation
       if (kDebugMode) {
-        print('Removed reaction from message $messageId');
+        logger.info(
+          'Removed reaction from message $messageId',
+          category: 'MessageReactions',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error removing reaction: $e');
+        logger.error(
+          'Error removing reaction',
+          category: 'MessageReactions',
+          error: e,
+        );
       }
       rethrow;
     }
@@ -171,12 +186,19 @@ class MessageReactionsService {
     try {
       // Stub implementation
       if (kDebugMode) {
-        print('Getting reaction summary for message $messageId');
+        logger.info(
+          'Getting reaction summary for message $messageId',
+          category: 'MessageReactions',
+        );
       }
       return {};
     } catch (e) {
       if (kDebugMode) {
-        print('Error getting reaction summary: $e');
+        logger.error(
+          'Error getting reaction summary',
+          category: 'MessageReactions',
+          error: e,
+        );
       }
       return {};
     }
@@ -190,12 +212,19 @@ class MessageReactionsService {
 
       // Stub implementation
       if (kDebugMode) {
-        print('Getting user reaction for message $messageId');
+        logger.info(
+          'Getting user reaction for message $messageId',
+          category: 'MessageReactions',
+        );
       }
       return null;
     } catch (e) {
       if (kDebugMode) {
-        print('Error getting user reaction: $e');
+        logger.error(
+          'Error getting user reaction',
+          category: 'MessageReactions',
+          error: e,
+        );
       }
       return null;
     }
@@ -206,12 +235,19 @@ class MessageReactionsService {
     try {
       // Stub implementation
       if (kDebugMode) {
-        print('Getting reactions with users for message $messageId');
+        logger.info(
+          'Getting reactions with users for message $messageId',
+          category: 'MessageReactions',
+        );
       }
       return [];
     } catch (e) {
       if (kDebugMode) {
-        print('Error getting reactions with users: $e');
+        logger.error(
+          'Error getting reactions with users',
+          category: 'MessageReactions',
+          error: e,
+        );
       }
       return [];
     }
@@ -222,12 +258,19 @@ class MessageReactionsService {
     try {
       // Stub implementation
       if (kDebugMode) {
-        print('Getting reaction count for message $messageId');
+        logger.info(
+          'Getting reaction count for message $messageId',
+          category: 'MessageReactions',
+        );
       }
       return 0;
     } catch (e) {
       if (kDebugMode) {
-        print('Error getting reaction count: $e');
+        logger.error(
+          'Error getting reaction count',
+          category: 'MessageReactions',
+          error: e,
+        );
       }
       return 0;
     }

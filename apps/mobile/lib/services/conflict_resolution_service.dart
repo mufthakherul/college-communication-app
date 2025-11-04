@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:campus_mesh/services/app_logger_service.dart';
 
 /// Conflict resolution strategy
 enum ConflictStrategy {
@@ -50,7 +51,10 @@ class ConflictResolutionService {
   void setDefaultStrategy(ConflictStrategy strategy) {
     _defaultStrategy = strategy;
     if (kDebugMode) {
-      print('Default conflict strategy set to: ${strategy.name}');
+      logger.info(
+        'Default conflict strategy set to: ${strategy.name}',
+        category: 'ConflictResolution',
+      );
     }
   }
 
@@ -65,14 +69,23 @@ class ConflictResolutionService {
     try {
       // Stub implementation - would implement with Appwrite
       if (kDebugMode) {
-        print(
-          'Updating document with conflict detection (stub): $collection/$documentId',
+        logger.debug(
+          'Updating document with conflict detection (stub): '
+          '$collection/$documentId',
+          category: 'ConflictResolution',
         );
-        print('Strategy: ${(strategy ?? _defaultStrategy).name}');
+        logger.info(
+          'Strategy: ${(strategy ?? _defaultStrategy).name}',
+          category: 'ConflictResolution',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error in conflict detection update: $e');
+        logger.error(
+          'Error in conflict detection update',
+          category: 'ConflictResolution',
+          error: e,
+        );
       }
       rethrow;
     }
@@ -101,11 +114,18 @@ class ConflictResolutionService {
       _unresolvedConflicts.removeAt(conflictIndex);
 
       if (kDebugMode) {
-        print('Manually resolved conflict for $documentId');
+        logger.info(
+          'Manually resolved conflict for $documentId',
+          category: 'ConflictResolution',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error resolving conflict: $e');
+        logger.error(
+          'Error resolving conflict',
+          category: 'ConflictResolution',
+          error: e,
+        );
       }
       rethrow;
     }
@@ -116,7 +136,10 @@ class ConflictResolutionService {
     _unresolvedConflicts.removeWhere((c) => c.documentId == documentId);
 
     if (kDebugMode) {
-      print('Discarded conflict for $documentId');
+      logger.info(
+        'Discarded conflict for $documentId',
+        category: 'ConflictResolution',
+      );
     }
   }
 
@@ -125,7 +148,10 @@ class ConflictResolutionService {
     _unresolvedConflicts.clear();
 
     if (kDebugMode) {
-      print('Cleared all unresolved conflicts');
+      logger.info(
+        'Cleared all unresolved conflicts',
+        category: 'ConflictResolution',
+      );
     }
   }
 
@@ -139,13 +165,19 @@ class ConflictResolutionService {
     try {
       // Stub implementation - would implement with Appwrite
       if (kDebugMode) {
-        print(
-          'Versioned update (stub) for $documentId, expected version: $expectedVersion',
+        logger.debug(
+          'Versioned update (stub) for $documentId, '
+          'expected version: $expectedVersion',
+          category: 'ConflictResolution',
         );
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Versioned update failed: $e');
+        logger.error(
+          'Error in versioned update',
+          category: 'ConflictResolution',
+          error: e,
+        );
       }
       rethrow;
     }
