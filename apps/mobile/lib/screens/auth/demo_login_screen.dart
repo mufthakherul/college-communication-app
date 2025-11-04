@@ -94,8 +94,8 @@ class _DemoLoginScreenState extends State<DemoLoginScreen> {
                   Text(
                     'Demo Mode',
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
@@ -227,9 +227,9 @@ class _DemoLoginScreenState extends State<DemoLoginScreen> {
                   Text(
                     'Note: Data in demo mode is not saved. Connect Firebase for real functionality.',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.grey,
-                      fontStyle: FontStyle.italic,
-                    ),
+                          color: Colors.grey,
+                          fontStyle: FontStyle.italic,
+                        ),
                     textAlign: TextAlign.center,
                   ),
                 ],

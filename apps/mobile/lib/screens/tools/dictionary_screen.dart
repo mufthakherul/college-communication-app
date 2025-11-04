@@ -218,10 +218,10 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
             child: _isSearching
                 ? const Center(child: CircularProgressIndicator())
                 : _selectedWord == null
-                ? _buildSearchHistory()
-                : _definition != null
-                ? _buildDefinitionView()
-                : _buildNotFoundView(),
+                    ? _buildSearchHistory()
+                    : _definition != null
+                        ? _buildDefinitionView()
+                        : _buildNotFoundView(),
           ),
         ],
       ),
