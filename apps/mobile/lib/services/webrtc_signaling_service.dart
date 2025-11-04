@@ -129,11 +129,18 @@ class WebRTCSignalingService {
       _isInitialized = true;
 
       if (kDebugMode) {
-        logger.info('WebRTC signaling service initialized: $localPeerId', category: 'WebRTC');
+        logger.info(
+          'WebRTC signaling service initialized: $localPeerId',
+          category: 'WebRTC',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error initializing WebRTC service', category: 'WebRTC', error: e);
+        logger.error(
+          'Error initializing WebRTC service',
+          category: 'WebRTC',
+          error: e,
+        );
       }
       rethrow;
     }
@@ -218,7 +225,11 @@ class WebRTCSignalingService {
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error handling signaling message', category: 'WebRTC', error: e);
+        logger.error(
+          'Error handling signaling message',
+          category: 'WebRTC',
+          error: e,
+        );
       }
     }
   }
@@ -316,7 +327,10 @@ class WebRTCSignalingService {
       await peerConnection.addCandidate(candidate);
 
       if (kDebugMode) {
-        logger.debug('Added ICE candidate from peer: $peerId', category: 'WebRTC');
+        logger.debug(
+          'Added ICE candidate from peer: $peerId',
+          category: 'WebRTC',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
@@ -347,7 +361,10 @@ class WebRTCSignalingService {
 
     connection.onIceConnectionState = (state) {
       if (kDebugMode) {
-        logger.debug('ICE connection state for $peerId: $state', category: 'WebRTC');
+        logger.debug(
+          'ICE connection state for $peerId: $state',
+          category: 'WebRTC',
+        );
       }
 
       WebRTCConnectionState newState;
@@ -392,18 +409,28 @@ class WebRTCSignalingService {
         _messageController.add(data);
 
         if (kDebugMode) {
-          logger.debug('Received message from $peerId: ${message.text.length} bytes', category: 'WebRTC');
+          logger.debug(
+            'Received message from $peerId: ${message.text.length} bytes',
+            category: 'WebRTC',
+          );
         }
       } catch (e) {
         if (kDebugMode) {
-          logger.error('Error processing message', category: 'WebRTC', error: e);
+          logger.error(
+            'Error processing message',
+            category: 'WebRTC',
+            error: e,
+          );
         }
       }
     };
 
     channel.onDataChannelState = (state) {
       if (kDebugMode) {
-        logger.debug('Data channel state for $peerId: $state', category: 'WebRTC');
+        logger.debug(
+          'Data channel state for $peerId: $state',
+          category: 'WebRTC',
+        );
       }
     };
   }
@@ -425,13 +452,20 @@ class WebRTCSignalingService {
       connection.bytesSent += jsonMessage.length;
 
       if (kDebugMode) {
-        logger.debug('Sent message to $peerId: ${jsonMessage.length} bytes', category: 'WebRTC');
+        logger.debug(
+          'Sent message to $peerId: ${jsonMessage.length} bytes',
+          category: 'WebRTC',
+        );
       }
 
       return true;
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error sending message to $peerId', category: 'WebRTC', error: e);
+        logger.error(
+          'Error sending message to $peerId',
+          category: 'WebRTC',
+          error: e,
+        );
       }
       return false;
     }

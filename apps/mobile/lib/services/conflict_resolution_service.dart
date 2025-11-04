@@ -51,7 +51,10 @@ class ConflictResolutionService {
   void setDefaultStrategy(ConflictStrategy strategy) {
     _defaultStrategy = strategy;
     if (kDebugMode) {
-      logger.info('Default conflict strategy set to: ${strategy.name}', category: 'ConflictResolution');
+      logger.info(
+        'Default conflict strategy set to: ${strategy.name}',
+        category: 'ConflictResolution',
+      );
     }
   }
 
@@ -70,11 +73,18 @@ class ConflictResolutionService {
           'Updating document with conflict detection (stub): $collection/$documentId',
           category: 'ConflictResolution',
         );
-        logger.info('Strategy: ${(strategy ?? _defaultStrategy).name}', category: 'ConflictResolution');
+        logger.info(
+          'Strategy: ${(strategy ?? _defaultStrategy).name}',
+          category: 'ConflictResolution',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error in conflict detection update', category: 'ConflictResolution', error: e);
+        logger.error(
+          'Error in conflict detection update',
+          category: 'ConflictResolution',
+          error: e,
+        );
       }
       rethrow;
     }
@@ -103,11 +113,18 @@ class ConflictResolutionService {
       _unresolvedConflicts.removeAt(conflictIndex);
 
       if (kDebugMode) {
-        logger.info('Manually resolved conflict for $documentId', category: 'ConflictResolution');
+        logger.info(
+          'Manually resolved conflict for $documentId',
+          category: 'ConflictResolution',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error resolving conflict', category: 'ConflictResolution', error: e);
+        logger.error(
+          'Error resolving conflict',
+          category: 'ConflictResolution',
+          error: e,
+        );
       }
       rethrow;
     }
@@ -118,7 +135,10 @@ class ConflictResolutionService {
     _unresolvedConflicts.removeWhere((c) => c.documentId == documentId);
 
     if (kDebugMode) {
-      logger.info('Discarded conflict for $documentId', category: 'ConflictResolution');
+      logger.info(
+        'Discarded conflict for $documentId',
+        category: 'ConflictResolution',
+      );
     }
   }
 
@@ -127,7 +147,10 @@ class ConflictResolutionService {
     _unresolvedConflicts.clear();
 
     if (kDebugMode) {
-      logger.info('Cleared all unresolved conflicts', category: 'ConflictResolution');
+      logger.info(
+        'Cleared all unresolved conflicts',
+        category: 'ConflictResolution',
+      );
     }
   }
 
@@ -148,7 +171,11 @@ class ConflictResolutionService {
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error in versioned update', category: 'ConflictResolution', error: e);
+        logger.error(
+          'Error in versioned update',
+          category: 'ConflictResolution',
+          error: e,
+        );
       }
       rethrow;
     }

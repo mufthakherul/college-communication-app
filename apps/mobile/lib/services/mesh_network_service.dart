@@ -298,11 +298,18 @@ class MeshNetworkService {
       _isAdvertising = true;
 
       if (kDebugMode) {
-        logger.debug('Started advertising mesh network', category: 'MeshNetwork');
+        logger.debug(
+          'Started advertising mesh network',
+          category: 'MeshNetwork',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error starting advertising', category: 'MeshNetwork', error: e);
+        logger.error(
+          'Error starting advertising',
+          category: 'MeshNetwork',
+          error: e,
+        );
       }
     }
   }
@@ -316,11 +323,18 @@ class MeshNetworkService {
       _isAdvertising = false;
 
       if (kDebugMode) {
-        logger.debug('Stopped advertising', category: 'MeshNetwork');
+        logger.debug(
+          'Stopped advertising',
+          category: 'MeshNetwork',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error stopping advertising', category: 'MeshNetwork', error: e);
+        logger.error(
+          'Error stopping advertising',
+          category: 'MeshNetwork',
+          error: e,
+        );
       }
     }
   }
@@ -360,8 +374,14 @@ class MeshNetworkService {
     }
 
     if (kDebugMode) {
-      logger.debug('Generated pairing QR code with token: $pairingToken', category: 'MeshNetwork');
-      logger.debug('Purposes: ${purposes?.map((p) => p.name).join(", ")}', category: 'MeshNetwork');
+      logger.debug(
+        'Generated pairing QR code with token: $pairingToken',
+        category: 'MeshNetwork',
+      );
+      logger.debug(
+        'Purposes: ${purposes?.map((p) => p.name).join(", ")}',
+        category: 'MeshNetwork',
+      );
       logger.debug('Expires: ${expiresAt ?? "Never"}', category: 'MeshNetwork');
     }
 
@@ -383,7 +403,10 @@ class MeshNetworkService {
       // Check if already connected
       if (_connectedNodes.containsKey(pairingData.deviceId)) {
         if (kDebugMode) {
-          logger.info('Already connected to device: ${pairingData.deviceName}', category: 'MeshNetwork');
+          logger.info(
+            'Already connected to device: ${pairingData.deviceName}',
+            category: 'MeshNetwork',
+          );
         }
         return true;
       }
@@ -392,13 +415,20 @@ class MeshNetworkService {
       await _connectToDeviceWithPairing(pairingData);
 
       if (kDebugMode) {
-        logger.info('Successfully paired with device: ${pairingData.deviceName}', category: 'MeshNetwork');
+        logger.info(
+          'Successfully paired with device: ${pairingData.deviceName}',
+          category: 'MeshNetwork',
+        );
       }
 
       return true;
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error pairing with QR code', category: 'MeshNetwork', error: e);
+        logger.error(
+          'Error pairing with QR code',
+          category: 'MeshNetwork',
+          error: e,
+        );
       }
       return false;
     }
@@ -434,7 +464,11 @@ class MeshNetworkService {
         return;
       } catch (e) {
         if (kDebugMode) {
-          logger.warning('Failed to connect via ${connectionType.name}', category: 'MeshNetwork', metadata: {'error': e.toString()});
+          logger.warning(
+            'Failed to connect via ${connectionType.name}',
+            category: 'MeshNetwork',
+            metadata: {'error': e.toString()},
+          );
         }
         continue;
       }
@@ -467,7 +501,10 @@ class MeshNetworkService {
     }
 
     if (kDebugMode) {
-      logger.info('Established ${connectionType.name} connection with $deviceName', category: 'MeshNetwork');
+      logger.info(
+        'Established ${connectionType.name} connection with $deviceName',
+        category: 'MeshNetwork',
+      );
     }
   }
 
@@ -540,7 +577,10 @@ class MeshNetworkService {
   void setAutoConnect(bool enabled) {
     _autoConnectEnabled = enabled;
     if (kDebugMode) {
-      logger.info('Auto-connect ${enabled ? "enabled" : "disabled"}', category: 'MeshNetwork');
+      logger.info(
+        'Auto-connect ${enabled ? "enabled" : "disabled"}',
+        category: 'MeshNetwork',
+      );
     }
   }
 
@@ -579,7 +619,11 @@ class MeshNetworkService {
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error starting discovery', category: 'MeshNetwork', error: e);
+        logger.error(
+          'Error starting discovery',
+          category: 'MeshNetwork',
+          error: e,
+        );
       }
     }
   }
@@ -597,7 +641,11 @@ class MeshNetworkService {
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error stopping discovery', category: 'MeshNetwork', error: e);
+        logger.error(
+          'Error stopping discovery',
+          category: 'MeshNetwork',
+          error: e,
+        );
       }
     }
   }
@@ -612,7 +660,10 @@ class MeshNetworkService {
         _nodeController.add(connectedNodes);
 
         if (kDebugMode) {
-          logger.info('Disconnected from device: ${node.name}', category: 'MeshNetwork');
+          logger.info(
+            'Disconnected from device: ${node.name}',
+            category: 'MeshNetwork',
+          );
         }
       }
     } catch (e) {
@@ -635,11 +686,18 @@ class MeshNetworkService {
       // await _nearbyConnections?.sendMessage(recipientId, jsonEncode(message.toJson()));
 
       if (kDebugMode) {
-        logger.debug('Sent message to ${node.name}: ${message.type}', category: 'MeshNetwork');
+        logger.debug(
+          'Sent message to ${node.name}: ${message.type}',
+          category: 'MeshNetwork',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error sending message', category: 'MeshNetwork', error: e);
+        logger.error(
+          'Error sending message',
+          category: 'MeshNetwork',
+          error: e,
+        );
       }
       rethrow;
     }
@@ -656,7 +714,11 @@ class MeshNetworkService {
           await sendMessage(node.id, routedMessage);
         } catch (e) {
           if (kDebugMode) {
-            logger.warning('Failed to send to ${node.name}', category: 'MeshNetwork', metadata: {'error': e.toString()});
+            logger.warning(
+              'Failed to send to ${node.name}',
+              category: 'MeshNetwork',
+              metadata: {'error': e.toString()},
+            );
           }
         }
       }

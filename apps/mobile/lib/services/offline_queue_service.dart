@@ -39,7 +39,10 @@ class OfflineQueueService {
     // Check queue size limit
     if (_queue.length >= _maxQueueSize) {
       if (kDebugMode) {
-        logger.warning('Queue full, removing oldest low-priority action', category: 'OfflineQueue');
+        logger.warning(
+          'Queue full, removing oldest low-priority action',
+          category: 'OfflineQueue',
+        );
       }
       _removeOldestLowPriorityAction();
     }
@@ -49,7 +52,10 @@ class OfflineQueueService {
     await _saveQueue();
 
     if (kDebugMode) {
-      logger.debug('Action queued: ${action.type} (priority: ${action.priority})', category: 'OfflineQueue');
+      logger.debug(
+        'Action queued: ${action.type} (priority: ${action.priority})',
+        category: 'OfflineQueue',
+      );
     }
   }
 
@@ -135,7 +141,10 @@ class OfflineQueueService {
     _lastSyncAttempt = DateTime.now();
 
     if (kDebugMode) {
-      logger.info('Processing ${_queue.length} queued actions', category: 'OfflineQueue');
+      logger.info(
+        'Processing ${_queue.length} queued actions',
+        category: 'OfflineQueue',
+      );
     }
 
     final actions = List<OfflineAction>.from(_queue);
@@ -171,7 +180,10 @@ class OfflineQueueService {
           successCount++;
 
           if (kDebugMode) {
-            logger.debug('✓ Processed action: ${action.type}', category: 'OfflineQueue');
+            logger.debug(
+              '✓ Processed action: ${action.type}',
+              category: 'OfflineQueue',
+            );
           }
           break;
         } catch (e) {
@@ -208,7 +220,10 @@ class OfflineQueueService {
           }
         } else {
           if (kDebugMode) {
-            logger.warning('Action ${action.type} exceeded max retries, dropping', category: 'OfflineQueue');
+            logger.warning(
+              'Action ${action.type} exceeded max retries, dropping',
+              category: 'OfflineQueue',
+            );
           }
         }
       }
@@ -334,7 +349,11 @@ class OfflineQueueService {
       await prefs.setString(_analyticsKey, analyticsJson);
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error saving analytics', category: 'OfflineQueue', error: e);
+        logger.error(
+          'Error saving analytics',
+          category: 'OfflineQueue',
+          error: e,
+        );
       }
     }
   }
@@ -354,7 +373,11 @@ class OfflineQueueService {
       }
     } catch (e) {
       if (kDebugMode) {
-        logger.error('Error loading analytics', category: 'OfflineQueue', error: e);
+        logger.error(
+          'Error loading analytics',
+          category: 'OfflineQueue',
+          error: e,
+        );
       }
     }
   }
