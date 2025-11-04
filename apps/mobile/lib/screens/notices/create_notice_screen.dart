@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:campus_mesh/models/notice_model.dart';
+import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/services/notice_service.dart';
+import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/widgets/markdown_editor.dart';
 
 class CreateNoticeScreen extends StatefulWidget {
@@ -20,6 +22,67 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
   String _selectedAudience = 'all';
   bool _isLoading = false;
   bool _useMarkdown = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkPermissions();
+  }
+
+  Future<void> _checkPermissions() async {
+    // Optional: Pre-check user permissions
+    // This helps provide early feedback if user doesn't have permission
+    try {
+      final authService = AuthService();
+      final currentUser = await authService.currentUser;
+      
+      if (currentUser == null) {
+        if (mounted) {
+          _showPermissionError('You must be logged in to create notices');
+        }
+        return;
+      }
+
+      // Check if user has appropriate role
+      if (currentUser.role != UserRole.admin && 
+          currentUser.role != UserRole.teacher) {
+        if (mounted) {
+          _showPermissionError(
+            'Only admins and teachers can create notices.\n'
+            'Your current role: ${currentUser.role.name}'
+          );
+        }
+      }
+    } catch (e) {
+      // Silently fail - user can still try to create notice
+      // and get a proper error from the backend
+    }
+  }
+
+  void _showPermissionError(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Row(
+          children: [
+            Icon(Icons.warning, color: Colors.orange),
+            SizedBox(width: 12),
+            Text('Permission Required'),
+          ],
+        ),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close dialog
+              Navigator.of(context).pop(); // Close create screen
+            },
+            child: const Text('Go Back'),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   void dispose() {
@@ -49,28 +112,76 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
       }
     } catch (e) {
       if (mounted) {
+        final errorMessage = e.toString();
+        final isPermissionError = errorMessage.toLowerCase().contains('permission') ||
+            errorMessage.toLowerCase().contains('authenticated') ||
+            errorMessage.toLowerCase().contains('unauthorized');
+
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: const Text('Failed to Create Notice'),
+            title: Row(
+              children: [
+                Icon(
+                  isPermissionError ? Icons.lock : Icons.error,
+                  color: isPermissionError ? Colors.orange : Colors.red,
+                ),
+                const SizedBox(width: 12),
+                const Expanded(
+                  child: Text('Failed to Create Notice'),
+                ),
+              ],
+            ),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Unable to create the notice. Please try the following:',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 12),
-                const Text('• Check your internet connection'),
-                const Text('• Verify you have permission to create notices'),
-                const Text('• Try again in a few moments'),
+                if (isPermissionError) ...[
+                  const Text(
+                    'Permission Denied',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  const Text(
+                    'You need to have admin or teacher role to create notices.',
+                  ),
+                  const SizedBox(height: 12),
+                  const Text('To create notices:'),
+                  const SizedBox(height: 8),
+                  const Text('• Contact your administrator'),
+                  const Text('• Request teacher or admin role'),
+                  const Text('• Ensure your account is properly configured'),
+                ] else ...[
+                  const Text(
+                    'Unable to create the notice. Please try the following:',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 12),
+                  const Text('• Check your internet connection'),
+                  const Text('• Verify you have permission to create notices'),
+                  const Text('• Ensure backend is configured correctly'),
+                  const Text('• Try again in a few moments'),
+                ],
                 const SizedBox(height: 12),
                 const Divider(),
                 const SizedBox(height: 8),
-                SelectableText(
-                  'Error details: ${e.toString()}',
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Colors.grey.shade100,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: SelectableText(
+                    'Error: ${e.toString()}',
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: Colors.grey,
+                      fontFamily: 'monospace',
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -93,12 +204,43 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Create Notice')),
+      appBar: AppBar(
+        title: const Text('Create Notice'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.info_outline),
+            tooltip: 'Help',
+            onPressed: () => _showHelpDialog(),
+          ),
+        ],
+      ),
       body: Form(
         key: _formKey,
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
+            // Info banner
+            Container(
+              padding: const EdgeInsets.all(12),
+              margin: const EdgeInsets.only(bottom: 16),
+              decoration: BoxDecoration(
+                color: Colors.blue.shade50,
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Colors.blue.shade200),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.info, color: Colors.blue.shade700, size: 20),
+                  const SizedBox(width: 12),
+                  const Expanded(
+                    child: Text(
+                      'Only admins and teachers can create notices',
+                      style: TextStyle(fontSize: 13),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Semantics(
               label: 'Notice title input field',
               hint: 'Enter a title for the notice',
@@ -221,6 +363,128 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  void _showHelpDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Row(
+          children: [
+            Icon(Icons.help_outline, color: Colors.blue),
+            SizedBox(width: 12),
+            Text('Creating Notices'),
+          ],
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Who can create notices?',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text('• Admins'),
+              const Text('• Teachers'),
+              const SizedBox(height: 16),
+              const Divider(),
+              const SizedBox(height: 12),
+              const Text(
+                'Notice Types',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 8),
+              _buildNoticeTypeInfo(
+                Icons.announcement,
+                'Announcement',
+                'General information and updates',
+                Colors.green,
+              ),
+              const SizedBox(height: 8),
+              _buildNoticeTypeInfo(
+                Icons.event,
+                'Event',
+                'Upcoming events and activities',
+                Colors.blue,
+              ),
+              const SizedBox(height: 8),
+              _buildNoticeTypeInfo(
+                Icons.warning,
+                'Urgent',
+                'Important and time-sensitive notices',
+                Colors.red,
+              ),
+              const SizedBox(height: 16),
+              const Divider(),
+              const SizedBox(height: 12),
+              const Text(
+                'Tips',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text('• Use clear and concise titles'),
+              const Text('• Enable rich text for better formatting'),
+              const Text('• Select appropriate target audience'),
+              const Text('• Choose the right notice type'),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Got it'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNoticeTypeInfo(
+    IconData icon,
+    String title,
+    String description,
+    Color color,
+  ) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CircleAvatar(
+          radius: 12,
+          backgroundColor: color.withOpacity(0.2),
+          child: Icon(icon, size: 14, color: color),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+              Text(
+                description,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: Colors.grey.shade600,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
