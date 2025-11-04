@@ -19,19 +19,22 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
   // Built-in dictionary with common words (expandable)
   final Map<String, Map<String, dynamic>> _dictionary = {
     'algorithm': {
-      'definition': 'A step-by-step procedure for solving a problem or accomplishing a task, especially in computing.',
+      'definition':
+          'A step-by-step procedure for solving a problem or accomplishing a task, especially in computing.',
       'partOfSpeech': 'noun',
       'example': 'The sorting algorithm efficiently organized the data.',
       'synonyms': ['procedure', 'process', 'method'],
     },
     'programming': {
-      'definition': 'The process of creating a set of instructions that tell a computer how to perform a task.',
+      'definition':
+          'The process of creating a set of instructions that tell a computer how to perform a task.',
       'partOfSpeech': 'noun',
       'example': 'She is learning programming to develop mobile apps.',
       'synonyms': ['coding', 'software development'],
     },
     'variable': {
-      'definition': 'A storage location identified by a name that holds a value which can be changed during program execution.',
+      'definition':
+          'A storage location identified by a name that holds a value which can be changed during program execution.',
       'partOfSpeech': 'noun',
       'example': 'The variable x stores the user input.',
       'synonyms': ['placeholder', 'container'],
@@ -43,37 +46,43 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
       'synonyms': ['method', 'procedure', 'subroutine'],
     },
     'database': {
-      'definition': 'An organized collection of structured information or data stored electronically.',
+      'definition':
+          'An organized collection of structured information or data stored electronically.',
       'partOfSpeech': 'noun',
       'example': 'The database stores all student records.',
       'synonyms': ['data store', 'repository'],
     },
     'network': {
-      'definition': 'A group of interconnected computers and devices that can share resources and communicate.',
+      'definition':
+          'A group of interconnected computers and devices that can share resources and communicate.',
       'partOfSpeech': 'noun',
       'example': 'The college network connects all campus computers.',
       'synonyms': ['system', 'grid', 'web'],
     },
     'technology': {
-      'definition': 'The application of scientific knowledge for practical purposes, especially in industry.',
+      'definition':
+          'The application of scientific knowledge for practical purposes, especially in industry.',
       'partOfSpeech': 'noun',
       'example': 'Technology has transformed education.',
       'synonyms': ['innovation', 'engineering', 'science'],
     },
     'education': {
-      'definition': 'The process of receiving or giving systematic instruction, especially at a school or university.',
+      'definition':
+          'The process of receiving or giving systematic instruction, especially at a school or university.',
       'partOfSpeech': 'noun',
       'example': 'Education is the key to success.',
       'synonyms': ['learning', 'teaching', 'schooling'],
     },
     'study': {
-      'definition': 'The devotion of time and attention to gaining knowledge of an academic subject.',
+      'definition':
+          'The devotion of time and attention to gaining knowledge of an academic subject.',
       'partOfSpeech': 'noun/verb',
       'example': 'I need to study for my exams.',
       'synonyms': ['learn', 'research', 'review'],
     },
     'knowledge': {
-      'definition': 'Facts, information, and skills acquired through experience or education.',
+      'definition':
+          'Facts, information, and skills acquired through experience or education.',
       'partOfSpeech': 'noun',
       'example': 'Knowledge is power.',
       'synonyms': ['information', 'understanding', 'wisdom'],

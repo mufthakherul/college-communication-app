@@ -16,7 +16,7 @@ class SearchService {
   final _authService = AuthService();
 
   String? get _currentUserId => _authService.currentUserId;
-  
+
   // Search history constants
   static const String _searchHistoryKey = 'search_history';
   static const int _maxSearchHistorySize = 20;
@@ -299,11 +299,11 @@ class SearchService {
     try {
       final prefs = await SharedPreferences.getInstance();
       final historyJson = prefs.getString(_searchHistoryKey);
-      
+
       if (historyJson == null) {
         return [];
       }
-      
+
       final List<dynamic> decoded = jsonDecode(historyJson);
       return decoded.cast<String>();
     } catch (e) {
@@ -321,21 +321,21 @@ class SearchService {
       if (sanitizedQuery.isEmpty || sanitizedQuery.length < 2) {
         return; // Don't save very short queries
       }
-      
+
       final prefs = await SharedPreferences.getInstance();
       List<String> history = await getRecentSearches();
-      
+
       // Remove duplicate if exists
       history.remove(sanitizedQuery);
-      
+
       // Add new query at the beginning
       history.insert(0, sanitizedQuery);
-      
+
       // Limit history size
       if (history.length > _maxSearchHistorySize) {
         history = history.sublist(0, _maxSearchHistorySize);
       }
-      
+
       // Save to preferences
       await prefs.setString(_searchHistoryKey, jsonEncode(history));
       debugPrint('Search history saved: $sanitizedQuery');
@@ -343,15 +343,15 @@ class SearchService {
       debugPrint('Error saving search query: $e');
     }
   }
-  
+
   /// Remove a specific query from search history
   Future<void> removeSearchQuery(String query) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       List<String> history = await getRecentSearches();
-      
+
       history.remove(query);
-      
+
       await prefs.setString(_searchHistoryKey, jsonEncode(history));
       debugPrint('Removed from search history: $query');
     } catch (e) {

@@ -52,7 +52,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   double _evaluateExpression(String expr) {
     // Handle scientific functions
     expr = expr.replaceAll('×', '*').replaceAll('÷', '/');
-    
+
     // Handle basic operators using a simple parser
     try {
       return _parseExpression(expr);
@@ -64,12 +64,12 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   double _parseExpression(String expr) {
     // Remove whitespace
     expr = expr.replaceAll(' ', '');
-    
+
     // Simple evaluation for basic operations
     // This is a simplified version - in production, use a proper expression parser
     List<String> tokens = [];
     String currentNumber = '';
-    
+
     for (int i = 0; i < expr.length; i++) {
       String char = expr[i];
       if ('0123456789.'.contains(char)) {
@@ -223,7 +223,9 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
             flex: 5,
             child: Padding(
               padding: const EdgeInsets.all(8),
-              child: _isScientific ? _buildScientificLayout() : _buildBasicLayout(),
+              child: _isScientific
+                  ? _buildScientificLayout()
+                  : _buildBasicLayout(),
             ),
           ),
         ],

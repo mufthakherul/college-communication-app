@@ -19,7 +19,7 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
       _clearAll(except: 'decimal');
       return;
     }
-    
+
     try {
       final decimal = int.parse(value);
       setState(() {
@@ -37,7 +37,7 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
       _clearAll(except: 'binary');
       return;
     }
-    
+
     try {
       final decimal = int.parse(value, radix: 2);
       setState(() {
@@ -55,7 +55,7 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
       _clearAll(except: 'hex');
       return;
     }
-    
+
     try {
       final decimal = int.parse(value, radix: 16);
       setState(() {
@@ -73,7 +73,7 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
       _clearAll(except: 'octal');
       return;
     }
-    
+
     try {
       final decimal = int.parse(value, radix: 8);
       setState(() {
@@ -231,7 +231,8 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
                 suffixIcon: controller.text.isNotEmpty
                     ? IconButton(
                         icon: const Icon(Icons.copy, size: 20),
-                        onPressed: () => _copyToClipboard(controller.text, label),
+                        onPressed: () =>
+                            _copyToClipboard(controller.text, label),
                       )
                     : null,
               ),
@@ -272,15 +273,18 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
                   children: const [
                     Padding(
                       padding: EdgeInsets.all(8),
-                      child: Text('Decimal', style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: Text('Decimal',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     Padding(
                       padding: EdgeInsets.all(8),
-                      child: Text('Binary', style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: Text('Binary',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                     Padding(
                       padding: EdgeInsets.all(8),
-                      child: Text('Hex', style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: Text('Hex',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
                   ],
                 ),

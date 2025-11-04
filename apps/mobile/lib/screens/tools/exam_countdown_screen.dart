@@ -22,7 +22,7 @@ class _ExamCountdownScreenState extends State<ExamCountdownScreen> {
   Future<void> _loadExams() async {
     final prefs = await SharedPreferences.getInstance();
     final examsJson = prefs.getString('exams');
-    
+
     if (examsJson != null) {
       final List<dynamic> decoded = json.decode(examsJson);
       setState(() {
@@ -100,7 +100,8 @@ class _ExamCountdownScreenState extends State<ExamCountdownScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                if (nameController.text.isNotEmpty && subjectController.text.isNotEmpty) {
+                if (nameController.text.isNotEmpty &&
+                    subjectController.text.isNotEmpty) {
                   setState(() {
                     _exams.add(Exam(
                       name: nameController.text,
@@ -243,7 +244,7 @@ class _ExamCountdownScreenState extends State<ExamCountdownScreen> {
 
   Color _getCountdownColor(DateTime examDate) {
     final difference = examDate.difference(DateTime.now());
-    
+
     if (difference.isNegative) return Colors.grey;
     if (difference.inDays == 0) return Colors.red;
     if (difference.inDays <= 3) return Colors.orange;
@@ -363,7 +364,8 @@ class _ExamCountdownScreenState extends State<ExamCountdownScreen> {
                                 ),
                               ),
                               IconButton(
-                                icon: const Icon(Icons.delete, color: Colors.red),
+                                icon:
+                                    const Icon(Icons.delete, color: Colors.red),
                                 onPressed: () => _deleteExam(exam),
                               ),
                             ],
@@ -382,8 +384,18 @@ class _ExamCountdownScreenState extends State<ExamCountdownScreen> {
 
   String _getMonthName(int month) {
     const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
     ];
     return months[month - 1];
   }
