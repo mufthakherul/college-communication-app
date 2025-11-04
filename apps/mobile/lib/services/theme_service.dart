@@ -59,7 +59,6 @@ class ThemeService extends ChangeNotifier {
   /// Get light theme
   static ThemeData get lightTheme {
     return ThemeData(
-      primarySwatch: Colors.blue,
       useMaterial3: true,
       brightness: Brightness.light,
       colorScheme: ColorScheme.fromSeed(
@@ -89,7 +88,6 @@ class ThemeService extends ChangeNotifier {
   /// Get dark theme
   static ThemeData get darkTheme {
     return ThemeData(
-      primarySwatch: Colors.blue,
       useMaterial3: true,
       brightness: Brightness.dark,
       colorScheme: ColorScheme.fromSeed(
