@@ -43,10 +43,8 @@ class MessageAttachmentsService {
 
       // Generate unique file name
       final fileName = customFileName ?? path.basename(file.path);
-      final fileExtension = path
-          .extension(fileName)
-          .toLowerCase()
-          .replaceAll('.', '');
+      final fileExtension =
+          path.extension(fileName).toLowerCase().replaceAll('.', '');
       final timestamp = DateTime.now().millisecondsSinceEpoch;
       final uniqueFileName = '${userId}_${timestamp}_$fileName';
       final filePath = '$userId/$uniqueFileName';

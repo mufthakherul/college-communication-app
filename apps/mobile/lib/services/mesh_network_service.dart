@@ -34,25 +34,25 @@ class MeshNode {
   });
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'name': name,
-    'connectedAt': connectedAt.toIso8601String(),
-    'connectionType': connectionType.name,
-    'isActive': isActive,
-    'isVisible': isVisible,
-  };
+        'id': id,
+        'name': name,
+        'connectedAt': connectedAt.toIso8601String(),
+        'connectionType': connectionType.name,
+        'isActive': isActive,
+        'isVisible': isVisible,
+      };
 
   factory MeshNode.fromJson(Map<String, dynamic> json) => MeshNode(
-    id: json['id'] as String,
-    name: json['name'] as String,
-    connectedAt: DateTime.parse(json['connectedAt'] as String),
-    connectionType: MeshConnectionType.values.firstWhere(
-      (t) => t.name == json['connectionType'],
-      orElse: () => MeshConnectionType.auto,
-    ),
-    isActive: json['isActive'] ?? true,
-    isVisible: json['isVisible'] ?? false,
-  );
+        id: json['id'] as String,
+        name: json['name'] as String,
+        connectedAt: DateTime.parse(json['connectedAt'] as String),
+        connectionType: MeshConnectionType.values.firstWhere(
+          (t) => t.name == json['connectionType'],
+          orElse: () => MeshConnectionType.auto,
+        ),
+        isActive: json['isActive'] ?? true,
+        isVisible: json['isVisible'] ?? false,
+      );
 
   String getConnectionTypeDisplay() {
     switch (connectionType) {
@@ -108,14 +108,14 @@ class MeshPairingData {
   });
 
   Map<String, dynamic> toJson() => {
-    'deviceId': deviceId,
-    'deviceName': deviceName,
-    'pairingToken': pairingToken,
-    'expiresAt': expiresAt?.toIso8601String(),
-    'supportedConnections': supportedConnections,
-    'purposes': purposes.map((p) => p.name).toList(),
-    'sharedInfo': sharedInfo,
-  };
+        'deviceId': deviceId,
+        'deviceName': deviceName,
+        'pairingToken': pairingToken,
+        'expiresAt': expiresAt?.toIso8601String(),
+        'supportedConnections': supportedConnections,
+        'purposes': purposes.map((p) => p.name).toList(),
+        'sharedInfo': sharedInfo,
+      };
 
   factory MeshPairingData.fromJson(Map<String, dynamic> json) =>
       MeshPairingData(
@@ -125,17 +125,17 @@ class MeshPairingData {
         expiresAt: json['expiresAt'] != null
             ? DateTime.parse(json['expiresAt'] as String)
             : null,
-        supportedConnections: (json['supportedConnections'] as List)
-            .cast<String>(),
+        supportedConnections:
+            (json['supportedConnections'] as List).cast<String>(),
         purposes: json['purposes'] != null
             ? (json['purposes'] as List)
-                  .map(
-                    (p) => QRPairingPurpose.values.firstWhere(
-                      (purpose) => purpose.name == p,
-                      orElse: () => QRPairingPurpose.privateChat,
-                    ),
-                  )
-                  .toList()
+                .map(
+                  (p) => QRPairingPurpose.values.firstWhere(
+                    (purpose) => purpose.name == p,
+                    orElse: () => QRPairingPurpose.privateChat,
+                  ),
+                )
+                .toList()
             : [QRPairingPurpose.privateChat],
         sharedInfo: json['sharedInfo'] as Map<String, dynamic>?,
       );
@@ -170,26 +170,26 @@ class MeshMessage {
     required this.payload,
     DateTime? timestamp,
     List<String>? routePath,
-  }) : timestamp = timestamp ?? DateTime.now(),
-       routePath = routePath ?? [];
+  })  : timestamp = timestamp ?? DateTime.now(),
+        routePath = routePath ?? [];
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'senderId': senderId,
-    'type': type,
-    'payload': payload,
-    'timestamp': timestamp.toIso8601String(),
-    'routePath': routePath,
-  };
+        'id': id,
+        'senderId': senderId,
+        'type': type,
+        'payload': payload,
+        'timestamp': timestamp.toIso8601String(),
+        'routePath': routePath,
+      };
 
   factory MeshMessage.fromJson(Map<String, dynamic> json) => MeshMessage(
-    id: json['id'] as String,
-    senderId: json['senderId'] as String,
-    type: json['type'] as String,
-    payload: json['payload'] as Map<String, dynamic>,
-    timestamp: DateTime.parse(json['timestamp'] as String),
-    routePath: (json['routePath'] as List?)?.cast<String>() ?? [],
-  );
+        id: json['id'] as String,
+        senderId: json['senderId'] as String,
+        type: json['type'] as String,
+        payload: json['payload'] as Map<String, dynamic>,
+        timestamp: DateTime.parse(json['timestamp'] as String),
+        routePath: (json['routePath'] as List?)?.cast<String>() ?? [],
+      );
 
   MeshMessage copyWithRoute(String nodeId) {
     return MeshMessage(
@@ -419,8 +419,7 @@ class MeshNetworkService {
         );
 
         // If successful, make the node visible
-        final node =
-            _connectedNodes[pairingData.deviceId] ??
+        final node = _connectedNodes[pairingData.deviceId] ??
             _hiddenNodes[pairingData.deviceId];
         if (node != null) {
           node.isVisible = true;

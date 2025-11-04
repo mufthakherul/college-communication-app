@@ -320,9 +320,8 @@ class AnalyticsDashboardService {
         }
       }
 
-      final avgMessagesPerUser = allUsers.total > 0
-          ? messagesCount.total / allUsers.total
-          : 0.0;
+      final avgMessagesPerUser =
+          allUsers.total > 0 ? messagesCount.total / allUsers.total : 0.0;
 
       return SystemAnalytics(
         totalUsers: allUsers.total,

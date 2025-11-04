@@ -405,8 +405,7 @@ class _AlgorithmComplexityScreenState extends State<AlgorithmComplexityScreen> {
       return Colors.lightGreen;
     if (complexity.contains('O(n)') &&
         !complexity.contains('²') &&
-        !complexity.contains('³'))
-      return Colors.blue;
+        !complexity.contains('³')) return Colors.blue;
     if (complexity.contains('O(n log n)')) return Colors.orange;
     if (complexity.contains('O(n²)')) return Colors.deepOrange;
     if (complexity.contains('O(n³)') || complexity.contains('O(2'))

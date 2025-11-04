@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 class DictionaryScreen extends StatefulWidget {
   const DictionaryScreen({super.key});
@@ -218,10 +217,10 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
             child: _isSearching
                 ? const Center(child: CircularProgressIndicator())
                 : _selectedWord == null
-                ? _buildSearchHistory()
-                : _definition != null
-                ? _buildDefinitionView()
-                : _buildNotFoundView(),
+                    ? _buildSearchHistory()
+                    : _definition != null
+                        ? _buildDefinitionView()
+                        : _buildNotFoundView(),
           ),
         ],
       ),
