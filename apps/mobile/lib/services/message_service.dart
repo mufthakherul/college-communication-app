@@ -246,7 +246,7 @@ class MessageService {
       }
       
       // Basic validation - just check it's not obviously malformed
-      if (recipientId.contains(RegExp(r'[<>"\'\\/]'))) {
+      if (recipientId.contains(RegExp(r'''[<>"'\\/]'''))) {
         throw Exception('Invalid recipient: Recipient ID contains invalid characters');
       }
 
