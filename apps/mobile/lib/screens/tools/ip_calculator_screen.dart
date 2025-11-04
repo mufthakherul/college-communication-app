@@ -7,11 +7,15 @@ class IPCalculatorScreen extends StatefulWidget {
   State<IPCalculatorScreen> createState() => _IPCalculatorScreenState();
 }
 
-class _IPCalculatorScreenState extends State<IPCalculatorScreen> {
+class _IPCalculatorScreenState extends State<IPCalculatorScreen>
+    with SingleTickerProviderStateMixin {
   final TextEditingController _ipController = TextEditingController();
   final TextEditingController _cidrController =
       TextEditingController(text: '24');
-
+      
+  late TabController _tabController;
+  
+  // IPv4 results
   String? _networkAddress;
   String? _broadcastAddress;
   String? _subnetMask;
@@ -22,6 +26,18 @@ class _IPCalculatorScreenState extends State<IPCalculatorScreen> {
   String? _ipType;
   String? _firstHost;
   String? _lastHost;
+  
+  // IPv6 results
+  String? _ipv6Expanded;
+  String? _ipv6Compressed;
+  String? _ipv6Network;
+  String? _ipv6Type;
+  
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
 
   void _calculate() {
     final ip = _ipController.text.trim();
@@ -110,13 +126,136 @@ class _IPCalculatorScreenState extends State<IPCalculatorScreen> {
     );
   }
 
+  void _calculateIPv6() {
+    final ip = _ipController.text.trim();
+    final prefix = int.tryParse(_cidrController.text.trim()) ?? 64;
+    
+    if (!_isValidIPv6(ip)) {
+      _showError('Invalid IPv6 address');
+      return;
+    }
+    
+    setState(() {
+      _ipv6Expanded = _expandIPv6(ip);
+      _ipv6Compressed = _compressIPv6(_ipv6Expanded!);
+      _ipv6Network = _calculateIPv6Network(_ipv6Expanded!, prefix);
+      _ipv6Type = _getIPv6Type(_ipv6Expanded!);
+    });
+  }
+  
+  bool _isValidIPv6(String ip) {
+    final ipv6Pattern = RegExp(
+      r'^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:))$',
+    );
+    return ipv6Pattern.hasMatch(ip);
+  }
+  
+  String _expandIPv6(String ip) {
+    // Expand :: notation
+    if (ip.contains('::')) {
+      final parts = ip.split('::');
+      final left = parts[0].split(':').where((s) => s.isNotEmpty).toList();
+      final right = parts.length > 1 ? parts[1].split(':').where((s) => s.isNotEmpty).toList() : [];
+      final missing = 8 - left.length - right.length;
+      final expanded = [...left, ...List.filled(missing, '0'), ...right];
+      ip = expanded.join(':');
+    }
+    
+    // Pad each section to 4 digits
+    final sections = ip.split(':');
+    return sections.map((s) => s.padLeft(4, '0')).join(':');
+  }
+  
+  String _compressIPv6(String ip) {
+    // Find longest run of zeros
+    final sections = ip.split(':');
+    var maxZeroStart = -1;
+    var maxZeroLen = 0;
+    var currentZeroStart = -1;
+    var currentZeroLen = 0;
+    
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i] == '0000') {
+        if (currentZeroStart == -1) currentZeroStart = i;
+        currentZeroLen++;
+      } else {
+        if (currentZeroLen > maxZeroLen) {
+          maxZeroStart = currentZeroStart;
+          maxZeroLen = currentZeroLen;
+        }
+        currentZeroStart = -1;
+        currentZeroLen = 0;
+      }
+    }
+    
+    if (currentZeroLen > maxZeroLen) {
+      maxZeroStart = currentZeroStart;
+      maxZeroLen = currentZeroLen;
+    }
+    
+    // Compress
+    if (maxZeroLen > 1) {
+      final before = sections.sublist(0, maxZeroStart);
+      final after = sections.sublist(maxZeroStart + maxZeroLen);
+      return '${before.join(':')}::${after.join(':')}';
+    }
+    
+    // Remove leading zeros
+    return sections.map((s) => s.replaceFirst(RegExp(r'^0+'), '') == '' ? '0' : s.replaceFirst(RegExp(r'^0+'), '')).join(':');
+  }
+  
+  String _calculateIPv6Network(String ip, int prefix) {
+    final sections = ip.split(':');
+    final bits = sections.map((s) => int.parse(s, radix: 16)).toList();
+    
+    // Calculate network address
+    for (var i = 0; i < 8; i++) {
+      final bitsInSection = prefix - (i * 16);
+      if (bitsInSection <= 0) {
+        bits[i] = 0;
+      } else if (bitsInSection < 16) {
+        final mask = (0xFFFF << (16 - bitsInSection)) & 0xFFFF;
+        bits[i] = bits[i] & mask;
+      }
+    }
+    
+    return bits.map((b) => b.toRadixString(16).padLeft(4, '0')).join(':');
+  }
+  
+  String _getIPv6Type(String ip) {
+    if (ip.startsWith('fe80:')) return 'Link-Local';
+    if (ip.startsWith('fc00:') || ip.startsWith('fd00:')) return 'Unique Local';
+    if (ip.startsWith('ff00:')) return 'Multicast';
+    if (ip == '0000:0000:0000:0000:0000:0000:0000:0001') return 'Loopback';
+    if (ip == '0000:0000:0000:0000:0000:0000:0000:0000') return 'Unspecified';
+    return 'Global Unicast';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('IP/Subnet Calculator'),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: const [
+            Tab(text: 'IPv4'),
+            Tab(text: 'IPv6'),
+          ],
+        ),
       ),
-      body: SingleChildScrollView(
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          _buildIPv4Tab(),
+          _buildIPv6Tab(),
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildIPv4Tab() {
+    return SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -242,10 +381,139 @@ class _IPCalculatorScreenState extends State<IPCalculatorScreen> {
     );
   }
 
+  Widget _buildIPv6Tab() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Info Card
+          Card(
+            color: Colors.blue[50],
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Icon(Icons.info_outline, color: Colors.blue[700]),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Calculate IPv6 network details and address format',
+                      style: TextStyle(fontSize: 12, color: Colors.grey[700]),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // Input Fields
+          TextField(
+            controller: _ipController,
+            decoration: const InputDecoration(
+              labelText: 'IPv6 Address',
+              hintText: '2001:db8::1',
+              border: OutlineInputBorder(),
+              prefixIcon: Icon(Icons.computer),
+            ),
+          ),
+          const SizedBox(height: 16),
+          TextField(
+            controller: _cidrController,
+            decoration: const InputDecoration(
+              labelText: 'Prefix Length (0-128)',
+              hintText: '64',
+              border: OutlineInputBorder(),
+              prefixIcon: Icon(Icons.network_check),
+            ),
+            keyboardType: TextInputType.number,
+          ),
+          const SizedBox(height: 24),
+
+          // Calculate Button
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: _calculateIPv6,
+              icon: const Icon(Icons.calculate),
+              label: const Text('Calculate'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(16),
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
+
+          // Results
+          if (_ipv6Expanded != null) ...[
+            const Text(
+              'IPv6 Information',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            _buildResultCard('Expanded', _ipv6Expanded!, Icons.unfold_more),
+            _buildResultCard('Compressed', _ipv6Compressed!, Icons.compress),
+            _buildResultCard('Network', _ipv6Network!, Icons.router),
+            _buildResultCard('Type', _ipv6Type!, Icons.category),
+            const SizedBox(height: 16),
+            _buildIPv6Examples(),
+          ],
+        ],
+      ),
+    );
+  }
+  
+  Widget _buildIPv6Examples() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Common IPv6 Addresses',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            _buildExampleRow('Loopback', '::1'),
+            _buildExampleRow('Unspecified', '::'),
+            _buildExampleRow('Link-Local', 'fe80::1'),
+            _buildExampleRow('Global', '2001:db8::1'),
+          ],
+        ),
+      ),
+    );
+  }
+  
+  Widget _buildExampleRow(String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 100,
+            child: Text(
+              label,
+              style: const TextStyle(fontWeight: FontWeight.w500),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              value,
+              style: const TextStyle(fontFamily: 'Courier'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _ipController.dispose();
     _cidrController.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 }
