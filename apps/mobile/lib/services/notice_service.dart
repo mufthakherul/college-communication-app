@@ -154,6 +154,11 @@ class NoticeService {
           'source': source.name,
           'source_url': sourceUrl,
         },
+        permissions: [
+          Permission.read(Role.any()),
+          Permission.update(Role.user(currentUserId ?? systemUserId)),
+          Permission.delete(Role.user(currentUserId ?? systemUserId)),
+        ],
       );
 
       return document.$id;
