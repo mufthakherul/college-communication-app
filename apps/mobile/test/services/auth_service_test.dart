@@ -1,4 +1,3 @@
-import 'package:campus_mesh/services/auth_service.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 // TODO(mufthakherul): Update tests to use Appwrite mocks

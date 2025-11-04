@@ -10,6 +10,8 @@ void main() {
     setUp(() {
       service = AppLoggerService();
       service.clearLogs(); // Start fresh for each test
+      service.setEnabled(true); // Reset to enabled
+      service.setMinLevel(LogLevel.debug); // Reset to debug level
     });
 
     test('should be a singleton', () {
