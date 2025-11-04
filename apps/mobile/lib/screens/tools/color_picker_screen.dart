@@ -53,8 +53,9 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
     setState(() {
       _selectedColor = color;
       
-      // Update HEX
-      _hexController.text = '#${color.value.toRadixString(16).substring(2).toUpperCase()}';
+      // Update HEX (ensure 8 characters with padding before substring)
+      final hexValue = color.value.toRadixString(16).padLeft(8, '0');
+      _hexController.text = '#${hexValue.substring(2).toUpperCase()}';
       
       // Update RGB
       _rController.text = color.red.toString();

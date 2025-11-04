@@ -22,7 +22,7 @@ class _RegexTesterScreenState extends State<RegexTesterScreen> {
   String _replacedText = '';
   
   final Map<String, String> _commonPatterns = {
-    'Email': r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+    'Email': r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
     'Phone (US)': r'^\+?1?\d{10}$',
     'URL': r'https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)',
     'IPv4': r'^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$',
