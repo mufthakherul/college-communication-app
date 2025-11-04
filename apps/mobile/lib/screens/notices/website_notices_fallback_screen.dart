@@ -192,35 +192,6 @@ class _WebsiteNoticesFallbackScreenState
             ),
         ],
       ),
-      bottomNavigationBar: _buildBottomInfo(),
-    );
-  }
-
-  Widget _buildBottomInfo() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: Colors.blue.shade50,
-        border: Border(
-          top: BorderSide(color: Colors.blue.shade200),
-        ),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.info_outline, size: 20, color: Colors.blue.shade700),
-          const SizedBox(width: 12),
-          const Expanded(
-            child: Text(
-              'Viewing official college website notices',
-              style: TextStyle(fontSize: 12),
-            ),
-          ),
-          TextButton(
-            onPressed: () => _showDeveloperInfo(),
-            child: const Text('Developer', style: TextStyle(fontSize: 12)),
-          ),
-        ],
-      ),
     );
   }
 
@@ -248,13 +219,9 @@ class _WebsiteNoticesFallbackScreenState
             ),
             const SizedBox(height: 12),
             const Text(
-              'This view shows the official college website notices page when:',
+              'This view shows the official college website notices page as a fallback when scraped notices are not available.',
               style: TextStyle(fontSize: 14),
             ),
-            const SizedBox(height: 8),
-            _buildBulletPoint('Scraped notices are not available'),
-            _buildBulletPoint('Network scraping fails'),
-            _buildBulletPoint('You want to see the original website'),
             const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.all(12),
@@ -306,134 +273,4 @@ class _WebsiteNoticesFallbackScreenState
     );
   }
 
-  void _showDeveloperInfo() {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Row(
-          children: [
-            CircleAvatar(
-              backgroundColor: Colors.blue,
-              child: Icon(Icons.person, color: Colors.white),
-            ),
-            SizedBox(width: 12),
-            Text('Developer Information'),
-          ],
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Mufthakherul',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'Developer of RPI Communication App',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey,
-              ),
-            ),
-            const SizedBox(height: 16),
-            const Divider(),
-            const SizedBox(height: 12),
-            _buildInfoRow(
-              Icons.school,
-              'Institution',
-              'Rangpur Polytechnic Institute',
-            ),
-            const SizedBox(height: 12),
-            _buildInfoRow(
-              Icons.web,
-              'College Website',
-              'rangpur.polytech.gov.bd',
-            ),
-            const SizedBox(height: 12),
-            _buildInfoRow(
-              Icons.code,
-              'App Features',
-              'Notice scraping, real-time messaging, and more',
-            ),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.green.shade50,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.green.shade200),
-              ),
-              child: const Row(
-                children: [
-                  Icon(Icons.check_circle, color: Colors.green, size: 20),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'This app provides automatic notice scraping and enhanced communication features for the college community',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Close'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBulletPoint(String text) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 12, bottom: 4),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('• ', style: TextStyle(fontSize: 14)),
-          Expanded(
-            child: Text(text, style: const TextStyle(fontSize: 14)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInfoRow(IconData icon, String label, String value) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(icon, size: 20, color: Colors.grey.shade600),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label,
-                style: const TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                value,
-                style: const TextStyle(fontSize: 14),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
 }
