@@ -19,6 +19,12 @@ import 'package:campus_mesh/screens/tools/binary_converter_screen.dart';
 import 'package:campus_mesh/screens/tools/ascii_table_screen.dart';
 import 'package:campus_mesh/screens/tools/code_snippet_manager_screen.dart';
 import 'package:campus_mesh/screens/tools/ip_calculator_screen.dart';
+import 'package:campus_mesh/screens/tools/regex_tester_screen.dart';
+import 'package:campus_mesh/screens/tools/json_formatter_screen.dart';
+import 'package:campus_mesh/screens/tools/hash_generator_screen.dart';
+import 'package:campus_mesh/screens/tools/base64_converter_screen.dart';
+import 'package:campus_mesh/screens/tools/color_picker_screen.dart';
+import 'package:campus_mesh/screens/tools/algorithm_complexity_screen.dart';
 
 class ToolsScreen extends StatefulWidget {
   const ToolsScreen({super.key});
@@ -111,6 +117,54 @@ class _ToolsScreenState extends State<ToolsScreen>
           Icons.router,
           Colors.blueGrey,
           const IPCalculatorScreen(),
+          'CST',
+        ),
+        _buildToolCard(
+          context,
+          'Regex Tester',
+          Icons.find_in_page,
+          Colors.green,
+          const RegexTesterScreen(),
+          'CST',
+        ),
+        _buildToolCard(
+          context,
+          'JSON Formatter',
+          Icons.data_object,
+          Colors.amber,
+          const JSONFormatterScreen(),
+          'CST',
+        ),
+        _buildToolCard(
+          context,
+          'Hash Generator',
+          Icons.fingerprint,
+          Colors.red,
+          const HashGeneratorScreen(),
+          'CST',
+        ),
+        _buildToolCard(
+          context,
+          'Base64 Encoder',
+          Icons.transform,
+          Colors.cyan,
+          const Base64ConverterScreen(),
+          'CST',
+        ),
+        _buildToolCard(
+          context,
+          'Color Picker',
+          Icons.palette,
+          Colors.pink,
+          const ColorPickerScreen(),
+          'CST',
+        ),
+        _buildToolCard(
+          context,
+          'Algorithm Complexity',
+          Icons.analytics,
+          Colors.purple,
+          const AlgorithmComplexityScreen(),
           'CST',
         ),
         // Academic Tools
@@ -297,6 +351,46 @@ class _ToolsScreenState extends State<ToolsScreen>
         ),
         _buildToolCard(
           context,
+          'Regex Tester',
+          Icons.find_in_page,
+          Colors.green,
+          const RegexTesterScreen(),
+          'CST',
+        ),
+        _buildToolCard(
+          context,
+          'JSON Formatter',
+          Icons.data_object,
+          Colors.amber,
+          const JSONFormatterScreen(),
+          'CST',
+        ),
+        _buildToolCard(
+          context,
+          'Hash Generator',
+          Icons.fingerprint,
+          Colors.red,
+          const HashGeneratorScreen(),
+          'CST',
+        ),
+        _buildToolCard(
+          context,
+          'Base64 Encoder',
+          Icons.transform,
+          Colors.cyan,
+          const Base64ConverterScreen(),
+          'CST',
+        ),
+        _buildToolCard(
+          context,
+          'Color Picker',
+          Icons.palette,
+          Colors.pink,
+          const ColorPickerScreen(),
+          'CST',
+        ),
+        _buildToolCard(
+          context,
           'Calculator',
           Icons.calculate,
           Colors.blue,
@@ -309,6 +403,14 @@ class _ToolsScreenState extends State<ToolsScreen>
           Icons.swap_horiz,
           Colors.pink,
           const UnitConverterScreen(),
+          'CST',
+        ),
+        _buildToolCard(
+          context,
+          'Algorithm Complexity',
+          Icons.analytics,
+          Colors.purple,
+          const AlgorithmComplexityScreen(),
           'CST',
         ),
       ],

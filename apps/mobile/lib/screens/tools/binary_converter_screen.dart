@@ -13,6 +13,14 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
   final TextEditingController _binaryController = TextEditingController();
   final TextEditingController _hexController = TextEditingController();
   final TextEditingController _octalController = TextEditingController();
+  
+  // Bitwise operation controllers
+  final TextEditingController _num1Controller = TextEditingController();
+  final TextEditingController _num2Controller = TextEditingController();
+  String _bitwiseResult = '';
+  String _selectedOperation = 'AND';
+  
+  final List<String> _operations = ['AND', 'OR', 'XOR', 'NOT', 'Left Shift', 'Right Shift'];
 
   void _convertFromDecimal(String value) {
     if (value.isEmpty) {
@@ -99,6 +107,75 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
       SnackBar(content: Text('$type copied to clipboard')),
     );
   }
+  
+  void _performBitwiseOperation() {
+    final num1 = int.tryParse(_num1Controller.text);
+    final num2 = int.tryParse(_num2Controller.text);
+    
+    if (num1 == null) {
+      setState(() => _bitwiseResult = 'Invalid first number');
+      return;
+    }
+    
+    if (_selectedOperation != 'NOT' && num2 == null) {
+      setState(() => _bitwiseResult = 'Invalid second number');
+      return;
+    }
+    
+    int result;
+    String operation;
+    
+    switch (_selectedOperation) {
+      case 'AND':
+        result = num1 & num2!;
+        operation = '$num1 & $num2';
+        break;
+      case 'OR':
+        result = num1 | num2!;
+        operation = '$num1 | $num2';
+        break;
+      case 'XOR':
+        result = num1 ^ num2!;
+        operation = '$num1 ^ $num2';
+        break;
+      case 'NOT':
+        result = ~num1;
+        operation = '~$num1';
+        break;
+      case 'Left Shift':
+        result = num1 << (num2 ?? 1);
+        operation = '$num1 << ${num2 ?? 1}';
+        break;
+      case 'Right Shift':
+        result = num1 >> (num2 ?? 1);
+        operation = '$num1 >> ${num2 ?? 1}';
+        break;
+      default:
+        result = 0;
+        operation = '';
+    }
+    
+    setState(() {
+      _bitwiseResult = '$operation = $result\nBinary: ${result.toRadixString(2)}\nHex: 0x${result.toRadixString(16).toUpperCase()}';
+    });
+  }
+  
+  String _toTwosComplement(String binary, int bits) {
+    if (binary.isEmpty) return '';
+    try {
+      int value = int.parse(binary, radix: 2);
+      // Check if value requires more than 'bits' to represent
+      if (value >= (1 << bits)) {
+        return 'Overflow for $bits-bit';
+      }
+      // Invert and add 1
+      int inverted = (~value) & ((1 << bits) - 1);
+      int twosComp = (inverted + 1) & ((1 << bits) - 1);
+      return twosComp.toRadixString(2).padLeft(bits, '0');
+    } catch (e) {
+      return 'Invalid';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -156,9 +233,186 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
               '[0-7]',
             ),
             const SizedBox(height: 24),
+            _buildBitwiseOperations(),
+            const SizedBox(height: 24),
+            _buildTwosComplementSection(),
+            const SizedBox(height: 24),
             _buildReferenceTable(),
           ],
         ),
+      ),
+    );
+  }
+  
+  Widget _buildBitwiseOperations() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.settings, color: Colors.deepPurple),
+                const SizedBox(width: 8),
+                const Text(
+                  'Bitwise Operations',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _num1Controller,
+                    decoration: const InputDecoration(
+                      labelText: 'Number 1',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                if (_selectedOperation != 'NOT')
+                  Expanded(
+                    child: TextField(
+                      controller: _num2Controller,
+                      decoration: const InputDecoration(
+                        labelText: 'Number 2',
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.number,
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            DropdownButtonFormField<String>(
+              value: _selectedOperation,
+              decoration: const InputDecoration(
+                labelText: 'Operation',
+                border: OutlineInputBorder(),
+              ),
+              items: _operations.map((op) {
+                return DropdownMenuItem(value: op, child: Text(op));
+              }).toList(),
+              onChanged: (value) {
+                setState(() => _selectedOperation = value!);
+              },
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: _performBitwiseOperation,
+                icon: const Icon(Icons.calculate),
+                label: const Text('Calculate'),
+              ),
+            ),
+            if (_bitwiseResult.isNotEmpty) ...[
+              const SizedBox(height: 16),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.green[50],
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.green[200]!),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Result:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      _bitwiseResult,
+                      style: const TextStyle(
+                        fontFamily: 'Courier',
+                        fontSize: 13,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+  
+  Widget _buildTwosComplementSection() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.flip, color: Colors.orange),
+                const SizedBox(width: 8),
+                const Text(
+                  'Two\'s Complement',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            if (_binaryController.text.isNotEmpty) ...[
+              _buildComplementRow('8-bit', 8),
+              _buildComplementRow('16-bit', 16),
+              _buildComplementRow('32-bit', 32),
+            ] else
+              Text(
+                'Enter a binary number above to see two\'s complement',
+                style: TextStyle(color: Colors.grey[600], fontSize: 12),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+  
+  Widget _buildComplementRow(String label, int bits) {
+    final complement = _toTwosComplement(_binaryController.text, bits);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 60,
+            child: Text(
+              label,
+              style: const TextStyle(fontWeight: FontWeight.w500),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              complement,
+              style: const TextStyle(fontFamily: 'Courier', fontSize: 12),
+            ),
+          ),
+          if (complement != 'Invalid' && complement != 'Overflow for $bits-bit')
+            IconButton(
+              icon: const Icon(Icons.copy, size: 18),
+              onPressed: () => _copyToClipboard(complement, 'Two\'s Complement'),
+            ),
+        ],
       ),
     );
   }
