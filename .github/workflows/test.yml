@@ -46,7 +46,7 @@ jobs:
 
       - name: Run analyzer
         working-directory: apps/mobile
-        run: flutter analyze --no-fatal-infos
+        run: flutter analyze --fatal-errors --no-fatal-warnings --no-fatal-infos
 
       - name: Run tests
         working-directory: apps/mobile
@@ -110,7 +110,7 @@ jobs:
 
       - name: Analyze code
         working-directory: apps/mobile
-        run: flutter analyze --no-fatal-infos
+        run: flutter analyze --fatal-errors --no-fatal-warnings --no-fatal-infos
 
   notice-scraping-test:
     name: Notice Scraping Test
