@@ -1,7 +1,7 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:campus_mesh/services/auth_service.dart';
+import 'package:flutter_test/flutter_test.dart';
 
-// TODO: Update tests to use Appwrite mocks
+// TODO(mufthakherul): Update tests to use Appwrite mocks
 // For now, these are placeholder tests demonstrating expected behavior
 
 void main() {
