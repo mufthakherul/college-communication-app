@@ -9,7 +9,7 @@ A comprehensive college communication platform for **Rangpur Polytechnic Institu
 
 ## 🚀 **PRODUCTION READY** - Deploy in 30 Minutes!
 
-> ⚡ **QUICK START:** [DEPLOYMENT_QUICKSTART.md](DEPLOYMENT_QUICKSTART.md) - Deploy to production in 30-45 minutes  
+> ⚡ **QUICK START:** [docs/QUICK_START.md](docs/QUICK_START.md) - Get started in under 30 minutes  
 > 📖 **COMPLETE GUIDE:** [PRODUCTION_DEPLOYMENT_GUIDE.md](PRODUCTION_DEPLOYMENT_GUIDE.md) - Comprehensive deployment documentation  
 > 🔒 **SECURITY:** [SECURITY.md](SECURITY.md) - Security features and best practices
 
@@ -32,22 +32,21 @@ A comprehensive college communication platform for **Rangpur Polytechnic Institu
 
 **Appwrite offers FREE Pro plan for educational projects!**
 
-### 🆕 Updated Documentation Available
+### 🆕 Complete Appwrite Guide Available
 
-**⚠️ IMPORTANT:** Appwrite has been significantly updated with new services and features. Please review:
+**⚠️ IMPORTANT:** All Appwrite documentation has been consolidated into a comprehensive guide.
 
 **📋 Prerequisites:**
 - **Dart SDK 3.3.0+** required for Appwrite v12.0.4
-- See [DART_SDK_UPGRADE_GUIDE.md](DART_SDK_UPGRADE_GUIDE.md) if you need to upgrade
-- Or use Appwrite v12.0.2 with Dart 3.0+ (see upgrade guide for details)
+- Flutter SDK 3.x or higher
 
-- **[APPWRITE_UPDATED_GUIDE.md](APPWRITE_UPDATED_GUIDE.md)** - 🆕 **Latest comprehensive guide**
-  - Updated SDK (v12.0.4 - requires Dart 3.3.0+)
-  - Database with advanced queries
+- **[docs/APPWRITE_GUIDE.md](docs/APPWRITE_GUIDE.md)** - 🆕 **Complete Appwrite guide**
+  - Account setup & educational benefits
+  - Database schema & configuration
+  - Authentication setup
+  - Storage configuration
   - Real-time subscriptions
-  - Functions (serverless)
-  - Enhanced permissions
-  - Complete examples
+  - Complete examples & troubleshooting
 
 **What You Get:**
 - ✅ **Free Pro Plan** ($15/month value) for students
@@ -58,24 +57,42 @@ A comprehensive college communication platform for **Rangpur Polytechnic Institu
 - ✅ **Learning resources** and workshops
 
 **Get Started:**
-1. 📚 **Latest Features**: [APPWRITE_UPDATED_GUIDE.md](APPWRITE_UPDATED_GUIDE.md) - **START HERE** for updated info
-2. 🚀 **Quick Deploy**: [DEPLOYMENT_QUICKSTART.md](DEPLOYMENT_QUICKSTART.md) - 30 minutes setup
-3. 📖 **Full Guide**: [PRODUCTION_DEPLOYMENT_GUIDE.md](PRODUCTION_DEPLOYMENT_GUIDE.md) - Complete documentation
+1. 📚 **Appwrite Setup**: [docs/APPWRITE_GUIDE.md](docs/APPWRITE_GUIDE.md) - **START HERE** for backend setup
+2. 🚀 **Quick Start**: [docs/QUICK_START.md](docs/QUICK_START.md) - Get running in 30 minutes
+3. 📖 **Deployment**: [PRODUCTION_DEPLOYMENT_GUIDE.md](PRODUCTION_DEPLOYMENT_GUIDE.md) - Production deployment
 4. 🎓 **Apply for benefits**: https://appwrite.io/education
 
 ---
 
-## 🌐 Alternative: Supabase Support
+## 🚀 Getting Started
 
-The app also supports Supabase backend:
-- 📖 Setup Guide: [SUPABASE_SETUP_GUIDE.md](SUPABASE_SETUP_GUIDE.md)
-- 📊 Backend Comparison: [BACKEND_COMPARISON.md](BACKEND_COMPARISON.md)
+### Quick Start
 
-## 🚀 Backend Setup (Choose One)
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/mufthakherul/college-communication-app.git
+   cd college-communication-app
+   ```
 
-### Option A: Supabase (Current - 100% Free)
+2. **Install dependencies**
+   ```bash
+   flutter pub get
+   ```
 
-The app is currently configured to use Supabase. Follow the step-by-step guide: [SUPABASE_SETUP_GUIDE.md](SUPABASE_SETUP_GUIDE.md)
+3. **Setup Appwrite backend**
+   - Follow [docs/APPWRITE_GUIDE.md](docs/APPWRITE_GUIDE.md) for complete setup
+   - Or use [docs/QUICK_START.md](docs/QUICK_START.md) for quick setup
+
+4. **Run the app**
+   ```bash
+   flutter run
+   ```
+
+### Backend Options
+
+The app is primarily designed for **Appwrite** backend:
+- 📖 Primary Guide: [docs/APPWRITE_GUIDE.md](docs/APPWRITE_GUIDE.md)
+- 🌐 Alternative backends available in `archive_docs/`
 
 **What Supabase Provides (100% Free):**
 - User authentication (login/register) - 50,000 monthly active users
@@ -111,10 +128,10 @@ The app is currently configured to use Supabase. Follow the step-by-step guide: 
 - ✅ Easy self-hosting option if needed
 
 **Get Started:**
-1. 📚 Learn about benefits: [APPWRITE_EDUCATIONAL_BENEFITS.md](APPWRITE_EDUCATIONAL_BENEFITS.md)
-2. 📊 Compare backends: [BACKEND_COMPARISON.md](BACKEND_COMPARISON.md)
-3. 🚀 Migration guide: [APPWRITE_MIGRATION_GUIDE.md](APPWRITE_MIGRATION_GUIDE.md)
-4. 🎓 Apply now: https://appwrite.io/education
+1. 📚 Setup Guide: [docs/APPWRITE_GUIDE.md](docs/APPWRITE_GUIDE.md) - Complete Appwrite setup
+2. 🚀 Quick Start: [docs/QUICK_START.md](docs/QUICK_START.md) - Get running in 30 minutes
+3. 🎓 Apply for benefits: https://appwrite.io/education
+4. 📖 Archived guides: See `archive_docs/` for historical documentation
 
 ---
 
@@ -152,7 +169,7 @@ The app is currently configured to use Supabase. Follow the step-by-step guide: 
 - ✅ **Security Tests**: Biometric & secure storage validation
 - ✅ **Logger Tests**: All logging functionality verified
 
-See [NEW_FEATURES_v2.1.md](NEW_FEATURES_v2.1.md) for complete details.
+See [IMPLEMENTATION_SUMMARY_v2.1.md](IMPLEMENTATION_SUMMARY_v2.1.md) for complete implementation details.
 
 ### Previous Release v1.0.0
 
@@ -165,10 +182,10 @@ See [NEW_FEATURES_v2.1.md](NEW_FEATURES_v2.1.md) for complete details.
 
 **Complete Documentation** 📚
 - ✅ [Production Deployment Guide](PRODUCTION_DEPLOYMENT_GUIDE.md) - Complete step-by-step guide
-- ✅ [Quick Start Guide](DEPLOYMENT_QUICKSTART.md) - Deploy in 30 minutes
+- ✅ [Quick Start Guide](docs/QUICK_START.md) - Get started in 30 minutes
 - ✅ [Security Policy](SECURITY.md) - Security features and best practices
-- ✅ [Pre-Production Checklist](PRE_PRODUCTION_CHECKLIST.md) - Validation checklist
-- ✅ [Release Summary](PRODUCTION_RELEASE_SUMMARY.md) - Complete release overview
+- ✅ [Appwrite Setup](docs/APPWRITE_GUIDE.md) - Backend configuration guide
+- ✅ [Implementation Summary](IMPLEMENTATION_SUMMARY_v2.1.md) - Complete implementation overview
 
 **Production Ready** ✅
 - ✅ Tested and verified
@@ -181,10 +198,10 @@ See [NEW_FEATURES_v2.1.md](NEW_FEATURES_v2.1.md) for complete details.
 
 Choose your path:
 
-- **🚀 Quick Deploy** (30 min): [DEPLOYMENT_QUICKSTART.md](DEPLOYMENT_QUICKSTART.md)
+- **🚀 Quick Start** (30 min): [docs/QUICK_START.md](docs/QUICK_START.md)
 - **📖 Complete Guide** (45 min): [PRODUCTION_DEPLOYMENT_GUIDE.md](PRODUCTION_DEPLOYMENT_GUIDE.md)
-- **✅ Pre-Flight Check**: [PRE_PRODUCTION_CHECKLIST.md](PRE_PRODUCTION_CHECKLIST.md)
-- **📊 Release Details**: [PRODUCTION_RELEASE_SUMMARY.md](PRODUCTION_RELEASE_SUMMARY.md)
+- **🔧 Appwrite Setup**: [docs/APPWRITE_GUIDE.md](docs/APPWRITE_GUIDE.md)
+- **📊 Implementation Status**: [IMPLEMENTATION_SUMMARY_v2.1.md](IMPLEMENTATION_SUMMARY_v2.1.md)
 
 ---
 
@@ -196,7 +213,7 @@ Choose your path:
 2. Download the APK artifact from the latest successful run
 3. Or check the [Releases Page](../../releases) for stable versions
 
-See the complete [APK Build Guide](APK_BUILD_GUIDE.md) for detailed instructions.
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) or the archived [APK Build Guide](archive_docs/APK_BUILD_GUIDE.md) for detailed instructions.
 
 ## 🚀 Quick Start
 
@@ -246,7 +263,7 @@ flutter run
   - Group messages require admin/teacher approval
   - Message status indicators (pending, synced, failed)
   - Sync statistics dashboard
-  - See [OFFLINE_CHAT_GUIDE.md](OFFLINE_CHAT_GUIDE.md) for details
+  - See [docs/NETWORKING_GUIDE.md](docs/NETWORKING_GUIDE.md) for details
 - 💾 **Intelligent Caching** - Fast and efficient data access
   - Time-based expiry (5min, 1hr, 1day)
   - 50MB cache limit with auto-cleanup
@@ -284,7 +301,7 @@ flutter run
   - Secure local storage for chats
   - API key cleared on logout for security
   - Multiple chat sessions support
-  - See [AI_CHATBOT_GUIDE.md](AI_CHATBOT_GUIDE.md) for details
+  - See archived [AI_CHATBOT_GUIDE.md](archive_docs/AI_CHATBOT_GUIDE.md) for details
 - 📝 **Assignment Tracker** - Coming soon
 - 📅 **Class Timetable** - Coming soon
 - 🎉 **College Events** - Coming soon
@@ -314,73 +331,57 @@ flutter run
 
 ## 📖 Documentation
 
-### 🆕 Appwrite Setup & Configuration (UPDATED - November 2025)
+### Essential Documentation
 
-**Important:** Appwrite has been significantly updated. Use these latest guides:
+**Start here for setup and development:**
 
-1. **[APPWRITE_UPDATED_GUIDE.md](APPWRITE_UPDATED_GUIDE.md)** - 📚 **START HERE**
-   - Complete guide with latest Appwrite features
-   - Database, Auth, Storage, Realtime, Functions
-   - Updated SDK (v13.0.0)
+1. **[docs/QUICK_START.md](docs/QUICK_START.md)** - 🚀 **Get started in 30 minutes**
+   - Complete setup guide from scratch
+   - Appwrite configuration
+   - First-time user setup
+   
+2. **[docs/APPWRITE_GUIDE.md](docs/APPWRITE_GUIDE.md)** - 📚 **Complete Appwrite guide**
+   - Account setup & educational benefits
+   - Database schema & configuration
+   - Authentication & storage setup
    - Real-time subscriptions
-   - Advanced permissions
-   - Security best practices
+   - Troubleshooting
 
-2. **[APPWRITE_DATABASE_QUICKSTART.md](APPWRITE_DATABASE_QUICKSTART.md)** - ⚡ Quick Reference
-   - Step-by-step database setup
-   - Collection configuration with permissions
-   - Storage bucket setup
-   - Testing guide
+3. **[docs/NETWORKING_GUIDE.md](docs/NETWORKING_GUIDE.md)** - 🌐 **Networking guide**
+   - Architecture overview
+   - Mesh networking setup
+   - Offline chat system
+   - Network detection
+   - Troubleshooting
 
-3. **[APPWRITE_CONFIGURATION_CHECKLIST.md](APPWRITE_CONFIGURATION_CHECKLIST.md)** - ✅ Complete Checklist
-   - Phase-by-phase setup checklist
-   - Verification steps
-   - Troubleshooting guide
-   - Success criteria
+4. **[PRODUCTION_DEPLOYMENT_GUIDE.md](PRODUCTION_DEPLOYMENT_GUIDE.md)** - 🚀 **Production deployment**
+   - Complete deployment checklist
+   - Security configurations
+   - APK signing and release
 
-4. **[APPWRITE_COLLECTIONS_SCHEMA.md](APPWRITE_COLLECTIONS_SCHEMA.md)** - 📊 Schema Reference
-   - All collections with attributes
-   - Permissions configuration
-   - Indexes setup
+### Core Documentation
 
-5. **[APPWRITE_SETUP_INSTRUCTIONS.md](APPWRITE_SETUP_INSTRUCTIONS.md)** - 🔧 Project-Specific Setup
-   - Your project credentials
-   - Collection creation steps
-   - Bucket configuration
+- **[docs/README.md](docs/README.md)** - Documentation overview
+- **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** - System architecture
+- **[docs/API.md](docs/API.md)** - API reference
+- **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** - Deployment guide
+- **[docs/CONTRIBUTING.md](docs/CONTRIBUTING.md)** - Contributing guidelines
+- **[docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md)** - Troubleshooting guide
+- **[docs/SEEDING.md](docs/SEEDING.md)** - Database seeding
 
-### Backend Setup & Migration 🎓
-- [**Appwrite Educational Benefits**](APPWRITE_EDUCATIONAL_BENEFITS.md) - Get free Pro plan for students!
-- [**Backend Comparison**](BACKEND_COMPARISON.md) - Supabase vs Appwrite analysis
-- [**Appwrite Migration Guide**](APPWRITE_MIGRATION_GUIDE.md) - Migration strategy overview
-- [Supabase Setup Guide](SUPABASE_SETUP_GUIDE.md) - Alternative backend option
+### User Guides
 
-### Setup & Getting Started
-- [Supabase Setup Guide](SUPABASE_SETUP_GUIDE.md) - **Connect to Supabase (current backend)**
-- [APK Build Guide](APK_BUILD_GUIDE.md) - **Download and install the app**
-- [Quick Start](QUICK_START.md) - **For teachers/immediate use**
+- **[docs/USER_GUIDE.md](docs/USER_GUIDE.md)** - For students and users
+- **[docs/TEACHER_GUIDE.md](docs/TEACHER_GUIDE.md)** - For teachers and staff
+- **[docs/ACCESSIBILITY.md](docs/ACCESSIBILITY.md)** - Accessibility features
+- **[docs/CONFIGURATION_GUIDE.md](docs/CONFIGURATION_GUIDE.md)** - App configuration
 
-### Advanced Features (Phase 2 & 3)
-- [Phase 2 & 3 Implementation](PHASE2_PHASE3_IMPLEMENTATION.md) - **🆕 Complete feature overview**
-- [Edge Functions Guide](EDGE_FUNCTIONS_GUIDE.md) - **🆕 Serverless functions deployment**
-- [Analytics Setup Guide](ANALYTICS_SETUP_GUIDE.md) - **🆕 Analytics, Sentry, OneSignal**
-- [AI Chatbot Guide](AI_CHATBOT_GUIDE.md) - **🆕 AI assistant setup and usage**
+### Additional Resources
 
-### Technical Documentation
-- [Mesh Network Guide](MESH_NETWORK_GUIDE.md) - **Peer-to-peer communication**
-- [Network Improvements Summary](NETWORK_IMPROVEMENTS_SUMMARY.md) - **Technical details**
-- [Complete Networking Guide](NETWORKING_COMPLETE_GUIDE.md) - **🆕 Comprehensive networking documentation**
-- [Networking Troubleshooting](NETWORKING_TROUBLESHOOTING.md) - **🆕 Solve networking issues**
-- [Full Documentation](docs/README.md)
-- [Architecture Overview](docs/ARCHITECTURE.md)
-- [API Reference](docs/API.md)
-- [Deployment Guide](docs/DEPLOYMENT.md)
-- [Database Seeding Guide](docs/SEEDING.md)
-- [Contributing Guidelines](docs/CONTRIBUTING.md)
-- [Troubleshooting](docs/TROUBLESHOOTING.md)
-
-### Migration & Reference
-- [Migration Notes](MIGRATION_NOTES.md) - **Complete migration documentation**
-- [Firebase Setup Guide](FIREBASE_SETUP_GUIDE.md) - **Legacy reference**
+- **[SECURITY.md](SECURITY.md)** - Security policy and features
+- **[docs/TESTING_GUIDE.md](docs/TESTING_GUIDE.md)** - Testing guidelines
+- **[IMPLEMENTATION_SUMMARY_v2.1.md](IMPLEMENTATION_SUMMARY_v2.1.md)** - Latest implementation status
+- **[archive_docs/](archive_docs/)** - Historical documentation and references
 
 ## 🏗️ Project Structure
 
