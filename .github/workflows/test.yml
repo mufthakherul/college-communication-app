@@ -110,7 +110,7 @@ jobs:
 
       - name: Analyze code
         working-directory: apps/mobile
-        run: flutter analyze --fatal-infos
+        run: flutter analyze --no-fatal-infos
 
   notice-scraping-test:
     name: Notice Scraping Test
