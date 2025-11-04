@@ -47,32 +47,30 @@ class WebsiteScraperService {
       // The website uses DataTables with server-side processing
       // Data is loaded via AJAX from the API endpoint
       // We need to make a POST request to the DataTables API
-      final response = await http
-          .post(
-            Uri.parse(_apiUrl),
-            headers: {
-              'User-Agent': 'Mozilla/5.0 (compatible; RPICommunicationApp/1.0)',
-              'Content-Type': 'application/x-www-form-urlencoded',
-              'Accept': 'application/json, text/javascript, */*; q=0.01',
-              'X-Requested-With': 'XMLHttpRequest',
-            },
-            body: {
-              'draw': '1',
-              'start': '0',
-              'length': '20', // Fetch 20 notices at a time
-              'domain_id': '',
-              'lang': 'bn',
-              'subdomain': '',
-              'content_type': 'notices',
-            },
-          )
-          .timeout(
-            const Duration(seconds: 30),
-            onTimeout: () {
-              debugPrint('API request timed out, attempting HTML scraping...');
-              throw TimeoutException('API request timed out');
-            },
-          );
+      final response = await http.post(
+        Uri.parse(_apiUrl),
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (compatible; RPICommunicationApp/1.0)',
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Accept': 'application/json, text/javascript, */*; q=0.01',
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: {
+          'draw': '1',
+          'start': '0',
+          'length': '20', // Fetch 20 notices at a time
+          'domain_id': '',
+          'lang': 'bn',
+          'subdomain': '',
+          'content_type': 'notices',
+        },
+      ).timeout(
+        const Duration(seconds: 30),
+        onTimeout: () {
+          debugPrint('API request timed out, attempting HTML scraping...');
+          throw TimeoutException('API request timed out');
+        },
+      );
 
       if (response.statusCode != 200) {
         debugPrint(
@@ -136,14 +134,12 @@ class WebsiteScraperService {
     try {
       debugPrint('Fetching notices via HTML scraping...');
 
-      final response = await http
-          .get(
-            Uri.parse(_websiteUrl),
-            headers: {
-              'User-Agent': 'Mozilla/5.0 (compatible; RPICommunicationApp/1.0)',
-            },
-          )
-          .timeout(const Duration(seconds: 30));
+      final response = await http.get(
+        Uri.parse(_websiteUrl),
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (compatible; RPICommunicationApp/1.0)',
+        },
+      ).timeout(const Duration(seconds: 30));
 
       if (response.statusCode != 200) {
         throw Exception('Failed to load website: ${response.statusCode}');
@@ -417,8 +413,7 @@ class WebsiteScraperService {
       DateTime? expiresAt,
       required String source,
       String? sourceUrl,
-    })
-    createNoticeCallback,
+    }) createNoticeCallback,
   ) async {
     try {
       final notices = await getNotices(forceRefresh: true);
@@ -518,20 +513,20 @@ class ScrapedNotice {
   });
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'title': title,
-    'description': description,
-    'url': url,
-    'publishedDate': publishedDate.toIso8601String(),
-    'source': source,
-  };
+        'id': id,
+        'title': title,
+        'description': description,
+        'url': url,
+        'publishedDate': publishedDate.toIso8601String(),
+        'source': source,
+      };
 
   factory ScrapedNotice.fromJson(Map<String, dynamic> json) => ScrapedNotice(
-    id: json['id'] ?? '',
-    title: json['title'] ?? '',
-    description: json['description'] ?? '',
-    url: json['url'] ?? '',
-    publishedDate: DateTime.parse(json['publishedDate']),
-    source: json['source'] ?? 'Website',
-  );
+        id: json['id'] ?? '',
+        title: json['title'] ?? '',
+        description: json['description'] ?? '',
+        url: json['url'] ?? '',
+        publishedDate: DateTime.parse(json['publishedDate']),
+        source: json['source'] ?? 'Website',
+      );
 }

@@ -49,7 +49,7 @@ linter:
     avoid_positional_boolean_parameters: true
     avoid_private_typedef_functions: true
     avoid_renaming_method_parameters: true
-    avoid_returning_null_for_future: true
+    # avoid_returning_null_for_future: true  # Removed in Dart 3.3.0
     avoid_returning_null_for_void: true
     avoid_shadowing_type_parameters: true
     avoid_single_cascade_in_expression_statements: true

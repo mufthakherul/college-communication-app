@@ -112,8 +112,7 @@ class LocalMessageDatabase {
     final db = await database;
     return await db.query(
       'local_messages',
-      where:
-          '(sender_id = ? AND recipient_id = ?) OR '
+      where: '(sender_id = ? AND recipient_id = ?) OR '
           '(sender_id = ? AND recipient_id = ?)',
       whereArgs: [userId1, userId2, userId2, userId1],
       orderBy: 'created_at ASC',
@@ -189,9 +188,8 @@ class LocalMessageDatabase {
   /// Delete synced messages older than specified days
   Future<int> cleanupSyncedMessages({int daysToKeep = 7}) async {
     final db = await database;
-    final cutoffDate = DateTime.now()
-        .subtract(Duration(days: daysToKeep))
-        .toIso8601String();
+    final cutoffDate =
+        DateTime.now().subtract(Duration(days: daysToKeep)).toIso8601String();
 
     return await db.delete(
       'local_messages',

@@ -55,11 +55,11 @@ class _MessagesScreenState extends State<MessagesScreen> {
       return messages.where((message) {
         try {
           final contentMatch = message.content.toLowerCase().contains(
-            _searchQuery.toLowerCase(),
-          );
+                _searchQuery.toLowerCase(),
+              );
           final recipientMatch = message.recipientId.toLowerCase().contains(
-            _searchQuery.toLowerCase(),
-          );
+                _searchQuery.toLowerCase(),
+              );
           return contentMatch || recipientMatch;
         } catch (e) {
           // If there's an error filtering this message, exclude it
@@ -215,9 +215,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
                   title: Text(
                     message.recipientId,
                     style: TextStyle(
-                      fontWeight: message.read
-                          ? FontWeight.normal
-                          : FontWeight.bold,
+                      fontWeight:
+                          message.read ? FontWeight.normal : FontWeight.bold,
                     ),
                   ),
                   subtitle: Text(
@@ -242,8 +241,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
                     final navigator = Navigator.of(context);
                     final userId =
                         message.senderId == _authService.currentUserId
-                        ? message.recipientId
-                        : message.senderId;
+                            ? message.recipientId
+                            : message.senderId;
 
                     // Get or fetch user info
                     UserModel? otherUser;
