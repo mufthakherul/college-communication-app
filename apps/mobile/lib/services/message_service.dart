@@ -240,9 +240,14 @@ class MessageService {
       }
 
       // Validate recipient ID format - accept both UUID and Appwrite document IDs
-      if (!InputValidator.isValidDocumentId(recipientId) &&
-          !InputValidator.isValidUuid(recipientId)) {
-        throw Exception('Invalid recipient ID format');
+      // Allow system user IDs and common patterns
+      if (recipientId.isEmpty || recipientId.length > 255) {
+        throw Exception('Invalid recipient: Recipient ID is empty or too long');
+      }
+      
+      // Basic validation - just check it's not obviously malformed
+      if (recipientId.contains(RegExp(r'[<>"\'\\/]'))) {
+        throw Exception('Invalid recipient: Recipient ID contains invalid characters');
       }
 
       // Sanitize message content
@@ -294,6 +299,13 @@ class MessageService {
           'read': false,
           'created_at': now,
         },
+        permissions: [
+          Permission.read(Role.user(currentUserId)),
+          Permission.read(Role.user(recipientId)),
+          Permission.update(Role.user(currentUserId)),
+          Permission.update(Role.user(recipientId)),
+          Permission.delete(Role.user(currentUserId)),
+        ],
       );
 
       return document.$id;

@@ -23,7 +23,7 @@ class _ApiKeyInputScreenState extends State<ApiKeyInputScreen> {
     super.dispose();
   }
 
-  Future<void> _validateAndSaveApiKey() async {
+  Future<void> _validateAndSaveApiKey({bool skipValidation = false}) async {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() {
@@ -34,15 +34,18 @@ class _ApiKeyInputScreenState extends State<ApiKeyInputScreen> {
     final apiKey = _apiKeyController.text.trim();
 
     try {
-      // Validate the API key
-      final isValid = await _aiService.validateApiKey(apiKey);
+      if (!skipValidation) {
+        // Validate the API key
+        final isValid = await _aiService.validateApiKey(apiKey);
 
-      if (!isValid) {
-        setState(() {
-          _errorMessage = 'Invalid API key. Please check and try again.';
-          _isLoading = false;
-        });
-        return;
+        if (!isValid) {
+          setState(() {
+            _errorMessage =
+                'API key validation failed. This could be due to network issues or an invalid key. You can try again or save anyway and test it in the chat.';
+            _isLoading = false;
+          });
+          return;
+        }
       }
 
       // Store the API key
@@ -54,7 +57,8 @@ class _ApiKeyInputScreenState extends State<ApiKeyInputScreen> {
       }
     } catch (e) {
       setState(() {
-        _errorMessage = 'Failed to validate API key: $e';
+        _errorMessage =
+            'Failed to validate API key: ${e.toString()}. You can try again or save anyway.';
         _isLoading = false;
       });
     }
@@ -123,19 +127,24 @@ class _ApiKeyInputScreenState extends State<ApiKeyInputScreen> {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.red[50],
+                      color: Colors.orange[50],
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.red[300]!),
+                      border: Border.all(color: Colors.orange[300]!),
                     ),
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(Icons.error_outline, color: Colors.red[700]),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            _errorMessage!,
-                            style: TextStyle(color: Colors.red[700]),
-                          ),
+                        Row(
+                          children: [
+                            Icon(Icons.warning_amber, color: Colors.orange[700]),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                _errorMessage!,
+                                style: TextStyle(color: Colors.orange[900]),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -154,10 +163,25 @@ class _ApiKeyInputScreenState extends State<ApiKeyInputScreen> {
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : const Text(
-                          'Save & Continue',
+                          'Validate & Save',
                           style: TextStyle(fontSize: 16),
                         ),
                 ),
+                if (_errorMessage != null) ...[
+                  const SizedBox(height: 12),
+                  OutlinedButton(
+                    onPressed: _isLoading
+                        ? null
+                        : () => _validateAndSaveApiKey(skipValidation: true),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
+                    child: const Text(
+                      'Save Without Validation',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ],
                 const SizedBox(height: 24),
                 const Divider(),
                 const SizedBox(height: 16),
