@@ -1,6 +1,6 @@
+import 'package:campus_mesh/services/website_scraper_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:campus_mesh/services/website_scraper_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
@@ -232,7 +232,7 @@ void main() {
     test(
       'should parse notices with valid structure',
       () {
-        // TODO: Implement HTML parsing test with mock HTML
+        // TODO(mufthakherul): Implement HTML parsing test with mock HTML
         // This requires exposing the internal parsing method or using mock HTTP responses
       },
       skip: 'Placeholder - requires refactoring to expose parsing method',
@@ -241,7 +241,7 @@ void main() {
     test(
       'should handle malformed HTML gracefully',
       () {
-        // TODO: Test that malformed HTML doesn't crash the parser
+        // TODO(mufthakherul): Test that malformed HTML doesn't crash the parser
       },
       skip: 'Placeholder - requires refactoring to expose parsing method',
     );
@@ -249,7 +249,7 @@ void main() {
     test(
       'should extract absolute URLs from relative paths',
       () {
-        // TODO: Test URL normalization logic
+        // TODO(mufthakherul): Test URL normalization logic
       },
       skip: 'Placeholder - requires refactoring to expose URL helper method',
     );
@@ -257,7 +257,7 @@ void main() {
     test(
       'should parse various date formats',
       () {
-        // TODO: Test date parsing logic with various formats
+        // TODO(mufthakherul): Test date parsing logic with various formats
       },
       skip: 'Placeholder - requires refactoring to expose date parsing method',
     );
@@ -267,7 +267,7 @@ void main() {
     test(
       'should integrate with NoticeService',
       () {
-        // TODO: Verify that scraped notices can be stored in the notice service
+        // TODO(mufthakherul): Verify that scraped notices can be stored in the notice service
       },
       skip: 'Placeholder - requires NoticeService mock or integration setup',
     );
@@ -275,7 +275,7 @@ void main() {
     test(
       'should not duplicate notices on multiple scrapes',
       () {
-        // TODO: Verify that the same notice isn't added multiple times
+        // TODO(mufthakherul): Verify that the same notice isn't added multiple times
       },
       skip: 'Placeholder - requires multiple scrape simulation',
     );
@@ -283,7 +283,7 @@ void main() {
     test(
       'should update existing notices if content changes',
       () {
-        // TODO: Verify that notices are updated when website content changes
+        // TODO(mufthakherul): Verify that notices are updated when website content changes
       },
       skip: 'Placeholder - requires mock HTTP responses with different content',
     );
