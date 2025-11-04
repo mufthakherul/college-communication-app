@@ -238,14 +238,24 @@ lib/services/
 
 ## Changelog
 
-### Version 2.0.0+2
-- ✅ Added website notices fallback screen with WebView
-- ✅ Enhanced notice detail with source links and developer profile
+### Version 2.0.0+2 (Latest)
+- ✅ Added website notices fallback screen with WebView (in-app viewing)
+- ✅ Enhanced notice detail with source links
 - ✅ Improved create notice screen with permission checks
 - ✅ Added comprehensive error handling and user guidance
 - ✅ Made GitHub Actions workflow more resilient
+- ✅ Fixed flutter analyze command (removed --no-fatal-warnings)
+- ✅ Temporarily disabled root/jailbreak detection to prevent crashes
+- ✅ Removed developer profile dialogs from notice screens
+- ✅ Simplified fallback UI for better user experience
 - ✅ Added multiple access points for website notices
 - ✅ Enhanced empty and error states with actionable buttons
+
+### Security Changes
+- **Root/Jailbreak Detection**: Temporarily disabled due to FileSystemException crashes on some devices
+- **Other Security Checks**: Still active (backend config validation, build integrity)
+- **Fail-Open Approach**: App allows execution while logging warnings
+- **Re-enable Note**: Can be re-enabled after testing on target devices
 
 ---
 
