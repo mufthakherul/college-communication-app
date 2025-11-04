@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/foundation.dart';
+import 'package:campus_mesh/services/app_logger_service.dart';
 import 'package:campus_mesh/services/connectivity_service.dart';
 import 'package:campus_mesh/services/notice_service.dart';
 import 'package:campus_mesh/services/message_service.dart';
@@ -38,7 +39,10 @@ class OfflineQueueService {
     // Check queue size limit
     if (_queue.length >= _maxQueueSize) {
       if (kDebugMode) {
-        print('Queue full, removing oldest low-priority action');
+        logger.warning(
+          'Queue full, removing oldest low-priority action',
+          category: 'OfflineQueue',
+        );
       }
       _removeOldestLowPriorityAction();
     }
@@ -48,7 +52,10 @@ class OfflineQueueService {
     await _saveQueue();
 
     if (kDebugMode) {
-      print('Action queued: ${action.type} (priority: ${action.priority})');
+      logger.debug(
+        'Action queued: ${action.type} (priority: ${action.priority})',
+        category: 'OfflineQueue',
+      );
     }
   }
 
@@ -95,7 +102,7 @@ class OfflineQueueService {
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error loading queue: $e');
+        logger.error('Error loading queue', category: 'OfflineQueue', error: e);
       }
     }
   }
@@ -108,7 +115,7 @@ class OfflineQueueService {
       await prefs.setString(_queueKey, queueJson);
     } catch (e) {
       if (kDebugMode) {
-        print('Error saving queue: $e');
+        logger.error('Error saving queue', category: 'OfflineQueue', error: e);
       }
     }
   }
@@ -126,7 +133,7 @@ class OfflineQueueService {
     // Check if online and network quality is sufficient
     if (!_connectivityService.isOnline) {
       if (kDebugMode) {
-        print('Cannot process queue: offline');
+        logger.info('Cannot process queue: offline', category: 'OfflineQueue');
       }
       return;
     }
@@ -134,7 +141,10 @@ class OfflineQueueService {
     _lastSyncAttempt = DateTime.now();
 
     if (kDebugMode) {
-      print('Processing ${_queue.length} queued actions');
+      logger.info(
+        'Processing ${_queue.length} queued actions',
+        category: 'OfflineQueue',
+      );
     }
 
     final actions = List<OfflineAction>.from(_queue);
@@ -157,8 +167,10 @@ class OfflineQueueService {
             // Exponential backoff: 1s, 2s, 4s
             final delaySeconds = pow(2, attempt - 1).toInt();
             if (kDebugMode) {
-              print(
-                'Retrying action ${action.type} after ${delaySeconds}s (attempt ${attempt + 1})',
+              logger.info(
+                'Retrying action ${action.type} after ${delaySeconds}s '
+                '(attempt ${attempt + 1})',
+                category: 'OfflineQueue',
               );
             }
             await Future.delayed(Duration(seconds: delaySeconds));
@@ -169,14 +181,20 @@ class OfflineQueueService {
           successCount++;
 
           if (kDebugMode) {
-            print('✓ Processed action: ${action.type}');
+            logger.debug(
+              '✓ Processed action: ${action.type}',
+              category: 'OfflineQueue',
+            );
           }
           break;
         } catch (e) {
           lastError = e is Exception ? e : Exception(e.toString());
           if (kDebugMode) {
-            print(
-              '✗ Error processing action ${action.type} (attempt ${attempt + 1}): $e',
+            logger.warning(
+              '✗ Error processing action ${action.type} '
+              '(attempt ${attempt + 1})',
+              category: 'OfflineQueue',
+              metadata: {'error': e.toString()},
             );
           }
         }
@@ -197,13 +215,18 @@ class OfflineQueueService {
           _queue.add(updatedAction);
 
           if (kDebugMode) {
-            print(
-              'Re-queued failed action: ${action.type} (retry ${updatedAction.retryCount}/$_maxRetries)',
+            logger.info(
+              'Re-queued failed action: ${action.type} '
+              '(retry ${updatedAction.retryCount}/$_maxRetries)',
+              category: 'OfflineQueue',
             );
           }
         } else {
           if (kDebugMode) {
-            print('Action ${action.type} exceeded max retries, dropping');
+            logger.warning(
+              'Action ${action.type} exceeded max retries, dropping',
+              category: 'OfflineQueue',
+            );
           }
         }
       }
@@ -218,8 +241,10 @@ class OfflineQueueService {
     await _saveQueue();
 
     if (kDebugMode) {
-      print(
-        'Queue processing complete: $successCount succeeded, $failureCount failed',
+      logger.info(
+        'Queue processing complete: $successCount succeeded, '
+        '$failureCount failed',
+        category: 'OfflineQueue',
       );
     }
 
@@ -328,7 +353,11 @@ class OfflineQueueService {
       await prefs.setString(_analyticsKey, analyticsJson);
     } catch (e) {
       if (kDebugMode) {
-        print('Error saving analytics: $e');
+        logger.error(
+          'Error saving analytics',
+          category: 'OfflineQueue',
+          error: e,
+        );
       }
     }
   }
@@ -348,7 +377,11 @@ class OfflineQueueService {
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error loading analytics: $e');
+        logger.error(
+          'Error loading analytics',
+          category: 'OfflineQueue',
+          error: e,
+        );
       }
     }
   }
