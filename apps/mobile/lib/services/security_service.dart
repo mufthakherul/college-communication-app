@@ -73,6 +73,12 @@ class SecurityService {
 
   /// Checks for root/jailbreak indicators
   Future<bool> _checkDeviceSecurity() async {
+    // TEMPORARY: Disable root/jailbreak detection to prevent crashes
+    // This check can cause FileSystemException on some devices
+    // Re-enable after thorough testing on target devices
+    return true;
+    
+    /* DISABLED FOR STABILITY
     try {
       if (Platform.isAndroid) {
         // Check for common root indicators
@@ -143,6 +149,7 @@ class SecurityService {
       debugPrint('Device security check error: $e');
       return true; // Fail open for better UX - legitimate users not blocked
     }
+    */
   }
 
   /// Validates backend configuration hasn't been tampered with

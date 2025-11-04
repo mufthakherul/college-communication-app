@@ -5,6 +5,7 @@ import 'package:campus_mesh/services/notice_service.dart';
 import 'package:campus_mesh/services/qr_data_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/screens/qr/qr_share_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NoticeDetailScreen extends StatelessWidget {
   final String noticeId;
@@ -181,6 +182,30 @@ class NoticeDetailScreen extends StatelessWidget {
                         title: const Text('Target Audience'),
                         subtitle: Text(notice.targetAudience),
                       ),
+                      // Show website link for scraped notices
+                      if (notice.source == NoticeSource.scraped) ...[
+                        const Divider(),
+                        ListTile(
+                          leading: const Icon(Icons.source),
+                          title: const Text('Source'),
+                          subtitle: const Text('College Website'),
+                          trailing: const Icon(Icons.verified, color: Colors.blue),
+                        ),
+                        if (notice.sourceUrl != null &&
+                            notice.sourceUrl!.isNotEmpty) ...[
+                          ListTile(
+                            leading: const Icon(Icons.link),
+                            title: const Text('View on Website'),
+                            subtitle: Text(
+                              notice.sourceUrl!,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            trailing: const Icon(Icons.open_in_new),
+                            onTap: () => _launchURL(context, notice.sourceUrl!),
+                          ),
+                        ],
+                      ],
                     ],
                   ),
                 ),
@@ -306,6 +331,29 @@ class NoticeDetailScreen extends StatelessWidget {
         context,
         MaterialPageRoute(builder: (context) => QRShareScreen(qrData: qrData)),
       );
+    }
+  }
+
+  Future<void> _launchURL(BuildContext context, String url) async {
+    try {
+      final uri = Uri.parse(url);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Could not open URL: $url'),
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error opening link: ${e.toString()}')),
+        );
+      }
     }
   }
 }
