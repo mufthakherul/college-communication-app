@@ -161,12 +161,12 @@ void main() {
 
       final stats = service.getStatistics();
       expect(stats['total'], equals(5));
-      expect(stats['byLevel']['debug'], equals(1));
-      expect(stats['byLevel']['info'], equals(2));
-      expect(stats['byLevel']['warning'], equals(1));
-      expect(stats['byLevel']['error'], equals(1));
-      expect(stats['byCategory']['auth'], equals(1));
-      expect(stats['byCategory']['network'], equals(1));
+      expect((stats['byLevel'] as Map)['debug'], equals(1));
+      expect((stats['byLevel'] as Map)['info'], equals(2));
+      expect((stats['byLevel'] as Map)['warning'], equals(1));
+      expect((stats['byLevel'] as Map)['error'], equals(1));
+      expect((stats['byCategory'] as Map)['auth'], equals(1));
+      expect((stats['byCategory'] as Map)['network'], equals(1));
     });
 
     test('setEnabled should control logging', () {
@@ -218,7 +218,6 @@ void main() {
 
     test('getLogsInRange should filter by time', () {
       final now = DateTime.now();
-      final hourAgo = now.subtract(const Duration(hours: 1));
       final twoHoursAgo = now.subtract(const Duration(hours: 2));
 
       service.info('Message 1');
