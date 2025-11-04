@@ -78,7 +78,8 @@ class AuthService {
 
     if (password.isEmpty || password.length < 6) {
       throw Exception(
-          'invalid-password: Password must be at least 6 characters.');
+        'invalid-password: Password must be at least 6 characters.',
+      );
     }
 
     // Ensure Appwrite is initialized
@@ -194,7 +195,8 @@ class AuthService {
         // If profile creation fails, delete the account to maintain consistency
         try {
           debugPrint(
-              '🗑️ Cleaning up account due to profile creation failure...');
+            '🗑️ Cleaning up account due to profile creation failure...',
+          );
           await _appwrite.account.deleteSession(sessionId: 'current');
         } catch (cleanupError) {
           debugPrint('⚠️ Cleanup error: $cleanupError');
@@ -230,7 +232,8 @@ class AuthService {
       }
 
       debugPrint(
-          '🎉 Registration completed successfully for user: ${user.$id}');
+        '🎉 Registration completed successfully for user: ${user.$id}',
+      );
       return user.$id;
     } on AppwriteException catch (e) {
       debugPrint('❌ Appwrite exception during registration: ${e.message}');
@@ -239,13 +242,16 @@ class AuthService {
       // Provide user-friendly error messages
       if (e.code == 409 || e.message?.contains('already exists') == true) {
         throw Exception(
-            'email-already-in-use: This email is already registered.');
+          'email-already-in-use: This email is already registered.',
+        );
       } else if (e.code == 400 && e.message?.contains('password') == true) {
         throw Exception(
-            'weak-password: Password must be at least 8 characters.');
+          'weak-password: Password must be at least 8 characters.',
+        );
       } else if (e.message?.contains('network') == true || e.code == 0) {
         throw Exception(
-            'network: Please check your internet connection and try again.');
+          'network: Please check your internet connection and try again.',
+        );
       }
 
       throw Exception('Failed to register: ${e.message ?? 'Unknown error'}');

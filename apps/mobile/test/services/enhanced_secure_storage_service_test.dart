@@ -203,10 +203,7 @@ void main() {
     });
 
     test('setBiometricSettings and getBiometricSettings should work', () async {
-      final settings = {
-        'enabled': true,
-        'type': 'fingerprint',
-      };
+      final settings = {'enabled': true, 'type': 'fingerprint'};
 
       // Set settings
       final setResult = await service.setBiometricSettings(settings);

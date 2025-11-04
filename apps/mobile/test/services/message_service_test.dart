@@ -43,7 +43,7 @@ void main() {
     test('should handle missing recipient', () {
       expect(true, isTrue);
     });
-    
+
     test('should accept long recipient IDs from Appwrite', () {
       // Verify that recipient IDs longer than 36 characters are accepted
       // This tests the fix for the "invalid recipient" bug

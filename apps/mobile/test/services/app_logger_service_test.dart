@@ -47,10 +47,7 @@ void main() {
     });
 
     test('error should create log entry with metadata', () {
-      service.error(
-        'Test error message',
-        metadata: {'code': 500},
-      );
+      service.error('Test error message', metadata: {'code': 500});
       final logs = service.getLogs();
 
       expect(logs.length, equals(1));
@@ -102,8 +99,9 @@ void main() {
       final errors = service.getErrors();
       expect(errors.length, equals(3));
       expect(
-        errors.every((log) =>
-            log.level == LogLevel.error || log.level == LogLevel.fatal),
+        errors.every(
+          (log) => log.level == LogLevel.error || log.level == LogLevel.fatal,
+        ),
         isTrue,
       );
     });
@@ -137,8 +135,10 @@ void main() {
 
       final results = service.searchLogs('user');
       expect(results.length, equals(2));
-      expect(results.every((log) => log.message.toLowerCase().contains('user')),
-          isTrue);
+      expect(
+        results.every((log) => log.message.toLowerCase().contains('user')),
+        isTrue,
+      );
     });
 
     test('getRecentLogs should return last N logs', () {
@@ -189,8 +189,10 @@ void main() {
 
       final logs = service.getLogs();
       expect(logs.length, equals(2)); // Only warning and error
-      expect(logs.every((log) => log.level.index >= LogLevel.warning.index),
-          isTrue);
+      expect(
+        logs.every((log) => log.level.index >= LogLevel.warning.index),
+        isTrue,
+      );
     });
 
     test('exportLogsJson should return valid JSON', () {
@@ -223,7 +225,9 @@ void main() {
       service.info('Message 1');
 
       final logs = service.getLogsInRange(
-          twoHoursAgo, now.add(const Duration(minutes: 1)));
+        twoHoursAgo,
+        now.add(const Duration(minutes: 1)),
+      );
       expect(logs.length, equals(1));
     });
   });

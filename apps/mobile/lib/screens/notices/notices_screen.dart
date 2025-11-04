@@ -157,11 +157,11 @@ class _NoticesScreenState extends State<NoticesScreen>
 
     return notices.where((notice) {
       final titleMatch = notice.title.toLowerCase().contains(
-            _searchQuery.toLowerCase(),
-          );
+        _searchQuery.toLowerCase(),
+      );
       final contentMatch = notice.content.toLowerCase().contains(
-            _searchQuery.toLowerCase(),
-          );
+        _searchQuery.toLowerCase(),
+      );
       return titleMatch || contentMatch;
     }).toList();
   }
@@ -202,8 +202,7 @@ class _NoticesScreenState extends State<NoticesScreen>
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) =>
-                        const WebsiteNoticesFallbackScreen(),
+                    builder: (context) => const WebsiteNoticesFallbackScreen(),
                   ),
                 );
               },
@@ -244,10 +243,7 @@ class _NoticesScreenState extends State<NoticesScreen>
                     icon: Icon(Icons.admin_panel_settings),
                     text: 'Admin/Teacher',
                   ),
-                  Tab(
-                    icon: Icon(Icons.public),
-                    text: 'College Website',
-                  ),
+                  Tab(icon: Icon(Icons.public), text: 'College Website'),
                 ],
               ),
       ),
@@ -302,8 +298,10 @@ class _NoticesScreenState extends State<NoticesScreen>
                       const SizedBox(height: 16),
                       Text(
                         emptyMessage,
-                        style:
-                            const TextStyle(fontSize: 18, color: Colors.grey),
+                        style: const TextStyle(
+                          fontSize: 18,
+                          color: Colors.grey,
+                        ),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 8),
@@ -382,10 +380,7 @@ class _NoticesScreenState extends State<NoticesScreen>
               final icon = _getNoticeIcon(notice.type);
 
               return Card(
-                margin: const EdgeInsets.symmetric(
-                  vertical: 4,
-                  horizontal: 8,
-                ),
+                margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                 child: ListTile(
                   leading: CircleAvatar(
                     backgroundColor: color.withOpacity(0.2),
@@ -404,11 +399,7 @@ class _NoticesScreenState extends State<NoticesScreen>
                       if (notice.source == NoticeSource.scraped)
                         const Padding(
                           padding: EdgeInsets.only(left: 4),
-                          child: Icon(
-                            Icons.link,
-                            size: 16,
-                            color: Colors.blue,
-                          ),
+                          child: Icon(Icons.link, size: 16, color: Colors.blue),
                         ),
                     ],
                   ),

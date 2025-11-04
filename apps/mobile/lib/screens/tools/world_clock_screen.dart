@@ -74,9 +74,7 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('World Clock'),
-      ),
+      appBar: AppBar(title: const Text('World Clock')),
       body: Column(
         children: [
           // Local Time Display
@@ -93,10 +91,7 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
               children: [
                 const Text(
                   'Local Time (Dhaka)',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 16,
-                  ),
+                  style: TextStyle(color: Colors.white70, fontSize: 16),
                 ),
                 const SizedBox(height: 8),
                 Text(
@@ -110,10 +105,7 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
                 const SizedBox(height: 4),
                 Text(
                   _formatDate(_currentTime),
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 16,
-                  ),
+                  style: const TextStyle(color: Colors.white70, fontSize: 16),
                 ),
               ],
             ),
@@ -140,10 +132,7 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
                     ),
                     title: Row(
                       children: [
-                        Text(
-                          zone.flag,
-                          style: const TextStyle(fontSize: 20),
-                        ),
+                        Text(zone.flag, style: const TextStyle(fontSize: 20)),
                         const SizedBox(width: 8),
                         Text(
                           zone.city,
@@ -209,7 +198,7 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
       'Sep',
       'Oct',
       'Nov',
-      'Dec'
+      'Dec',
     ];
     return '${days[time.weekday - 1]}, ${months[time.month - 1]} ${time.day}, ${time.year}';
   }

@@ -44,9 +44,9 @@ class _AIChatHistoryScreenState extends State<AIChatHistoryScreen> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error loading chats: $e')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error loading chats: $e')));
       }
     } finally {
       setState(() => _isLoading = false);
@@ -58,9 +58,7 @@ class _AIChatHistoryScreenState extends State<AIChatHistoryScreen> {
       // Show API key input screen
       final result = await Navigator.push<bool>(
         context,
-        MaterialPageRoute(
-          builder: (context) => const ApiKeyInputScreen(),
-        ),
+        MaterialPageRoute(builder: (context) => const ApiKeyInputScreen()),
       );
 
       if (result != true) return;
@@ -72,9 +70,7 @@ class _AIChatHistoryScreenState extends State<AIChatHistoryScreen> {
     if (mounted) {
       final result = await Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => const AIChatScreen(),
-        ),
+        MaterialPageRoute(builder: (context) => const AIChatScreen()),
       );
 
       if (result != null) {
@@ -89,9 +85,7 @@ class _AIChatHistoryScreenState extends State<AIChatHistoryScreen> {
       // Show API key input screen
       final result = await Navigator.push<bool>(
         context,
-        MaterialPageRoute(
-          builder: (context) => const ApiKeyInputScreen(),
-        ),
+        MaterialPageRoute(builder: (context) => const ApiKeyInputScreen()),
       );
 
       if (result != true) return;
@@ -171,40 +165,36 @@ class _AIChatHistoryScreenState extends State<AIChatHistoryScreen> {
         if (!mounted) return;
         final success = await Navigator.push<bool>(
           context,
-          MaterialPageRoute(
-            builder: (context) => const ApiKeyInputScreen(),
-          ),
+          MaterialPageRoute(builder: (context) => const ApiKeyInputScreen()),
         );
         if (!mounted) return;
         if (success == true) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('API key updated')),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('API key updated')));
         }
       } else if (result == 'remove') {
         await _aiService.clearApiKey();
         if (!mounted) return;
         setState(() => _hasApiKey = false);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('API key removed')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('API key removed')));
       }
     } else {
       // Add API key
       if (!mounted) return;
       final result = await Navigator.push<bool>(
         context,
-        MaterialPageRoute(
-          builder: (context) => const ApiKeyInputScreen(),
-        ),
+        MaterialPageRoute(builder: (context) => const ApiKeyInputScreen()),
       );
 
       if (!mounted) return;
       if (result == true) {
         setState(() => _hasApiKey = true);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('API key added')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('API key added')));
       }
     }
   }
@@ -261,18 +251,11 @@ class _AIChatHistoryScreenState extends State<AIChatHistoryScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.vpn_key_off,
-              size: 80,
-              color: Colors.grey,
-            ),
+            const Icon(Icons.vpn_key_off, size: 80, color: Colors.grey),
             const SizedBox(height: 24),
             const Text(
               'API Key Required',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             const Text(
@@ -303,11 +286,7 @@ class _AIChatHistoryScreenState extends State<AIChatHistoryScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.smart_toy,
-            size: 80,
-            color: Colors.grey[400],
-          ),
+          Icon(Icons.smart_toy, size: 80, color: Colors.grey[400]),
           const SizedBox(height: 16),
           Text(
             'No Chats Yet',
@@ -320,10 +299,7 @@ class _AIChatHistoryScreenState extends State<AIChatHistoryScreen> {
           const SizedBox(height: 8),
           Text(
             'Start a new conversation with AI',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[500],
-            ),
+            style: TextStyle(fontSize: 16, color: Colors.grey[500]),
           ),
         ],
       ),
@@ -336,10 +312,7 @@ class _AIChatHistoryScreenState extends State<AIChatHistoryScreen> {
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: Theme.of(context).primaryColor.withOpacity(0.2),
-          child: Icon(
-            Icons.smart_toy,
-            color: Theme.of(context).primaryColor,
-          ),
+          child: Icon(Icons.smart_toy, color: Theme.of(context).primaryColor),
         ),
         title: Text(
           session.title,

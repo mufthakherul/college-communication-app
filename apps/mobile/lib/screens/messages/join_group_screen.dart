@@ -66,9 +66,7 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Join Group'),
-      ),
+      appBar: AppBar(title: const Text('Join Group')),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -89,9 +87,9 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> {
             const SizedBox(height: 8),
             Text(
               'Ask the group creator for the invite code',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.grey[600],
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: Colors.grey[600]),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),
@@ -145,11 +143,11 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> {
                         const SizedBox(width: 8),
                         Text(
                           'How it works',
-                          style:
-                              Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    color: Colors.blue[700],
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(
+                                color: Colors.blue[700],
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                       ],
                     ),

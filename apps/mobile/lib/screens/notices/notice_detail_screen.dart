@@ -136,9 +136,7 @@ class NoticeDetailScreen extends StatelessWidget {
                       const SizedBox(height: 8),
                       Text(
                         notice.title,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineSmall
+                        style: Theme.of(context).textTheme.headlineSmall
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
@@ -189,7 +187,10 @@ class NoticeDetailScreen extends StatelessWidget {
                           leading: const Icon(Icons.source),
                           title: const Text('Source'),
                           subtitle: const Text('College Website'),
-                          trailing: const Icon(Icons.verified, color: Colors.blue),
+                          trailing: const Icon(
+                            Icons.verified,
+                            color: Colors.blue,
+                          ),
                         ),
                         if (notice.sourceUrl != null &&
                             notice.sourceUrl!.isNotEmpty) ...[
@@ -341,11 +342,9 @@ class NoticeDetailScreen extends StatelessWidget {
         await launchUrl(uri, mode: LaunchMode.externalApplication);
       } else {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Could not open URL: $url'),
-            ),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text('Could not open URL: $url')));
         }
       }
     } catch (e) {
