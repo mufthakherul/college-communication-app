@@ -168,7 +168,8 @@ class OfflineQueueService {
             final delaySeconds = pow(2, attempt - 1).toInt();
             if (kDebugMode) {
               logger.info(
-                'Retrying action ${action.type} after ${delaySeconds}s (attempt ${attempt + 1})',
+                'Retrying action ${action.type} after ${delaySeconds}s '
+                '(attempt ${attempt + 1})',
                 category: 'OfflineQueue',
               );
             }
@@ -190,7 +191,8 @@ class OfflineQueueService {
           lastError = e is Exception ? e : Exception(e.toString());
           if (kDebugMode) {
             logger.warning(
-              '✗ Error processing action ${action.type} (attempt ${attempt + 1})',
+              '✗ Error processing action ${action.type} '
+              '(attempt ${attempt + 1})',
               category: 'OfflineQueue',
               metadata: {'error': e.toString()},
             );
@@ -214,7 +216,8 @@ class OfflineQueueService {
 
           if (kDebugMode) {
             logger.info(
-              'Re-queued failed action: ${action.type} (retry ${updatedAction.retryCount}/$_maxRetries)',
+              'Re-queued failed action: ${action.type} '
+              '(retry ${updatedAction.retryCount}/$_maxRetries)',
               category: 'OfflineQueue',
             );
           }
@@ -239,7 +242,8 @@ class OfflineQueueService {
 
     if (kDebugMode) {
       logger.info(
-        'Queue processing complete: $successCount succeeded, $failureCount failed',
+        'Queue processing complete: $successCount succeeded, '
+        '$failureCount failed',
         category: 'OfflineQueue',
       );
     }

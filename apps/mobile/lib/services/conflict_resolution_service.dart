@@ -70,7 +70,8 @@ class ConflictResolutionService {
       // Stub implementation - would implement with Appwrite
       if (kDebugMode) {
         logger.debug(
-          'Updating document with conflict detection (stub): $collection/$documentId',
+          'Updating document with conflict detection (stub): '
+          '$collection/$documentId',
           category: 'ConflictResolution',
         );
         logger.info(
@@ -165,7 +166,8 @@ class ConflictResolutionService {
       // Stub implementation - would implement with Appwrite
       if (kDebugMode) {
         logger.debug(
-          'Versioned update (stub) for $documentId, expected version: $expectedVersion',
+          'Versioned update (stub) for $documentId, '
+          'expected version: $expectedVersion',
           category: 'ConflictResolution',
         );
       }

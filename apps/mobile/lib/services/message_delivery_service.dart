@@ -255,7 +255,8 @@ class MessageDeliveryService {
       // Stub implementation - would update Appwrite database
       if (kDebugMode) {
         logger.debug(
-          'Updated delivery status for ${tracking.messageId}: ${tracking.status.name}',
+          'Updated delivery status for ${tracking.messageId}: '
+          '${tracking.status.name}',
           category: 'MessageDelivery',
         );
       }
@@ -323,7 +324,8 @@ class MessageDeliveryService {
       // Stub implementation - would update Appwrite database
       if (kDebugMode) {
         logger.debug(
-          'Sent typing indicator for conversation $conversationId: ${status.name}',
+          'Sent typing indicator for conversation $conversationId: '
+          '${status.name}',
           category: 'MessageDelivery',
         );
       }
