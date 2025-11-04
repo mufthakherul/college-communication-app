@@ -7,13 +7,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Service for handling biometric authentication
 /// Supports fingerprint, face recognition, and iris scanning
 class BiometricAuthService {
-  static final BiometricAuthService _instance = BiometricAuthService._internal();
+  static final BiometricAuthService _instance =
+      BiometricAuthService._internal();
   factory BiometricAuthService() => _instance;
   BiometricAuthService._internal();
 
   final LocalAuthentication _localAuth = LocalAuthentication();
   static const String _biometricEnabledKey = 'biometric_enabled';
-  
+
   /// Check if biometric authentication is available on this device
   Future<bool> isBiometricAvailable() async {
     try {
@@ -72,17 +73,17 @@ class BiometricAuthService {
       );
     } on PlatformException catch (e) {
       debugPrint('Biometric authentication error: ${e.code} - ${e.message}');
-      
+
       // Handle specific error codes
       if (e.code == auth_error.notAvailable) {
         debugPrint('Biometric authentication not available');
       } else if (e.code == auth_error.notEnrolled) {
         debugPrint('No biometrics enrolled on this device');
-      } else if (e.code == auth_error.lockedOut || 
-                 e.code == auth_error.permanentlyLockedOut) {
+      } else if (e.code == auth_error.lockedOut ||
+          e.code == auth_error.permanentlyLockedOut) {
         debugPrint('Biometric authentication locked out');
       }
-      
+
       return false;
     } catch (e) {
       debugPrint('Unexpected error during biometric authentication: $e');
@@ -117,7 +118,7 @@ class BiometricAuthService {
       final canAuth = await authenticate(
         localizedReason: 'Enable biometric authentication for quick login',
       );
-      
+
       if (!canAuth) {
         return false;
       }

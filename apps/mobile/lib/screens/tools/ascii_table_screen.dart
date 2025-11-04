@@ -75,7 +75,8 @@ class _ASCIITableScreenState extends State<ASCIITableScreen> {
     if (code >= 48 && code <= 57) return 'Digit';
     if (code >= 65 && code <= 90) return 'Uppercase Letter';
     if (code >= 97 && code <= 122) return 'Lowercase Letter';
-    if ([33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47].contains(code)) {
+    if ([33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
+        .contains(code)) {
       return 'Punctuation';
     }
     if ([58, 59, 60, 61, 62, 63, 64].contains(code)) return 'Special Character';
@@ -87,7 +88,7 @@ class _ASCIITableScreenState extends State<ASCIITableScreen> {
 
   List<ASCIIChar> get _filteredChars {
     if (_searchQuery.isEmpty) return _asciiChars;
-    
+
     return _asciiChars.where((char) {
       final query = _searchQuery.toLowerCase();
       return char.decimal.toString().contains(query) ||

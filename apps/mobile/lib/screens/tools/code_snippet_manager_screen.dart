@@ -7,7 +7,8 @@ class CodeSnippetManagerScreen extends StatefulWidget {
   const CodeSnippetManagerScreen({super.key});
 
   @override
-  State<CodeSnippetManagerScreen> createState() => _CodeSnippetManagerScreenState();
+  State<CodeSnippetManagerScreen> createState() =>
+      _CodeSnippetManagerScreenState();
 }
 
 class _CodeSnippetManagerScreenState extends State<CodeSnippetManagerScreen> {
@@ -37,7 +38,7 @@ class _CodeSnippetManagerScreenState extends State<CodeSnippetManagerScreen> {
   Future<void> _loadSnippets() async {
     final prefs = await SharedPreferences.getInstance();
     final snippetsJson = prefs.getString('code_snippets');
-    
+
     if (snippetsJson != null) {
       final List<dynamic> decoded = json.decode(snippetsJson);
       setState(() {
@@ -209,11 +210,13 @@ struct Node* createNode(int data) {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.code, size: 64, color: Colors.grey[400]),
+                              Icon(Icons.code,
+                                  size: 64, color: Colors.grey[400]),
                               const SizedBox(height: 16),
                               const Text(
                                 'No snippets yet',
-                                style: TextStyle(fontSize: 18, color: Colors.grey),
+                                style:
+                                    TextStyle(fontSize: 18, color: Colors.grey),
                               ),
                               const SizedBox(height: 8),
                               const Text(
@@ -249,7 +252,8 @@ struct Node* createNode(int data) {
           backgroundColor: Colors.blue[100],
           child: Text(
             snippet.language.substring(0, 1),
-            style: TextStyle(color: Colors.blue[700], fontWeight: FontWeight.bold),
+            style:
+                TextStyle(color: Colors.blue[700], fontWeight: FontWeight.bold),
           ),
         ),
         title: Text(
@@ -294,7 +298,8 @@ struct Node* createNode(int data) {
                       onPressed: () {
                         Clipboard.setData(ClipboardData(text: snippet.code));
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Code copied to clipboard')),
+                          const SnackBar(
+                              content: Text('Code copied to clipboard')),
                         );
                       },
                     ),
@@ -376,7 +381,8 @@ class _SnippetDialogState extends State<_SnippetDialog> {
     super.initState();
     _titleController = TextEditingController(text: widget.snippet?.title ?? '');
     _codeController = TextEditingController(text: widget.snippet?.code ?? '');
-    _descController = TextEditingController(text: widget.snippet?.description ?? '');
+    _descController =
+        TextEditingController(text: widget.snippet?.description ?? '');
     _selectedLanguage = widget.snippet?.language ?? widget.languages[0];
   }
 
@@ -438,7 +444,8 @@ class _SnippetDialogState extends State<_SnippetDialog> {
         ),
         ElevatedButton(
           onPressed: () {
-            if (_titleController.text.isNotEmpty && _codeController.text.isNotEmpty) {
+            if (_titleController.text.isNotEmpty &&
+                _codeController.text.isNotEmpty) {
               widget.onSave(CodeSnippet(
                 title: _titleController.text,
                 language: _selectedLanguage,

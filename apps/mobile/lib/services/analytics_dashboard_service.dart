@@ -131,12 +131,12 @@ class AnalyticsDashboardService {
 
       for (final doc in allNotices.documents) {
         final data = doc.data;
-        
+
         // Count active vs expired
-        final expiresAt = data['expires_at'] != null 
+        final expiresAt = data['expires_at'] != null
             ? DateTime.parse(data['expires_at'])
             : null;
-        
+
         if (expiresAt == null || expiresAt.isAfter(now)) {
           activeCount++;
         } else {
@@ -149,7 +149,8 @@ class AnalyticsDashboardService {
 
         // Count by month
         final createdAt = DateTime.parse(data['created_at']);
-        final monthKey = '${createdAt.year}-${createdAt.month.toString().padLeft(2, '0')}';
+        final monthKey =
+            '${createdAt.year}-${createdAt.month.toString().padLeft(2, '0')}';
         byMonth[monthKey] = (byMonth[monthKey] ?? 0) + 1;
 
         // Track top viewed notices
@@ -219,7 +220,8 @@ class AnalyticsDashboardService {
         byType[type] = (byType[type] ?? 0) + 1;
 
         // Count by day
-        final dayKey = '${createdAt.year}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}';
+        final dayKey =
+            '${createdAt.year}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}';
         byDay[dayKey] = (byDay[dayKey] ?? 0) + 1;
 
         // Track user activity
@@ -233,7 +235,7 @@ class AnalyticsDashboardService {
       // TODO: Optimize by fetching all users in a single query instead of individual queries
       final sortedUsers = userMessageCounts.entries.toList()
         ..sort((a, b) => b.value.compareTo(a.value));
-      
+
       final mostActive = <ActiveUser>[];
       for (final entry in sortedUsers.take(10)) {
         // Fetch user name (N+1 query - acceptable for top 10 users, consider caching for optimization)
@@ -243,7 +245,7 @@ class AnalyticsDashboardService {
             collectionId: AppwriteConfig.usersCollectionId,
             documentId: entry.key,
           );
-          
+
           mostActive.add(ActiveUser(
             userId: entry.key,
             name: user.data['display_name'] ?? 'Unknown',
@@ -302,7 +304,7 @@ class AnalyticsDashboardService {
 
       for (final doc in allUsers.documents) {
         final data = doc.data;
-        
+
         // Count by role
         final role = data['role'] ?? 'student';
         byRole[role] = (byRole[role] ?? 0) + 1;
@@ -313,17 +315,17 @@ class AnalyticsDashboardService {
           final lastLogin = DateTime.parse(lastLoginStr);
           if (lastLogin.isAfter(last30Days)) {
             activeUsersCount++;
-            
+
             // Track daily active users
-            final dayKey = '${lastLogin.year}-${lastLogin.month.toString().padLeft(2, '0')}-${lastLogin.day.toString().padLeft(2, '0')}';
+            final dayKey =
+                '${lastLogin.year}-${lastLogin.month.toString().padLeft(2, '0')}-${lastLogin.day.toString().padLeft(2, '0')}';
             dailyActive[dayKey] = (dailyActive[dayKey] ?? 0) + 1;
           }
         }
       }
 
-      final avgMessagesPerUser = allUsers.total > 0
-          ? messagesCount.total / allUsers.total
-          : 0.0;
+      final avgMessagesPerUser =
+          allUsers.total > 0 ? messagesCount.total / allUsers.total : 0.0;
 
       return SystemAnalytics(
         totalUsers: allUsers.total,
@@ -341,13 +343,13 @@ class AnalyticsDashboardService {
   }
 
   /// Get user activity data for admin dashboard
-  /// 
+  ///
   /// Note: This method makes individual queries for each user's stats.
   /// For large user bases (>100 users), consider implementing:
   /// 1. Server-side aggregation with Appwrite Functions
   /// 2. Caching with periodic updates
   /// 3. Pagination with on-demand loading
-  /// 
+  ///
   /// Current implementation is suitable for small-to-medium deployments (<100 users)
   Future<List<UserActivityData>> getUserActivityData({int limit = 50}) async {
     try {
@@ -405,7 +407,7 @@ class AnalyticsDashboardService {
           noticeCount: noticeCount,
           messageCount: messageCount,
           loginCount: data['login_count'] ?? 0,
-          lastActive: data['last_login'] != null 
+          lastActive: data['last_login'] != null
               ? DateTime.parse(data['last_login'])
               : DateTime.fromMillisecondsSinceEpoch(0),
         ));
@@ -461,19 +463,22 @@ class AnalyticsDashboardService {
 
       for (final doc in users.documents) {
         final createdAt = DateTime.parse(doc.data['created_at']);
-        final dayKey = '${createdAt.year}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}';
+        final dayKey =
+            '${createdAt.year}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}';
         usersByDay[dayKey] = (usersByDay[dayKey] ?? 0) + 1;
       }
 
       for (final doc in notices.documents) {
         final createdAt = DateTime.parse(doc.data['created_at']);
-        final dayKey = '${createdAt.year}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}';
+        final dayKey =
+            '${createdAt.year}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}';
         noticesByDay[dayKey] = (noticesByDay[dayKey] ?? 0) + 1;
       }
 
       for (final doc in messages.documents) {
         final createdAt = DateTime.parse(doc.data['created_at']);
-        final dayKey = '${createdAt.year}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}';
+        final dayKey =
+            '${createdAt.year}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}';
         messagesByDay[dayKey] = (messagesByDay[dayKey] ?? 0) + 1;
       }
 
