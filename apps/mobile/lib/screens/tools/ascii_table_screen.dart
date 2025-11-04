@@ -13,7 +13,7 @@ class _ASCIITableScreenState extends State<ASCIITableScreen> {
   String _searchQuery = '';
 
   bool _showExtended = false;
-  
+
   List<ASCIIChar> get _asciiChars => List.generate(
     _showExtended ? 256 : 128,
     (index) => ASCIIChar(
@@ -77,14 +77,29 @@ class _ASCIITableScreenState extends State<ASCIITableScreen> {
     if (code >= 48 && code <= 57) return 'Digit';
     if (code >= 65 && code <= 90) return 'Uppercase Letter';
     if (code >= 97 && code <= 122) return 'Lowercase Letter';
-    if ([33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47]
-        .contains(code)) {
+    if ([
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+    ].contains(code)) {
       return 'Punctuation';
     }
     if ([58, 59, 60, 61, 62, 63, 64].contains(code)) return 'Special Character';
     if ([91, 92, 93, 94, 95, 96].contains(code)) return 'Symbol';
     if ([123, 124, 125, 126].contains(code)) return 'Symbol';
-    
+
     // Extended ASCII (128-255)
     if (code >= 128 && code <= 159) return 'Extended Control';
     if (code >= 160 && code <= 191) return 'Extended Latin';
@@ -107,17 +122,15 @@ class _ASCIITableScreenState extends State<ASCIITableScreen> {
 
   void _copyToClipboard(String value, String type) {
     Clipboard.setData(ClipboardData(text: value));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('$type copied to clipboard')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('$type copied to clipboard')));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('ASCII Table'),
-      ),
+      appBar: AppBar(title: const Text('ASCII Table')),
       body: Column(
         children: [
           // Search Bar
@@ -174,13 +187,19 @@ class _ASCIITableScreenState extends State<ASCIITableScreen> {
           ),
 
           const SizedBox(height: 8),
-          
+
           // Toggle Extended ASCII
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: SwitchListTile(
-              title: const Text('Show Extended ASCII', style: TextStyle(fontSize: 14)),
-              subtitle: const Text('Characters 128-255', style: TextStyle(fontSize: 11)),
+              title: const Text(
+                'Show Extended ASCII',
+                style: TextStyle(fontSize: 14),
+              ),
+              subtitle: const Text(
+                'Characters 128-255',
+                style: TextStyle(fontSize: 11),
+              ),
               value: _showExtended,
               dense: true,
               onChanged: (value) {
@@ -275,10 +294,7 @@ class _ASCIITableScreenState extends State<ASCIITableScreen> {
         Icon(icon, size: 20, color: Colors.grey[600]),
         const SizedBox(width: 8),
         Expanded(
-          child: Text(
-            '$label: $value',
-            style: const TextStyle(fontSize: 14),
-          ),
+          child: Text('$label: $value', style: const TextStyle(fontSize: 14)),
         ),
         IconButton(
           icon: const Icon(Icons.copy, size: 18),

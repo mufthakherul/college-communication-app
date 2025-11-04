@@ -10,16 +10,16 @@ class ColorPickerScreen extends StatefulWidget {
 
 class _ColorPickerScreenState extends State<ColorPickerScreen> {
   Color _selectedColor = Colors.blue;
-  
+
   final TextEditingController _hexController = TextEditingController();
   final TextEditingController _rController = TextEditingController();
   final TextEditingController _gController = TextEditingController();
   final TextEditingController _bController = TextEditingController();
-  
+
   double _hue = 211.0;
   double _saturation = 100.0;
   double _lightness = 50.0;
-  
+
   final List<Color> _presetColors = [
     Colors.red,
     Colors.pink,
@@ -52,16 +52,16 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
   void _updateFromColor(Color color) {
     setState(() {
       _selectedColor = color;
-      
+
       // Update HEX (ensure 8 characters with padding before substring)
       final hexValue = color.value.toRadixString(16).padLeft(8, '0');
       _hexController.text = '#${hexValue.substring(2).toUpperCase()}';
-      
+
       // Update RGB
       _rController.text = color.red.toString();
       _gController.text = color.green.toString();
       _bController.text = color.blue.toString();
-      
+
       // Update HSL
       final hsl = HSLColor.fromColor(color);
       _hue = hsl.hue;
@@ -72,7 +72,7 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
 
   void _updateFromHex(String hex) {
     if (hex.isEmpty) return;
-    
+
     try {
       String hexColor = hex.replaceAll('#', '');
       if (hexColor.length == 6) {
@@ -90,7 +90,7 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
       final r = int.parse(_rController.text);
       final g = int.parse(_gController.text);
       final b = int.parse(_bController.text);
-      
+
       if (r >= 0 && r <= 255 && g >= 0 && g <= 255 && b >= 0 && b <= 255) {
         _updateFromColor(Color.fromARGB(255, r, g, b));
       }
@@ -111,17 +111,15 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
 
   void _copyValue(String value, String type) {
     Clipboard.setData(ClipboardData(text: value));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('$type copied to clipboard')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('$type copied to clipboard')));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Color Picker'),
-      ),
+      appBar: AppBar(title: const Text('Color Picker')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -165,13 +163,17 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             decoration: BoxDecoration(
-              color: _isLightColor(_selectedColor) ? Colors.black : Colors.white,
+              color: _isLightColor(_selectedColor)
+                  ? Colors.black
+                  : Colors.white,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
               _hexController.text,
               style: TextStyle(
-                color: _isLightColor(_selectedColor) ? Colors.white : Colors.black,
+                color: _isLightColor(_selectedColor)
+                    ? Colors.white
+                    : Colors.black,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Courier',
@@ -240,7 +242,10 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
                     const SizedBox(width: 8),
                     const Text(
                       'RGB Color',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                   ],
                 ),
@@ -279,7 +284,12 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
     );
   }
 
-  Widget _buildRGBSlider(String label, TextEditingController controller, Color color, Function(double) onChanged) {
+  Widget _buildRGBSlider(
+    String label,
+    TextEditingController controller,
+    Color color,
+    Function(double) onChanged,
+  ) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
@@ -305,7 +315,10 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
             width: 45,
             child: Text(
               controller.text,
-              style: const TextStyle(fontFamily: 'Courier', fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontFamily: 'Courier',
+                fontWeight: FontWeight.bold,
+              ),
               textAlign: TextAlign.right,
             ),
           ),
@@ -330,7 +343,10 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
                     const SizedBox(width: 8),
                     const Text(
                       'HSL Color',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                   ],
                 ),
@@ -369,7 +385,14 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
     );
   }
 
-  Widget _buildHSLSlider(String label, double value, double min, double max, String unit, Function(double) onChanged) {
+  Widget _buildHSLSlider(
+    String label,
+    double value,
+    double min,
+    double max,
+    String unit,
+    Function(double) onChanged,
+  ) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Row(
@@ -393,7 +416,10 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
             width: 60,
             child: Text(
               '${value.round()}$unit',
-              style: const TextStyle(fontFamily: 'Courier', fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontFamily: 'Courier',
+                fontWeight: FontWeight.bold,
+              ),
               textAlign: TextAlign.right,
             ),
           ),
@@ -432,7 +458,9 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
                       color: color,
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                        color: _selectedColor == color ? Colors.white : Colors.grey[300]!,
+                        color: _selectedColor == color
+                            ? Colors.white
+                            : Colors.grey[300]!,
                         width: _selectedColor == color ? 3 : 1,
                       ),
                     ),
@@ -459,10 +487,22 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
             ),
             const SizedBox(height: 12),
             _buildInfoRow('HEX', _hexController.text),
-            _buildInfoRow('RGB', 'rgb(${_rController.text}, ${_gController.text}, ${_bController.text})'),
-            _buildInfoRow('HSL', 'hsl(${_hue.round()}, ${_saturation.round()}%, ${_lightness.round()}%)'),
-            _buildInfoRow('Luminance', '${(_selectedColor.computeLuminance() * 100).toStringAsFixed(1)}%'),
-            _buildInfoRow('Brightness', _isLightColor(_selectedColor) ? 'Light' : 'Dark'),
+            _buildInfoRow(
+              'RGB',
+              'rgb(${_rController.text}, ${_gController.text}, ${_bController.text})',
+            ),
+            _buildInfoRow(
+              'HSL',
+              'hsl(${_hue.round()}, ${_saturation.round()}%, ${_lightness.round()}%)',
+            ),
+            _buildInfoRow(
+              'Luminance',
+              '${(_selectedColor.computeLuminance() * 100).toStringAsFixed(1)}%',
+            ),
+            _buildInfoRow(
+              'Brightness',
+              _isLightColor(_selectedColor) ? 'Light' : 'Dark',
+            ),
           ],
         ),
       ),
@@ -475,10 +515,7 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: TextStyle(color: Colors.grey[600], fontSize: 13),
-          ),
+          Text(label, style: TextStyle(color: Colors.grey[600], fontSize: 13)),
           Text(
             value,
             style: const TextStyle(

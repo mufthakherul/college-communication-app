@@ -39,10 +39,7 @@ class PermissionService {
     try {
       // For Android 13+ (API 33+), use granular media permissions
       if (await _isAndroid13OrAbove()) {
-        final statuses = await [
-          Permission.photos,
-          Permission.videos,
-        ].request();
+        final statuses = await [Permission.photos, Permission.videos].request();
 
         return statuses.values.every((status) => status.isGranted);
       } else {
@@ -225,7 +222,8 @@ class PermissionService {
 
   /// Show permission rationale dialog
   Future<bool> shouldShowRequestPermissionRationale(
-      Permission permission) async {
+    Permission permission,
+  ) async {
     try {
       return await permission.shouldShowRequestRationale;
     } catch (e) {

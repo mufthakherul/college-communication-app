@@ -13,11 +13,11 @@ class _JSONFormatterScreenState extends State<JSONFormatterScreen>
     with SingleTickerProviderStateMixin {
   final TextEditingController _inputController = TextEditingController();
   final TextEditingController _outputController = TextEditingController();
-  
+
   late TabController _tabController;
   String _error = '';
   int _indentSpaces = 2;
-  
+
   @override
   void initState() {
     super.initState();
@@ -26,7 +26,7 @@ class _JSONFormatterScreenState extends State<JSONFormatterScreen>
 
   void _formatJSON() {
     setState(() => _error = '');
-    
+
     if (_inputController.text.trim().isEmpty) {
       setState(() => _error = 'Please enter JSON data');
       return;
@@ -36,7 +36,7 @@ class _JSONFormatterScreenState extends State<JSONFormatterScreen>
       final jsonObject = json.decode(_inputController.text);
       final encoder = JsonEncoder.withIndent(' ' * _indentSpaces);
       final formatted = encoder.convert(jsonObject);
-      
+
       setState(() {
         _outputController.text = formatted;
       });
@@ -47,7 +47,7 @@ class _JSONFormatterScreenState extends State<JSONFormatterScreen>
 
   void _minifyJSON() {
     setState(() => _error = '');
-    
+
     if (_inputController.text.trim().isEmpty) {
       setState(() => _error = 'Please enter JSON data');
       return;
@@ -56,7 +56,7 @@ class _JSONFormatterScreenState extends State<JSONFormatterScreen>
     try {
       final jsonObject = json.decode(_inputController.text);
       final minified = json.encode(jsonObject);
-      
+
       setState(() {
         _outputController.text = minified;
       });
@@ -67,7 +67,7 @@ class _JSONFormatterScreenState extends State<JSONFormatterScreen>
 
   void _validateJSON() {
     setState(() => _error = '');
-    
+
     if (_inputController.text.trim().isEmpty) {
       setState(() => _error = 'Please enter JSON data');
       return;
@@ -88,14 +88,14 @@ class _JSONFormatterScreenState extends State<JSONFormatterScreen>
 
   void _escapeJSON() {
     if (_inputController.text.trim().isEmpty) return;
-    
+
     final escaped = _inputController.text
         .replaceAll('\\', '\\\\')
         .replaceAll('"', '\\"')
         .replaceAll('\n', '\\n')
         .replaceAll('\r', '\\r')
         .replaceAll('\t', '\\t');
-    
+
     setState(() {
       _outputController.text = escaped;
     });
@@ -103,14 +103,14 @@ class _JSONFormatterScreenState extends State<JSONFormatterScreen>
 
   void _unescapeJSON() {
     if (_inputController.text.trim().isEmpty) return;
-    
+
     final unescaped = _inputController.text
         .replaceAll('\\\\', '\\')
         .replaceAll('\\"', '"')
         .replaceAll('\\n', '\n')
         .replaceAll('\\r', '\r')
         .replaceAll('\\t', '\t');
-    
+
     setState(() {
       _outputController.text = unescaped;
     });
@@ -118,9 +118,9 @@ class _JSONFormatterScreenState extends State<JSONFormatterScreen>
 
   void _copyOutput() {
     Clipboard.setData(ClipboardData(text: _outputController.text));
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Output copied to clipboard')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Output copied to clipboard')));
   }
 
   void _clear() {
@@ -146,10 +146,7 @@ class _JSONFormatterScreenState extends State<JSONFormatterScreen>
       ),
       body: TabBarView(
         controller: _tabController,
-        children: [
-          _buildJSONTab(),
-          _buildXMLTab(),
-        ],
+        children: [_buildJSONTab(), _buildXMLTab()],
       ),
     );
   }
@@ -233,7 +230,10 @@ class _JSONFormatterScreenState extends State<JSONFormatterScreen>
         padding: const EdgeInsets.all(12),
         child: Row(
           children: [
-            const Text('Indent Spaces:', style: TextStyle(fontWeight: FontWeight.bold)),
+            const Text(
+              'Indent Spaces:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             const SizedBox(width: 16),
             ...List.generate(4, (index) {
               final spaces = (index + 1) * 2;
@@ -362,10 +362,7 @@ class _JSONFormatterScreenState extends State<JSONFormatterScreen>
             Icon(Icons.error_outline, color: Colors.red[700]),
             const SizedBox(width: 8),
             Expanded(
-              child: Text(
-                _error,
-                style: TextStyle(color: Colors.red[700]),
-              ),
+              child: Text(_error, style: TextStyle(color: Colors.red[700])),
             ),
           ],
         ),

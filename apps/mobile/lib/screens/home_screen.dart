@@ -78,12 +78,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List<Widget> get _screens => [
-        const NoticesScreen(),
-        const MessagesScreen(),
-        const BooksScreen(),
-        const ToolsScreen(),
-        ProfileScreen(user: _currentUser, currentUser: _currentUser),
-      ];
+    const NoticesScreen(),
+    const MessagesScreen(),
+    const BooksScreen(),
+    const ToolsScreen(),
+    ProfileScreen(user: _currentUser, currentUser: _currentUser),
+  ];
 
   void _showQROptions() {
     showModalBottomSheet(

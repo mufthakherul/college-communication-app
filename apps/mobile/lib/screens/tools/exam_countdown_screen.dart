@@ -103,11 +103,13 @@ class _ExamCountdownScreenState extends State<ExamCountdownScreen> {
                 if (nameController.text.isNotEmpty &&
                     subjectController.text.isNotEmpty) {
                   setState(() {
-                    _exams.add(Exam(
-                      name: nameController.text,
-                      subject: subjectController.text,
-                      date: selectedDate,
-                    ));
+                    _exams.add(
+                      Exam(
+                        name: nameController.text,
+                        subject: subjectController.text,
+                        date: selectedDate,
+                      ),
+                    );
                     _exams.sort((a, b) => a.date.compareTo(b.date));
                   });
                   _saveExams();
@@ -255,126 +257,123 @@ class _ExamCountdownScreenState extends State<ExamCountdownScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Exam Countdown'),
-      ),
+      appBar: AppBar(title: const Text('Exam Countdown')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _exams.isEmpty
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.event_note, size: 64, color: Colors.grey[400]),
-                      const SizedBox(height: 16),
-                      const Text(
-                        'No exams scheduled',
-                        style: TextStyle(fontSize: 18, color: Colors.grey),
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        'Tap + to add an exam',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ],
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.event_note, size: 64, color: Colors.grey[400]),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'No exams scheduled',
+                    style: TextStyle(fontSize: 18, color: Colors.grey),
                   ),
-                )
-              : ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: _exams.length,
-                  itemBuilder: (context, index) {
-                    final exam = _exams[index];
-                    final countdownText = _getCountdownText(exam.date);
-                    final countdownColor = _getCountdownColor(exam.date);
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Tap + to add an exam',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ],
+              ),
+            )
+          : ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: _exams.length,
+              itemBuilder: (context, index) {
+                final exam = _exams[index];
+                final countdownText = _getCountdownText(exam.date);
+                final countdownColor = _getCountdownColor(exam.date);
 
-                    return Card(
-                      margin: const EdgeInsets.only(bottom: 12),
-                      child: InkWell(
-                        onTap: () => _editExam(exam),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Row(
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: countdownColor.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(8),
+                return Card(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  child: InkWell(
+                    onTap: () => _editExam(exam),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: countdownColor.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Column(
+                              children: [
+                                Text(
+                                  exam.date.day.toString(),
+                                  style: TextStyle(
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold,
+                                    color: countdownColor,
+                                  ),
                                 ),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      exam.date.day.toString(),
-                                      style: TextStyle(
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.bold,
-                                        color: countdownColor,
-                                      ),
-                                    ),
-                                    Text(
-                                      _getMonthName(exam.date.month),
-                                      style: TextStyle(
-                                        fontSize: 12,
-                                        color: countdownColor,
-                                      ),
-                                    ),
-                                  ],
+                                Text(
+                                  _getMonthName(exam.date.month),
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: countdownColor,
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      exam.name,
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      exam.subject,
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey[600],
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 12,
-                                        vertical: 4,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: countdownColor.withOpacity(0.2),
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: Text(
-                                        countdownText,
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.bold,
-                                          color: countdownColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              IconButton(
-                                icon:
-                                    const Icon(Icons.delete, color: Colors.red),
-                                onPressed: () => _deleteExam(exam),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  exam.name,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  exam.subject,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 12,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: countdownColor.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Text(
+                                    countdownText,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: countdownColor,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete, color: Colors.red),
+                            onPressed: () => _deleteExam(exam),
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                );
+              },
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addExam,
         child: const Icon(Icons.add),
@@ -395,7 +394,7 @@ class _ExamCountdownScreenState extends State<ExamCountdownScreen> {
       'Sep',
       'Oct',
       'Nov',
-      'Dec'
+      'Dec',
     ];
     return months[month - 1];
   }
@@ -406,21 +405,17 @@ class Exam {
   String subject;
   DateTime date;
 
-  Exam({
-    required this.name,
-    required this.subject,
-    required this.date,
-  });
+  Exam({required this.name, required this.subject, required this.date});
 
   Map<String, dynamic> toJson() => {
-        'name': name,
-        'subject': subject,
-        'date': date.toIso8601String(),
-      };
+    'name': name,
+    'subject': subject,
+    'date': date.toIso8601String(),
+  };
 
   factory Exam.fromJson(Map<String, dynamic> json) => Exam(
-        name: json['name'],
-        subject: json['subject'],
-        date: DateTime.parse(json['date']),
-      );
+    name: json['name'],
+    subject: json['subject'],
+    date: DateTime.parse(json['date']),
+  );
 }

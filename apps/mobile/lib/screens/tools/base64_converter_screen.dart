@@ -12,13 +12,13 @@ class Base64ConverterScreen extends StatefulWidget {
 class _Base64ConverterScreenState extends State<Base64ConverterScreen> {
   final TextEditingController _inputController = TextEditingController();
   final TextEditingController _outputController = TextEditingController();
-  
+
   bool _isEncoding = true;
   String _error = '';
 
   void _convert() {
     setState(() => _error = '');
-    
+
     if (_inputController.text.isEmpty) {
       setState(() {
         _outputController.clear();
@@ -41,7 +41,7 @@ class _Base64ConverterScreenState extends State<Base64ConverterScreen> {
       }
     } catch (e) {
       setState(() {
-        _error = _isEncoding 
+        _error = _isEncoding
             ? 'Encoding failed: ${e.toString()}'
             : 'Invalid Base64 string: ${e.toString()}';
         _outputController.clear();
@@ -80,9 +80,11 @@ class _Base64ConverterScreenState extends State<Base64ConverterScreen> {
   void _loadExample() {
     setState(() {
       if (_isEncoding) {
-        _inputController.text = 'Hello, World! This is a test message for Base64 encoding.';
+        _inputController.text =
+            'Hello, World! This is a test message for Base64 encoding.';
       } else {
-        _inputController.text = 'SGVsbG8sIFdvcmxkISBUaGlzIGlzIGEgdGVzdCBtZXNzYWdlIGZvciBCYXNlNjQgZW5jb2Rpbmcu';
+        _inputController.text =
+            'SGVsbG8sIFdvcmxkISBUaGlzIGlzIGEgdGVzdCBtZXNzYWdlIGZvciBCYXNlNjQgZW5jb2Rpbmcu';
       }
       _convert();
     });
@@ -233,16 +235,13 @@ class _Base64ConverterScreenState extends State<Base64ConverterScreen> {
         TextField(
           controller: _inputController,
           decoration: InputDecoration(
-            hintText: _isEncoding 
+            hintText: _isEncoding
                 ? 'Enter text to encode...'
                 : 'Enter Base64 string to decode...',
             border: const OutlineInputBorder(),
             prefixIcon: Icon(_isEncoding ? Icons.text_fields : Icons.code),
             suffixIcon: _inputController.text.isNotEmpty
-                ? IconButton(
-                    icon: const Icon(Icons.clear),
-                    onPressed: _clear,
-                  )
+                ? IconButton(icon: const Icon(Icons.clear), onPressed: _clear)
                 : null,
           ),
           maxLines: _isEncoding ? 5 : 8,
@@ -264,9 +263,7 @@ class _Base64ConverterScreenState extends State<Base64ConverterScreen> {
             onPressed: _convert,
             icon: Icon(_isEncoding ? Icons.lock : Icons.lock_open),
             label: Text(_isEncoding ? 'Encode' : 'Decode'),
-            style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.all(16),
-            ),
+            style: ElevatedButton.styleFrom(padding: const EdgeInsets.all(16)),
           ),
         ),
         const SizedBox(width: 8),
@@ -275,9 +272,7 @@ class _Base64ConverterScreenState extends State<Base64ConverterScreen> {
             onPressed: _clear,
             icon: const Icon(Icons.clear),
             label: const Text('Clear'),
-            style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.all(16),
-            ),
+            style: OutlinedButton.styleFrom(padding: const EdgeInsets.all(16)),
           ),
         ),
       ],
@@ -294,10 +289,7 @@ class _Base64ConverterScreenState extends State<Base64ConverterScreen> {
             Icon(Icons.error_outline, color: Colors.red[700]),
             const SizedBox(width: 8),
             Expanded(
-              child: Text(
-                _error,
-                style: TextStyle(color: Colors.red[700]),
-              ),
+              child: Text(_error, style: TextStyle(color: Colors.red[700])),
             ),
           ],
         ),
@@ -372,10 +364,7 @@ class _Base64ConverterScreenState extends State<Base64ConverterScreen> {
           children: [
             const Text(
               'Common Use Cases',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
             const SizedBox(height: 12),
             _buildUseCase(
@@ -430,10 +419,7 @@ class _Base64ConverterScreenState extends State<Base64ConverterScreen> {
                 ),
                 Text(
                   description,
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: Colors.grey[600],
-                  ),
+                  style: TextStyle(fontSize: 11, color: Colors.grey[600]),
                 ),
               ],
             ),

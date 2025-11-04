@@ -219,7 +219,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 // Auto-scroll to bottom only when user is at bottom or sending new message
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   if (_scrollController.hasClients) {
-                    final isAtBottom = _scrollController.position.pixels >=
+                    final isAtBottom =
+                        _scrollController.position.pixels >=
                         _scrollController.position.maxScrollExtent - 100;
                     if (isAtBottom) {
                       _scrollController.animateTo(
@@ -303,11 +304,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget _buildSyncStatusIcon(MessageSyncStatus status) {
     switch (status) {
       case MessageSyncStatus.pending:
-        return const Icon(
-          Icons.schedule,
-          size: 14,
-          color: Colors.white70,
-        );
+        return const Icon(Icons.schedule, size: 14, color: Colors.white70);
       case MessageSyncStatus.pendingApproval:
         return const Icon(
           Icons.hourglass_empty,
@@ -315,17 +312,9 @@ class _ChatScreenState extends State<ChatScreen> {
           color: Colors.orange,
         );
       case MessageSyncStatus.failed:
-        return const Icon(
-          Icons.error_outline,
-          size: 14,
-          color: Colors.red,
-        );
+        return const Icon(Icons.error_outline, size: 14, color: Colors.red);
       case MessageSyncStatus.synced:
-        return const Icon(
-          Icons.done_all,
-          size: 14,
-          color: Colors.white70,
-        );
+        return const Icon(Icons.done_all, size: 14, color: Colors.white70);
     }
   }
 

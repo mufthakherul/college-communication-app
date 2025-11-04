@@ -5,13 +5,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
 /// Log levels
-enum LogLevel {
-  debug,
-  info,
-  warning,
-  error,
-  fatal,
-}
+enum LogLevel { debug, info, warning, error, fatal }
 
 /// Log entry
 class LogEntry {
@@ -32,24 +26,24 @@ class LogEntry {
   });
 
   Map<String, dynamic> toJson() => {
-        'level': level.name,
-        'message': message,
-        'timestamp': timestamp.toIso8601String(),
-        'category': category,
-        'metadata': metadata,
-        'stackTrace': stackTrace?.toString(),
-      };
+    'level': level.name,
+    'message': message,
+    'timestamp': timestamp.toIso8601String(),
+    'category': category,
+    'metadata': metadata,
+    'stackTrace': stackTrace?.toString(),
+  };
 
   factory LogEntry.fromJson(Map<String, dynamic> json) => LogEntry(
-        level: LogLevel.values.byName(json['level']),
-        message: json['message'],
-        timestamp: DateTime.parse(json['timestamp']),
-        category: json['category'],
-        metadata: json['metadata'],
-        stackTrace: json['stackTrace'] != null
-            ? StackTrace.fromString(json['stackTrace'])
-            : null,
-      );
+    level: LogLevel.values.byName(json['level']),
+    message: json['message'],
+    timestamp: DateTime.parse(json['timestamp']),
+    category: json['category'],
+    metadata: json['metadata'],
+    stackTrace: json['stackTrace'] != null
+        ? StackTrace.fromString(json['stackTrace'])
+        : null,
+  );
 
   @override
   String toString() {
@@ -128,29 +122,40 @@ class AppLoggerService {
   }
 
   /// Log a debug message
-  void debug(String message,
-      {String? category, Map<String, dynamic>? metadata}) {
+  void debug(
+    String message, {
+    String? category,
+    Map<String, dynamic>? metadata,
+  }) {
     _log(LogLevel.debug, message, category: category, metadata: metadata);
   }
 
   /// Log an info message
-  void info(String message,
-      {String? category, Map<String, dynamic>? metadata}) {
+  void info(
+    String message, {
+    String? category,
+    Map<String, dynamic>? metadata,
+  }) {
     _log(LogLevel.info, message, category: category, metadata: metadata);
   }
 
   /// Log a warning message
-  void warning(String message,
-      {String? category, Map<String, dynamic>? metadata}) {
+  void warning(
+    String message, {
+    String? category,
+    Map<String, dynamic>? metadata,
+  }) {
     _log(LogLevel.warning, message, category: category, metadata: metadata);
   }
 
   /// Log an error message
-  void error(String message,
-      {String? category,
-      Map<String, dynamic>? metadata,
-      Object? error,
-      StackTrace? stackTrace}) {
+  void error(
+    String message, {
+    String? category,
+    Map<String, dynamic>? metadata,
+    Object? error,
+    StackTrace? stackTrace,
+  }) {
     final fullMetadata = {...?metadata};
     if (error != null) {
       fullMetadata['error'] = error.toString();
@@ -166,11 +171,13 @@ class AppLoggerService {
   }
 
   /// Log a fatal error
-  void fatal(String message,
-      {String? category,
-      Map<String, dynamic>? metadata,
-      Object? error,
-      StackTrace? stackTrace}) {
+  void fatal(
+    String message, {
+    String? category,
+    Map<String, dynamic>? metadata,
+    Object? error,
+    StackTrace? stackTrace,
+  }) {
     final fullMetadata = {...?metadata};
     if (error != null) {
       fullMetadata['error'] = error.toString();
@@ -186,10 +193,13 @@ class AppLoggerService {
   }
 
   /// Internal logging method
-  void _log(LogLevel level, String message,
-      {String? category,
-      Map<String, dynamic>? metadata,
-      StackTrace? stackTrace}) {
+  void _log(
+    LogLevel level,
+    String message, {
+    String? category,
+    Map<String, dynamic>? metadata,
+    StackTrace? stackTrace,
+  }) {
     if (!_enabled) return;
 
     // Check minimum level
@@ -256,8 +266,9 @@ class AppLoggerService {
   /// Get logs in time range
   List<LogEntry> getLogsInRange(DateTime start, DateTime end) {
     return _logs
-        .where((log) =>
-            log.timestamp.isAfter(start) && log.timestamp.isBefore(end))
+        .where(
+          (log) => log.timestamp.isAfter(start) && log.timestamp.isBefore(end),
+        )
         .toList();
   }
 
@@ -265,7 +276,8 @@ class AppLoggerService {
   List<LogEntry> getErrors() {
     return _logs
         .where(
-            (log) => log.level == LogLevel.error || log.level == LogLevel.fatal)
+          (log) => log.level == LogLevel.error || log.level == LogLevel.fatal,
+        )
         .toList();
   }
 
@@ -299,7 +311,8 @@ class AppLoggerService {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final exportFile = File(
-          '${directory.path}/logs_export_${DateTime.now().millisecondsSinceEpoch}.json');
+        '${directory.path}/logs_export_${DateTime.now().millisecondsSinceEpoch}.json',
+      );
 
       await exportFile.writeAsString(exportLogsJson());
       debugPrint('Exported logs to: ${exportFile.path}');
@@ -320,16 +333,20 @@ class AppLoggerService {
 
     // Count by level
     for (final level in LogLevel.values) {
-      stats['byLevel'][level.name] =
-          _logs.where((log) => log.level == level).length;
+      stats['byLevel'][level.name] = _logs
+          .where((log) => log.level == level)
+          .length;
     }
 
     // Count by category
-    final categories =
-        _logs.map((log) => log.category).whereType<String>().toSet();
+    final categories = _logs
+        .map((log) => log.category)
+        .whereType<String>()
+        .toSet();
     for (final category in categories) {
-      stats['byCategory'][category] =
-          _logs.where((log) => log.category == category).length;
+      stats['byCategory'][category] = _logs
+          .where((log) => log.category == category)
+          .length;
     }
 
     if (_logs.isNotEmpty) {

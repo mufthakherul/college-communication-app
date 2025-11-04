@@ -115,10 +115,7 @@ class AnalyticsDashboardService {
       final allNotices = await _appwrite.databases.listDocuments(
         databaseId: AppwriteConfig.databaseId,
         collectionId: AppwriteConfig.noticesCollectionId,
-        queries: [
-          Query.limit(500),
-          Query.orderDesc('created_at'),
-        ],
+        queries: [Query.limit(500), Query.orderDesc('created_at')],
       );
 
       int activeCount = 0;
@@ -154,12 +151,14 @@ class AnalyticsDashboardService {
         byMonth[monthKey] = (byMonth[monthKey] ?? 0) + 1;
 
         // Track top viewed notices
-        topNotices.add(TopNotice(
-          id: doc.$id,
-          title: data['title'] ?? 'Untitled',
-          views: data['view_count'] ?? 0,
-          createdAt: createdAt,
-        ));
+        topNotices.add(
+          TopNotice(
+            id: doc.$id,
+            title: data['title'] ?? 'Untitled',
+            views: data['view_count'] ?? 0,
+            createdAt: createdAt,
+          ),
+        );
       }
 
       // Sort and limit top notices
@@ -187,10 +186,7 @@ class AnalyticsDashboardService {
       final allMessages = await _appwrite.databases.listDocuments(
         databaseId: AppwriteConfig.databaseId,
         collectionId: AppwriteConfig.messagesCollectionId,
-        queries: [
-          Query.limit(500),
-          Query.orderDesc('created_at'),
-        ],
+        queries: [Query.limit(500), Query.orderDesc('created_at')],
       );
 
       final now = DateTime.now();
@@ -246,11 +242,13 @@ class AnalyticsDashboardService {
             documentId: entry.key,
           );
 
-          mostActive.add(ActiveUser(
-            userId: entry.key,
-            name: user.data['display_name'] ?? 'Unknown',
-            messageCount: entry.value,
-          ));
+          mostActive.add(
+            ActiveUser(
+              userId: entry.key,
+              name: user.data['display_name'] ?? 'Unknown',
+              messageCount: entry.value,
+            ),
+          );
         } catch (e) {
           debugPrint('Error fetching user data: $e');
         }
@@ -277,9 +275,7 @@ class AnalyticsDashboardService {
       final allUsers = await _appwrite.databases.listDocuments(
         databaseId: AppwriteConfig.databaseId,
         collectionId: AppwriteConfig.usersCollectionId,
-        queries: [
-          Query.limit(500),
-        ],
+        queries: [Query.limit(500)],
       );
 
       // Get total notices
@@ -324,8 +320,9 @@ class AnalyticsDashboardService {
         }
       }
 
-      final avgMessagesPerUser =
-          allUsers.total > 0 ? messagesCount.total / allUsers.total : 0.0;
+      final avgMessagesPerUser = allUsers.total > 0
+          ? messagesCount.total / allUsers.total
+          : 0.0;
 
       return SystemAnalytics(
         totalUsers: allUsers.total,
@@ -356,10 +353,7 @@ class AnalyticsDashboardService {
       final users = await _appwrite.databases.listDocuments(
         databaseId: AppwriteConfig.databaseId,
         collectionId: AppwriteConfig.usersCollectionId,
-        queries: [
-          Query.limit(limit),
-          Query.orderDesc('last_login'),
-        ],
+        queries: [Query.limit(limit), Query.orderDesc('last_login')],
       );
 
       final List<UserActivityData> activityData = [];
@@ -375,10 +369,7 @@ class AnalyticsDashboardService {
           final notices = await _appwrite.databases.listDocuments(
             databaseId: AppwriteConfig.databaseId,
             collectionId: AppwriteConfig.noticesCollectionId,
-            queries: [
-              Query.equal('created_by', userId),
-              Query.limit(1),
-            ],
+            queries: [Query.equal('created_by', userId), Query.limit(1)],
           );
           noticeCount = notices.total;
         } catch (e) {
@@ -391,26 +382,25 @@ class AnalyticsDashboardService {
           final messages = await _appwrite.databases.listDocuments(
             databaseId: AppwriteConfig.databaseId,
             collectionId: AppwriteConfig.messagesCollectionId,
-            queries: [
-              Query.equal('sender_id', userId),
-              Query.limit(1),
-            ],
+            queries: [Query.equal('sender_id', userId), Query.limit(1)],
           );
           messageCount = messages.total;
         } catch (e) {
           debugPrint('Error getting message count for user $userId: $e');
         }
 
-        activityData.add(UserActivityData(
-          userId: userId,
-          userName: data['display_name'] ?? 'Unknown',
-          noticeCount: noticeCount,
-          messageCount: messageCount,
-          loginCount: data['login_count'] ?? 0,
-          lastActive: data['last_login'] != null
-              ? DateTime.parse(data['last_login'])
-              : DateTime.fromMillisecondsSinceEpoch(0),
-        ));
+        activityData.add(
+          UserActivityData(
+            userId: userId,
+            userName: data['display_name'] ?? 'Unknown',
+            noticeCount: noticeCount,
+            messageCount: messageCount,
+            loginCount: data['login_count'] ?? 0,
+            lastActive: data['last_login'] != null
+                ? DateTime.parse(data['last_login'])
+                : DateTime.fromMillisecondsSinceEpoch(0),
+          ),
+        );
       }
 
       return activityData;

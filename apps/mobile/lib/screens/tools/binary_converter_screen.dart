@@ -13,14 +13,21 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
   final TextEditingController _binaryController = TextEditingController();
   final TextEditingController _hexController = TextEditingController();
   final TextEditingController _octalController = TextEditingController();
-  
+
   // Bitwise operation controllers
   final TextEditingController _num1Controller = TextEditingController();
   final TextEditingController _num2Controller = TextEditingController();
   String _bitwiseResult = '';
   String _selectedOperation = 'AND';
-  
-  final List<String> _operations = ['AND', 'OR', 'XOR', 'NOT', 'Left Shift', 'Right Shift'];
+
+  final List<String> _operations = [
+    'AND',
+    'OR',
+    'XOR',
+    'NOT',
+    'Left Shift',
+    'Right Shift',
+  ];
 
   void _convertFromDecimal(String value) {
     if (value.isEmpty) {
@@ -103,28 +110,28 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
 
   void _copyToClipboard(String value, String type) {
     Clipboard.setData(ClipboardData(text: value));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('$type copied to clipboard')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('$type copied to clipboard')));
   }
-  
+
   void _performBitwiseOperation() {
     final num1 = int.tryParse(_num1Controller.text);
     final num2 = int.tryParse(_num2Controller.text);
-    
+
     if (num1 == null) {
       setState(() => _bitwiseResult = 'Invalid first number');
       return;
     }
-    
+
     if (_selectedOperation != 'NOT' && num2 == null) {
       setState(() => _bitwiseResult = 'Invalid second number');
       return;
     }
-    
+
     int result;
     String operation;
-    
+
     switch (_selectedOperation) {
       case 'AND':
         result = num1 & num2!;
@@ -154,12 +161,13 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
         result = 0;
         operation = '';
     }
-    
+
     setState(() {
-      _bitwiseResult = '$operation = $result\nBinary: ${result.toRadixString(2)}\nHex: 0x${result.toRadixString(16).toUpperCase()}';
+      _bitwiseResult =
+          '$operation = $result\nBinary: ${result.toRadixString(2)}\nHex: 0x${result.toRadixString(16).toUpperCase()}';
     });
   }
-  
+
   String _toTwosComplement(String binary, int bits) {
     if (binary.isEmpty) return '';
     try {
@@ -243,7 +251,7 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
       ),
     );
   }
-  
+
   Widget _buildBitwiseOperations() {
     return Card(
       child: Padding(
@@ -257,10 +265,7 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
                 const SizedBox(width: 8),
                 const Text(
                   'Bitwise Operations',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ],
             ),
@@ -351,7 +356,7 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
       ),
     );
   }
-  
+
   Widget _buildTwosComplementSection() {
     return Card(
       child: Padding(
@@ -365,10 +370,7 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
                 const SizedBox(width: 8),
                 const Text(
                   'Two\'s Complement',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
               ],
             ),
@@ -387,7 +389,7 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
       ),
     );
   }
-  
+
   Widget _buildComplementRow(String label, int bits) {
     final complement = _toTwosComplement(_binaryController.text, bits);
     return Padding(
@@ -410,7 +412,8 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
           if (complement != 'Invalid' && complement != 'Overflow for $bits-bit')
             IconButton(
               icon: const Icon(Icons.copy, size: 18),
-              onPressed: () => _copyToClipboard(complement, 'Two\'s Complement'),
+              onPressed: () =>
+                  _copyToClipboard(complement, 'Two\'s Complement'),
             ),
         ],
       ),
@@ -470,10 +473,7 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
                 const SizedBox(width: 8),
                 Text(
                   label,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: color,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, color: color),
                 ),
               ],
             ),
@@ -513,10 +513,7 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
           children: [
             const Text(
               'Quick Reference',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
             const SizedBox(height: 12),
             Table(
@@ -527,18 +524,24 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
                   children: const [
                     Padding(
                       padding: EdgeInsets.all(8),
-                      child: Text('Decimal',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: Text(
+                        'Decimal',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                     Padding(
                       padding: EdgeInsets.all(8),
-                      child: Text('Binary',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: Text(
+                        'Binary',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                     Padding(
                       padding: EdgeInsets.all(8),
-                      child: Text('Hex',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: Text(
+                        'Hex',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ],
                 ),

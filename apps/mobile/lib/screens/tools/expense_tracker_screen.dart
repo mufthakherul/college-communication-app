@@ -157,13 +157,14 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                 if (amount != null && amount > 0) {
                   setState(() {
                     _expenses.insert(
-                        0,
-                        Expense(
-                          amount: amount,
-                          category: selectedCategory,
-                          description: descriptionController.text,
-                          date: DateTime.now(),
-                        ));
+                      0,
+                      Expense(
+                        amount: amount,
+                        category: selectedCategory,
+                        description: descriptionController.text,
+                        date: DateTime.now(),
+                      ),
+                    );
                   });
                   _saveExpenses();
                   Navigator.pop(context);
@@ -286,10 +287,7 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                     children: [
                       const Text(
                         'Monthly Budget',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 14,
-                        ),
+                        style: TextStyle(color: Colors.white70, fontSize: 14),
                       ),
                       const SizedBox(height: 8),
                       Text(
@@ -309,7 +307,9 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                               const Text(
                                 'Spent',
                                 style: TextStyle(
-                                    color: Colors.white70, fontSize: 12),
+                                  color: Colors.white70,
+                                  fontSize: 12,
+                                ),
                               ),
                               Text(
                                 '৳ ${totalExpenses.toStringAsFixed(0)}',
@@ -326,7 +326,9 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                               const Text(
                                 'Remaining',
                                 style: TextStyle(
-                                    color: Colors.white70, fontSize: 12),
+                                  color: Colors.white70,
+                                  fontSize: 12,
+                                ),
                               ),
                               Text(
                                 '৳ ${remaining.toStringAsFixed(0)}',
@@ -357,7 +359,9 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                       Text(
                         '${percentage.toStringAsFixed(1)}% used',
                         style: const TextStyle(
-                            color: Colors.white70, fontSize: 12),
+                          color: Colors.white70,
+                          fontSize: 12,
+                        ),
                       ),
                     ],
                   ),
@@ -369,13 +373,18 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.receipt_long,
-                                  size: 64, color: Colors.grey[400]),
+                              Icon(
+                                Icons.receipt_long,
+                                size: 64,
+                                color: Colors.grey[400],
+                              ),
                               const SizedBox(height: 16),
                               const Text(
                                 'No expenses yet',
-                                style:
-                                    TextStyle(fontSize: 18, color: Colors.grey),
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.grey,
+                                ),
                               ),
                               const SizedBox(height: 8),
                               const Text(
@@ -407,12 +416,15 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                                       ? expense.category
                                       : expense.description,
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.w500),
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                                 subtitle: Text(
                                   '${expense.category} • ${_formatDate(expense.date)}',
                                   style: TextStyle(
-                                      fontSize: 12, color: Colors.grey[600]),
+                                    fontSize: 12,
+                                    color: Colors.grey[600],
+                                  ),
                                 ),
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
@@ -483,7 +495,9 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                           Text(
                             '${percentage.toStringAsFixed(0)}%',
                             style: TextStyle(
-                                fontSize: 12, color: Colors.grey[600]),
+                              fontSize: 12,
+                              color: Colors.grey[600],
+                            ),
                           ),
                         ],
                       ),
@@ -531,16 +545,16 @@ class Expense {
   });
 
   Map<String, dynamic> toJson() => {
-        'amount': amount,
-        'category': category,
-        'description': description,
-        'date': date.toIso8601String(),
-      };
+    'amount': amount,
+    'category': category,
+    'description': description,
+    'date': date.toIso8601String(),
+  };
 
   factory Expense.fromJson(Map<String, dynamic> json) => Expense(
-        amount: json['amount'],
-        category: json['category'],
-        description: json['description'],
-        date: DateTime.parse(json['date']),
-      );
+    amount: json['amount'],
+    category: json['category'],
+    description: json['description'],
+    date: DateTime.parse(json['date']),
+  );
 }

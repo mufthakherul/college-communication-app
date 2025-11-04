@@ -11,15 +11,28 @@ void main() {
       expect(InputValidator.isValidDocumentId('msg-456'), isTrue);
       expect(InputValidator.isValidDocumentId('a1b2c3d4e5f6'), isTrue);
       expect(InputValidator.isValidDocumentId('123456789'), isTrue);
-      
+
       // Test longer IDs that Appwrite can generate
-      expect(InputValidator.isValidDocumentId('a' * 37), isTrue); // 37 chars - should pass now
+      expect(
+        InputValidator.isValidDocumentId('a' * 37),
+        isTrue,
+      ); // 37 chars - should pass now
       expect(InputValidator.isValidDocumentId('a' * 50), isTrue); // 50 chars
       expect(InputValidator.isValidDocumentId('a' * 100), isTrue); // 100 chars
-      expect(InputValidator.isValidDocumentId('user_1234567890_abcdefghijklmnopqrstuvwxyz'), isTrue);
-      
+      expect(
+        InputValidator.isValidDocumentId(
+          'user_1234567890_abcdefghijklmnopqrstuvwxyz',
+        ),
+        isTrue,
+      );
+
       // Test typical Appwrite ID.unique() format (longer IDs)
-      expect(InputValidator.isValidDocumentId('5f8a7b2c9d1e2f3g4h5i6j7k8l9m0n1o2p3q'), isTrue);
+      expect(
+        InputValidator.isValidDocumentId(
+          '5f8a7b2c9d1e2f3g4h5i6j7k8l9m0n1o2p3q',
+        ),
+        isTrue,
+      );
     });
 
     test('should reject invalid document IDs', () {
@@ -29,18 +42,27 @@ void main() {
       expect(InputValidator.isValidDocumentId('id with spaces'), isFalse);
       expect(InputValidator.isValidDocumentId('id@special'), isFalse);
       expect(InputValidator.isValidDocumentId('id#hash'), isFalse);
-      expect(InputValidator.isValidDocumentId('a' * 256), isFalse); // Too long (>255)
+      expect(
+        InputValidator.isValidDocumentId('a' * 256),
+        isFalse,
+      ); // Too long (>255)
     });
   });
 
   group('InputValidator - UUID Tests', () {
     test('should accept valid UUIDs', () {
-      expect(InputValidator.isValidUuid('550e8400-e29b-41d4-a716-446655440000'),
-          isTrue);
-      expect(InputValidator.isValidUuid('6ba7b810-9dad-11d1-80b4-00c04fd430c8'),
-          isTrue);
-      expect(InputValidator.isValidUuid('6ba7b811-9dad-11d1-80b4-00c04fd430c8'),
-          isTrue);
+      expect(
+        InputValidator.isValidUuid('550e8400-e29b-41d4-a716-446655440000'),
+        isTrue,
+      );
+      expect(
+        InputValidator.isValidUuid('6ba7b810-9dad-11d1-80b4-00c04fd430c8'),
+        isTrue,
+      );
+      expect(
+        InputValidator.isValidUuid('6ba7b811-9dad-11d1-80b4-00c04fd430c8'),
+        isTrue,
+      );
     });
 
     test('should reject invalid UUIDs', () {
@@ -56,13 +78,17 @@ void main() {
     test('should sanitize message content', () {
       expect(InputValidator.sanitizeMessage('Hello world'), 'Hello world');
       expect(InputValidator.sanitizeMessage('  Hello  '), 'Hello');
-      expect(InputValidator.sanitizeMessage('Test\nmultiline\nmessage'),
-          'Test\nmultiline\nmessage');
+      expect(
+        InputValidator.sanitizeMessage('Test\nmultiline\nmessage'),
+        'Test\nmultiline\nmessage',
+      );
     });
 
     test('should remove HTML tags from messages', () {
-      expect(InputValidator.sanitizeMessage('<script>alert("XSS")</script>'),
-          'alert("XSS")');
+      expect(
+        InputValidator.sanitizeMessage('<script>alert("XSS")</script>'),
+        'alert("XSS")',
+      );
       expect(InputValidator.sanitizeMessage('<b>Bold text</b>'), 'Bold text');
       expect(InputValidator.sanitizeMessage('<a href="#">Link</a>'), 'Link');
     });
@@ -90,7 +116,9 @@ void main() {
     test('should remove special characters from search', () {
       expect(InputValidator.sanitizeSearchQuery('test<script>'), 'testscript');
       expect(
-          InputValidator.sanitizeSearchQuery('test@example'), 'test@example');
+        InputValidator.sanitizeSearchQuery('test@example'),
+        'test@example',
+      );
       expect(InputValidator.sanitizeSearchQuery('test!'), 'test!');
     });
 
