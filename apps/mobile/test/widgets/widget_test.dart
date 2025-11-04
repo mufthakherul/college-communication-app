@@ -20,7 +20,7 @@ void main() {
     expect(find.text('Test App'), findsOneWidget);
 
     // Get the MaterialApp widget
-    final app = tester.widget(find.byType(MaterialApp));
+    final app = tester.widget<MaterialApp>(find.byType(MaterialApp));
 
     // Verify Material Design 3 is enabled
     expect(app.theme?.useMaterial3, true);
