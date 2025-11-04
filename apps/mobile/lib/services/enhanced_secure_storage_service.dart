@@ -3,14 +3,14 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 
 /// Enhanced secure storage service using hardware-backed encryption
-/// 
+///
 /// Uses platform-specific secure storage:
 /// - Android: Uses KeyStore (hardware-backed encryption)
 /// - iOS: Uses Keychain (hardware-backed encryption)
 /// - Linux: Uses libsecret
 /// - Windows: Uses Windows Credentials Store
 /// - macOS: Uses macOS Keychain
-/// 
+///
 /// This provides cryptographically secure storage suitable for:
 /// - Authentication tokens
 /// - API keys
@@ -18,7 +18,7 @@ import 'dart:convert';
 /// - Personal information
 /// - Payment information
 class EnhancedSecureStorageService {
-  static final EnhancedSecureStorageService _instance = 
+  static final EnhancedSecureStorageService _instance =
       EnhancedSecureStorageService._internal();
   factory EnhancedSecureStorageService() => _instance;
   EnhancedSecureStorageService._internal();
@@ -63,7 +63,8 @@ class EnhancedSecureStorageService {
   Future<String?> read(String key) async {
     try {
       final value = await _secureStorage.read(key: key);
-      debugPrint('Secure storage: Read key $key ${value != null ? '(found)' : '(not found)'}');
+      debugPrint(
+          'Secure storage: Read key $key ${value != null ? '(found)' : '(not found)'}');
       return value;
     } catch (e) {
       debugPrint('Secure storage read error for key $key: $e');
@@ -290,20 +291,21 @@ class EnhancedSecureStorageService {
   }) async {
     try {
       bool success = true;
-      
+
       if (oldToken != null) {
         success = success && await setAuthToken(oldToken);
       }
-      
+
       if (oldUserId != null) {
         success = success && await setUserId(oldUserId);
       }
-      
+
       if (oldSessionData != null) {
         success = success && await setSessionData(oldSessionData);
       }
-      
-      debugPrint('Secure storage: Migration ${success ? 'successful' : 'failed'}');
+
+      debugPrint(
+          'Secure storage: Migration ${success ? 'successful' : 'failed'}');
       return success;
     } catch (e) {
       debugPrint('Error during migration: $e');

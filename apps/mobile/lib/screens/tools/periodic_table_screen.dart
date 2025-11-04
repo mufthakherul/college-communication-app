@@ -82,7 +82,8 @@ class _PeriodicTableScreenState extends State<PeriodicTableScreen> {
                   child: GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 18,
                       mainAxisSpacing: 2,
                       crossAxisSpacing: 2,

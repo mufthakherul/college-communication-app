@@ -6,7 +6,8 @@ class AttendanceTrackerScreen extends StatefulWidget {
   const AttendanceTrackerScreen({super.key});
 
   @override
-  State<AttendanceTrackerScreen> createState() => _AttendanceTrackerScreenState();
+  State<AttendanceTrackerScreen> createState() =>
+      _AttendanceTrackerScreenState();
 }
 
 class _AttendanceTrackerScreenState extends State<AttendanceTrackerScreen> {
@@ -22,7 +23,7 @@ class _AttendanceTrackerScreenState extends State<AttendanceTrackerScreen> {
   Future<void> _loadSubjects() async {
     final prefs = await SharedPreferences.getInstance();
     final subjectsJson = prefs.getString('attendance_subjects');
-    
+
     if (subjectsJson != null) {
       final List<dynamic> decoded = json.decode(subjectsJson);
       setState(() {
@@ -107,8 +108,10 @@ class _AttendanceTrackerScreenState extends State<AttendanceTrackerScreen> {
 
   void _editSubject(Subject subject) {
     final nameController = TextEditingController(text: subject.name);
-    final attendedController = TextEditingController(text: subject.attended.toString());
-    final totalController = TextEditingController(text: subject.total.toString());
+    final attendedController =
+        TextEditingController(text: subject.attended.toString());
+    final totalController =
+        TextEditingController(text: subject.total.toString());
 
     showDialog(
       context: context,
@@ -250,7 +253,8 @@ class _AttendanceTrackerScreenState extends State<AttendanceTrackerScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.event_available, size: 64, color: Colors.grey[400]),
+                      Icon(Icons.event_available,
+                          size: 64, color: Colors.grey[400]),
                       const SizedBox(height: 16),
                       const Text(
                         'No subjects added yet',
@@ -308,7 +312,9 @@ class _AttendanceTrackerScreenState extends State<AttendanceTrackerScreen> {
                             ),
                             const SizedBox(height: 12),
                             LinearProgressIndicator(
-                              value: subject.total > 0 ? subject.attended / subject.total : 0,
+                              value: subject.total > 0
+                                  ? subject.attended / subject.total
+                                  : 0,
                               backgroundColor: Colors.grey[200],
                               color: _getPercentageColor(percentage),
                               minHeight: 8,
@@ -318,8 +324,10 @@ class _AttendanceTrackerScreenState extends State<AttendanceTrackerScreen> {
                               children: [
                                 Expanded(
                                   child: OutlinedButton.icon(
-                                    onPressed: () => _markAttendance(subject, true),
-                                    icon: const Icon(Icons.check, color: Colors.green),
+                                    onPressed: () =>
+                                        _markAttendance(subject, true),
+                                    icon: const Icon(Icons.check,
+                                        color: Colors.green),
                                     label: const Text('Present'),
                                     style: OutlinedButton.styleFrom(
                                       foregroundColor: Colors.green,
@@ -329,8 +337,10 @@ class _AttendanceTrackerScreenState extends State<AttendanceTrackerScreen> {
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: OutlinedButton.icon(
-                                    onPressed: () => _markAttendance(subject, false),
-                                    icon: const Icon(Icons.close, color: Colors.red),
+                                    onPressed: () =>
+                                        _markAttendance(subject, false),
+                                    icon: const Icon(Icons.close,
+                                        color: Colors.red),
                                     label: const Text('Absent'),
                                     style: OutlinedButton.styleFrom(
                                       foregroundColor: Colors.red,
