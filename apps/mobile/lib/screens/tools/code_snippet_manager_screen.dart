@@ -15,6 +15,8 @@ class _CodeSnippetManagerScreenState extends State<CodeSnippetManagerScreen> {
   List<CodeSnippet> _snippets = [];
   String _selectedLanguage = 'All';
   bool _isLoading = true;
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
 
   final List<String> _languages = [
     'All',
@@ -27,6 +29,10 @@ class _CodeSnippetManagerScreenState extends State<CodeSnippetManagerScreen> {
     'PHP',
     'SQL',
     'HTML/CSS',
+    'Kotlin',
+    'Swift',
+    'Go',
+    'Rust',
   ];
 
   @override
@@ -110,8 +116,20 @@ struct Node* createNode(int data) {
   }
 
   List<CodeSnippet> get _filteredSnippets {
-    if (_selectedLanguage == 'All') return _snippets;
-    return _snippets.where((s) => s.language == _selectedLanguage).toList();
+    var filtered = _selectedLanguage == 'All' 
+        ? _snippets 
+        : _snippets.where((s) => s.language == _selectedLanguage).toList();
+    
+    if (_searchQuery.isNotEmpty) {
+      filtered = filtered.where((s) => 
+        s.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+        s.description.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+        s.code.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+        s.tags.any((tag) => tag.toLowerCase().contains(_searchQuery.toLowerCase()))
+      ).toList();
+    }
+    
+    return filtered;
   }
 
   void _addSnippet() {
@@ -178,6 +196,35 @@ struct Node* createNode(int data) {
           ? const Center(child: CircularProgressIndicator())
           : Column(
               children: [
+                // Search Bar
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Search by title, description, or tags...',
+                      prefixIcon: const Icon(Icons.search),
+                      suffixIcon: _searchQuery.isNotEmpty
+                          ? IconButton(
+                              icon: const Icon(Icons.clear),
+                              onPressed: () {
+                                setState(() {
+                                  _searchController.clear();
+                                  _searchQuery = '';
+                                });
+                              },
+                            )
+                          : null,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    onChanged: (value) {
+                      setState(() => _searchQuery = value);
+                    },
+                  ),
+                ),
+                
                 // Language Filter
                 Container(
                   height: 50,
@@ -260,7 +307,24 @@ struct Node* createNode(int data) {
           snippet.title,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        subtitle: Text(snippet.description),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(snippet.description),
+            if (snippet.tags.isNotEmpty) ...[
+              const SizedBox(height: 4),
+              Wrap(
+                spacing: 4,
+                children: snippet.tags.map((tag) => Chip(
+                  label: Text(tag, style: const TextStyle(fontSize: 10)),
+                  backgroundColor: Colors.grey[200],
+                  padding: const EdgeInsets.all(2),
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                )).toList(),
+              ),
+            ],
+          ],
+        ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

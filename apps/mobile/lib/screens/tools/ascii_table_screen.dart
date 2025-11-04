@@ -12,8 +12,10 @@ class _ASCIITableScreenState extends State<ASCIITableScreen> {
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
-  final List<ASCIIChar> _asciiChars = List.generate(
-    128,
+  bool _showExtended = false;
+  
+  List<ASCIIChar> get _asciiChars => List.generate(
+    _showExtended ? 256 : 128,
     (index) => ASCIIChar(
       decimal: index,
       hex: index.toRadixString(16).toUpperCase(),
@@ -82,6 +84,11 @@ class _ASCIITableScreenState extends State<ASCIITableScreen> {
     if ([58, 59, 60, 61, 62, 63, 64].contains(code)) return 'Special Character';
     if ([91, 92, 93, 94, 95, 96].contains(code)) return 'Symbol';
     if ([123, 124, 125, 126].contains(code)) return 'Symbol';
+    
+    // Extended ASCII (128-255)
+    if (code >= 128 && code <= 159) return 'Extended Control';
+    if (code >= 160 && code <= 191) return 'Extended Latin';
+    if (code >= 192 && code <= 255) return 'Extended Latin';
 
     return 'Printable';
   }
@@ -156,7 +163,9 @@ class _ASCIITableScreenState extends State<ASCIITableScreen> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'ASCII (American Standard Code for Information Interchange) - 128 characters',
+                    _showExtended
+                        ? 'Extended ASCII - 256 characters (0-255)'
+                        : 'ASCII - 128 characters (0-127)',
                     style: TextStyle(fontSize: 12, color: Colors.grey[700]),
                   ),
                 ),
@@ -164,7 +173,23 @@ class _ASCIITableScreenState extends State<ASCIITableScreen> {
             ),
           ),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
+          
+          // Toggle Extended ASCII
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: SwitchListTile(
+              title: const Text('Show Extended ASCII', style: TextStyle(fontSize: 14)),
+              subtitle: const Text('Characters 128-255', style: TextStyle(fontSize: 11)),
+              value: _showExtended,
+              dense: true,
+              onChanged: (value) {
+                setState(() => _showExtended = value);
+              },
+            ),
+          ),
+
+          const SizedBox(height: 8),
 
           // ASCII Table
           Expanded(
