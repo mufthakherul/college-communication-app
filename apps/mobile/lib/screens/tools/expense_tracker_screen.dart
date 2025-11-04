@@ -156,12 +156,14 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                 final amount = double.tryParse(amountController.text);
                 if (amount != null && amount > 0) {
                   setState(() {
-                    _expenses.insert(0, Expense(
-                      amount: amount,
-                      category: selectedCategory,
-                      description: descriptionController.text,
-                      date: DateTime.now(),
-                    ));
+                    _expenses.insert(
+                        0,
+                        Expense(
+                          amount: amount,
+                          category: selectedCategory,
+                          description: descriptionController.text,
+                          date: DateTime.now(),
+                        ));
                   });
                   _saveExpenses();
                   Navigator.pop(context);
@@ -206,7 +208,8 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
   Map<String, double> _getCategoryTotals() {
     final totals = <String, double>{};
     for (var expense in _expenses) {
-      totals[expense.category] = (totals[expense.category] ?? 0) + expense.amount;
+      totals[expense.category] =
+          (totals[expense.category] ?? 0) + expense.amount;
     }
     return totals;
   }
@@ -305,7 +308,8 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                             children: [
                               const Text(
                                 'Spent',
-                                style: TextStyle(color: Colors.white70, fontSize: 12),
+                                style: TextStyle(
+                                    color: Colors.white70, fontSize: 12),
                               ),
                               Text(
                                 '৳ ${totalExpenses.toStringAsFixed(0)}',
@@ -321,12 +325,15 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                             children: [
                               const Text(
                                 'Remaining',
-                                style: TextStyle(color: Colors.white70, fontSize: 12),
+                                style: TextStyle(
+                                    color: Colors.white70, fontSize: 12),
                               ),
                               Text(
                                 '৳ ${remaining.toStringAsFixed(0)}',
                                 style: TextStyle(
-                                  color: remaining >= 0 ? Colors.white : Colors.red[200],
+                                  color: remaining >= 0
+                                      ? Colors.white
+                                      : Colors.red[200],
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -337,7 +344,9 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                       ),
                       const SizedBox(height: 16),
                       LinearProgressIndicator(
-                        value: _budget > 0 ? (totalExpenses / _budget).clamp(0, 1) : 0,
+                        value: _budget > 0
+                            ? (totalExpenses / _budget).clamp(0, 1)
+                            : 0,
                         backgroundColor: Colors.white30,
                         valueColor: AlwaysStoppedAnimation(
                           percentage > 90 ? Colors.red : Colors.white,
@@ -347,7 +356,8 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                       const SizedBox(height: 8),
                       Text(
                         '${percentage.toStringAsFixed(1)}% used',
-                        style: const TextStyle(color: Colors.white70, fontSize: 12),
+                        style: const TextStyle(
+                            color: Colors.white70, fontSize: 12),
                       ),
                     ],
                   ),
@@ -359,11 +369,13 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.receipt_long, size: 64, color: Colors.grey[400]),
+                              Icon(Icons.receipt_long,
+                                  size: 64, color: Colors.grey[400]),
                               const SizedBox(height: 16),
                               const Text(
                                 'No expenses yet',
-                                style: TextStyle(fontSize: 18, color: Colors.grey),
+                                style:
+                                    TextStyle(fontSize: 18, color: Colors.grey),
                               ),
                               const SizedBox(height: 8),
                               const Text(
@@ -394,11 +406,13 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                                   expense.description.isEmpty
                                       ? expense.category
                                       : expense.description,
-                                  style: const TextStyle(fontWeight: FontWeight.w500),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.w500),
                                 ),
                                 subtitle: Text(
                                   '${expense.category} • ${_formatDate(expense.date)}',
-                                  style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                                  style: TextStyle(
+                                      fontSize: 12, color: Colors.grey[600]),
                                 ),
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
@@ -468,7 +482,8 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                           ),
                           Text(
                             '${percentage.toStringAsFixed(0)}%',
-                            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                            style: TextStyle(
+                                fontSize: 12, color: Colors.grey[600]),
                           ),
                         ],
                       ),

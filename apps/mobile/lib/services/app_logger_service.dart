@@ -32,24 +32,24 @@ class LogEntry {
   });
 
   Map<String, dynamic> toJson() => {
-    'level': level.name,
-    'message': message,
-    'timestamp': timestamp.toIso8601String(),
-    'category': category,
-    'metadata': metadata,
-    'stackTrace': stackTrace?.toString(),
-  };
+        'level': level.name,
+        'message': message,
+        'timestamp': timestamp.toIso8601String(),
+        'category': category,
+        'metadata': metadata,
+        'stackTrace': stackTrace?.toString(),
+      };
 
   factory LogEntry.fromJson(Map<String, dynamic> json) => LogEntry(
-    level: LogLevel.values.byName(json['level']),
-    message: json['message'],
-    timestamp: DateTime.parse(json['timestamp']),
-    category: json['category'],
-    metadata: json['metadata'],
-    stackTrace: json['stackTrace'] != null 
-        ? StackTrace.fromString(json['stackTrace'])
-        : null,
-  );
+        level: LogLevel.values.byName(json['level']),
+        message: json['message'],
+        timestamp: DateTime.parse(json['timestamp']),
+        category: json['category'],
+        metadata: json['metadata'],
+        stackTrace: json['stackTrace'] != null
+            ? StackTrace.fromString(json['stackTrace'])
+            : null,
+      );
 
   @override
   String toString() {
@@ -73,13 +73,13 @@ class AppLoggerService {
   // In-memory log buffer
   final List<LogEntry> _logs = [];
   static const int _maxLogsInMemory = 1000;
-  
+
   // Configuration
   bool _enabled = true;
   LogLevel _minLevel = kReleaseMode ? LogLevel.info : LogLevel.debug;
   bool _persistLogs = true;
   bool _printToConsole = true;
-  
+
   // File logging
   File? _logFile;
   bool _fileLoggingInitialized = false;
@@ -87,18 +87,19 @@ class AppLoggerService {
   /// Initialize file logging
   Future<void> initialize() async {
     if (_fileLoggingInitialized) return;
-    
+
     try {
       final directory = await getApplicationDocumentsDirectory();
       final logsDir = Directory('${directory.path}/logs');
-      
+
       if (!await logsDir.exists()) {
         await logsDir.create(recursive: true);
       }
-      
-      final fileName = 'app_${DateTime.now().toIso8601String().split('T')[0]}.log';
+
+      final fileName =
+          'app_${DateTime.now().toIso8601String().split('T')[0]}.log';
       _logFile = File('${logsDir.path}/$fileName');
-      
+
       _fileLoggingInitialized = true;
       debugPrint('Log file initialized: ${_logFile!.path}');
     } catch (e) {
@@ -127,77 +128,73 @@ class AppLoggerService {
   }
 
   /// Log a debug message
-  void debug(String message, {String? category, Map<String, dynamic>? metadata}) {
+  void debug(String message,
+      {String? category, Map<String, dynamic>? metadata}) {
     _log(LogLevel.debug, message, category: category, metadata: metadata);
   }
 
   /// Log an info message
-  void info(String message, {String? category, Map<String, dynamic>? metadata}) {
+  void info(String message,
+      {String? category, Map<String, dynamic>? metadata}) {
     _log(LogLevel.info, message, category: category, metadata: metadata);
   }
 
   /// Log a warning message
-  void warning(String message, {String? category, Map<String, dynamic>? metadata}) {
+  void warning(String message,
+      {String? category, Map<String, dynamic>? metadata}) {
     _log(LogLevel.warning, message, category: category, metadata: metadata);
   }
 
   /// Log an error message
-  void error(
-    String message, 
-    {String? category, 
-    Map<String, dynamic>? metadata,
-    Object? error,
-    StackTrace? stackTrace}
-  ) {
+  void error(String message,
+      {String? category,
+      Map<String, dynamic>? metadata,
+      Object? error,
+      StackTrace? stackTrace}) {
     final fullMetadata = {...?metadata};
     if (error != null) {
       fullMetadata['error'] = error.toString();
     }
-    
+
     _log(
-      LogLevel.error, 
-      message, 
-      category: category, 
+      LogLevel.error,
+      message,
+      category: category,
       metadata: fullMetadata,
       stackTrace: stackTrace,
     );
   }
 
   /// Log a fatal error
-  void fatal(
-    String message, 
-    {String? category, 
-    Map<String, dynamic>? metadata,
-    Object? error,
-    StackTrace? stackTrace}
-  ) {
+  void fatal(String message,
+      {String? category,
+      Map<String, dynamic>? metadata,
+      Object? error,
+      StackTrace? stackTrace}) {
     final fullMetadata = {...?metadata};
     if (error != null) {
       fullMetadata['error'] = error.toString();
     }
-    
+
     _log(
-      LogLevel.fatal, 
-      message, 
-      category: category, 
+      LogLevel.fatal,
+      message,
+      category: category,
       metadata: fullMetadata,
       stackTrace: stackTrace,
     );
   }
 
   /// Internal logging method
-  void _log(
-    LogLevel level,
-    String message,
-    {String? category,
-    Map<String, dynamic>? metadata,
-    StackTrace? stackTrace}
-  ) {
+  void _log(LogLevel level, String message,
+      {String? category,
+      Map<String, dynamic>? metadata,
+      StackTrace? stackTrace}) {
     if (!_enabled) return;
-    
+
     // Check minimum level
     if (level.index < _minLevel.index) return;
-    
+
     final entry = LogEntry(
       level: level,
       message: message,
@@ -206,13 +203,13 @@ class AppLoggerService {
       metadata: metadata,
       stackTrace: stackTrace,
     );
-    
+
     // Add to memory buffer
     _logs.add(entry);
     if (_logs.length > _maxLogsInMemory) {
       _logs.removeAt(0);
     }
-    
+
     // Print to console if enabled
     if (_printToConsole) {
       if (kDebugMode || level.index >= LogLevel.warning.index) {
@@ -222,7 +219,7 @@ class AppLoggerService {
         }
       }
     }
-    
+
     // Write to file if enabled
     if (_persistLogs && _fileLoggingInitialized) {
       _writeToFile(entry);
@@ -232,7 +229,7 @@ class AppLoggerService {
   /// Write log entry to file
   Future<void> _writeToFile(LogEntry entry) async {
     if (_logFile == null) return;
-    
+
     try {
       await _logFile!.writeAsString(
         '${entry.toString()}\n',
@@ -258,16 +255,18 @@ class AppLoggerService {
 
   /// Get logs in time range
   List<LogEntry> getLogsInRange(DateTime start, DateTime end) {
-    return _logs.where((log) => 
-      log.timestamp.isAfter(start) && log.timestamp.isBefore(end)
-    ).toList();
+    return _logs
+        .where((log) =>
+            log.timestamp.isAfter(start) && log.timestamp.isBefore(end))
+        .toList();
   }
 
   /// Get error logs
   List<LogEntry> getErrors() {
-    return _logs.where((log) => 
-      log.level == LogLevel.error || log.level == LogLevel.fatal
-    ).toList();
+    return _logs
+        .where(
+            (log) => log.level == LogLevel.error || log.level == LogLevel.fatal)
+        .toList();
   }
 
   /// Get warnings
@@ -300,9 +299,8 @@ class AppLoggerService {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final exportFile = File(
-        '${directory.path}/logs_export_${DateTime.now().millisecondsSinceEpoch}.json'
-      );
-      
+          '${directory.path}/logs_export_${DateTime.now().millisecondsSinceEpoch}.json');
+
       await exportFile.writeAsString(exportLogsJson());
       debugPrint('Exported logs to: ${exportFile.path}');
       return exportFile;
@@ -319,23 +317,26 @@ class AppLoggerService {
       'byLevel': {},
       'byCategory': {},
     };
-    
+
     // Count by level
     for (final level in LogLevel.values) {
-      stats['byLevel'][level.name] = _logs.where((log) => log.level == level).length;
+      stats['byLevel'][level.name] =
+          _logs.where((log) => log.level == level).length;
     }
-    
+
     // Count by category
-    final categories = _logs.map((log) => log.category).whereType<String>().toSet();
+    final categories =
+        _logs.map((log) => log.category).whereType<String>().toSet();
     for (final category in categories) {
-      stats['byCategory'][category] = _logs.where((log) => log.category == category).length;
+      stats['byCategory'][category] =
+          _logs.where((log) => log.category == category).length;
     }
-    
+
     if (_logs.isNotEmpty) {
       stats['oldest'] = _logs.first.timestamp.toIso8601String();
       stats['newest'] = _logs.last.timestamp.toIso8601String();
     }
-    
+
     return stats;
   }
 
@@ -348,14 +349,14 @@ class AppLoggerService {
     (stats['byLevel'] as Map).forEach((level, count) {
       debugPrint('  $level: $count');
     });
-    
+
     if ((stats['byCategory'] as Map).isNotEmpty) {
       debugPrint('By Category:');
       (stats['byCategory'] as Map).forEach((category, count) {
         debugPrint('  $category: $count');
       });
     }
-    
+
     if (stats.containsKey('oldest')) {
       debugPrint('Time Range: ${stats['oldest']} to ${stats['newest']}');
     }
@@ -371,21 +372,22 @@ class AppLoggerService {
   /// Search logs by message content
   List<LogEntry> searchLogs(String query) {
     final lowerQuery = query.toLowerCase();
-    return _logs.where((log) => 
-      log.message.toLowerCase().contains(lowerQuery)
-    ).toList();
+    return _logs
+        .where((log) => log.message.toLowerCase().contains(lowerQuery))
+        .toList();
   }
 
   /// Get log file path
   String? get logFilePath => _logFile?.path;
 
   /// Check if file logging is available
-  bool get isFileLoggingAvailable => _fileLoggingInitialized && _logFile != null;
+  bool get isFileLoggingAvailable =>
+      _fileLoggingInitialized && _logFile != null;
 
   /// Rotate log files (create new file for new day)
   Future<void> rotateLogFiles() async {
     if (!_fileLoggingInitialized) return;
-    
+
     final today = DateTime.now().toIso8601String().split('T')[0];
     if (_logFile != null && !_logFile!.path.contains(today)) {
       // Create new log file for today
@@ -399,12 +401,12 @@ class AppLoggerService {
     try {
       final directory = await getApplicationDocumentsDirectory();
       final logsDir = Directory('${directory.path}/logs');
-      
+
       if (!await logsDir.exists()) return;
-      
+
       final now = DateTime.now();
       final cutoffDate = now.subtract(Duration(days: daysToKeep));
-      
+
       await for (final file in logsDir.list()) {
         if (file is File && file.path.endsWith('.log')) {
           final stat = await file.stat();

@@ -9,8 +9,9 @@ class IPCalculatorScreen extends StatefulWidget {
 
 class _IPCalculatorScreenState extends State<IPCalculatorScreen> {
   final TextEditingController _ipController = TextEditingController();
-  final TextEditingController _cidrController = TextEditingController(text: '24');
-  
+  final TextEditingController _cidrController =
+      TextEditingController(text: '24');
+
   String? _networkAddress;
   String? _broadcastAddress;
   String? _subnetMask;
@@ -38,32 +39,33 @@ class _IPCalculatorScreenState extends State<IPCalculatorScreen> {
 
     setState(() {
       final parts = ip.split('.').map(int.parse).toList();
-      final ipInt = (parts[0] << 24) | (parts[1] << 16) | (parts[2] << 8) | parts[3];
-      
+      final ipInt =
+          (parts[0] << 24) | (parts[1] << 16) | (parts[2] << 8) | parts[3];
+
       // Calculate subnet mask
       final maskInt = (0xFFFFFFFF << (32 - cidr)) & 0xFFFFFFFF;
       _subnetMask = _intToIP(maskInt);
-      
+
       // Calculate wildcard mask
       final wildcardInt = ~maskInt & 0xFFFFFFFF;
       _wildcardMask = _intToIP(wildcardInt);
-      
+
       // Calculate network address
       final networkInt = ipInt & maskInt;
       _networkAddress = _intToIP(networkInt);
-      
+
       // Calculate broadcast address
       final broadcastInt = networkInt | wildcardInt;
       _broadcastAddress = _intToIP(broadcastInt);
-      
+
       // Calculate hosts
       _totalHosts = 1 << (32 - cidr);
       _usableHosts = _totalHosts! - 2;
-      
+
       // First and last usable host
       _firstHost = _intToIP(networkInt + 1);
       _lastHost = _intToIP(broadcastInt - 1);
-      
+
       // Determine IP class and type
       _ipClass = _getIPClass(parts[0]);
       _ipType = _getIPType(parts);
@@ -73,7 +75,7 @@ class _IPCalculatorScreenState extends State<IPCalculatorScreen> {
   bool _isValidIP(String ip) {
     final parts = ip.split('.');
     if (parts.length != 4) return false;
-    
+
     for (final part in parts) {
       final num = int.tryParse(part);
       if (num == null || num < 0 || num > 255) return false;
@@ -185,20 +187,26 @@ class _IPCalculatorScreenState extends State<IPCalculatorScreen> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
-              _buildResultCard('Network Address', _networkAddress!, Icons.router),
-              _buildResultCard('Broadcast Address', _broadcastAddress!, Icons.broadcast_on_personal),
+              _buildResultCard(
+                  'Network Address', _networkAddress!, Icons.router),
+              _buildResultCard('Broadcast Address', _broadcastAddress!,
+                  Icons.broadcast_on_personal),
               _buildResultCard('Subnet Mask', _subnetMask!, Icons.filter_list),
-              _buildResultCard('Wildcard Mask', _wildcardMask!, Icons.filter_none),
+              _buildResultCard(
+                  'Wildcard Mask', _wildcardMask!, Icons.filter_none),
               const SizedBox(height: 16),
               const Text(
                 'Host Information',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
-              _buildResultCard('First Usable Host', _firstHost!, Icons.play_arrow),
+              _buildResultCard(
+                  'First Usable Host', _firstHost!, Icons.play_arrow),
               _buildResultCard('Last Usable Host', _lastHost!, Icons.stop),
-              _buildResultCard('Total Hosts', _totalHosts!.toString(), Icons.devices),
-              _buildResultCard('Usable Hosts', _usableHosts!.toString(), Icons.computer),
+              _buildResultCard(
+                  'Total Hosts', _totalHosts!.toString(), Icons.devices),
+              _buildResultCard(
+                  'Usable Hosts', _usableHosts!.toString(), Icons.computer),
               const SizedBox(height: 16),
               const Text(
                 'IP Classification',
