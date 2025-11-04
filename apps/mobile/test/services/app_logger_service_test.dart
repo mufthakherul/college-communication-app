@@ -202,11 +202,11 @@ void main() {
 
       final json = service.exportLogsJson();
       expect(json, isNotEmpty);
-      
+
       // Verify it's valid JSON by parsing it
       final logs = service.getLogs();
       expect(logs.length, greaterThan(0));
-      
+
       // Check if the JSON string contains the expected data
       // The JSON should contain an array with log entries
       expect(json.startsWith('['), isTrue);
