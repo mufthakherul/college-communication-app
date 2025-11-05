@@ -70,15 +70,18 @@ class NoticeService {
    */
   async createNotice(noticeData: Omit<Notice, '$id'>): Promise<Notice> {
     try {
+      // Set server timestamp for consistency across clients
+      const noticeWithTimestamp = {
+        ...noticeData,
+        createdAt: new Date().toISOString(), // Server-side timestamp
+        isActive: noticeData.isActive ?? true,
+      };
+
       const response = await appwriteService.databases.createDocument(
         AppwriteConfig.databaseId,
         AppwriteConfig.collections.notices,
         ID.unique(),
-        {
-          ...noticeData,
-          createdAt: new Date().toISOString(),
-          isActive: true,
-        }
+        noticeWithTimestamp
       );
 
       return response as unknown as Notice;

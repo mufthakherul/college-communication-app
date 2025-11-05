@@ -37,9 +37,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const checkAuth = async () => {
     try {
       const authUser = await appwriteService.getCurrentUser();
-      // Fetch full user profile from database
-      const users = await userService.getUsers({ limit: 1000 });
-      const userProfile = users.find((u) => u.userId === authUser.$id);
+      // Fetch user profile from database using efficient query
+      const userProfile = await userService.getUserByAuthId(authUser.$id);
 
       if (
         userProfile &&

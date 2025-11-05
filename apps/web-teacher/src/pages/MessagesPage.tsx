@@ -17,13 +17,16 @@ import {
   Box,
   Chip,
   CircularProgress,
+  Tooltip,
 } from '@mui/material';
 import { messageService } from '../services/message.service';
-import { Message } from '../types';
+import { userService } from '../services/user.service';
+import { Message, User } from '../types';
 import { format } from 'date-fns';
 
 const MessagesPage: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [users, setUsers] = useState<Map<string, User>>(new Map());
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,13 +35,26 @@ const MessagesPage: React.FC = () => {
 
   const loadMessages = async () => {
     try {
-      const data = await messageService.getMessages({ limit: 100 });
-      setMessages(data);
+      const [messagesData, usersData] = await Promise.all([
+        messageService.getMessages({ limit: 100 }),
+        userService.getUsers(),
+      ]);
+      
+      // Create a map of userId to user for quick lookup
+      const userMap = new Map(usersData.map(u => [u.userId, u]));
+      
+      setMessages(messagesData);
+      setUsers(userMap);
     } catch (error) {
       console.error('Error loading messages:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  const getUserName = (userId: string): string => {
+    const user = users.get(userId);
+    return user?.name || 'Unknown User';
   };
 
   if (loading) {
@@ -59,8 +75,8 @@ const MessagesPage: React.FC = () => {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Sender ID</TableCell>
-              <TableCell>Receiver ID</TableCell>
+              <TableCell>Sender</TableCell>
+              <TableCell>Receiver</TableCell>
               <TableCell>Message</TableCell>
               <TableCell>Timestamp</TableCell>
               <TableCell>Status</TableCell>
@@ -69,8 +85,16 @@ const MessagesPage: React.FC = () => {
           <TableBody>
             {messages.map((message) => (
               <TableRow key={message.$id}>
-                <TableCell>{message.senderId.substring(0, 8)}...</TableCell>
-                <TableCell>{message.receiverId.substring(0, 8)}...</TableCell>
+                <TableCell>
+                  <Tooltip title={`ID: ${message.senderId}`}>
+                    <span>{getUserName(message.senderId)}</span>
+                  </Tooltip>
+                </TableCell>
+                <TableCell>
+                  <Tooltip title={`ID: ${message.receiverId}`}>
+                    <span>{getUserName(message.receiverId)}</span>
+                  </Tooltip>
+                </TableCell>
                 <TableCell>
                   {message.message.length > 50
                     ? `${message.message.substring(0, 50)}...`
