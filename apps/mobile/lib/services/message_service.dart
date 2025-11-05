@@ -244,10 +244,12 @@ class MessageService {
       if (recipientId.isEmpty || recipientId.length > 255) {
         throw Exception('Invalid recipient: Recipient ID is empty or too long');
       }
-      
+
       // Basic validation - just check it's not obviously malformed
       if (recipientId.contains(RegExp(r'''[<>"'\\/]'''))) {
-        throw Exception('Invalid recipient: Recipient ID contains invalid characters');
+        throw Exception(
+          'Invalid recipient: Recipient ID contains invalid characters',
+        );
       }
 
       // Sanitize message content

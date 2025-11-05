@@ -44,7 +44,7 @@ Always maintain a respectful and supportive tone.
   Future<void> storeApiKey(String apiKey) async {
     // Trim whitespace that might have been accidentally copied
     final trimmedKey = apiKey.trim();
-    
+
     await _secureStorage.write('gemini_api_key', trimmedKey);
     _currentApiKey = trimmedKey;
     _initializeModel();
@@ -70,13 +70,13 @@ Always maintain a respectful and supportive tone.
     if (apiKey.isEmpty || apiKey.length < 20) {
       return false;
     }
-    
+
     // Check for common API key format (starts with expected prefix)
     if (!apiKey.startsWith('AI')) {
       // Gemini API keys typically start with 'AI'
       return false;
     }
-    
+
     try {
       final testModel = GenerativeModel(
         model: _modelVersion,
