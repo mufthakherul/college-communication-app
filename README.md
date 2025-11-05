@@ -5,6 +5,19 @@ A comprehensive college communication platform for **Rangpur Polytechnic Institu
 🌐 **College Website:** [rangpur.polytech.gov.bd](https://rangpur.polytech.gov.bd)  
 👨‍💻 **Developed by:** Mufthakherul
 
+## 🆕 Web Teacher Dashboard Available!
+
+**NEW:** Web-based dashboard for teachers and administrators to manage the app remotely from any browser.
+
+- 📊 **Analytics Dashboard** - Real-time statistics and insights
+- 👥 **User Management** - Create, edit, and manage users
+- 📢 **Notice Management** - Create and publish announcements
+- 💬 **Message Monitoring** - View and monitor communications
+
+👉 **[Get Started with Web Dashboard](apps/web-teacher/README.md)** | **[Complete Guide](docs/WEB_TEACHER_DASHBOARD.md)**
+
+![Teacher Dashboard Login](https://github.com/user-attachments/assets/9a497d62-6ca9-4415-aeb3-aa24c136bfe3)
+
 ---
 
 ## 🚀 **PRODUCTION READY** - Deploy in 30 Minutes!
@@ -376,6 +389,11 @@ flutter run
 - **[docs/ACCESSIBILITY.md](docs/ACCESSIBILITY.md)** - Accessibility features
 - **[docs/CONFIGURATION_GUIDE.md](docs/CONFIGURATION_GUIDE.md)** - App configuration
 
+### Web Dashboard
+
+- **[apps/web-teacher/README.md](apps/web-teacher/README.md)** - 🆕 **Web dashboard setup**
+- **[docs/WEB_TEACHER_DASHBOARD.md](docs/WEB_TEACHER_DASHBOARD.md)** - 🆕 **Complete web dashboard guide**
+
 ### Additional Resources
 
 - **[SECURITY.md](SECURITY.md)** - Security policy and features
@@ -386,7 +404,9 @@ flutter run
 ## 🏗️ Project Structure
 
 ```
-├── apps/mobile/          # Flutter mobile application
+├── apps/
+│   ├── mobile/          # Flutter mobile application
+│   └── web-teacher/     # 🆕 Web dashboard for teachers/admins
 ├── backend/             # Backend utilities and scripts
 ├── functions/           # Cloud Functions (legacy Firebase, can be migrated to Supabase Edge Functions)
 ├── infra/              # Infrastructure configuration (includes Supabase SQL schema)

@@ -62,6 +62,27 @@ class UserService {
   }
 
   /**
+   * Get user by auth ID (userId field)
+   */
+  async getUserByAuthId(authId: string): Promise<User | null> {
+    try {
+      const response = await appwriteService.databases.listDocuments(
+        AppwriteConfig.databaseId,
+        AppwriteConfig.collections.users,
+        [Query.equal('userId', authId), Query.limit(1)]
+      );
+
+      if (response.documents.length > 0) {
+        return response.documents[0] as unknown as User;
+      }
+      return null;
+    } catch (error) {
+      console.error('Error fetching user by auth ID:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Create a new user
    */
   async createUser(userData: Omit<User, '$id'>): Promise<User> {

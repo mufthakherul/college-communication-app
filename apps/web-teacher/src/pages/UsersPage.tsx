@@ -95,8 +95,10 @@ const UsersPage: React.FC = () => {
       if (editingUser) {
         await userService.updateUser(editingUser.$id, formData);
       } else {
+        // Note: userId should be set by Appwrite auth when the actual user account is created
+        // This creates the user profile document; a separate auth account creation is needed
         await userService.createUser({
-          userId: '',
+          userId: 'pending', // Placeholder until auth account is created
           ...formData,
           isActive: true,
         });

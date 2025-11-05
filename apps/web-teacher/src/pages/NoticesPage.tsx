@@ -100,11 +100,12 @@ const NoticesPage: React.FC = () => {
       if (editingNotice) {
         await noticeService.updateNotice(editingNotice.$id, formData);
       } else {
+        // createdAt timestamp is set by the service layer
         await noticeService.createNotice({
           ...formData,
           authorId: currentUser.userId,
           authorName: currentUser.name,
-          createdAt: new Date().toISOString(),
+          createdAt: '', // Will be set by service
           isActive: true,
         });
       }
