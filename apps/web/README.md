@@ -82,66 +82,63 @@ npm run preview
 
 ## Deployment
 
-### 🚀 GitHub Actions Auto-Deploy (Recommended!)
+### 🚀 GitHub Actions Auto-Deploy to Appwrite (Recommended!)
 
-**Best option**: Automatic deployment - your web app updates automatically when you edit the repository!
+**Best option**: Automatic deployment to Appwrite - your web app updates automatically when you edit the repository!
 
+✅ **Same Backend** - Uses your existing Appwrite infrastructure  
 ✅ **Already configured** - workflow included in `.github/workflows/deploy-web-dashboard.yml`  
 ✅ **Zero maintenance** - deploys automatically on every push  
 ✅ **Fast** - live in ~2 minutes after commit  
-✅ **Live updates** - edit repo, changes go live automatically  
+✅ **Free** - No additional hosting costs  
 
-**Quick Setup** (2 minutes):
+**Quick Setup** (5 minutes):
 
-1. Choose Vercel or Netlify (sign in with GitHub)
-2. Add 3 secrets to GitHub Settings → Secrets:
-   - For **Vercel**: `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`
-   - For **Netlify**: `NETLIFY_AUTH_TOKEN`, `NETLIFY_SITE_ID`
-3. Done! Push changes and watch auto-deploy in Actions tab
+1. **Create Appwrite API Key** (in Appwrite Console → Settings → API Keys)
+   - Scopes: storage.read, storage.write, buckets.read, buckets.write
+2. **Add 3 secrets** to GitHub Settings → Secrets:
+   - `APPWRITE_API_KEY` - Your API key from Appwrite
+   - `APPWRITE_PROJECT_ID` - Your project ID: `6904cfb1001e5253725b`
+   - `APPWRITE_ENDPOINT` - `https://sgp.cloud.appwrite.io/v1`
+3. **Create Storage Bucket** in Appwrite Console:
+   - Bucket ID: `web-dashboard`
+   - Permissions: Read = Any, File Security = Disabled
+4. **Done!** Push changes and watch auto-deploy in Actions tab
 
-**📖 Complete setup guide**: **[GITHUB_ACTIONS_SETUP.md](GITHUB_ACTIONS_SETUP.md)** ⭐
+**📖 Complete setup guide**: **[APPWRITE_GITHUB_ACTIONS.md](APPWRITE_GITHUB_ACTIONS.md)** ⭐
 
 ---
 
 ### Alternative Options
 
-#### Manual Deploy via Vercel/Netlify
+#### Deploy with Appwrite CLI (Manual)
 
-1. Go to [vercel.com](https://vercel.com) or [netlify.com](https://netlify.com)
-2. Sign in with GitHub
-3. Import repository
-4. Auto-configured, click Deploy
-5. Manual re-deploy needed for updates
-
-#### Deploy with CLI (Advanced)
+For one-time or manual deployments:
 
 For manual control or CI/CD pipelines:
 
-**Appwrite:**
 ```bash
 npm i -g appwrite-cli
 appwrite login
-cd apps/web && npm run build
-appwrite deploy function
+cd apps/web
+npm run build
+# Upload to Appwrite Storage manually
 ```
 
-**Vercel:**
-```bash
-npm i -g vercel
-cd apps/web && vercel
-```
+#### Other Hosting Platforms
 
-**Netlify:**
-```bash
-npm i -g netlify-cli
-cd apps/web && netlify deploy --prod
-```
+If you prefer external hosting:
+- **Vercel**: Connect GitHub, auto-deploy
+- **Netlify**: Connect GitHub, auto-deploy
+- **GitHub Pages**: Free for public repos
+
+See [GITHUB_DEPLOYMENT.md](GITHUB_DEPLOYMENT.md) for other options.
 
 ### Documentation
 
-- **[GITHUB_ACTIONS_SETUP.md](GITHUB_ACTIONS_SETUP.md)** - ⭐ **Auto-deploy setup (recommended)**
-- **[GITHUB_DEPLOYMENT.md](GITHUB_DEPLOYMENT.md)** - Deploy from GitHub (no CLI)
+- **[APPWRITE_GITHUB_ACTIONS.md](APPWRITE_GITHUB_ACTIONS.md)** - ⭐ **Auto-deploy to Appwrite (recommended)**
 - **[DEPLOYMENT.md](DEPLOYMENT.md)** - Complete deployment guide with all options
+- **[GITHUB_DEPLOYMENT.md](GITHUB_DEPLOYMENT.md)** - Alternative hosting platforms
 
 ### Other Hosting Options
 
