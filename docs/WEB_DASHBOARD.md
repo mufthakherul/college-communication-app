@@ -1,8 +1,8 @@
-# Web Teacher Dashboard Guide
+# Web Dashboard Guide
 
 ## Overview
 
-The Web Teacher Dashboard is a comprehensive web application designed for teachers and administrators to monitor, manage, and control the RPI Communication App. It provides a modern, responsive interface for performing administrative tasks without requiring a mobile device.
+The RPI Web Dashboard is a comprehensive web application designed for teachers, administrators, and (in the future) students to monitor, manage, and interact with the RPI Communication App. It provides a modern, responsive interface for performing tasks without requiring a mobile device.
 
 ## Features
 
@@ -48,7 +48,7 @@ The Web Teacher Dashboard is a comprehensive web application designed for teache
 ### Project Structure
 
 ```
-apps/web-teacher/
+apps/web/
 ├── src/
 │   ├── components/       # Reusable UI components
 │   │   └── Layout.tsx   # Main layout with navigation
@@ -99,7 +99,7 @@ apps/web-teacher/
 
 1. Navigate to the web-teacher directory:
    ```bash
-   cd apps/web-teacher
+   cd apps/web
    ```
 
 2. Install dependencies:
@@ -158,7 +158,7 @@ npm run preview
 
 2. Deploy:
    ```bash
-   cd apps/web-teacher
+   cd apps/web
    vercel
    ```
 
@@ -179,7 +179,7 @@ Benefits:
 
 2. Deploy:
    ```bash
-   cd apps/web-teacher
+   cd apps/web
    npm run build
    netlify deploy --prod
    ```

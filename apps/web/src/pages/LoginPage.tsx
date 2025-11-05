@@ -45,7 +45,7 @@ const LoginPage: React.FC = () => {
     <Container maxWidth="sm" sx={{ mt: 8 }}>
       <Paper elevation={3} sx={{ p: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom align="center">
-          RPI Teacher Dashboard
+          RPI Dashboard
         </Typography>
         <Typography variant="body2" color="text.secondary" align="center" mb={3}>
           Rangpur Polytechnic Institute

@@ -14,7 +14,7 @@ A comprehensive college communication platform for **Rangpur Polytechnic Institu
 - 📢 **Notice Management** - Create and publish announcements
 - 💬 **Message Monitoring** - View and monitor communications
 
-👉 **[Get Started with Web Dashboard](apps/web-teacher/README.md)** | **[Complete Guide](docs/WEB_TEACHER_DASHBOARD.md)**
+👉 **[Get Started with Web Dashboard](apps/web/README.md)** | **[Complete Guide](docs/WEB_DASHBOARD.md)**
 
 ![Teacher Dashboard Login](https://github.com/user-attachments/assets/9a497d62-6ca9-4415-aeb3-aa24c136bfe3)
 
@@ -391,8 +391,8 @@ flutter run
 
 ### Web Dashboard
 
-- **[apps/web-teacher/README.md](apps/web-teacher/README.md)** - 🆕 **Web dashboard setup**
-- **[docs/WEB_TEACHER_DASHBOARD.md](docs/WEB_TEACHER_DASHBOARD.md)** - 🆕 **Complete web dashboard guide**
+- **[apps/web/README.md](apps/web/README.md)** - 🆕 **Web dashboard setup**
+- **[docs/WEB_DASHBOARD.md](docs/WEB_DASHBOARD.md)** - 🆕 **Complete web dashboard guide**
 
 ### Additional Resources
 
@@ -406,7 +406,7 @@ flutter run
 ```
 ├── apps/
 │   ├── mobile/          # Flutter mobile application
-│   └── web-teacher/     # 🆕 Web dashboard for teachers/admins
+│   └── web/             # 🆕 Web dashboard for teachers/admins/students
 ├── backend/             # Backend utilities and scripts
 ├── functions/           # Cloud Functions (legacy Firebase, can be migrated to Supabase Edge Functions)
 ├── infra/              # Infrastructure configuration (includes Supabase SQL schema)

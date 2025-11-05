@@ -1,14 +1,23 @@
-# RPI Teacher Dashboard
+# RPI Web Dashboard
 
-A web-based dashboard for teachers and administrators to manage the RPI Communication App.
+A web-based dashboard for the RPI Communication App. Currently supports teachers and administrators, with future support planned for students.
 
-## Features
+## Current Features (Teachers & Admins)
 
 - 📊 **Dashboard Overview** - View statistics and analytics
 - 👥 **User Management** - Create, edit, and manage users (students, teachers, admins)
 - 📢 **Notice Management** - Create and manage announcements and notices
 - 💬 **Message Monitoring** - View and monitor messages between users
-- 🔐 **Secure Authentication** - Role-based access control (teachers and admins only)
+- 🔐 **Secure Authentication** - Role-based access control
+
+## Future Features (Students)
+
+Planning to add:
+- 📚 **Personal Dashboard** - View notices, assignments, and grades
+- 💬 **Direct Messaging** - Chat with teachers and classmates
+- 📖 **Course Materials** - Access study resources and books
+- 📝 **Assignment Submission** - Submit homework and projects
+- 📊 **Grade Tracking** - Monitor academic progress
 
 ## Tech Stack
 
@@ -28,9 +37,9 @@ A web-based dashboard for teachers and administrators to manage the RPI Communic
 
 ## Installation
 
-1. Navigate to the web-teacher directory:
+1. Navigate to the web directory:
    ```bash
-   cd apps/web-teacher
+   cd apps/web
    ```
 
 2. Install dependencies:
@@ -73,7 +82,30 @@ npm run preview
 
 ## Deployment
 
-### Option 1: Deploy to Vercel
+### Option 1: Deploy to Appwrite (Recommended)
+
+Deploy directly to your Appwrite infrastructure:
+
+1. Install Appwrite CLI:
+   ```bash
+   npm i -g appwrite-cli
+   ```
+
+2. Login and initialize:
+   ```bash
+   appwrite login
+   appwrite init project
+   ```
+
+3. Build and deploy:
+   ```bash
+   npm run build
+   appwrite deploy function
+   ```
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed Appwrite deployment instructions.
+
+### Option 2: Deploy to Vercel
 
 1. Install Vercel CLI:
    ```bash
@@ -85,7 +117,7 @@ npm run preview
    vercel
    ```
 
-### Option 2: Deploy to Netlify
+### Option 3: Deploy to Netlify
 
 1. Install Netlify CLI:
    ```bash
@@ -97,7 +129,7 @@ npm run preview
    netlify deploy --prod
    ```
 
-### Option 3: Static Hosting
+### Option 4: Other Hosting Options
 
 After building, upload the `dist` folder to any static hosting service:
 - GitHub Pages
