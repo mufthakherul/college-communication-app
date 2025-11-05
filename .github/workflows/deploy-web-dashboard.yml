@@ -49,7 +49,7 @@ jobs:
           cd apps/web
           
           # Login to Appwrite using API key
-          appwrite client --endpoint $APPWRITE_ENDPOINT --project-Id $APPWRITE_PROJECT_ID --key $APPWRITE_API_KEY
+          appwrite client --endpoint $APPWRITE_ENDPOINT --project-id $APPWRITE_PROJECT_ID --key $APPWRITE_API_KEY
           
           # Deploy static files to Appwrite Storage
           # Upload all files from dist folder to Appwrite bucket
