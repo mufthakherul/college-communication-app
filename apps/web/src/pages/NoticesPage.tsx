@@ -51,6 +51,7 @@ import { Notice } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 import { format } from 'date-fns';
 import Snackbar from '../components/Snackbar';
+import { isRequired, isValidFileType, isValidFileSize, MAX_FILE_SIZE } from '../utils/validation';
 
 const NoticesPage: React.FC = () => {
   const [notices, setNotices] = useState<Notice[]>([]);
@@ -153,6 +154,31 @@ const NoticesPage: React.FC = () => {
     const files = event.target.files;
     if (!files || files.length === 0) return;
 
+    // Validate files before upload
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      
+      // Validate file type
+      if (!isValidFileType(file.name)) {
+        showSnackbar(
+          `Invalid file type: ${file.name}. Please upload images, PDFs, or documents.`,
+          'error'
+        );
+        event.target.value = '';
+        return;
+      }
+      
+      // Validate file size
+      if (!isValidFileSize(file.size)) {
+        showSnackbar(
+          `File too large: ${file.name}. Maximum size is ${MAX_FILE_SIZE / 1024 / 1024}MB.`,
+          'error'
+        );
+        event.target.value = '';
+        return;
+      }
+    }
+
     setUploadingFiles(true);
     const uploadedFileIds: string[] = [];
 
@@ -205,12 +231,12 @@ const NoticesPage: React.FC = () => {
   const handleSave = async () => {
     if (!currentUser) return;
 
-    // Validate form data
-    if (!formData.title.trim()) {
+    // Validate form data using shared validation utilities
+    if (!isRequired(formData.title)) {
       showSnackbar('Title is required', 'error');
       return;
     }
-    if (!formData.content.trim()) {
+    if (!isRequired(formData.content)) {
       showSnackbar('Content is required', 'error');
       return;
     }
@@ -220,12 +246,12 @@ const NoticesPage: React.FC = () => {
         await noticeService.updateNotice(editingNotice.$id, formData);
         showSnackbar('Notice updated successfully', 'success');
       } else {
-        // createdAt timestamp is set by the service layer
+        // createdAt timestamp will be set by the service layer
         await noticeService.createNotice({
           ...formData,
           authorId: currentUser.userId,
           authorName: currentUser.name,
-          createdAt: '', // Will be set by service
+          createdAt: new Date().toISOString(), // Temporary value, server will override
         });
         showSnackbar('Notice created successfully', 'success');
       }

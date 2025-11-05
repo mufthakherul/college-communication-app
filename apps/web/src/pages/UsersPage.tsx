@@ -39,6 +39,7 @@ import {
 import { userService } from '../services/user.service';
 import { User, UserRole } from '../types';
 import Snackbar from '../components/Snackbar';
+import { isValidEmail, isRequired } from '../utils/validation';
 
 const UsersPage: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -132,18 +133,16 @@ const UsersPage: React.FC = () => {
   };
 
   const handleSave = async () => {
-    // Validate form data
-    if (!formData.name.trim()) {
+    // Validate form data using shared validation utilities
+    if (!isRequired(formData.name)) {
       showSnackbar('Name is required', 'error');
       return;
     }
-    if (!formData.email.trim()) {
+    if (!isRequired(formData.email)) {
       showSnackbar('Email is required', 'error');
       return;
     }
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
+    if (!isValidEmail(formData.email)) {
       showSnackbar('Please enter a valid email address', 'error');
       return;
     }

@@ -2,13 +2,33 @@
 
 A web-based dashboard for the RPI Communication App. Currently supports teachers and administrators, with future support planned for students.
 
+## ✨ What's New
+
+**Latest Updates:**
+- 🔍 **Search & Filter**: Quickly find users, notices, and messages with powerful search
+- 📎 **File Attachments**: Upload documents and images to notices
+- 🎯 **Quick Actions**: Toggle active/inactive status by clicking chips
+- ✅ **Form Validation**: Comprehensive validation with helpful error messages
+- 🔔 **Toast Notifications**: User-friendly success/error notifications
+- 📊 **Enhanced Dashboard**: Improved overview with system statistics and tips
+
 ## Current Features (Teachers & Admins)
 
-- 📊 **Dashboard Overview** - View statistics and analytics
+- 📊 **Dashboard Overview** - View statistics and analytics with system overview
 - 👥 **User Management** - Create, edit, and manage users (students, teachers, admins)
+  - Search by name, email, or department
+  - Filter by role (student, teacher, admin)
+  - Quick status toggle (click chip to activate/deactivate)
 - 📢 **Notice Management** - Create and manage announcements and notices
+  - Search by title, content, or author
+  - File attachments support (images, PDFs, documents)
+  - Priority levels (high, medium, low)
+  - Quick status toggle (click chip to activate/deactivate)
 - 💬 **Message Monitoring** - View and monitor messages between users
+  - Search by content, sender, or receiver
+  - Filter by read/unread status
 - 🔐 **Secure Authentication** - Role-based access control
+- 🎨 **Enhanced UX** - Toast notifications, form validation, and helpful tooltips
 
 ## Future Features (Students)
 
@@ -160,22 +180,41 @@ After building, upload the `dist` folder to any static hosting service:
 
 1. Navigate to **Users** from the sidebar
 2. Click **Add User** to create a new user
-3. Click the edit icon to modify user details
-4. Click the delete icon to remove a user
+3. Fill in required fields (name, email)
+4. Select role (student, teacher, admin)
+5. Optionally set department
+6. Click **Create** to save
+7. Use the search bar to find users by name, email, or department
+8. Use the role filter dropdown to filter by user type
+9. Click on the status chip to quickly toggle active/inactive
+10. Click the edit icon to modify user details
+11. Click the delete icon to remove a user
+
+**Note**: Creating a user profile here creates the database record. You need to separately create an Appwrite authentication account for the user to be able to log in.
 
 ### Managing Notices
 
 1. Navigate to **Notices** from the sidebar
 2. Click **Create Notice** to publish a new notice
-3. Set priority (high, medium, low) and department
-4. Click the edit icon to modify existing notices
-5. Click the delete icon to remove a notice
+3. Fill in required fields (title, content)
+4. Optionally set department (leave empty for all departments)
+5. Set priority (high, medium, low)
+6. Upload file attachments if needed (images, PDFs, documents)
+7. Toggle active/inactive status
+8. Click **Create** to publish
+9. Use the search bar to find specific notices
+10. Click on the status chip to quickly toggle active/inactive
+11. Click the edit icon to modify existing notices
+12. Click the delete icon to remove a notice
 
 ### Monitoring Messages
 
 1. Navigate to **Messages** from the sidebar
 2. View all messages exchanged between users
-3. Monitor message status (read/unread)
+3. Use the search bar to find messages by content, sender, or receiver
+4. Use the status filter to show only read or unread messages
+5. Monitor message status (read/unread)
+6. View message details including sender, receiver, timestamp
 
 ## Project Structure
 

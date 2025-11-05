@@ -26,9 +26,12 @@ class StorageService {
         undefined,
         onProgress
           ? (uploadProgress) => {
-              // Convert UploadProgress to percentage
-              const percentage =
-                (uploadProgress.$id ? 100 : (uploadProgress.chunksUploaded / uploadProgress.chunksTotal) * 100) || 0;
+              // Convert Appwrite UploadProgress to percentage
+              // When $id exists, upload is complete (100%)
+              // Otherwise, calculate from chunks uploaded vs total chunks
+              const percentage = uploadProgress.$id
+                ? 100
+                : (uploadProgress.chunksUploaded / uploadProgress.chunksTotal) * 100 || 0;
               onProgress(percentage);
             }
           : undefined
