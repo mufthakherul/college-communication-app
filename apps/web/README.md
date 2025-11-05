@@ -82,54 +82,62 @@ npm run preview
 
 ## Deployment
 
-### Option 1: Deploy to Appwrite (Recommended)
+### 🚀 No CLI Required! Deploy from GitHub
 
-Deploy directly to your Appwrite infrastructure:
+**Recommended**: Connect your GitHub repository to Vercel or Netlify for automatic deployments.
 
-1. Install Appwrite CLI:
-   ```bash
-   npm i -g appwrite-cli
-   ```
+See **[GITHUB_DEPLOYMENT.md](GITHUB_DEPLOYMENT.md)** for step-by-step instructions on:
+- Deploying via Vercel (connect GitHub, automatic deploys)
+- Deploying via Netlify (connect GitHub, automatic deploys)
+- Manual upload to Appwrite Console (no CLI needed)
+- GitHub Pages setup
 
-2. Login and initialize:
-   ```bash
-   appwrite login
-   appwrite init project
-   ```
+### Option 1: Deploy via Vercel (Zero Config)
 
-3. Build and deploy:
-   ```bash
-   npm run build
-   appwrite deploy function
-   ```
+1. Go to [vercel.com](https://vercel.com)
+2. Sign in with GitHub
+3. Import `college-communication-app` repository
+4. Vercel auto-detects configuration
+5. Done! Auto-deploys on every push
 
-See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed Appwrite deployment instructions.
+### Option 2: Deploy via Netlify (Zero Config)
 
-### Option 2: Deploy to Vercel
+1. Go to [netlify.com](https://netlify.com)
+2. Sign in with GitHub
+3. Import repository
+4. Auto-configured, click Deploy
+5. Done! Auto-deploys on every push
 
-1. Install Vercel CLI:
-   ```bash
-   npm i -g vercel
-   ```
+### Option 3: Deploy with CLI (Advanced)
 
-2. Deploy:
-   ```bash
-   vercel
-   ```
+For manual control or CI/CD pipelines:
 
-### Option 3: Deploy to Netlify
+**Appwrite:**
+```bash
+npm i -g appwrite-cli
+appwrite login
+cd apps/web && npm run build
+appwrite deploy function
+```
 
-1. Install Netlify CLI:
-   ```bash
-   npm i -g netlify-cli
-   ```
+**Vercel:**
+```bash
+npm i -g vercel
+cd apps/web && vercel
+```
 
-2. Deploy:
-   ```bash
-   netlify deploy --prod
-   ```
+**Netlify:**
+```bash
+npm i -g netlify-cli
+cd apps/web && netlify deploy --prod
+```
 
-### Option 4: Other Hosting Options
+### Documentation
+
+- **[GITHUB_DEPLOYMENT.md](GITHUB_DEPLOYMENT.md)** - 🆕 Deploy from GitHub (no CLI)
+- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Complete deployment guide with all options
+
+### Other Hosting Options
 
 After building, upload the `dist` folder to any static hosting service:
 - GitHub Pages

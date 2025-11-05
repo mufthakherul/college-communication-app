@@ -86,11 +86,86 @@ Create `appwrite.json` in your project root:
 4. Configure DNS records as instructed
 5. Wait for SSL certificate provisioning (automatic)
 
+#### Automatic Deployment with GitHub Actions (No CLI Required!)
+
+**Best option**: Deploy automatically from GitHub without installing CLI locally.
+
+1. **Set up GitHub Secrets**:
+   - Go to your GitHub repository → Settings → Secrets and variables → Actions
+   - Add these secrets:
+     - `APPWRITE_API_KEY`: Generate from Appwrite Console → API Keys
+     - `APPWRITE_PROJECT_ID`: Your project ID (e.g., `6904cfb1001e5253725b`)
+     - `APPWRITE_ENDPOINT`: `https://sgp.cloud.appwrite.io/v1`
+
+2. **Create GitHub Actions workflow**:
+   
+   Create `.github/workflows/deploy-web.yml`:
+   ```yaml
+   name: Deploy Web Dashboard to Appwrite
+   
+   on:
+     push:
+       branches:
+         - main
+       paths:
+         - 'apps/web/**'
+     workflow_dispatch:
+   
+   jobs:
+     deploy:
+       runs-on: ubuntu-latest
+       
+       steps:
+         - uses: actions/checkout@v4
+         
+         - name: Setup Node.js
+           uses: actions/setup-node@v4
+           with:
+             node-version: '20'
+             
+         - name: Install dependencies
+           run: |
+             cd apps/web
+             npm install
+             
+         - name: Build
+           run: |
+             cd apps/web
+             npm run build
+             
+         - name: Deploy to Appwrite
+           uses: appwrite/sdk-for-cli-action@v1
+           with:
+             api-key: ${{ secrets.APPWRITE_API_KEY }}
+             endpoint: ${{ secrets.APPWRITE_ENDPOINT }}
+             project-id: ${{ secrets.APPWRITE_PROJECT_ID }}
+             
+         - name: Upload to Appwrite Storage
+           run: |
+             cd apps/web/dist
+             # Upload dist folder to Appwrite Storage bucket
+             # Or use Appwrite Functions to serve the static files
+   ```
+
+3. **Alternative: Deploy via Vercel/Netlify with GitHub Integration**:
+   - Connect your GitHub repository to Vercel or Netlify
+   - They auto-detect the Vite configuration
+   - Automatic deployments on every push
+   - No CLI or manual upload needed
+
+4. **Manual Upload via Appwrite Console** (Simplest for one-time):
+   - Build locally: `npm run build`
+   - Go to Appwrite Console
+   - Navigate to Storage → Create Bucket (name: `web-dashboard`)
+   - Upload all files from `dist/` folder
+   - Configure bucket to serve as static website
+   - Access via provided URL
+
 #### Benefits of Appwrite Deployment
 - ✅ **Same infrastructure** as your backend
 - ✅ **Automatic HTTPS** certificates
 - ✅ **Global CDN** for fast access
-- ✅ **Easy updates** with CLI
+- ✅ **Easy updates** - push to GitHub or upload to console
 - ✅ **Integrated monitoring** in Appwrite Console
 - ✅ **No additional costs** (included in your plan)
 
