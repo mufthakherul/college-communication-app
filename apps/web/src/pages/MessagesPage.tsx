@@ -18,7 +18,13 @@ import {
   Chip,
   CircularProgress,
   Tooltip,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
+import { Search as SearchIcon } from '@mui/icons-material';
 import { messageService } from '../services/message.service';
 import { userService } from '../services/user.service';
 import { Message, User } from '../types';
@@ -26,12 +32,41 @@ import { format } from 'date-fns';
 
 const MessagesPage: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [filteredMessages, setFilteredMessages] = useState<Message[]>([]);
   const [users, setUsers] = useState<Map<string, User>>(new Map());
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'read' | 'unread'>('all');
 
   useEffect(() => {
     loadMessages();
   }, []);
+
+  useEffect(() => {
+    // Filter messages based on search term and status
+    let filtered = messages;
+
+    if (searchTerm) {
+      filtered = filtered.filter(
+        (message) =>
+          message.message.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          getUserName(message.senderId)
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          getUserName(message.receiverId)
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter((message) =>
+        statusFilter === 'read' ? message.isRead : !message.isRead
+      );
+    }
+
+    setFilteredMessages(filtered);
+  }, [searchTerm, statusFilter, messages]);
 
   const loadMessages = async () => {
     try {
@@ -44,6 +79,7 @@ const MessagesPage: React.FC = () => {
       const userMap = new Map(usersData.map(u => [u.userId, u]));
       
       setMessages(messagesData);
+      setFilteredMessages(messagesData);
       setUsers(userMap);
     } catch (error) {
       console.error('Error loading messages:', error);
@@ -69,6 +105,37 @@ const MessagesPage: React.FC = () => {
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Typography variant="h4">Message Monitoring</Typography>
+        <Typography variant="body2" color="text.secondary">
+          Total: {filteredMessages.length} of {messages.length} messages
+        </Typography>
+      </Box>
+
+      {/* Search and Filter */}
+      <Box mb={3} display="flex" gap={2}>
+        <TextField
+          fullWidth
+          placeholder="Search messages by content, sender, or receiver..."
+          variant="outlined"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          InputProps={{
+            startAdornment: <SearchIcon sx={{ mr: 1, color: 'text.secondary' }} />,
+          }}
+        />
+        <FormControl sx={{ minWidth: 150 }}>
+          <InputLabel>Status</InputLabel>
+          <Select
+            value={statusFilter}
+            label="Status"
+            onChange={(e) =>
+              setStatusFilter(e.target.value as 'all' | 'read' | 'unread')
+            }
+          >
+            <MenuItem value="all">All</MenuItem>
+            <MenuItem value="read">Read</MenuItem>
+            <MenuItem value="unread">Unread</MenuItem>
+          </Select>
+        </FormControl>
       </Box>
 
       <TableContainer component={Paper}>
@@ -83,7 +150,7 @@ const MessagesPage: React.FC = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {messages.map((message) => (
+            {filteredMessages.map((message) => (
               <TableRow key={message.$id}>
                 <TableCell>
                   <Tooltip title={`ID: ${message.senderId}`}>
@@ -116,10 +183,12 @@ const MessagesPage: React.FC = () => {
         </Table>
       </TableContainer>
 
-      {messages.length === 0 && (
+      {!loading && filteredMessages.length === 0 && (
         <Box textAlign="center" mt={4}>
           <Typography variant="body1" color="text.secondary">
-            No messages found
+            {messages.length === 0
+              ? 'No messages found'
+              : 'No messages match your search criteria'}
           </Typography>
         </Box>
       )}
