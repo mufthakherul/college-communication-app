@@ -42,8 +42,11 @@ Always maintain a respectful and supportive tone.
 
   // Store API key securely
   Future<void> storeApiKey(String apiKey) async {
-    await _secureStorage.write('gemini_api_key', apiKey);
-    _currentApiKey = apiKey;
+    // Trim whitespace that might have been accidentally copied
+    final trimmedKey = apiKey.trim();
+
+    await _secureStorage.write('gemini_api_key', trimmedKey);
+    _currentApiKey = trimmedKey;
     _initializeModel();
   }
 
@@ -63,16 +66,40 @@ Always maintain a respectful and supportive tone.
 
   // Validate API key
   Future<bool> validateApiKey(String apiKey) async {
-    try {
-      final testModel = GenerativeModel(model: _modelVersion, apiKey: apiKey);
+    // Basic format validation first
+    if (apiKey.isEmpty || apiKey.length < 20) {
+      return false;
+    }
 
-      // Test with a simple prompt
-      final response = await testModel.generateContent([
-        Content.text('Respond with "OK" if you receive this message.'),
-      ]);
+    // Check for common API key format (starts with expected prefix)
+    if (!apiKey.startsWith('AI')) {
+      // Gemini API keys typically start with 'AI'
+      return false;
+    }
+
+    try {
+      final testModel = GenerativeModel(
+        model: _modelVersion,
+        apiKey: apiKey,
+        generationConfig: GenerationConfig(
+          temperature: 0.7,
+          maxOutputTokens: 50, // Smaller for validation
+        ),
+      );
+
+      // Test with a simple prompt - use timeout to avoid hanging
+      final response = await testModel
+          .generateContent([
+            Content.text('Test'),
+          ])
+          .timeout(
+            const Duration(seconds: 10),
+            onTimeout: () => throw Exception('API validation timeout'),
+          );
 
       return response.text != null && response.text!.isNotEmpty;
     } catch (e) {
+      // Return false for validation errors but don't throw
       return false;
     }
   }
