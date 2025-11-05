@@ -28,40 +28,53 @@ class _WebsiteNoticesFallbackScreenState
   }
 
   void _initializeWebView() {
-    _controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(const Color(0x00000000))
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onProgress: (int progress) {
-            if (progress == 100 && mounted) {
-              setState(() => _isLoading = false);
-            }
-          },
-          onPageStarted: (String url) {
-            if (mounted) {
-              setState(() {
-                _isLoading = true;
-                _error = null;
-              });
-            }
-          },
-          onPageFinished: (String url) {
-            if (mounted) {
-              setState(() => _isLoading = false);
-            }
-          },
-          onWebResourceError: (WebResourceError error) {
-            if (mounted) {
-              setState(() {
-                _isLoading = false;
-                _error = error.description;
-              });
-            }
-          },
-        ),
-      )
-      ..loadRequest(Uri.parse(_websiteUrl));
+    try {
+      _controller = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..setBackgroundColor(const Color(0x00000000))
+        ..setNavigationDelegate(
+          NavigationDelegate(
+            onProgress: (int progress) {
+              if (progress == 100 && mounted) {
+                setState(() => _isLoading = false);
+              }
+            },
+            onPageStarted: (String url) {
+              if (mounted) {
+                setState(() {
+                  _isLoading = true;
+                  _error = null;
+                });
+              }
+            },
+            onPageFinished: (String url) {
+              if (mounted) {
+                setState(() => _isLoading = false);
+              }
+            },
+            onWebResourceError: (WebResourceError error) {
+              if (mounted) {
+                setState(() {
+                  _isLoading = false;
+                  _error = error.description;
+                });
+              }
+            },
+            onNavigationRequest: (NavigationRequest request) {
+              // Allow all navigation for now
+              return NavigationDecision.navigate;
+            },
+          ),
+        )
+        ..loadRequest(Uri.parse(_websiteUrl));
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _error = 'Failed to initialize WebView: ${e.toString()}';
+        });
+      }
+    }
   }
 
   Future<void> _openInBrowser() async {
