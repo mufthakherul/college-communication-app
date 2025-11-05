@@ -4,13 +4,16 @@ A web-based dashboard for the RPI Communication App. Currently supports teachers
 
 ## ✨ What's New
 
-**Latest Updates:**
+**Latest Updates** (Latest version - fully tested ✅):
 - 🔍 **Search & Filter**: Quickly find users, notices, and messages with powerful search
-- 📎 **File Attachments**: Upload documents and images to notices
+- 📎 **File Attachments**: Upload documents and images to notices (validated)
 - 🎯 **Quick Actions**: Toggle active/inactive status by clicking chips
 - ✅ **Form Validation**: Comprehensive validation with helpful error messages
 - 🔔 **Toast Notifications**: User-friendly success/error notifications
 - 📊 **Enhanced Dashboard**: Improved overview with system statistics and tips
+- 🔒 **Security**: File validation, no vulnerabilities detected (CodeQL verified)
+
+**See [IMPROVEMENTS.md](IMPROVEMENTS.md) for detailed documentation.**
 
 ## Current Features (Teachers & Admins)
 
