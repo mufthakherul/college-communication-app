@@ -82,33 +82,38 @@ npm run preview
 
 ## Deployment
 
-### 🚀 No CLI Required! Deploy from GitHub
+### 🚀 GitHub Actions Auto-Deploy (Recommended!)
 
-**Recommended**: Connect your GitHub repository to Vercel or Netlify for automatic deployments.
+**Best option**: Automatic deployment - your web app updates automatically when you edit the repository!
 
-See **[GITHUB_DEPLOYMENT.md](GITHUB_DEPLOYMENT.md)** for step-by-step instructions on:
-- Deploying via Vercel (connect GitHub, automatic deploys)
-- Deploying via Netlify (connect GitHub, automatic deploys)
-- Manual upload to Appwrite Console (no CLI needed)
-- GitHub Pages setup
+✅ **Already configured** - workflow included in `.github/workflows/deploy-web-dashboard.yml`  
+✅ **Zero maintenance** - deploys automatically on every push  
+✅ **Fast** - live in ~2 minutes after commit  
+✅ **Live updates** - edit repo, changes go live automatically  
 
-### Option 1: Deploy via Vercel (Zero Config)
+**Quick Setup** (2 minutes):
 
-1. Go to [vercel.com](https://vercel.com)
-2. Sign in with GitHub
-3. Import `college-communication-app` repository
-4. Vercel auto-detects configuration
-5. Done! Auto-deploys on every push
+1. Choose Vercel or Netlify (sign in with GitHub)
+2. Add 3 secrets to GitHub Settings → Secrets:
+   - For **Vercel**: `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID`
+   - For **Netlify**: `NETLIFY_AUTH_TOKEN`, `NETLIFY_SITE_ID`
+3. Done! Push changes and watch auto-deploy in Actions tab
 
-### Option 2: Deploy via Netlify (Zero Config)
+**📖 Complete setup guide**: **[GITHUB_ACTIONS_SETUP.md](GITHUB_ACTIONS_SETUP.md)** ⭐
 
-1. Go to [netlify.com](https://netlify.com)
+---
+
+### Alternative Options
+
+#### Manual Deploy via Vercel/Netlify
+
+1. Go to [vercel.com](https://vercel.com) or [netlify.com](https://netlify.com)
 2. Sign in with GitHub
 3. Import repository
 4. Auto-configured, click Deploy
-5. Done! Auto-deploys on every push
+5. Manual re-deploy needed for updates
 
-### Option 3: Deploy with CLI (Advanced)
+#### Deploy with CLI (Advanced)
 
 For manual control or CI/CD pipelines:
 
@@ -134,7 +139,8 @@ cd apps/web && netlify deploy --prod
 
 ### Documentation
 
-- **[GITHUB_DEPLOYMENT.md](GITHUB_DEPLOYMENT.md)** - 🆕 Deploy from GitHub (no CLI)
+- **[GITHUB_ACTIONS_SETUP.md](GITHUB_ACTIONS_SETUP.md)** - ⭐ **Auto-deploy setup (recommended)**
+- **[GITHUB_DEPLOYMENT.md](GITHUB_DEPLOYMENT.md)** - Deploy from GitHub (no CLI)
 - **[DEPLOYMENT.md](DEPLOYMENT.md)** - Complete deployment guide with all options
 
 ### Other Hosting Options
