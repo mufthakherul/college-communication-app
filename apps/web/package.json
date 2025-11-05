@@ -1,8 +1,8 @@
 {
-  "name": "rpi-teacher-dashboard",
+  "name": "rpi-web-dashboard",
   "version": "1.0.0",
   "type": "module",
-  "description": "Web dashboard for teachers and admins - RPI Communication App",
+  "description": "Web dashboard for RPI Communication App - supports teachers, admins, and students",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

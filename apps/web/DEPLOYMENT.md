@@ -1,6 +1,6 @@
-# Web Teacher Dashboard - Deployment Guide
+# Web Dashboard - Deployment Guide
 
-This guide provides step-by-step instructions for deploying the RPI Teacher Dashboard to various hosting platforms.
+This guide provides step-by-step instructions for deploying the RPI Web Dashboard to various hosting platforms, including Appwrite Static Sites.
 
 ## Pre-Deployment Checklist
 
@@ -14,7 +14,91 @@ Before deploying, ensure you have:
 
 ## Quick Deployment Options
 
-### 1. Vercel (Recommended) ⚡
+### 1. Appwrite Static Sites 🚀
+
+**Best for**: Integrated deployment with your existing Appwrite backend
+
+Appwrite now supports static site hosting, allowing you to deploy your web dashboard directly alongside your backend.
+
+#### Prerequisites
+- Appwrite Cloud account (same as your mobile app)
+- Appwrite CLI installed
+- Built application (`npm run build`)
+
+#### Installation
+
+1. Install Appwrite CLI:
+   ```bash
+   npm install -g appwrite-cli
+   ```
+
+2. Login to Appwrite:
+   ```bash
+   appwrite login
+   ```
+   This will open a browser window to authenticate.
+
+3. Initialize your project (first time only):
+   ```bash
+   cd apps/web
+   appwrite init project
+   ```
+   - Select your existing project (the same one used by the mobile app)
+   - Configure project details
+
+#### Deployment Steps
+
+1. Build the application:
+   ```bash
+   npm run build
+   ```
+
+2. Deploy to Appwrite:
+   ```bash
+   appwrite deploy function
+   ```
+   
+   Or use the Appwrite Console:
+   - Go to your Appwrite Console
+   - Navigate to **Functions** or **Static Sites** (depending on Appwrite version)
+   - Click **Create Function/Site**
+   - Upload your `dist/` folder
+   - Configure domain settings
+
+#### Configuration
+
+Create `appwrite.json` in your project root:
+```json
+{
+  "projectId": "6904cfb1001e5253725b",
+  "projectName": "RPI Communication",
+  "functions": [],
+  "collections": [],
+  "buckets": []
+}
+```
+
+#### Custom Domain Setup
+
+1. Go to Appwrite Console → Your Project → Settings
+2. Navigate to **Domains**
+3. Add your custom domain (e.g., `dashboard.yourdomain.com`)
+4. Configure DNS records as instructed
+5. Wait for SSL certificate provisioning (automatic)
+
+#### Benefits of Appwrite Deployment
+- ✅ **Same infrastructure** as your backend
+- ✅ **Automatic HTTPS** certificates
+- ✅ **Global CDN** for fast access
+- ✅ **Easy updates** with CLI
+- ✅ **Integrated monitoring** in Appwrite Console
+- ✅ **No additional costs** (included in your plan)
+
+**Production URL**: `https://[project-id].appwrite.global` or your custom domain
+
+---
+
+### 2. Vercel (Alternative Option) ⚡
 
 **Best for**: Quick deployment with zero configuration
 
@@ -30,7 +114,7 @@ Before deploying, ensure you have:
 
 3. Deploy:
    ```bash
-   cd apps/web-teacher
+   cd apps/web
    vercel
    ```
 
@@ -48,7 +132,7 @@ Before deploying, ensure you have:
 
 **Production URL**: `https://your-project.vercel.app`
 
-### 2. Netlify 🎯
+### 3. Netlify 🎯
 
 **Best for**: Easy deployment with great documentation
 
@@ -64,7 +148,7 @@ Before deploying, ensure you have:
 
 3. Build the project:
    ```bash
-   cd apps/web-teacher
+   cd apps/web
    npm run build
    ```
 
@@ -85,13 +169,13 @@ Before deploying, ensure you have:
   status = 200
 ```
 
-### 3. GitHub Pages 📄
+### 4. GitHub Pages 📄
 
 **Best for**: Free hosting for public repositories
 
 1. Install gh-pages:
    ```bash
-   cd apps/web-teacher
+   cd apps/web
    npm install --save-dev gh-pages
    ```
 
@@ -125,7 +209,7 @@ export default defineConfig({
 })
 ```
 
-### 4. Firebase Hosting 🔥
+### 5. Firebase Hosting 🔥
 
 **Best for**: Google Cloud integration
 
@@ -141,7 +225,7 @@ export default defineConfig({
 
 3. Initialize Firebase:
    ```bash
-   cd apps/web-teacher
+   cd apps/web
    firebase init hosting
    ```
 
@@ -173,7 +257,7 @@ export default defineConfig({
 }
 ```
 
-### 5. Docker Container 🐳
+### 6. Docker Container 🐳
 
 **Best for**: Self-hosted deployments, Kubernetes
 
@@ -225,7 +309,7 @@ export default defineConfig({
    docker push username/rpi-teacher-dashboard
    ```
 
-### 6. Traditional Web Server (Apache/Nginx) 🌐
+### 7. Traditional Web Server (Apache/Nginx) 🌐
 
 **Best for**: Existing web server infrastructure
 
@@ -379,7 +463,7 @@ Use services like:
 
 Keep dependencies updated:
 ```bash
-cd apps/web-teacher
+cd apps/web
 npm update
 npm audit fix
 ```
