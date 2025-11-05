@@ -172,22 +172,44 @@ const DashboardPage: React.FC = () => {
         <Grid size={{ xs: 12, md: 6 }}>
           <Paper sx={{ p: 3 }}>
             <Typography variant="h6" gutterBottom>
-              Recent Activity
+              System Overview
             </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Activity tracking coming soon...
-            </Typography>
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="body2" color="text.secondary" gutterBottom>
+                Active Users: {stats?.users.students || 0} students, {stats?.users.teachers || 0} teachers
+              </Typography>
+              <Typography variant="body2" color="text.secondary" gutterBottom>
+                Active Notices: {stats?.notices.active || 0} ({stats?.notices.highPriority || 0} high priority)
+              </Typography>
+              <Typography variant="body2" color="text.secondary" gutterBottom>
+                Total Messages: {stats?.messages.total || 0} ({stats?.messages.unread || 0} unread)
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
+                Use the navigation menu to manage users, notices, and messages.
+              </Typography>
+            </Box>
           </Paper>
         </Grid>
 
         <Grid size={{ xs: 12, md: 6 }}>
           <Paper sx={{ p: 3 }}>
             <Typography variant="h6" gutterBottom>
-              Quick Actions
+              Quick Tips
             </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Use the navigation menu to manage users, notices, and messages.
-            </Typography>
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="body2" color="text.secondary" gutterBottom>
+                • Click on status chips to toggle active/inactive
+              </Typography>
+              <Typography variant="body2" color="text.secondary" gutterBottom>
+                • Use the search bar to quickly find items
+              </Typography>
+              <Typography variant="body2" color="text.secondary" gutterBottom>
+                • Filter users by role for better management
+              </Typography>
+              <Typography variant="body2" color="text.secondary" gutterBottom>
+                • Attach files to notices for additional information
+              </Typography>
+            </Box>
           </Paper>
         </Grid>
       </Grid>

@@ -31,14 +31,22 @@ import {
   Switch,
   FormControlLabel,
   Alert,
+  LinearProgress,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
 } from '@mui/material';
 import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   Add as AddIcon,
   Search as SearchIcon,
+  AttachFile as AttachFileIcon,
+  Delete as DeleteFileIcon,
 } from '@mui/icons-material';
 import { noticeService } from '../services/notice.service';
+import { storageService } from '../services/storage.service';
 import { Notice } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 import { format } from 'date-fns';
@@ -56,7 +64,10 @@ const NoticesPage: React.FC = () => {
     department: '',
     priority: 'medium' as 'high' | 'medium' | 'low',
     isActive: true,
+    attachments: [] as string[],
   });
+  const [uploadingFiles, setUploadingFiles] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -113,6 +124,7 @@ const NoticesPage: React.FC = () => {
         department: notice.department || '',
         priority: notice.priority,
         isActive: notice.isActive,
+        attachments: notice.attachments || [],
       });
     } else {
       setEditingNotice(null);
@@ -122,14 +134,72 @@ const NoticesPage: React.FC = () => {
         department: '',
         priority: 'medium',
         isActive: true,
+        attachments: [],
       });
     }
+    setUploadingFiles(false);
+    setUploadProgress(0);
     setOpenDialog(true);
   };
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
     setEditingNotice(null);
+    setUploadingFiles(false);
+    setUploadProgress(0);
+  };
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
+
+    setUploadingFiles(true);
+    const uploadedFileIds: string[] = [];
+
+    try {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const fileId = await storageService.uploadNoticeAttachment(
+          file,
+          (progress) => {
+            const totalProgress = ((i + progress / 100) / files.length) * 100;
+            setUploadProgress(totalProgress);
+          }
+        );
+        uploadedFileIds.push(fileId);
+      }
+
+      setFormData({
+        ...formData,
+        attachments: [...formData.attachments, ...uploadedFileIds],
+      });
+      showSnackbar(
+        `${files.length} file(s) uploaded successfully`,
+        'success'
+      );
+    } catch (error) {
+      console.error('Error uploading files:', error);
+      showSnackbar('Failed to upload files', 'error');
+    } finally {
+      setUploadingFiles(false);
+      setUploadProgress(0);
+      // Reset file input
+      event.target.value = '';
+    }
+  };
+
+  const handleRemoveAttachment = async (fileId: string) => {
+    try {
+      await storageService.deleteNoticeAttachment(fileId);
+      setFormData({
+        ...formData,
+        attachments: formData.attachments.filter((id) => id !== fileId),
+      });
+      showSnackbar('Attachment removed successfully', 'success');
+    } catch (error) {
+      console.error('Error removing attachment:', error);
+      showSnackbar('Failed to remove attachment', 'error');
+    }
   };
 
   const handleSave = async () => {
@@ -255,6 +325,7 @@ const NoticesPage: React.FC = () => {
               <TableCell>Department</TableCell>
               <TableCell>Priority</TableCell>
               <TableCell>Status</TableCell>
+              <TableCell>Attachments</TableCell>
               <TableCell>Created</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
@@ -280,6 +351,18 @@ const NoticesPage: React.FC = () => {
                     onClick={() => handleToggleActive(notice)}
                     sx={{ cursor: 'pointer' }}
                   />
+                </TableCell>
+                <TableCell>
+                  {notice.attachments && notice.attachments.length > 0 ? (
+                    <Chip
+                      icon={<AttachFileIcon />}
+                      label={notice.attachments.length}
+                      size="small"
+                      variant="outlined"
+                    />
+                  ) : (
+                    '-'
+                  )}
                 </TableCell>
                 <TableCell>
                   {format(new Date(notice.createdAt), 'MMM dd, yyyy')}
@@ -378,10 +461,69 @@ const NoticesPage: React.FC = () => {
             label="Active"
             sx={{ mt: 2 }}
           />
+
+          {/* File Upload Section */}
+          <Box sx={{ mt: 3 }}>
+            <Typography variant="subtitle2" gutterBottom>
+              Attachments (Optional)
+            </Typography>
+            <Button
+              variant="outlined"
+              component="label"
+              startIcon={<AttachFileIcon />}
+              disabled={uploadingFiles}
+              fullWidth
+            >
+              Upload Files
+              <input
+                type="file"
+                hidden
+                multiple
+                accept="image/*,.pdf,.doc,.docx"
+                onChange={handleFileUpload}
+              />
+            </Button>
+            {uploadingFiles && (
+              <Box sx={{ mt: 2 }}>
+                <LinearProgress variant="determinate" value={uploadProgress} />
+                <Typography variant="caption" color="text.secondary">
+                  Uploading... {Math.round(uploadProgress)}%
+                </Typography>
+              </Box>
+            )}
+            {formData.attachments.length > 0 && (
+              <List dense sx={{ mt: 2 }}>
+                {formData.attachments.map((fileId, index) => (
+                  <ListItem key={fileId}>
+                    <ListItemText
+                      primary={`Attachment ${index + 1}`}
+                      secondary={fileId}
+                    />
+                    <ListItemSecondaryAction>
+                      <IconButton
+                        edge="end"
+                        size="small"
+                        onClick={() => handleRemoveAttachment(fileId)}
+                        disabled={uploadingFiles}
+                      >
+                        <DeleteFileIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            )}
+          </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button onClick={handleSave} variant="contained">
+          <Button onClick={handleCloseDialog} disabled={uploadingFiles}>
+            Cancel
+          </Button>
+          <Button
+            onClick={handleSave}
+            variant="contained"
+            disabled={uploadingFiles}
+          >
             {editingNotice ? 'Update' : 'Create'}
           </Button>
         </DialogActions>
