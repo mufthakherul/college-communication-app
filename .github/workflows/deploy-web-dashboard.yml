@@ -15,6 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository == 'mufthakherul/college-communication-app'
     
+    permissions:
+      contents: read
+      actions: read
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
