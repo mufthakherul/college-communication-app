@@ -105,48 +105,38 @@ npm run preview
 
 ## Deployment
 
-### 🚀 GitHub Actions Auto-Deploy to Appwrite (Recommended!)
+### 🚀 Automatic Deployment with Vercel (Recommended!)
 
-**Best option**: Automatic deployment to Appwrite - your web app updates automatically when you edit the repository!
+**Why Vercel?** Appwrite doesn't have native static site hosting. Appwrite is excellent for the backend (database, auth, storage), but for hosting the frontend web app, you need a platform like Vercel, Netlify, or GitHub Pages. This is the **officially recommended approach** by Appwrite.
 
-✅ **Same Backend** - Uses your existing Appwrite infrastructure  
-✅ **Already configured** - workflow included in `.github/workflows/deploy-web-dashboard.yml`  
-✅ **Zero maintenance** - deploys automatically on every push  
-✅ **Fast** - live in ~2 minutes after commit  
-✅ **Free** - No additional hosting costs  
+✅ **100% Free Forever** - Generous free tier, no credit card required
+✅ **Automatic** - Deploy on every push to main branch  
+✅ **Fast** - Live in ~2 minutes, global CDN  
+✅ **Professional** - HTTPS, custom domains, instant rollbacks  
+✅ **Zero Configuration** - Works out of the box with Vite  
 
-**Quick Setup** (5 minutes):
+**⚡ Quick Setup (15 minutes):**
 
-1. **Create Appwrite API Key** (in Appwrite Console → Settings → API Keys)
-   - Scopes: storage.read, storage.write, buckets.read, buckets.write
-2. **Add 3 secrets** to GitHub Settings → Secrets:
-   - `APPWRITE_API_KEY` - Your API key from Appwrite
-   - `APPWRITE_PROJECT_ID` - Your project ID: `6904cfb1001e5253725b`
-   - `APPWRITE_ENDPOINT` - `https://sgp.cloud.appwrite.io/v1`
-3. **Create Storage Bucket** in Appwrite Console:
-   - Bucket ID: `web-dashboard`
-   - Permissions: Read = Any, File Security = Disabled
-4. **Done!** Push changes and watch auto-deploy in Actions tab
+**[📖 Complete Setup Guide: DEPLOYMENT_SETUP.md](DEPLOYMENT_SETUP.md)** ⭐ **START HERE**
 
-**📖 Complete setup guide**: **[APPWRITE_GITHUB_ACTIONS.md](APPWRITE_GITHUB_ACTIONS.md)** ⭐
+**TL;DR:**
+1. Create free Vercel account (connect with GitHub)
+2. Import this repo, set root to `apps/web`
+3. Add 3 secrets to GitHub (Vercel token, project ID, org ID)
+4. Add Vercel domain to Appwrite CORS settings
+5. Push code → auto-deploy! 🚀
+
+**Your site will be live at**: `https://your-project.vercel.app`
 
 ---
 
 ### Alternative Options
 
-#### Deploy with Appwrite CLI (Manual)
-
-For one-time or manual deployments:
-
-For manual control or CI/CD pipelines:
-
-```bash
-npm i -g appwrite-cli
-appwrite login
-cd apps/web
-npm run build
-# Upload to Appwrite Storage manually
-```
+See **[DEPLOYMENT.md](DEPLOYMENT.md)** for other hosting options:
+- Netlify (similar to Vercel)
+- GitHub Pages (free for public repos)
+- Cloudflare Pages
+- Self-hosted with Docker/Nginx
 
 #### Other Hosting Platforms
 
