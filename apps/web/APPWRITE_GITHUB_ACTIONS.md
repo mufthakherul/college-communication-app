@@ -1,24 +1,52 @@
-# Deploy Web Dashboard to Appwrite using GitHub Actions
+# ⚠️ DEPRECATED - This Guide is Outdated
 
-This guide shows you how to automatically deploy your web dashboard to Appwrite using GitHub Actions - no manual CLI commands needed!
+## ❌ The Problem
 
-## Overview
+This guide describes deploying to **Appwrite Storage buckets**, but this approach **DOES NOT WORK** for hosting websites.
 
-✅ **Automatic**: Deploys to Appwrite on every push to `main` branch  
-✅ **Fast**: Build and deploy in ~2-3 minutes  
-✅ **Same Backend**: Uses your existing Appwrite infrastructure  
-✅ **Live Updates**: Web app updates automatically when you edit the repo  
-✅ **Free**: No additional hosting costs
+**Why it fails:**
+- Appwrite Storage buckets are for **file storage**, not website hosting
+- Files upload successfully (action succeeds) but **no accessible website is created**
+- No proper SPA routing support
+- According to latest Appwrite docs, they don't have native static site hosting
 
-## How It Works
+## ✅ The Correct Solution
 
-The GitHub Actions workflow:
+**Frontend Hosting**: Vercel, Netlify, or similar platforms
+**Backend**: Appwrite (database, auth, storage, functions)
+
+This is the **officially recommended architecture** by Appwrite.
+
+### 📖 Use the New Guide Instead
+
+**➡️ [DEPLOYMENT_SETUP.md](DEPLOYMENT_SETUP.md)** - Complete, working deployment guide
+
+**What you'll get:**
+- Automatic deployments via GitHub Actions
+- Actually working website (not just uploaded files)
+- Free hosting forever
+- Global CDN, HTTPS, custom domains
+- Setup time: 15 minutes
+
+---
+
+# Old Guide Content (For Reference Only)
+
+## Overview (DOES NOT WORK AS DESCRIBED)
+
+❌ **Does not create accessible website** - Files upload but cannot be accessed as a website
+❌ **No SPA routing** - Storage buckets can't handle React Router
+❌ **Not officially supported** - Appwrite doesn't recommend this approach
+
+## How It Works (BUT DOESN'T WORK)
+
+The old GitHub Actions workflow:
 1. Builds your React app
 2. Connects to your Appwrite project using API key
-3. Uploads files to Appwrite Storage
-4. Makes them publicly accessible
+3. Uploads files to Appwrite Storage bucket ✅ (This works)
+4. **PROBLEM**: Files in Storage bucket ≠ Hosted website ❌
 
-Your web dashboard is served directly from Appwrite, using the same infrastructure as your mobile app backend!
+Storage buckets store files, they don't serve websites with proper routing!
 
 ---
 
