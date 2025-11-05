@@ -1,0 +1,211 @@
+# RPI Teacher Dashboard
+
+A web-based dashboard for teachers and administrators to manage the RPI Communication App.
+
+## Features
+
+- 📊 **Dashboard Overview** - View statistics and analytics
+- 👥 **User Management** - Create, edit, and manage users (students, teachers, admins)
+- 📢 **Notice Management** - Create and manage announcements and notices
+- 💬 **Message Monitoring** - View and monitor messages between users
+- 🔐 **Secure Authentication** - Role-based access control (teachers and admins only)
+
+## Tech Stack
+
+- **React 19** - UI framework
+- **TypeScript** - Type safety
+- **Vite** - Fast build tool
+- **Material-UI (MUI)** - UI components
+- **React Router** - Client-side routing
+- **Appwrite** - Backend as a Service
+- **date-fns** - Date formatting
+
+## Prerequisites
+
+- Node.js 18 or higher
+- npm or yarn
+- Access to the Appwrite project (same as mobile app)
+
+## Installation
+
+1. Navigate to the web-teacher directory:
+   ```bash
+   cd apps/web-teacher
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+## Configuration
+
+The app is pre-configured to use the same Appwrite backend as the mobile app. The configuration is located in:
+- `src/config/appwrite.ts`
+
+No additional configuration is needed if using the default setup.
+
+## Development
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+The app will be available at `http://localhost:3000`
+
+## Building for Production
+
+Build the application:
+
+```bash
+npm run build
+```
+
+The built files will be in the `dist` directory.
+
+Preview the production build:
+
+```bash
+npm run preview
+```
+
+## Deployment
+
+### Option 1: Deploy to Vercel
+
+1. Install Vercel CLI:
+   ```bash
+   npm i -g vercel
+   ```
+
+2. Deploy:
+   ```bash
+   vercel
+   ```
+
+### Option 2: Deploy to Netlify
+
+1. Install Netlify CLI:
+   ```bash
+   npm i -g netlify-cli
+   ```
+
+2. Deploy:
+   ```bash
+   netlify deploy --prod
+   ```
+
+### Option 3: Static Hosting
+
+After building, upload the `dist` folder to any static hosting service:
+- GitHub Pages
+- AWS S3 + CloudFront
+- Firebase Hosting
+- Any web server (Apache, Nginx)
+
+## Usage
+
+### Login
+
+1. Navigate to the app URL
+2. Sign in with your teacher or admin credentials
+3. Only users with `teacher` or `admin` role can access the dashboard
+
+### Managing Users
+
+1. Navigate to **Users** from the sidebar
+2. Click **Add User** to create a new user
+3. Click the edit icon to modify user details
+4. Click the delete icon to remove a user
+
+### Managing Notices
+
+1. Navigate to **Notices** from the sidebar
+2. Click **Create Notice** to publish a new notice
+3. Set priority (high, medium, low) and department
+4. Click the edit icon to modify existing notices
+5. Click the delete icon to remove a notice
+
+### Monitoring Messages
+
+1. Navigate to **Messages** from the sidebar
+2. View all messages exchanged between users
+3. Monitor message status (read/unread)
+
+## Project Structure
+
+```
+apps/web-teacher/
+├── public/            # Static assets
+├── src/
+│   ├── components/    # Reusable components
+│   │   └── Layout.tsx # Main layout with navigation
+│   ├── config/        # Configuration files
+│   │   └── appwrite.ts
+│   ├── contexts/      # React contexts
+│   │   └── AuthContext.tsx
+│   ├── pages/         # Page components
+│   │   ├── DashboardPage.tsx
+│   │   ├── LoginPage.tsx
+│   │   ├── MessagesPage.tsx
+│   │   ├── NoticesPage.tsx
+│   │   └── UsersPage.tsx
+│   ├── services/      # API services
+│   │   ├── appwrite.service.ts
+│   │   ├── message.service.ts
+│   │   ├── notice.service.ts
+│   │   └── user.service.ts
+│   ├── types/         # TypeScript type definitions
+│   │   └── index.ts
+│   ├── App.tsx        # Main app component
+│   └── main.tsx       # Entry point
+├── index.html
+├── package.json
+├── tsconfig.json
+└── vite.config.ts
+```
+
+## Security
+
+- Authentication is handled by Appwrite
+- Role-based access control ensures only teachers and admins can access
+- All API calls are authenticated with Appwrite sessions
+- User sessions are managed securely
+
+## Troubleshooting
+
+### Cannot login
+- Ensure your user has `teacher` or `admin` role in the Appwrite database
+- Check that the Appwrite project ID and endpoint are correct
+- Verify network connectivity to Appwrite server
+
+### Data not loading
+- Check browser console for errors
+- Verify Appwrite database collections exist
+- Ensure proper permissions are set on collections
+
+### Build errors
+- Clear `node_modules` and reinstall: `rm -rf node_modules && npm install`
+- Check Node.js version: `node --version` (should be 18+)
+- Run type check: `npm run lint`
+
+## Contributing
+
+When contributing to the teacher dashboard:
+1. Follow the existing code structure
+2. Use TypeScript for all new files
+3. Follow Material-UI design patterns
+4. Test thoroughly before committing
+
+## License
+
+MIT License - Same as the main project
+
+## Support
+
+For issues or questions:
+- Check the main project documentation
+- Review Appwrite documentation: https://appwrite.io/docs
+- Open an issue on GitHub
