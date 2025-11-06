@@ -185,15 +185,77 @@ These fixes assume that the Appwrite collections have proper collection-level pe
 
 ---
 
+### 5. Web Dashboard Deployment Not Creating Website ✅
+**Problem:** GitHub Actions workflow showed "action successful" but no accessible website was created.
+
+**Root Cause:** The workflow was uploading files to Appwrite Storage bucket, but Appwrite Storage is designed for file storage, NOT website hosting. Files uploaded successfully, but Storage buckets cannot serve websites with proper SPA routing. According to latest Appwrite documentation, they don't have native static site hosting.
+
+**Fix Applied:**
+- Changed deployment architecture from Appwrite Storage to Vercel
+- Frontend: Vercel (static hosting with SPA routing)
+- Backend: Appwrite (database, auth, storage, functions)
+- This is the officially recommended architecture by Appwrite
+
+**Changes Made:**
+1. **Updated GitHub Actions Workflow:**
+   - Removed Appwrite Storage upload logic
+   - Added Vercel deployment action
+   - Added explicit security permissions
+
+2. **Added Configuration Files:**
+   - `apps/web/vercel.json` - Vercel config with SPA routing and security headers
+   - `apps/web/appwrite.json` - Minimal Appwrite project configuration
+
+3. **Created Comprehensive Documentation:**
+   - `apps/web/DEPLOYMENT_SETUP.md` - 15-minute setup guide
+   - `apps/web/DEPLOYMENT_FIX.md` - Detailed issue explanation
+   - `apps/web/ISSUE_RESOLUTION.md` - Complete resolution summary
+   - Updated `apps/web/README.md` with correct deployment instructions
+   - Deprecated `apps/web/APPWRITE_GITHUB_ACTIONS.md` with explanation
+
+4. **Security Improvements:**
+   - Replaced deprecated X-XSS-Protection with Content-Security-Policy
+   - Added explicit workflow permissions (least privilege)
+   - All CodeQL security checks passed
+
+**Benefits:**
+- ✅ Actually creates accessible website (not just uploaded files)
+- ✅ Proper SPA routing (all React Router routes work)
+- ✅ Officially recommended by Appwrite
+- ✅ Free forever (Vercel free tier)
+- ✅ Professional features (CDN, HTTPS, custom domains)
+- ✅ No code changes required
+
+**Setup Time:** 15 minutes (detailed guide provided)
+
+**Location:** 
+- `.github/workflows/deploy-web-dashboard.yml`
+- `apps/web/vercel.json`
+- `apps/web/appwrite.json`
+- `apps/web/DEPLOYMENT_SETUP.md` (complete setup guide)
+
+---
+
 ## Files Modified
 
+### Mobile App Fixes (Issues 1-4):
 1. `apps/mobile/lib/services/notice_service.dart`
 2. `apps/mobile/lib/services/message_service.dart`
 3. `apps/mobile/lib/services/ai_chatbot_service.dart`
 4. `apps/mobile/lib/screens/notices/website_notices_fallback_screen.dart`
 5. `apps/mobile/lib/screens/ai_chat/api_key_input_screen.dart`
 
+### Web Dashboard Deployment Fix (Issue 5):
+6. `.github/workflows/deploy-web-dashboard.yml`
+7. `apps/web/vercel.json` (new)
+8. `apps/web/appwrite.json` (new)
+9. `apps/web/DEPLOYMENT_SETUP.md` (new)
+10. `apps/web/DEPLOYMENT_FIX.md` (new)
+11. `apps/web/ISSUE_RESOLUTION.md` (new)
+12. `apps/web/README.md`
+13. `apps/web/APPWRITE_GITHUB_ACTIONS.md`
+
 ---
 
 ## No Breaking Changes
-All changes are backward compatible and focused on fixing specific issues. No existing functionality has been removed or significantly altered.
+All changes are backward compatible and focused on fixing specific issues. No existing functionality has been removed or significantly altered. The web dashboard deployment change only affects hosting platform, not the application code.
