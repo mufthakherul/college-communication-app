@@ -52,11 +52,11 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 
   double _evaluateExpression(String expr) {
     // Handle scientific functions
-    expr = expr.replaceAll('×', '*').replaceAll('÷', '/');
+    final normalized = expr.replaceAll('×', '*').replaceAll('÷', '/');
 
     // Handle basic operators using a simple parser
     try {
-      return _parseExpression(expr);
+      return _parseExpression(normalized);
     } catch (e) {
       throw Exception('Invalid expression');
     }
@@ -64,15 +64,15 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 
   double _parseExpression(String expr) {
     // Remove whitespace
-    expr = expr.replaceAll(' ', '');
+    final cleaned = expr.replaceAll(' ', '');
 
     // Simple evaluation for basic operations
     // This is a simplified version - in production, use a proper expression parser
     final tokens = <String>[];
     var currentNumber = '';
 
-    for (var i = 0; i < expr.length; i++) {
-      final char = expr[i];
+    for (var i = 0; i < cleaned.length; i++) {
+      final char = cleaned[i];
       if ('0123456789.'.contains(char)) {
         currentNumber += char;
       } else if ('+-*/'.contains(char)) {
