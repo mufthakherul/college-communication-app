@@ -451,21 +451,21 @@ class AnalyticsDashboardService {
       final messagesByDay = <String, int>{};
 
       for (final doc in users.documents) {
-        final createdAt = DateTime.parse(doc.data['created_at']);
+        final createdAt = DateTime.parse(doc.data['created_at'] as String);
         final dayKey =
             '${createdAt.year}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}';
         usersByDay[dayKey] = (usersByDay[dayKey] ?? 0) + 1;
       }
 
       for (final doc in notices.documents) {
-        final createdAt = DateTime.parse(doc.data['created_at']);
+        final createdAt = DateTime.parse(doc.data['created_at'] as String);
         final dayKey =
             '${createdAt.year}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}';
         noticesByDay[dayKey] = (noticesByDay[dayKey] ?? 0) + 1;
       }
 
       for (final doc in messages.documents) {
-        final createdAt = DateTime.parse(doc.data['created_at']);
+        final createdAt = DateTime.parse(doc.data['created_at'] as String);
         final dayKey =
             '${createdAt.year}-${createdAt.month.toString().padLeft(2, '0')}-${createdAt.day.toString().padLeft(2, '0')}';
         messagesByDay[dayKey] = (messagesByDay[dayKey] ?? 0) + 1;

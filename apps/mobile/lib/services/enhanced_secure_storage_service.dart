@@ -34,9 +34,9 @@ class EnhancedSecureStorageService {
     iOptions: IOSOptions(
       accessibility: KeychainAccessibility.first_unlock_this_device,
     ),
-    lOptions: LinuxOptions(),
-    wOptions: WindowsOptions(),
-    mOptions: MacOsOptions(),
+    lOptions: LinuxOptions.defaultOptions,
+    wOptions: WindowsOptions.defaultOptions,
+    mOptions: MacOsOptions.defaultOptions,
   );
 
   // Storage keys
