@@ -87,7 +87,7 @@ class OneSignalService {
   /// Set user tags for segmentation
   Future<void> setUserTags(Map<String, String> tags) async {
     try {
-      OneSignal.User.addTags(tags);
+      await OneSignal.User.addTags(tags);
 
       if (kDebugMode) {
         debugPrint('User tags set: $tags');
@@ -102,7 +102,7 @@ class OneSignalService {
   /// Remove user tags
   Future<void> removeUserTags(List<String> keys) async {
     try {
-      OneSignal.User.removeTags(keys);
+      await OneSignal.User.removeTags(keys);
 
       if (kDebugMode) {
         debugPrint('User tags removed: $keys');
@@ -165,7 +165,7 @@ class OneSignalService {
 
     if (type == null || id == null) return;
 
-    // TODO: Implement navigation based on type
+  // TODO(campus_mesh): Implement navigation based on type
     // Example:
     // - type: 'notice' -> Navigate to notice detail
     // - type: 'message' -> Navigate to message thread

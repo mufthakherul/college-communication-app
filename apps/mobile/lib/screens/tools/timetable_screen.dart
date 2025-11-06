@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:campus_mesh/models/timetable_model.dart';
 import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/services/class_alert_service.dart';
@@ -54,7 +56,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
     }
 
     // Load alert preferences
-    _loadAlertPreferences();
+    unawaited(_loadAlertPreferences());
   }
 
   Future<void> _loadAlertPreferences() async {

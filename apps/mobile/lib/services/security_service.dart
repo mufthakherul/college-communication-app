@@ -60,7 +60,7 @@ class SecurityService {
   Future<bool> _validatePackageName() async {
     try {
       if (Platform.isAndroid) {
-        // TODO: Implement native Android method to get package name via platform channels
+        // TODO(campus_mesh): Implement native Android method to get package name via platform channels
         // Expected: gov.bd.polytech.rgpi.communication.develop.by.mufthakherul
         // For now, ProGuard obfuscation provides primary anti-repackaging protection
         return true; // Placeholder - returns true to avoid blocking legitimate users
@@ -192,7 +192,7 @@ class SecurityService {
     }
 
     // In release mode, debugger should not be attached
-    // TODO: Implement actual debugger detection via platform channels
+    // TODO(campus_mesh): Implement actual debugger detection via platform channels
     // For now, return false (no debugger detected)
     return false; // Placeholder - assumes no debugger in release builds
   }

@@ -26,10 +26,10 @@ class TimetableService {
   }
 
   void _startPolling() {
-    _fetchTimetables();
+    unawaited(_fetchTimetables());
     _pollingTimer = Timer.periodic(
       const Duration(seconds: 10),
-      (_) => _fetchTimetables(),
+      (_) => unawaited(_fetchTimetables()),
     );
   }
 
@@ -112,7 +112,7 @@ class TimetableService {
         data: timetable.toJson(),
       );
 
-      _fetchTimetables();
+      unawaited(_fetchTimetables());
 
       return TimetableModel.fromJson(doc.data);
     } catch (e) {
@@ -140,7 +140,7 @@ class TimetableService {
         data: updates,
       );
 
-      _fetchTimetables();
+      unawaited(_fetchTimetables());
 
       return true;
     } catch (e) {
@@ -162,7 +162,7 @@ class TimetableService {
         documentId: timetableId,
       );
 
-      _fetchTimetables();
+      unawaited(_fetchTimetables());
 
       return true;
     } catch (e) {

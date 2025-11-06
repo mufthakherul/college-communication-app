@@ -27,10 +27,10 @@ class BooksService {
   }
 
   void _startPolling() {
-    _fetchBooks(); // Fetch immediately
+    unawaited(_fetchBooks()); // Fetch immediately
     _pollingTimer = Timer.periodic(
       const Duration(seconds: 10),
-      (_) => _fetchBooks(),
+      (_) => unawaited(_fetchBooks()),
     );
   }
 
@@ -154,7 +154,7 @@ class BooksService {
       );
 
       // Refresh the books list
-      _fetchBooks();
+      unawaited(_fetchBooks());
 
       return BookModel.fromJson(doc.data);
     } catch (e) {
@@ -180,7 +180,7 @@ class BooksService {
       );
 
       // Refresh the books list
-      _fetchBooks();
+      unawaited(_fetchBooks());
 
       return true;
     } catch (e) {
@@ -203,7 +203,7 @@ class BooksService {
       );
 
       // Refresh the books list
-      _fetchBooks();
+      unawaited(_fetchBooks());
 
       return true;
     } catch (e) {

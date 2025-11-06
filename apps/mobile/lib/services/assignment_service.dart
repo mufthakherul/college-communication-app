@@ -27,10 +27,10 @@ class AssignmentService {
   }
 
   void _startPolling() {
-    _fetchAssignments();
+    unawaited(_fetchAssignments());
     _pollingTimer = Timer.periodic(
       const Duration(seconds: 10),
-      (_) => _fetchAssignments(),
+      (_) => unawaited(_fetchAssignments()),
     );
   }
 
@@ -110,7 +110,7 @@ class AssignmentService {
         data: assignment.toJson(),
       );
 
-      _fetchAssignments();
+      unawaited(_fetchAssignments());
 
       return AssignmentModel.fromJson(doc.data);
     } catch (e) {
@@ -138,7 +138,7 @@ class AssignmentService {
         data: updates,
       );
 
-      _fetchAssignments();
+      unawaited(_fetchAssignments());
 
       return true;
     } catch (e) {
@@ -160,7 +160,7 @@ class AssignmentService {
         documentId: assignmentId,
       );
 
-      _fetchAssignments();
+      unawaited(_fetchAssignments());
 
       return true;
     } catch (e) {

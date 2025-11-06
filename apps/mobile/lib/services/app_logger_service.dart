@@ -325,25 +325,24 @@ class AppLoggerService {
 
   /// Get log statistics
   Map<String, dynamic> getStatistics() {
-    final stats = <String, dynamic>{
-      'total': _logs.length,
-      'byLevel': {},
-      'byCategory': {},
-    };
-
-    // Count by level
+    final byLevel = <String, int>{};
     for (final level in LogLevel.values) {
-      stats['byLevel'][level.name] =
-          _logs.where((log) => log.level == level).length;
+      byLevel[level.name] = _logs.where((log) => log.level == level).length;
     }
 
-    // Count by category
+    final byCategory = <String, int>{};
     final categories =
         _logs.map((log) => log.category).whereType<String>().toSet();
     for (final category in categories) {
-      stats['byCategory'][category] =
+      byCategory[category] =
           _logs.where((log) => log.category == category).length;
     }
+
+    final stats = <String, dynamic>{
+      'total': _logs.length,
+      'byLevel': byLevel,
+      'byCategory': byCategory,
+    };
 
     if (_logs.isNotEmpty) {
       stats['oldest'] = _logs.first.timestamp.toIso8601String();
@@ -359,13 +358,14 @@ class AppLoggerService {
     debugPrint('\n=== Log Summary ===');
     debugPrint('Total Logs: ${stats['total']}');
     debugPrint('By Level:');
-    (stats['byLevel'] as Map).forEach((level, count) {
+    (stats['byLevel'] as Map<String, int>).forEach((level, count) {
       debugPrint('  $level: $count');
     });
 
-    if ((stats['byCategory'] as Map).isNotEmpty) {
+    final byCategory = stats['byCategory'] as Map<String, int>;
+    if (byCategory.isNotEmpty) {
       debugPrint('By Category:');
-      (stats['byCategory'] as Map).forEach((category, count) {
+      byCategory.forEach((category, count) {
         debugPrint('  $category: $count');
       });
     }
