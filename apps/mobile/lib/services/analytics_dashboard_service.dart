@@ -471,10 +471,10 @@ class AnalyticsDashboardService {
         messagesByDay[dayKey] = (messagesByDay[dayKey] ?? 0) + 1;
       }
 
-      // Convert to chart-ready format
-      final usersData = <Map<String, dynamic>>[];
-      final noticesData = <Map<String, dynamic>>[];
-      final messagesData = <Map<String, dynamic>>[];
+  // Convert to chart-ready format
+  final usersData = <Map<String, Object>>[];
+  final noticesData = <Map<String, Object>>[];
+  final messagesData = <Map<String, Object>>[];
 
       usersByDay.forEach((day, count) {
         usersData.add({'date': day, 'count': count});
@@ -489,9 +489,18 @@ class AnalyticsDashboardService {
       });
 
       // Sort by date
-      usersData.sort((a, b) => a['date'].compareTo(b['date']));
-      noticesData.sort((a, b) => a['date'].compareTo(b['date']));
-      messagesData.sort((a, b) => a['date'].compareTo(b['date']));
+      usersData.sort(
+        (a, b) => ((a['date'] as String?) ?? '')
+            .compareTo((b['date'] as String?) ?? ''),
+      );
+      noticesData.sort(
+        (a, b) => ((a['date'] as String?) ?? '')
+            .compareTo((b['date'] as String?) ?? ''),
+      );
+      messagesData.sort(
+        (a, b) => ((a['date'] as String?) ?? '')
+            .compareTo((b['date'] as String?) ?? ''),
+      );
 
       return {
         'users': usersData,

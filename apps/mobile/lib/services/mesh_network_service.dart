@@ -225,8 +225,8 @@ class MeshNetworkService {
   bool _isAdvertising = false;
   bool _isDiscovering = false;
   bool _autoConnectEnabled = true; // Auto-connect to all available connections
-  String? _deviceId;
-  String? _deviceName;
+  late String _deviceId;
+  late String _deviceName;
 
   static const Duration _nodeTimeout = Duration(minutes: 5);
 
@@ -255,7 +255,7 @@ class MeshNetworkService {
 
       // Initialize the nearby connections
       // Note: Actual initialization is handled by the flutter_nearby_connections plugin
-      // TODO: Integrate flutter_nearby_connections plugin for full functionality
+  // TODO(campus_mesh): Integrate flutter_nearby_connections plugin for full functionality
       // See MESH_NETWORKING_FIX_GUIDE.md for implementation details
 
       _isInitialized = true;
@@ -346,7 +346,7 @@ class MeshNetworkService {
     Duration? expiryDuration,
     Map<String, dynamic>? sharedInfo,
   }) {
-    if (!_isInitialized || _deviceId == null) {
+    if (!_isInitialized) {
       throw Exception('Mesh network not initialized');
     }
 
@@ -356,8 +356,8 @@ class MeshNetworkService {
         : null; // No expiry if duration not provided
 
     final pairingData = MeshPairingData(
-      deviceId: _deviceId!,
-      deviceName: _deviceName!,
+  deviceId: _deviceId,
+  deviceName: _deviceName,
       pairingToken: pairingToken,
       expiresAt: expiresAt,
       supportedConnections: _getSupportedConnectionTypes(),
@@ -708,7 +708,7 @@ class MeshNetworkService {
   /// Broadcast message to all connected nodes
   Future<void> broadcastMessage(MeshMessage message) async {
     // Add self to route path to prevent echo
-    final routedMessage = message.copyWithRoute(_deviceId!);
+  final routedMessage = message.copyWithRoute(_deviceId);
 
     for (final node in _connectedNodes.values) {
       if (node.isActive && !routedMessage.routePath.contains(node.id)) {

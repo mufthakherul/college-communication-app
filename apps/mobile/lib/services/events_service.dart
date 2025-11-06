@@ -26,10 +26,10 @@ class EventsService {
   }
 
   void _startPolling() {
-    _fetchEvents();
+    unawaited(_fetchEvents());
     _pollingTimer = Timer.periodic(
       const Duration(seconds: 10),
-      (_) => _fetchEvents(),
+      (_) => unawaited(_fetchEvents()),
     );
   }
 
@@ -132,7 +132,7 @@ class EventsService {
         data: event.toJson(),
       );
 
-      _fetchEvents();
+      unawaited(_fetchEvents());
 
       return EventModel.fromJson(doc.data);
     } catch (e) {
@@ -157,7 +157,7 @@ class EventsService {
         data: updates,
       );
 
-      _fetchEvents();
+      unawaited(_fetchEvents());
 
       return true;
     } catch (e) {
@@ -179,7 +179,7 @@ class EventsService {
         documentId: eventId,
       );
 
-      _fetchEvents();
+      unawaited(_fetchEvents());
 
       return true;
     } catch (e) {

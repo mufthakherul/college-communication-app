@@ -9,12 +9,10 @@ class IPCalculatorScreen extends StatefulWidget {
 
 class _IPCalculatorScreenState extends State<IPCalculatorScreen>
     with SingleTickerProviderStateMixin {
-  final TextEditingController _ipController = TextEditingController();
-  final TextEditingController _cidrController = TextEditingController(
-    text: '24',
-  );
+  late final TextEditingController _ipController;
+  late final TextEditingController _cidrController;
 
-  late TabController _tabController;
+  late final TabController _tabController;
 
   // IPv4 results
   String? _networkAddress;
@@ -37,6 +35,8 @@ class _IPCalculatorScreenState extends State<IPCalculatorScreen>
   @override
   void initState() {
     super.initState();
+    _ipController = TextEditingController();
+    _cidrController = TextEditingController(text: '24');
     _tabController = TabController(length: 2, vsync: this);
   }
 
@@ -151,21 +151,24 @@ class _IPCalculatorScreenState extends State<IPCalculatorScreen>
     return ipv6Pattern.hasMatch(ip);
   }
 
-  String _expandIPv6(String ip) {
+  String _expandIPv6(String ipAddress) {
+    // Work on a local variable to avoid parameter reassignment
+    var workingIp = ipAddress;
+
     // Expand :: notation
-    if (ip.contains('::')) {
-      final parts = ip.split('::');
+    if (workingIp.contains('::')) {
+      final parts = workingIp.split('::');
       final left = parts[0].split(':').where((s) => s.isNotEmpty).toList();
       final right = parts.length > 1
           ? parts[1].split(':').where((s) => s.isNotEmpty).toList()
           : [];
       final missing = 8 - left.length - right.length;
       final expanded = [...left, ...List.filled(missing, '0'), ...right];
-      ip = expanded.join(':');
+      workingIp = expanded.join(':');
     }
 
     // Pad each section to 4 digits
-    final sections = ip.split(':');
+    final sections = workingIp.split(':');
     return sections.map((s) => s.padLeft(4, '0')).join(':');
   }
 
