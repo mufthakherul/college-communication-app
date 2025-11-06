@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:campus_mesh/models/event_model.dart';
 import 'package:campus_mesh/models/user_model.dart';
-import 'package:campus_mesh/services/events_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
+import 'package:campus_mesh/services/events_service.dart';
+import 'package:flutter/material.dart';
 
 class EventsScreen extends StatefulWidget {
   const EventsScreen({super.key});

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:campus_mesh/services/connectivity_service.dart';
+import 'package:flutter/material.dart';
 
 /// Widget to display network status and quality
 class NetworkStatusWidget extends StatefulWidget {

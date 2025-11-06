@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:campus_mesh/services/ai_chatbot_service.dart';
-import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/models/ai_chat_message_model.dart';
 import 'package:campus_mesh/models/ai_chat_session_model.dart';
 import 'package:campus_mesh/screens/ai_chat/api_key_input_screen.dart';
+import 'package:campus_mesh/services/ai_chatbot_service.dart';
+import 'package:campus_mesh/services/auth_service.dart';
+import 'package:flutter/material.dart';
 
 class AIChatScreen extends StatefulWidget {
-  final String? sessionId;
 
   const AIChatScreen({super.key, this.sessionId});
+  final String? sessionId;
 
   @override
   State<AIChatScreen> createState() => _AIChatScreenState();
@@ -249,7 +249,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
                     color: Theme.of(context).cardColor,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 4,
                         offset: const Offset(0, -2),
                       ),
@@ -347,7 +347,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
               _formatTime(message.timestamp),
               style: TextStyle(
                 color: message.isUser
-                    ? Colors.white.withOpacity(0.7)
+                    ? Colors.white.withValues(alpha: 0.7)
                     : Colors.black54,
                 fontSize: 12,
               ),
@@ -395,7 +395,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
       ),
     );
 
-    if (result == true && _session != null) {
+    if (result ?? false && _session != null) {
       await _aiService.deleteSession(_session!.id);
       if (mounted) {
         Navigator.pop(context, true); // Return true to indicate deletion

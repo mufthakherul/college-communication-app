@@ -203,18 +203,18 @@ class _GPACalculatorScreenState extends State<GPACalculatorScreen> {
                       border: OutlineInputBorder(),
                       isDense: true,
                     ),
-                    value: course.gradePoint,
+                    initialValue: course.gradePoint,
                     items: const [
-                      DropdownMenuItem(value: 4.0, child: Text('A+ (4.0)')),
+                      DropdownMenuItem(value: 4, child: Text('A+ (4.0)')),
                       DropdownMenuItem(value: 3.75, child: Text('A (3.75)')),
                       DropdownMenuItem(value: 3.5, child: Text('A- (3.5)')),
                       DropdownMenuItem(value: 3.25, child: Text('B+ (3.25)')),
-                      DropdownMenuItem(value: 3.0, child: Text('B (3.0)')),
+                      DropdownMenuItem(value: 3, child: Text('B (3.0)')),
                       DropdownMenuItem(value: 2.75, child: Text('B- (2.75)')),
                       DropdownMenuItem(value: 2.5, child: Text('C+ (2.5)')),
                       DropdownMenuItem(value: 2.25, child: Text('C (2.25)')),
-                      DropdownMenuItem(value: 2.0, child: Text('D (2.0)')),
-                      DropdownMenuItem(value: 0.0, child: Text('F (0.0)')),
+                      DropdownMenuItem(value: 2, child: Text('D (2.0)')),
+                      DropdownMenuItem(value: 0, child: Text('F (0.0)')),
                     ],
                     onChanged: (value) {
                       course.gradePoint = value;

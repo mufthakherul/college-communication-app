@@ -43,12 +43,12 @@ void main() {
 
     test('isBiometricAvailable should not throw', () async {
       // Should return false or true without throwing
-      expect(() async => await service.isBiometricAvailable(), returnsNormally);
+      expect(() async => service.isBiometricAvailable(), returnsNormally);
     });
 
     test('isDeviceSupported should not throw', () async {
       // Should return false or true without throwing
-      expect(() async => await service.isDeviceSupported(), returnsNormally);
+      expect(() async => service.isDeviceSupported(), returnsNormally);
     });
 
     test('getAvailableBiometrics should return list', () async {

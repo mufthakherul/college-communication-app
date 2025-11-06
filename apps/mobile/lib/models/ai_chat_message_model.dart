@@ -1,9 +1,4 @@
 class AIChatMessage {
-  final String id;
-  final String sessionId;
-  final String content;
-  final bool isUser;
-  final DateTime timestamp;
 
   AIChatMessage({
     required this.id,
@@ -13,16 +8,6 @@ class AIChatMessage {
     required this.timestamp,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'sessionId': sessionId,
-      'content': content,
-      'isUser': isUser ? 1 : 0,
-      'timestamp': timestamp.toIso8601String(),
-    };
-  }
-
   factory AIChatMessage.fromMap(Map<String, dynamic> map) {
     return AIChatMessage(
       id: map['id'] as String,
@@ -31,6 +16,21 @@ class AIChatMessage {
       isUser: (map['isUser'] as int) == 1,
       timestamp: DateTime.parse(map['timestamp'] as String),
     );
+  }
+  final String id;
+  final String sessionId;
+  final String content;
+  final bool isUser;
+  final DateTime timestamp;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'sessionId': sessionId,
+      'content': content,
+      'isUser': isUser ? 1 : 0,
+      'timestamp': timestamp.toIso8601String(),
+    };
   }
 
   AIChatMessage copyWith({

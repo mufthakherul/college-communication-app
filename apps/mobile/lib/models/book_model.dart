@@ -11,26 +11,7 @@ enum BookCategory {
 
 enum BookStatus { available, borrowed, reserved, maintenance }
 
-class BookModel {
-  final String id;
-  final String title;
-  final String author;
-  final String isbn;
-  final BookCategory category;
-  final String description;
-  final String? coverUrl;
-  final String? fileUrl; // For digital books (PDF)
-  final BookStatus status;
-  final String publisher;
-  final String edition;
-  final int publicationYear;
-  final int totalCopies;
-  final int availableCopies;
-  final String department; // Which department this book belongs to
-  final String? tags; // Comma-separated tags for better search
-  final DateTime createdAt;
-  final DateTime? updatedAt;
-  final String addedBy; // User ID who added the book
+class BookModel { // User ID who added the book
 
   BookModel({
     required this.id,
@@ -56,7 +37,7 @@ class BookModel {
 
   factory BookModel.fromJson(Map<String, dynamic> data) {
     return BookModel(
-      id: data['id'] ?? data['\$id'] ?? '',
+      id: data['id'] ?? data[r'$id'] ?? '',
       title: data['title'] ?? '',
       author: data['author'] ?? '',
       isbn: data['isbn'] ?? '',
@@ -81,6 +62,25 @@ class BookModel {
       addedBy: data['added_by'] ?? '',
     );
   }
+  final String id;
+  final String title;
+  final String author;
+  final String isbn;
+  final BookCategory category;
+  final String description;
+  final String? coverUrl;
+  final String? fileUrl; // For digital books (PDF)
+  final BookStatus status;
+  final String publisher;
+  final String edition;
+  final int publicationYear;
+  final int totalCopies;
+  final int availableCopies;
+  final String department; // Which department this book belongs to
+  final String? tags; // Comma-separated tags for better search
+  final DateTime createdAt;
+  final DateTime? updatedAt;
+  final String addedBy;
 
   Map<String, dynamic> toJson() {
     return {
@@ -225,16 +225,6 @@ class BookModel {
 
 // Book Borrowing Record Model
 class BookBorrowModel {
-  final String id;
-  final String bookId;
-  final String userId;
-  final String userName;
-  final String userEmail;
-  final DateTime borrowDate;
-  final DateTime dueDate;
-  final DateTime? returnDate;
-  final String status; // 'borrowed', 'returned', 'overdue'
-  final String? notes;
 
   BookBorrowModel({
     required this.id,
@@ -251,7 +241,7 @@ class BookBorrowModel {
 
   factory BookBorrowModel.fromJson(Map<String, dynamic> data) {
     return BookBorrowModel(
-      id: data['id'] ?? data['\$id'] ?? '',
+      id: data['id'] ?? data[r'$id'] ?? '',
       bookId: data['book_id'] ?? '',
       userId: data['user_id'] ?? '',
       userName: data['user_name'] ?? '',
@@ -265,6 +255,16 @@ class BookBorrowModel {
       notes: data['notes'],
     );
   }
+  final String id;
+  final String bookId;
+  final String userId;
+  final String userName;
+  final String userEmail;
+  final DateTime borrowDate;
+  final DateTime dueDate;
+  final DateTime? returnDate;
+  final String status; // 'borrowed', 'returned', 'overdue'
+  final String? notes;
 
   Map<String, dynamic> toJson() {
     return {

@@ -1,17 +1,18 @@
 import 'dart:io';
-import 'package:flutter/foundation.dart';
-import 'package:campus_mesh/services/app_logger_service.dart';
-import 'package:path/path.dart' as path;
-import 'package:campus_mesh/services/appwrite_service.dart';
-import 'package:campus_mesh/appwrite_config.dart';
+
 import 'package:appwrite/appwrite.dart';
+import 'package:campus_mesh/appwrite_config.dart';
+import 'package:campus_mesh/services/app_logger_service.dart';
+import 'package:campus_mesh/services/appwrite_service.dart';
+import 'package:flutter/foundation.dart';
+import 'package:path/path.dart' as path;
 
 /// Service to handle message attachments (images, files, videos, audio, documents)
 class MessageAttachmentsService {
-  static final MessageAttachmentsService _instance =
-      MessageAttachmentsService._internal();
   factory MessageAttachmentsService() => _instance;
   MessageAttachmentsService._internal();
+  static final MessageAttachmentsService _instance =
+      MessageAttachmentsService._internal();
 
   final _appwrite = AppwriteService();
   static const String _bucketId = AppwriteConfig.messageAttachmentsBucketId;

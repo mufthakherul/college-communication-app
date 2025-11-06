@@ -18,8 +18,8 @@ class _PeriodicTableScreenState extends State<PeriodicTableScreen> {
     Element(5, 'B', 'Boron', 10.81, 'Metalloid', 2, 13),
     Element(6, 'C', 'Carbon', 12.01, 'Nonmetal', 2, 14),
     Element(7, 'N', 'Nitrogen', 14.01, 'Nonmetal', 2, 15),
-    Element(8, 'O', 'Oxygen', 16.00, 'Nonmetal', 2, 16),
-    Element(9, 'F', 'Fluorine', 19.00, 'Halogen', 2, 17),
+    Element(8, 'O', 'Oxygen', 16, 'Nonmetal', 2, 16),
+    Element(9, 'F', 'Fluorine', 19, 'Halogen', 2, 17),
     Element(10, 'Ne', 'Neon', 20.18, 'Noble Gas', 2, 18),
     Element(11, 'Na', 'Sodium', 22.99, 'Alkali Metal', 3, 1),
     Element(12, 'Mg', 'Magnesium', 24.31, 'Alkaline Earth', 3, 2),
@@ -164,7 +164,7 @@ class _PeriodicTableScreenState extends State<PeriodicTableScreen> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
+            color: Colors.grey.withValues(alpha: 0.3),
             spreadRadius: 2,
             blurRadius: 5,
             offset: const Offset(0, -3),
@@ -314,13 +314,6 @@ class _PeriodicTableScreenState extends State<PeriodicTableScreen> {
 }
 
 class Element {
-  final int atomicNumber;
-  final String symbol;
-  final String name;
-  final double atomicMass;
-  final String category;
-  final int period;
-  final int group;
 
   Element(
     this.atomicNumber,
@@ -331,4 +324,11 @@ class Element {
     this.period,
     this.group,
   );
+  final int atomicNumber;
+  final String symbol;
+  final String name;
+  final double atomicMass;
+  final String category;
+  final int period;
+  final int group;
 }

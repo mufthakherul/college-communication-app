@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:campus_mesh/services/ai_chatbot_service.dart';
-import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/models/ai_chat_session_model.dart';
 import 'package:campus_mesh/screens/ai_chat/ai_chat_screen.dart';
 import 'package:campus_mesh/screens/ai_chat/api_key_input_screen.dart';
+import 'package:campus_mesh/services/ai_chatbot_service.dart';
+import 'package:campus_mesh/services/auth_service.dart';
+import 'package:flutter/material.dart';
 
 class AIChatHistoryScreen extends StatefulWidget {
   const AIChatHistoryScreen({super.key});
@@ -129,7 +129,7 @@ class _AIChatHistoryScreenState extends State<AIChatHistoryScreen> {
       ),
     );
 
-    if (result == true) {
+    if (result ?? false) {
       await _aiService.deleteSession(session.id);
       _initialize();
     }
@@ -168,7 +168,7 @@ class _AIChatHistoryScreenState extends State<AIChatHistoryScreen> {
           MaterialPageRoute(builder: (context) => const ApiKeyInputScreen()),
         );
         if (!mounted) return;
-        if (success == true) {
+        if (success ?? false) {
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(const SnackBar(content: Text('API key updated')));
@@ -190,7 +190,7 @@ class _AIChatHistoryScreenState extends State<AIChatHistoryScreen> {
       );
 
       if (!mounted) return;
-      if (result == true) {
+      if (result ?? false) {
         setState(() => _hasApiKey = true);
         ScaffoldMessenger.of(
           context,
@@ -247,7 +247,7 @@ class _AIChatHistoryScreenState extends State<AIChatHistoryScreen> {
   Widget _buildNoApiKeyState() {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -311,7 +311,7 @@ class _AIChatHistoryScreenState extends State<AIChatHistoryScreen> {
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor: Theme.of(context).primaryColor.withOpacity(0.2),
+          backgroundColor: Theme.of(context).primaryColor.withValues(alpha: 0.2),
           child: Icon(Icons.smart_toy, color: Theme.of(context).primaryColor),
         ),
         title: Text(

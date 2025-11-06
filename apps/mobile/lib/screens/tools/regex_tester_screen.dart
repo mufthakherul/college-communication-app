@@ -381,11 +381,11 @@ class _RegexTesterScreenState extends State<RegexTesterScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
+            const Row(
               children: [
-                const Icon(Icons.find_replace, color: Colors.orange),
-                const SizedBox(width: 8),
-                const Text(
+                Icon(Icons.find_replace, color: Colors.orange),
+                SizedBox(width: 8),
+                Text(
                   'Replacement Result',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
@@ -435,11 +435,11 @@ class _RegexTesterScreenState extends State<RegexTesterScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Regex Quick Reference'),
-        content: SingleChildScrollView(
+        content: const SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
-            children: const [
+            children: [
               Text(
                 'Character Classes:',
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -447,26 +447,26 @@ class _RegexTesterScreenState extends State<RegexTesterScreen> {
               Text(r'\d - Digit (0-9)'),
               Text(r'\w - Word character (a-z, A-Z, 0-9, _)'),
               Text(r'\s - Whitespace'),
-              Text(r'. - Any character'),
+              Text('. - Any character'),
               SizedBox(height: 12),
               Text(
                 'Quantifiers:',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              Text(r'* - 0 or more'),
-              Text(r'+ - 1 or more'),
-              Text(r'? - 0 or 1'),
-              Text(r'{n} - Exactly n'),
-              Text(r'{n,m} - Between n and m'),
+              Text('* - 0 or more'),
+              Text('+ - 1 or more'),
+              Text('? - 0 or 1'),
+              Text('{n} - Exactly n'),
+              Text('{n,m} - Between n and m'),
               SizedBox(height: 12),
               Text('Anchors:', style: TextStyle(fontWeight: FontWeight.bold)),
-              Text(r'^ - Start of string'),
+              Text('^ - Start of string'),
               Text(r'$ - End of string'),
               SizedBox(height: 12),
               Text('Groups:', style: TextStyle(fontWeight: FontWeight.bold)),
-              Text(r'() - Capture group'),
-              Text(r'| - Or'),
-              Text(r'[] - Character set'),
+              Text('() - Capture group'),
+              Text('| - Or'),
+              Text('[] - Character set'),
             ],
           ),
         ),

@@ -1,12 +1,13 @@
 import 'dart:io';
-import 'package:flutter/foundation.dart';
+
 import 'package:campus_mesh/appwrite_config.dart';
+import 'package:flutter/foundation.dart';
 
 /// Security service to protect against tampering, rooting, and reverse engineering
 class SecurityService {
-  static final SecurityService _instance = SecurityService._internal();
   factory SecurityService() => _instance;
   SecurityService._internal();
+  static final SecurityService _instance = SecurityService._internal();
 
   /// Expected package name - validates app hasn't been repackaged
   // Note: This field is reserved for future use

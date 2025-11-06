@@ -381,7 +381,7 @@ class _AlgorithmComplexityScreenState extends State<AlgorithmComplexityScreen> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
             decoration: BoxDecoration(
-              color: _getComplexityColor(value).withOpacity(0.2),
+              color: _getComplexityColor(value).withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Text(
@@ -401,15 +401,19 @@ class _AlgorithmComplexityScreenState extends State<AlgorithmComplexityScreen> {
 
   Color _getComplexityColor(String complexity) {
     if (complexity.contains('O(1)')) return Colors.green;
-    if (complexity.contains('O(log') || complexity.contains('O(√n)'))
+    if (complexity.contains('O(log') || complexity.contains('O(√n)')) {
       return Colors.lightGreen;
+    }
     if (complexity.contains('O(n)') &&
         !complexity.contains('²') &&
-        !complexity.contains('³')) return Colors.blue;
+        !complexity.contains('³')) {
+      return Colors.blue;
+    }
     if (complexity.contains('O(n log n)')) return Colors.orange;
     if (complexity.contains('O(n²)')) return Colors.deepOrange;
-    if (complexity.contains('O(n³)') || complexity.contains('O(2'))
+    if (complexity.contains('O(n³)') || complexity.contains('O(2')) {
       return Colors.red;
+    }
     return Colors.grey;
   }
 
@@ -486,7 +490,7 @@ class _AlgorithmComplexityScreenState extends State<AlgorithmComplexityScreen> {
             width: 80,
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.2),
+              color: color.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Text(
@@ -526,13 +530,6 @@ class _AlgorithmComplexityScreenState extends State<AlgorithmComplexityScreen> {
 }
 
 class AlgorithmInfo {
-  final String name;
-  final String bestTime;
-  final String averageTime;
-  final String worstTime;
-  final String space;
-  final String description;
-  final bool stable;
 
   AlgorithmInfo({
     required this.name,
@@ -543,4 +540,11 @@ class AlgorithmInfo {
     required this.description,
     required this.stable,
   });
+  final String name;
+  final String bestTime;
+  final String averageTime;
+  final String worstTime;
+  final String space;
+  final String description;
+  final bool stable;
 }

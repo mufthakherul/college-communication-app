@@ -1,16 +1,10 @@
-import 'package:flutter/foundation.dart';
-import 'package:campus_mesh/services/appwrite_service.dart';
-import 'package:campus_mesh/appwrite_config.dart';
 import 'package:appwrite/appwrite.dart';
+import 'package:campus_mesh/appwrite_config.dart';
+import 'package:campus_mesh/services/appwrite_service.dart';
+import 'package:flutter/foundation.dart';
 
 /// Analytics data models
 class UserActivityData {
-  final String userId;
-  final String userName;
-  final int noticeCount;
-  final int messageCount;
-  final int loginCount;
-  final DateTime lastActive;
 
   UserActivityData({
     required this.userId,
@@ -20,15 +14,15 @@ class UserActivityData {
     required this.loginCount,
     required this.lastActive,
   });
+  final String userId;
+  final String userName;
+  final int noticeCount;
+  final int messageCount;
+  final int loginCount;
+  final DateTime lastActive;
 }
 
 class NoticeAnalytics {
-  final int totalNotices;
-  final int activeNotices;
-  final int expiredNotices;
-  final Map<String, int> noticesByType;
-  final Map<String, int> noticesByMonth;
-  final List<TopNotice> topViewedNotices;
 
   NoticeAnalytics({
     required this.totalNotices,
@@ -38,13 +32,15 @@ class NoticeAnalytics {
     required this.noticesByMonth,
     required this.topViewedNotices,
   });
+  final int totalNotices;
+  final int activeNotices;
+  final int expiredNotices;
+  final Map<String, int> noticesByType;
+  final Map<String, int> noticesByMonth;
+  final List<TopNotice> topViewedNotices;
 }
 
 class TopNotice {
-  final String id;
-  final String title;
-  final int views;
-  final DateTime createdAt;
 
   TopNotice({
     required this.id,
@@ -52,15 +48,13 @@ class TopNotice {
     required this.views,
     required this.createdAt,
   });
+  final String id;
+  final String title;
+  final int views;
+  final DateTime createdAt;
 }
 
 class MessageAnalytics {
-  final int totalMessages;
-  final int todayMessages;
-  final int weekMessages;
-  final Map<String, int> messagesByType;
-  final Map<String, int> messagesByDay;
-  final List<ActiveUser> mostActiveUsers;
 
   MessageAnalytics({
     required this.totalMessages,
@@ -70,28 +64,27 @@ class MessageAnalytics {
     required this.messagesByDay,
     required this.mostActiveUsers,
   });
+  final int totalMessages;
+  final int todayMessages;
+  final int weekMessages;
+  final Map<String, int> messagesByType;
+  final Map<String, int> messagesByDay;
+  final List<ActiveUser> mostActiveUsers;
 }
 
 class ActiveUser {
-  final String userId;
-  final String name;
-  final int messageCount;
 
   ActiveUser({
     required this.userId,
     required this.name,
     required this.messageCount,
   });
+  final String userId;
+  final String name;
+  final int messageCount;
 }
 
 class SystemAnalytics {
-  final int totalUsers;
-  final int activeUsers;
-  final int totalNotices;
-  final int totalMessages;
-  final double averageMessagesPerUser;
-  final Map<String, int> usersByRole;
-  final Map<String, int> dailyActiveUsers;
 
   SystemAnalytics({
     required this.totalUsers,
@@ -102,6 +95,13 @@ class SystemAnalytics {
     required this.usersByRole,
     required this.dailyActiveUsers,
   });
+  final int totalUsers;
+  final int activeUsers;
+  final int totalNotices;
+  final int totalMessages;
+  final double averageMessagesPerUser;
+  final Map<String, int> usersByRole;
+  final Map<String, int> dailyActiveUsers;
 }
 
 /// Service for analytics dashboard with chart-ready data
@@ -118,11 +118,11 @@ class AnalyticsDashboardService {
         queries: [Query.limit(500), Query.orderDesc('created_at')],
       );
 
-      int activeCount = 0;
-      int expiredCount = 0;
-      final Map<String, int> byType = {};
-      final Map<String, int> byMonth = {};
-      final List<TopNotice> topNotices = [];
+      var activeCount = 0;
+      var expiredCount = 0;
+      final byType = <String, int>{};
+      final byMonth = <String, int>{};
+      final topNotices = <TopNotice>[];
 
       final now = DateTime.now();
 
@@ -193,11 +193,11 @@ class AnalyticsDashboardService {
       final today = DateTime(now.year, now.month, now.day);
       final weekAgo = now.subtract(const Duration(days: 7));
 
-      int todayCount = 0;
-      int weekCount = 0;
-      final Map<String, int> byType = {};
-      final Map<String, int> byDay = {};
-      final Map<String, int> userMessageCounts = {};
+      var todayCount = 0;
+      var weekCount = 0;
+      final byType = <String, int>{};
+      final byDay = <String, int>{};
+      final userMessageCounts = <String, int>{};
 
       for (final doc in allMessages.documents) {
         final data = doc.data;
@@ -292,9 +292,9 @@ class AnalyticsDashboardService {
         queries: [Query.limit(1)],
       );
 
-      int activeUsersCount = 0;
-      final Map<String, int> byRole = {};
-      final Map<String, int> dailyActive = {};
+      var activeUsersCount = 0;
+      final byRole = <String, int>{};
+      final dailyActive = <String, int>{};
       final now = DateTime.now();
       final last30Days = now.subtract(const Duration(days: 30));
 
@@ -355,7 +355,7 @@ class AnalyticsDashboardService {
         queries: [Query.limit(limit), Query.orderDesc('last_login')],
       );
 
-      final List<UserActivityData> activityData = [];
+      final activityData = <UserActivityData>[];
 
       // TODO: Optimize with batch queries or server-side aggregation for large user bases
       for (final doc in users.documents) {
@@ -363,7 +363,7 @@ class AnalyticsDashboardService {
         final userId = doc.$id;
 
         // Get user's notice count (for admins/teachers)
-        int noticeCount = 0;
+        var noticeCount = 0;
         try {
           final notices = await _appwrite.databases.listDocuments(
             databaseId: AppwriteConfig.databaseId,
@@ -376,7 +376,7 @@ class AnalyticsDashboardService {
         }
 
         // Get user's message count
-        int messageCount = 0;
+        var messageCount = 0;
         try {
           final messages = await _appwrite.databases.listDocuments(
             databaseId: AppwriteConfig.databaseId,
@@ -446,9 +446,9 @@ class AnalyticsDashboardService {
       );
 
       // Group by day
-      final Map<String, int> usersByDay = {};
-      final Map<String, int> noticesByDay = {};
-      final Map<String, int> messagesByDay = {};
+      final usersByDay = <String, int>{};
+      final noticesByDay = <String, int>{};
+      final messagesByDay = <String, int>{};
 
       for (final doc in users.documents) {
         final createdAt = DateTime.parse(doc.data['created_at']);
@@ -472,9 +472,9 @@ class AnalyticsDashboardService {
       }
 
       // Convert to chart-ready format
-      final List<Map<String, dynamic>> usersData = [];
-      final List<Map<String, dynamic>> noticesData = [];
-      final List<Map<String, dynamic>> messagesData = [];
+      final usersData = <Map<String, dynamic>>[];
+      final noticesData = <Map<String, dynamic>>[];
+      final messagesData = <Map<String, dynamic>>[];
 
       usersByDay.forEach((day, count) {
         usersData.add({'date': day, 'count': count});

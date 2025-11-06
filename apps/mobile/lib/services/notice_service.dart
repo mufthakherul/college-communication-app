@@ -1,9 +1,10 @@
 import 'dart:async';
+
 import 'package:appwrite/appwrite.dart';
+import 'package:campus_mesh/appwrite_config.dart';
 import 'package:campus_mesh/models/notice_model.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
-import 'package:campus_mesh/appwrite_config.dart';
 import 'package:campus_mesh/utils/input_validator.dart';
 
 class NoticeService {
@@ -18,8 +19,8 @@ class NoticeService {
   // Get all active notices (polling-based stream for compatibility)
   Stream<List<NoticeModel>> getNotices() {
     _noticesController ??= StreamController<List<NoticeModel>>.broadcast(
-      onListen: () => _startPolling(),
-      onCancel: () => _stopPolling(),
+      onListen: _startPolling,
+      onCancel: _stopPolling,
     );
     return _noticesController!.stream;
   }

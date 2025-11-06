@@ -13,12 +13,6 @@ enum QRDataType {
 
 /// QR code data wrapper for sharing information
 class QRCodeData {
-  final QRDataType type;
-  final Map<String, dynamic> data;
-  final DateTime createdAt;
-  final DateTime? expiresAt;
-  final String? senderId;
-  final String? senderName;
 
   QRCodeData({
     required this.type,
@@ -28,23 +22,6 @@ class QRCodeData {
     this.senderId,
     this.senderName,
   }) : createdAt = createdAt ?? DateTime.now();
-
-  /// Check if QR code is expired
-  bool get isExpired {
-    if (expiresAt == null) return false;
-    return DateTime.now().isAfter(expiresAt!);
-  }
-
-  /// Convert to JSON
-  Map<String, dynamic> toJson() => {
-        'type': type.name,
-        'data': data,
-        'createdAt': createdAt.toIso8601String(),
-        'expiresAt': expiresAt?.toIso8601String(),
-        'senderId': senderId,
-        'senderName': senderName,
-        'appSignature': 'campus_mesh_v1', // App-specific signature
-      };
 
   /// Create from JSON
   factory QRCodeData.fromJson(Map<String, dynamic> json) {
@@ -63,19 +40,6 @@ class QRCodeData {
     );
   }
 
-  /// Convert to QR string
-  String toQRString() {
-    try {
-      final jsonData = toJson();
-      return jsonEncode(jsonData);
-    } catch (e) {
-      if (kDebugMode) {
-        debugPrint('Error encoding QR data: $e');
-      }
-      rethrow;
-    }
-  }
-
   /// Create from QR string
   factory QRCodeData.fromQRString(String qrString) {
     try {
@@ -90,6 +54,42 @@ class QRCodeData {
     } catch (e) {
       if (kDebugMode) {
         debugPrint('Error decoding QR string: $e');
+      }
+      rethrow;
+    }
+  }
+  final QRDataType type;
+  final Map<String, dynamic> data;
+  final DateTime createdAt;
+  final DateTime? expiresAt;
+  final String? senderId;
+  final String? senderName;
+
+  /// Check if QR code is expired
+  bool get isExpired {
+    if (expiresAt == null) return false;
+    return DateTime.now().isAfter(expiresAt!);
+  }
+
+  /// Convert to JSON
+  Map<String, dynamic> toJson() => {
+        'type': type.name,
+        'data': data,
+        'createdAt': createdAt.toIso8601String(),
+        'expiresAt': expiresAt?.toIso8601String(),
+        'senderId': senderId,
+        'senderName': senderName,
+        'appSignature': 'campus_mesh_v1', // App-specific signature
+      };
+
+  /// Convert to QR string
+  String toQRString() {
+    try {
+      final jsonData = toJson();
+      return jsonEncode(jsonData);
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('Error encoding QR data: $e');
       }
       rethrow;
     }
@@ -116,9 +116,9 @@ class QRCodeData {
 
 /// Service for generating and parsing QR codes for data sharing
 class QRDataService {
-  static final QRDataService _instance = QRDataService._internal();
   factory QRDataService() => _instance;
   QRDataService._internal();
+  static final QRDataService _instance = QRDataService._internal();
 
   /// Generate QR code for sharing a notice
   QRCodeData generateNoticeQR({

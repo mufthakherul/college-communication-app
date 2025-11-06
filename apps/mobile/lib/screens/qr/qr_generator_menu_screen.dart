@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:campus_mesh/services/qr_data_service.dart';
-import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/screens/qr/qr_share_screen.dart';
+import 'package:campus_mesh/services/auth_service.dart';
+import 'package:campus_mesh/services/qr_data_service.dart';
+import 'package:flutter/material.dart';
 
 /// Menu screen for generating different types of QR codes
 class QRGeneratorMenuScreen extends StatefulWidget {
@@ -250,7 +250,7 @@ class _QRGeneratorMenuScreenState extends State<QRGeneratorMenuScreen> {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: color, size: 32),

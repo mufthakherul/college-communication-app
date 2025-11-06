@@ -1,6 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'dart:convert';
 
 /// Enhanced secure storage service using hardware-backed encryption
 ///
@@ -18,10 +19,10 @@ import 'dart:convert';
 /// - Personal information
 /// - Payment information
 class EnhancedSecureStorageService {
-  static final EnhancedSecureStorageService _instance =
-      EnhancedSecureStorageService._internal();
   factory EnhancedSecureStorageService() => _instance;
   EnhancedSecureStorageService._internal();
+  static final EnhancedSecureStorageService _instance =
+      EnhancedSecureStorageService._internal();
 
   // Configure secure storage with appropriate options
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage(
@@ -121,34 +122,34 @@ class EnhancedSecureStorageService {
 
   /// Store authentication token
   Future<bool> setAuthToken(String token) async {
-    return await write(_authTokenKey, token);
+    return write(_authTokenKey, token);
   }
 
   /// Get authentication token
   Future<String?> getAuthToken() async {
-    return await read(_authTokenKey);
+    return read(_authTokenKey);
   }
 
   /// Remove authentication token
   Future<bool> removeAuthToken() async {
-    return await delete(_authTokenKey);
+    return delete(_authTokenKey);
   }
 
   // ========== User ID Methods ==========
 
   /// Store user ID
   Future<bool> setUserId(String userId) async {
-    return await write(_userIdKey, userId);
+    return write(_userIdKey, userId);
   }
 
   /// Get user ID
   Future<String?> getUserId() async {
-    return await read(_userIdKey);
+    return read(_userIdKey);
   }
 
   /// Remove user ID
   Future<bool> removeUserId() async {
-    return await delete(_userIdKey);
+    return delete(_userIdKey);
   }
 
   // ========== Session Methods ==========
@@ -178,46 +179,46 @@ class EnhancedSecureStorageService {
 
   /// Remove session data
   Future<bool> removeSessionData() async {
-    return await delete(_sessionDataKey);
+    return delete(_sessionDataKey);
   }
 
   // ========== API Key Methods ==========
 
   /// Store API key
   Future<bool> setApiKey(String apiKey) async {
-    return await write(_apiKeyKey, apiKey);
+    return write(_apiKeyKey, apiKey);
   }
 
   /// Get API key
   Future<String?> getApiKey() async {
-    return await read(_apiKeyKey);
+    return read(_apiKeyKey);
   }
 
   /// Remove API key
   Future<bool> removeApiKey() async {
-    return await delete(_apiKeyKey);
+    return delete(_apiKeyKey);
   }
 
   /// Store Gemini API key
   Future<bool> setGeminiApiKey(String apiKey) async {
-    return await write(_geminiApiKeyKey, apiKey);
+    return write(_geminiApiKeyKey, apiKey);
   }
 
   /// Get Gemini API key
   Future<String?> getGeminiApiKey() async {
-    return await read(_geminiApiKeyKey);
+    return read(_geminiApiKeyKey);
   }
 
   /// Remove Gemini API key
   Future<bool> removeGeminiApiKey() async {
-    return await delete(_geminiApiKeyKey);
+    return delete(_geminiApiKeyKey);
   }
 
   // ========== Login Tracking Methods ==========
 
   /// Store last login timestamp
   Future<bool> setLastLogin(DateTime timestamp) async {
-    return await write(_lastLoginKey, timestamp.toIso8601String());
+    return write(_lastLoginKey, timestamp.toIso8601String());
   }
 
   /// Get last login timestamp
@@ -234,7 +235,7 @@ class EnhancedSecureStorageService {
 
   /// Remove last login timestamp
   Future<bool> removeLastLogin() async {
-    return await delete(_lastLoginKey);
+    return delete(_lastLoginKey);
   }
 
   // ========== Biometric Settings Methods ==========
@@ -264,7 +265,7 @@ class EnhancedSecureStorageService {
 
   /// Remove biometric settings
   Future<bool> removeBiometricSettings() async {
-    return await delete(_biometricSettingsKey);
+    return delete(_biometricSettingsKey);
   }
 
   // ========== Utility Methods ==========
@@ -291,7 +292,7 @@ class EnhancedSecureStorageService {
     Map<String, dynamic>? oldSessionData,
   }) async {
     try {
-      bool success = true;
+      var success = true;
 
       if (oldToken != null) {
         success = success && await setAuthToken(oldToken);

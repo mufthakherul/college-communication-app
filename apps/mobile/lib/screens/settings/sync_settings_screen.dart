@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:campus_mesh/services/offline_queue_service.dart';
-import 'package:campus_mesh/services/connectivity_service.dart';
 import 'package:campus_mesh/services/cache_service.dart';
 import 'package:campus_mesh/services/conflict_resolution_service.dart';
+import 'package:campus_mesh/services/connectivity_service.dart';
+import 'package:campus_mesh/services/offline_queue_service.dart';
+import 'package:flutter/material.dart';
 
 /// Screen for sync and network settings
 class SyncSettingsScreen extends StatefulWidget {
@@ -308,7 +308,7 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
 
   String _formatStrategyName(String strategy) {
     return strategy
-        .replaceAllMapped(RegExp(r'([A-Z])'), (match) => ' ${match.group(0)}')
+        .replaceAllMapped(RegExp('([A-Z])'), (match) => ' ${match.group(0)}')
         .trim();
   }
 
@@ -341,7 +341,7 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
       'Are you sure you want to clear all cached data? This will require re-downloading data.',
     );
 
-    if (confirmed == true) {
+    if (confirmed ?? false) {
       try {
         await _cacheService.clear();
         await _loadStatistics();
@@ -358,7 +358,7 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
       'Are you sure you want to clear all pending actions? This cannot be undone.',
     );
 
-    if (confirmed == true) {
+    if (confirmed ?? false) {
       try {
         await _offlineQueueService.clearQueue();
         await _loadStatistics();

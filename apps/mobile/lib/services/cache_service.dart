@@ -1,17 +1,29 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
-import 'package:campus_mesh/services/app_logger_service.dart';
-import 'package:path_provider/path_provider.dart';
+
 import 'package:archive/archive_io.dart';
+import 'package:campus_mesh/services/app_logger_service.dart';
+import 'package:flutter/foundation.dart';
+import 'package:path_provider/path_provider.dart';
 
 /// Cache entry with metadata
-class CacheEntry<T> {
-  final T data;
-  final DateTime timestamp;
-  final Duration ttl; // Time to live
+class CacheEntry<T> { // Time to live
 
   CacheEntry({required this.data, required this.timestamp, required this.ttl});
+
+  factory CacheEntry.fromJson(
+    Map<String, dynamic> json,
+    T Function(dynamic) fromJsonT,
+  ) {
+    return CacheEntry(
+      data: fromJsonT(json['data']),
+      timestamp: DateTime.parse(json['timestamp'] as String),
+      ttl: Duration(milliseconds: json['ttl'] as int),
+    );
+  }
+  final T data;
+  final DateTime timestamp;
+  final Duration ttl;
 
   bool get isExpired => DateTime.now().difference(timestamp) > ttl;
 
@@ -35,24 +47,13 @@ class CacheEntry<T> {
         'timestamp': timestamp.toIso8601String(),
         'ttl': ttl.inMilliseconds,
       };
-
-  factory CacheEntry.fromJson(
-    Map<String, dynamic> json,
-    T Function(dynamic) fromJsonT,
-  ) {
-    return CacheEntry(
-      data: fromJsonT(json['data']),
-      timestamp: DateTime.parse(json['timestamp'] as String),
-      ttl: Duration(milliseconds: json['ttl'] as int),
-    );
-  }
 }
 
 /// Smart caching service with time-based expiry and size limits
 class CacheService {
-  static final CacheService _instance = CacheService._internal();
   factory CacheService() => _instance;
   CacheService._internal();
+  static final CacheService _instance = CacheService._internal();
 
   static const int _maxCacheSizeMB = 50; // 50 MB cache limit
   static const Duration _defaultTTL = Duration(hours: 1);
@@ -251,7 +252,7 @@ class CacheService {
 
   /// Get cache size in bytes
   Future<int> getCacheSize() async {
-    int totalSize = 0;
+    var totalSize = 0;
 
     if (_cacheDirectory != null && _cacheDirectory!.existsSync()) {
       await for (final file in _cacheDirectory!.list(recursive: true)) {
@@ -382,7 +383,7 @@ class CacheService {
   /// Get cache statistics
   Future<Map<String, dynamic>> getStatistics() async {
     final sizeMB = await getCacheSizeMB();
-    int fileCount = 0;
+    var fileCount = 0;
 
     if (_cacheDirectory != null && _cacheDirectory!.existsSync()) {
       await for (final file in _cacheDirectory!.list()) {

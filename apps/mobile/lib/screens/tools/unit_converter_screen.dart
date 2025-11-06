@@ -135,7 +135,7 @@ class _UnitConverterScreenState extends State<UnitConverterScreen> {
             ),
             const SizedBox(height: 8),
             DropdownButtonFormField<String>(
-              value: _fromUnit,
+              initialValue: _fromUnit,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 isDense: true,
@@ -178,7 +178,7 @@ class _UnitConverterScreenState extends State<UnitConverterScreen> {
             ),
             const SizedBox(height: 8),
             DropdownButtonFormField<String>(
-              value: _toUnit,
+              initialValue: _toUnit,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 isDense: true,

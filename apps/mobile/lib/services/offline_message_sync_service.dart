@@ -1,17 +1,18 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
-import 'package:campus_mesh/services/local_message_database.dart';
-import 'package:campus_mesh/services/connectivity_service.dart';
+
 import 'package:appwrite/appwrite.dart';
-import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/appwrite_config.dart';
+import 'package:campus_mesh/services/appwrite_service.dart';
+import 'package:campus_mesh/services/connectivity_service.dart';
+import 'package:campus_mesh/services/local_message_database.dart';
+import 'package:flutter/foundation.dart';
 
 /// Service to sync offline messages when connection is restored
 class OfflineMessageSyncService {
-  static final OfflineMessageSyncService _instance =
-      OfflineMessageSyncService._internal();
   factory OfflineMessageSyncService() => _instance;
   OfflineMessageSyncService._internal();
+  static final OfflineMessageSyncService _instance =
+      OfflineMessageSyncService._internal();
 
   final _localDb = LocalMessageDatabase();
   final _connectivityService = ConnectivityService();
@@ -56,8 +57,8 @@ class OfflineMessageSyncService {
       final pendingMessages = await _localDb.getPendingMessages();
       debugPrint('Found ${pendingMessages.length} pending messages to sync');
 
-      int successCount = 0;
-      int failureCount = 0;
+      var successCount = 0;
+      var failureCount = 0;
 
       for (final message in pendingMessages) {
         try {
@@ -214,7 +215,7 @@ class OfflineMessageSyncService {
       for (final message in pendingApprovalMessages) {
         try {
           // Query pending collection for approval status
-          final messageId = message['id'] as String;
+          final messageId = message['id']! as String;
           final docs = await _appwrite.databases.listDocuments(
             databaseId: AppwriteConfig.databaseId,
             collectionId: AppwriteConfig.messagesPendingCollectionId,
@@ -276,7 +277,7 @@ class OfflineMessageSyncService {
 
   /// Get sync statistics
   Future<Map<String, int>> getSyncStatistics() async {
-    return await _localDb.getSyncStatistics();
+    return _localDb.getSyncStatistics();
   }
 
   /// Dispose resources

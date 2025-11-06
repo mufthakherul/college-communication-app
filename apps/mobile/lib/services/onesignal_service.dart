@@ -4,10 +4,10 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 /// OneSignal push notification service
 /// Provides cross-platform push notification support
 class OneSignalService {
-  // Singleton pattern
-  static final OneSignalService _instance = OneSignalService._internal();
   factory OneSignalService() => _instance;
   OneSignalService._internal();
+  // Singleton pattern
+  static final OneSignalService _instance = OneSignalService._internal();
 
   bool _initialized = false;
 
@@ -126,7 +126,7 @@ class OneSignalService {
 
   /// Request notification permission
   Future<bool> requestPermission() async {
-    return await OneSignal.Notifications.requestPermission(true);
+    return OneSignal.Notifications.requestPermission(true);
   }
 
   /// Handle notification opened (user tapped on notification)
@@ -175,14 +175,14 @@ class OneSignalService {
   /// Send a notification (requires REST API key - server-side only)
   /// This is just documentation - actual sending should be done from Edge Functions
   static String getSendNotificationExample() {
-    return '''
+    return r'''
 // Example: Send notification from Supabase Edge Function
 const sendNotification = async (userIds: string[], title: string, message: string, data: any) => {
   const response = await fetch('https://onesignal.com/api/v1/notifications', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Basic \${Deno.env.get('ONESIGNAL_REST_API_KEY')}`,
+      'Authorization': `Basic ${Deno.env.get('ONESIGNAL_REST_API_KEY')}`,
     },
     body: JSON.stringify({
       app_id: Deno.env.get('ONESIGNAL_APP_ID'),

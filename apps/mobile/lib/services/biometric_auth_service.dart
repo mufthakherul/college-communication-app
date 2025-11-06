@@ -1,16 +1,16 @@
-import 'package:local_auth/local_auth.dart';
-import 'package:local_auth/error_codes.dart' as auth_error;
-import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
+import 'package:local_auth/error_codes.dart' as auth_error;
+import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Service for handling biometric authentication
 /// Supports fingerprint, face recognition, and iris scanning
 class BiometricAuthService {
-  static final BiometricAuthService _instance =
-      BiometricAuthService._internal();
   factory BiometricAuthService() => _instance;
   BiometricAuthService._internal();
+  static final BiometricAuthService _instance =
+      BiometricAuthService._internal();
 
   final LocalAuthentication _localAuth = LocalAuthentication();
   static const String _biometricEnabledKey = 'biometric_enabled';
@@ -176,7 +176,7 @@ class BiometricAuthService {
       return 'No biometric methods are enrolled on this device';
     }
 
-    final types = biometrics.map((b) => getBiometricTypeName(b)).join(', ');
+    final types = biometrics.map(getBiometricTypeName).join(', ');
     return 'Available: $types';
   }
 }

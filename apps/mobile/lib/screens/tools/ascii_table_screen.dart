@@ -312,11 +312,6 @@ class _ASCIITableScreenState extends State<ASCIITableScreen> {
 }
 
 class ASCIIChar {
-  final int decimal;
-  final String hex;
-  final String binary;
-  final String char;
-  final String description;
 
   ASCIIChar({
     required this.decimal,
@@ -325,4 +320,9 @@ class ASCIIChar {
     required this.char,
     required this.description,
   });
+  final int decimal;
+  final String hex;
+  final String binary;
+  final String char;
+  final String description;
 }

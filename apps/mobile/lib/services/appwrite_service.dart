@@ -1,11 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:appwrite/appwrite.dart';
 import 'package:appwrite/models.dart' as models;
 import 'package:campus_mesh/appwrite_config.dart';
+import 'package:flutter/foundation.dart';
 
 /// Appwrite service singleton for managing Appwrite SDK instances
 class AppwriteService {
-  static final AppwriteService _instance = AppwriteService._internal();
   factory AppwriteService() {
     // Ensure initialization on every access in release mode
     if (!_instance._initialized) {
@@ -15,6 +14,7 @@ class AppwriteService {
     return _instance;
   }
   AppwriteService._internal();
+  static final AppwriteService _instance = AppwriteService._internal();
 
   late Client client;
   late Account account;

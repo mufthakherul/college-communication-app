@@ -1,10 +1,11 @@
 import 'dart:async';
+
 import 'package:appwrite/appwrite.dart';
-import 'package:flutter/foundation.dart';
+import 'package:campus_mesh/appwrite_config.dart';
 import 'package:campus_mesh/models/book_model.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
-import 'package:campus_mesh/appwrite_config.dart';
+import 'package:flutter/foundation.dart';
 
 class BooksService {
   final _appwrite = AppwriteService();
@@ -19,8 +20,8 @@ class BooksService {
   // Get all books (polling-based stream)
   Stream<List<BookModel>> getBooks() {
     _booksController ??= StreamController<List<BookModel>>.broadcast(
-      onListen: () => _startPolling(),
-      onCancel: () => _stopPolling(),
+      onListen: _startPolling,
+      onCancel: _stopPolling,
     );
     return _booksController!.stream;
   }

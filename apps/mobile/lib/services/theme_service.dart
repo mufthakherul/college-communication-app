@@ -3,9 +3,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// Service to manage app theme (light/dark mode)
 class ThemeService extends ChangeNotifier {
-  static final ThemeService _instance = ThemeService._internal();
   factory ThemeService() => _instance;
   ThemeService._internal();
+  static final ThemeService _instance = ThemeService._internal();
 
   static const String _themeModeKey = 'theme_mode';
   ThemeMode _themeMode = ThemeMode.light;

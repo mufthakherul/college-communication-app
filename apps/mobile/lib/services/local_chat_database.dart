@@ -1,13 +1,14 @@
 import 'dart:async';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
+
 import 'package:flutter/foundation.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 /// Local database service for storing chat/conversation metadata offline
 class LocalChatDatabase {
-  static final LocalChatDatabase _instance = LocalChatDatabase._internal();
   factory LocalChatDatabase() => _instance;
   LocalChatDatabase._internal();
+  static final LocalChatDatabase _instance = LocalChatDatabase._internal();
 
   Database? _database;
 
@@ -23,7 +24,7 @@ class LocalChatDatabase {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'campus_mesh_chats.db');
 
-    return await openDatabase(path, version: 1, onCreate: _onCreate);
+    return openDatabase(path, version: 1, onCreate: _onCreate);
   }
 
   /// Create database tables
@@ -77,7 +78,7 @@ class LocalChatDatabase {
   /// Get all pending chats for sync
   Future<List<Map<String, dynamic>>> getPendingChats() async {
     final db = await database;
-    return await db.query(
+    return db.query(
       'local_chats',
       where: 'sync_status = ?',
       whereArgs: ['pending'],
@@ -100,7 +101,7 @@ class LocalChatDatabase {
   /// Get all chats for a user
   Future<List<Map<String, dynamic>>> getUserChats(String userId) async {
     final db = await database;
-    return await db.query(
+    return db.query(
       'local_chats',
       where: 'participant_ids LIKE ?',
       whereArgs: ['%$userId%'],

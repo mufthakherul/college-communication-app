@@ -1,13 +1,14 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
+
 import 'package:appwrite/appwrite.dart';
+import 'package:campus_mesh/appwrite_config.dart';
 import 'package:campus_mesh/models/message_model.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
-import 'package:campus_mesh/services/local_message_database.dart';
 import 'package:campus_mesh/services/connectivity_service.dart';
-import 'package:campus_mesh/appwrite_config.dart';
+import 'package:campus_mesh/services/local_message_database.dart';
 import 'package:campus_mesh/utils/input_validator.dart';
+import 'package:flutter/foundation.dart';
 
 class MessageService {
   final _appwrite = AppwriteService();
@@ -31,7 +32,7 @@ class MessageService {
 
     _messagesController ??= StreamController<List<MessageModel>>.broadcast(
       onListen: () => _startMessagesPolling(otherUserId),
-      onCancel: () => _stopMessagesPolling(),
+      onCancel: _stopMessagesPolling,
     );
 
     return _messagesController!.stream;
@@ -371,8 +372,8 @@ class MessageService {
     }
 
     _unreadCountController ??= StreamController<int>.broadcast(
-      onListen: () => _startUnreadCountPolling(),
-      onCancel: () => _stopUnreadCountPolling(),
+      onListen: _startUnreadCountPolling,
+      onCancel: _stopUnreadCountPolling,
     );
 
     return _unreadCountController!.stream;

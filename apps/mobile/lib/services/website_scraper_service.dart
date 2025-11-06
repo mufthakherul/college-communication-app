@@ -1,18 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
-import 'package:html/parser.dart' as html_parser;
+
 import 'package:campus_mesh/models/notification_model.dart';
+import 'package:flutter/foundation.dart';
+import 'package:html/parser.dart' as html_parser;
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Service for scraping notices from the school website
 /// URL: https://rangpur.polytech.gov.bd/site/view/notices
 class WebsiteScraperService {
-  static final WebsiteScraperService _instance =
-      WebsiteScraperService._internal();
   factory WebsiteScraperService() => _instance;
   WebsiteScraperService._internal();
+  static final WebsiteScraperService _instance =
+      WebsiteScraperService._internal();
 
   static const String _websiteUrl =
       'https://rangpur.polytech.gov.bd/site/view/notices';
@@ -190,8 +191,8 @@ class WebsiteScraperService {
             final titleCell = cells[1];
             final titleLink = titleCell.querySelector('a');
 
-            String title = '';
-            String url = '';
+            var title = '';
+            var url = '';
 
             if (titleLink != null) {
               title = titleLink.text.trim();
@@ -255,8 +256,8 @@ class WebsiteScraperService {
               final titleDoc = html_parser.parse(titleHtml);
               final titleLink = titleDoc.querySelector('a');
 
-              String title = '';
-              String url = '';
+              var title = '';
+              var url = '';
 
               if (titleLink != null) {
                 title = titleLink.text.trim();
@@ -386,7 +387,7 @@ class WebsiteScraperService {
   /// Get notices (from cache or fetch new)
   Future<List<ScrapedNotice>> getNotices({bool forceRefresh = false}) async {
     if (forceRefresh) {
-      return await _fetchNotices();
+      return _fetchNotices();
     }
 
     // Check if we need to refresh based on last check time
@@ -396,10 +397,10 @@ class WebsiteScraperService {
     if (lastCheck == null ||
         DateTime.now().millisecondsSinceEpoch - lastCheck > 1800000) {
       // 30 minutes
-      return await _fetchNotices();
+      return _fetchNotices();
     }
 
-    return await _getCachedNotices();
+    return _getCachedNotices();
   }
 
   /// Sync scraped notices to the database
@@ -496,12 +497,6 @@ class WebsiteScraperService {
 
 /// Model for scraped notice from website
 class ScrapedNotice {
-  final String id;
-  final String title;
-  final String description;
-  final String url;
-  final DateTime publishedDate;
-  final String source;
 
   ScrapedNotice({
     required this.id,
@@ -512,15 +507,6 @@ class ScrapedNotice {
     required this.source,
   });
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'description': description,
-        'url': url,
-        'publishedDate': publishedDate.toIso8601String(),
-        'source': source,
-      };
-
   factory ScrapedNotice.fromJson(Map<String, dynamic> json) => ScrapedNotice(
         id: json['id'] ?? '',
         title: json['title'] ?? '',
@@ -529,4 +515,19 @@ class ScrapedNotice {
         publishedDate: DateTime.parse(json['publishedDate']),
         source: json['source'] ?? 'Website',
       );
+  final String id;
+  final String title;
+  final String description;
+  final String url;
+  final DateTime publishedDate;
+  final String source;
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'title': title,
+        'description': description,
+        'url': url,
+        'publishedDate': publishedDate.toIso8601String(),
+        'source': source,
+      };
 }

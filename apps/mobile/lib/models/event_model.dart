@@ -1,23 +1,6 @@
 enum EventType { seminar, workshop, exam, sports, cultural, other }
 
-class EventModel {
-  final String id;
-  final String title;
-  final String description;
-  final EventType type;
-  final DateTime startDate;
-  final DateTime endDate;
-  final String venue;
-  final String organizer;
-  final String? imageUrl;
-  final bool isRegistrationRequired;
-  final int? maxParticipants;
-  final int currentParticipants;
-  final String? registrationLink;
-  final DateTime createdAt;
-  final DateTime? updatedAt;
-  final List<String>
-      targetAudience; // 'all', 'students', 'teachers', specific departments
+class EventModel { // 'all', 'students', 'teachers', specific departments
 
   EventModel({
     required this.id,
@@ -40,7 +23,7 @@ class EventModel {
 
   factory EventModel.fromJson(Map<String, dynamic> data) {
     return EventModel(
-      id: data['id'] ?? data['\$id'] ?? '',
+      id: data['id'] ?? data[r'$id'] ?? '',
       title: data['title'] ?? '',
       description: data['description'] ?? '',
       type: _parseType(data['type']),
@@ -64,6 +47,23 @@ class EventModel {
           : ['all'],
     );
   }
+  final String id;
+  final String title;
+  final String description;
+  final EventType type;
+  final DateTime startDate;
+  final DateTime endDate;
+  final String venue;
+  final String organizer;
+  final String? imageUrl;
+  final bool isRegistrationRequired;
+  final int? maxParticipants;
+  final int currentParticipants;
+  final String? registrationLink;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
+  final List<String>
+      targetAudience;
 
   Map<String, dynamic> toJson() {
     return {

@@ -1,5 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:campus_mesh/services/app_logger_service.dart';
+import 'package:flutter/foundation.dart';
 
 /// Conflict resolution strategy
 enum ConflictStrategy {
@@ -11,13 +11,7 @@ enum ConflictStrategy {
 }
 
 /// Represents a data conflict
-class DataConflict<T> {
-  final String documentId;
-  final T serverVersion;
-  final T clientVersion;
-  final DateTime serverTimestamp;
-  final DateTime clientTimestamp;
-  final String conflictType; // 'edit', 'delete', 'create'
+class DataConflict<T> { // 'edit', 'delete', 'create'
 
   DataConflict({
     required this.documentId,
@@ -27,16 +21,22 @@ class DataConflict<T> {
     required this.clientTimestamp,
     required this.conflictType,
   });
+  final String documentId;
+  final T serverVersion;
+  final T clientVersion;
+  final DateTime serverTimestamp;
+  final DateTime clientTimestamp;
+  final String conflictType;
 }
 
 /// Service to handle simultaneous edit conflicts
 /// Note: This is a stub implementation. Full conflict resolution would require
 /// custom Appwrite Functions or client-side logic
 class ConflictResolutionService {
-  static final ConflictResolutionService _instance =
-      ConflictResolutionService._internal();
   factory ConflictResolutionService() => _instance;
   ConflictResolutionService._internal();
+  static final ConflictResolutionService _instance =
+      ConflictResolutionService._internal();
 
   final List<DataConflict> _unresolvedConflicts = [];
 

@@ -23,7 +23,7 @@ class InputValidator {
     }
 
     // Remove leading/trailing whitespace
-    String sanitized = name.trim();
+    var sanitized = name.trim();
 
     // Check length
     if (sanitized.length > maxNameLength) {
@@ -31,7 +31,7 @@ class InputValidator {
     }
 
     // Remove potentially dangerous characters (HTML/script tags)
-    sanitized = sanitized.replaceAll(RegExp(r'[<>]'), '');
+    sanitized = sanitized.replaceAll(RegExp('[<>]'), '');
 
     // Remove null bytes and control characters
     sanitized = sanitized.replaceAll(RegExp(r'[\x00-\x1F\x7F]'), '');
@@ -79,7 +79,7 @@ class InputValidator {
       return null;
     }
 
-    String sanitized = content.trim();
+    var sanitized = content.trim();
 
     // Check length
     if (sanitized.length > maxContentLength) {
@@ -103,13 +103,13 @@ class InputValidator {
 
     // Remove javascript: protocol
     sanitized = sanitized.replaceAll(
-      RegExp(r'javascript:', caseSensitive: false),
+      RegExp('javascript:', caseSensitive: false),
       '',
     );
 
     // Remove data: URLs (can be used for XSS)
     sanitized = sanitized.replaceAll(
-      RegExp(r'data:[^,]*,', caseSensitive: false),
+      RegExp('data:[^,]*,', caseSensitive: false),
       '',
     );
 
@@ -129,7 +129,7 @@ class InputValidator {
       return null;
     }
 
-    String sanitized = message.trim();
+    var sanitized = message.trim();
 
     // Check length
     if (sanitized.length > maxMessageLength) {
@@ -137,7 +137,7 @@ class InputValidator {
     }
 
     // Remove ALL HTML tags for messages (no HTML allowed)
-    sanitized = sanitized.replaceAll(RegExp(r'<[^>]*>'), '');
+    sanitized = sanitized.replaceAll(RegExp('<[^>]*>'), '');
 
     // Remove null bytes and control characters (except newlines and tabs)
     sanitized = sanitized.replaceAll(
@@ -212,7 +212,7 @@ class InputValidator {
       return null;
     }
 
-    String sanitized = query.trim();
+    var sanitized = query.trim();
 
     // Limit length
     if (sanitized.length > 200) {
@@ -249,12 +249,12 @@ class InputValidator {
     }
 
     // Check for at least one letter
-    if (!RegExp(r'[a-zA-Z]').hasMatch(password)) {
+    if (!RegExp('[a-zA-Z]').hasMatch(password)) {
       return 'Password must contain at least one letter';
     }
 
     // Check for at least one number
-    if (!RegExp(r'[0-9]').hasMatch(password)) {
+    if (!RegExp('[0-9]').hasMatch(password)) {
       return 'Password must contain at least one number';
     }
 

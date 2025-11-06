@@ -171,14 +171,14 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
   String _toTwosComplement(String binary, int bits) {
     if (binary.isEmpty) return '';
     try {
-      int value = int.parse(binary, radix: 2);
+      final value = int.parse(binary, radix: 2);
       // Check if value requires more than 'bits' to represent
       if (value >= (1 << bits)) {
         return 'Overflow for $bits-bit';
       }
       // Invert and add 1
-      int inverted = (~value) & ((1 << bits) - 1);
-      int twosComp = (inverted + 1) & ((1 << bits) - 1);
+      final inverted = (~value) & ((1 << bits) - 1);
+      final twosComp = (inverted + 1) & ((1 << bits) - 1);
       return twosComp.toRadixString(2).padLeft(bits, '0');
     } catch (e) {
       return 'Invalid';
@@ -194,7 +194,7 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
           IconButton(
             icon: const Icon(Icons.clear),
             onPressed: () {
-              setState(() => _clearAll());
+              setState(_clearAll);
             },
           ),
         ],
@@ -259,11 +259,11 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
+            const Row(
               children: [
-                const Icon(Icons.settings, color: Colors.deepPurple),
-                const SizedBox(width: 8),
-                const Text(
+                Icon(Icons.settings, color: Colors.deepPurple),
+                SizedBox(width: 8),
+                Text(
                   'Bitwise Operations',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
@@ -298,7 +298,7 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
-              value: _selectedOperation,
+              initialValue: _selectedOperation,
               decoration: const InputDecoration(
                 labelText: 'Operation',
                 border: OutlineInputBorder(),
@@ -364,11 +364,11 @@ class _BinaryConverterScreenState extends State<BinaryConverterScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
+            const Row(
               children: [
-                const Icon(Icons.flip, color: Colors.orange),
-                const SizedBox(width: 8),
-                const Text(
+                Icon(Icons.flip, color: Colors.orange),
+                SizedBox(width: 8),
+                Text(
                   'Two\'s Complement',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),

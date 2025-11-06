@@ -45,9 +45,9 @@ void main() {
         // Note: This is an integration test that requires network access
         // The test passes even if network is unavailable (returns cached/empty list)
 
-        bool noticesReceived = false;
+        var noticesReceived = false;
         List<ScrapedNotice>? receivedNotices;
-        bool errorOccurred = false;
+        var errorOccurred = false;
         String? errorMessage;
 
         // Listen to the stream
@@ -118,7 +118,7 @@ void main() {
             // Show all notices in brief
             if (receivedNotices!.length > 1) {
               debugPrint('\n📄 ALL SCRAPED NOTICES:');
-              for (int i = 0; i < receivedNotices!.length; i++) {
+              for (var i = 0; i < receivedNotices!.length; i++) {
                 final notice = receivedNotices![i];
                 debugPrint(
                   '${i + 1}. ${notice.title} (${notice.publishedDate.toLocal().toString().split(' ')[0]})',
@@ -166,7 +166,7 @@ void main() {
         // Test that the service handles errors without crashing
         // When network is unavailable, it should return cached notices or empty list
 
-        bool streamEmitted = false;
+        var streamEmitted = false;
 
         final subscription = scraperService.noticesStream.listen(
           (notices) {

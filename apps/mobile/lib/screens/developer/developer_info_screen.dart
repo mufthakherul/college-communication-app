@@ -1,6 +1,6 @@
+import 'package:campus_mesh/screens/developer/developer_website_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:campus_mesh/screens/developer/developer_website_screen.dart';
 
 class DeveloperInfoScreen extends StatelessWidget {
   const DeveloperInfoScreen({super.key});
@@ -21,7 +21,7 @@ class DeveloperInfoScreen extends StatelessWidget {
                   end: Alignment.bottomCenter,
                   colors: [
                     Theme.of(context).primaryColor,
-                    Theme.of(context).primaryColor.withOpacity(0.7),
+                    Theme.of(context).primaryColor.withValues(alpha: 0.7),
                   ],
                 ),
               ),

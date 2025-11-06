@@ -1,19 +1,6 @@
 enum AssignmentStatus { pending, submitted, graded, late }
 
 class AssignmentModel {
-  final String id;
-  final String title;
-  final String description;
-  final String subject;
-  final String teacherId;
-  final String teacherName;
-  final DateTime dueDate;
-  final int maxMarks;
-  final String? attachmentUrl;
-  final DateTime createdAt;
-  final DateTime? updatedAt;
-  final List<String> targetGroups; // Which classes/groups this is for
-  final String department;
 
   AssignmentModel({
     required this.id,
@@ -33,7 +20,7 @@ class AssignmentModel {
 
   factory AssignmentModel.fromJson(Map<String, dynamic> data) {
     return AssignmentModel(
-      id: data['id'] ?? data['\$id'] ?? '',
+      id: data['id'] ?? data[r'$id'] ?? '',
       title: data['title'] ?? '',
       description: data['description'] ?? '',
       subject: data['subject'] ?? '',
@@ -54,6 +41,19 @@ class AssignmentModel {
       department: data['department'] ?? '',
     );
   }
+  final String id;
+  final String title;
+  final String description;
+  final String subject;
+  final String teacherId;
+  final String teacherName;
+  final DateTime dueDate;
+  final int maxMarks;
+  final String? attachmentUrl;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
+  final List<String> targetGroups; // Which classes/groups this is for
+  final String department;
 
   Map<String, dynamic> toJson() {
     return {
@@ -79,17 +79,6 @@ class AssignmentModel {
 }
 
 class AssignmentSubmissionModel {
-  final String id;
-  final String assignmentId;
-  final String studentId;
-  final String studentName;
-  final DateTime submissionDate;
-  final String? submissionText;
-  final String? attachmentUrl;
-  final AssignmentStatus status;
-  final int? marksObtained;
-  final String? feedback;
-  final DateTime? gradedAt;
 
   AssignmentSubmissionModel({
     required this.id,
@@ -107,7 +96,7 @@ class AssignmentSubmissionModel {
 
   factory AssignmentSubmissionModel.fromJson(Map<String, dynamic> data) {
     return AssignmentSubmissionModel(
-      id: data['id'] ?? data['\$id'] ?? '',
+      id: data['id'] ?? data[r'$id'] ?? '',
       assignmentId: data['assignment_id'] ?? '',
       studentId: data['student_id'] ?? '',
       studentName: data['student_name'] ?? '',
@@ -121,6 +110,17 @@ class AssignmentSubmissionModel {
           data['graded_at'] != null ? DateTime.parse(data['graded_at']) : null,
     );
   }
+  final String id;
+  final String assignmentId;
+  final String studentId;
+  final String studentName;
+  final DateTime submissionDate;
+  final String? submissionText;
+  final String? attachmentUrl;
+  final AssignmentStatus status;
+  final int? marksObtained;
+  final String? feedback;
+  final DateTime? gradedAt;
 
   Map<String, dynamic> toJson() {
     return {

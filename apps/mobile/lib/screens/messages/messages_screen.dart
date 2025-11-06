@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:campus_mesh/models/message_model.dart';
 import 'package:campus_mesh/models/user_model.dart';
-import 'package:campus_mesh/services/message_service.dart';
-import 'package:campus_mesh/services/auth_service.dart';
-import 'package:campus_mesh/screens/messages/new_conversation_screen.dart';
 import 'package:campus_mesh/screens/messages/chat_screen.dart';
+import 'package:campus_mesh/screens/messages/new_conversation_screen.dart';
+import 'package:campus_mesh/services/auth_service.dart';
+import 'package:campus_mesh/services/message_service.dart';
+import 'package:flutter/material.dart';
 
 class MessagesScreen extends StatefulWidget {
   const MessagesScreen({super.key});
@@ -173,7 +173,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
           }
 
           // Group messages by conversation with null safety
-          final Map<String, MessageModel> conversations = {};
+          final conversations = <String, MessageModel>{};
           for (final message in messages) {
             // Skip messages with null createdAt
             if (message.createdAt == null) continue;

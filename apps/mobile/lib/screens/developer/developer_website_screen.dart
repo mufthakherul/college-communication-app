@@ -126,7 +126,7 @@ class _DeveloperWebsiteScreenState extends State<DeveloperWebsiteScreen> {
         children: [
           WebViewWidget(controller: _controller),
           if (_isLoading)
-            Container(
+            ColoredBox(
               color: Colors.white,
               child: Center(
                 child: Column(

@@ -1,6 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 class ExamCountdownScreen extends StatefulWidget {
   const ExamCountdownScreen({super.key});
@@ -44,7 +45,7 @@ class _ExamCountdownScreenState extends State<ExamCountdownScreen> {
   void _addExam() {
     final nameController = TextEditingController();
     final subjectController = TextEditingController();
-    DateTime selectedDate = DateTime.now().add(const Duration(days: 7));
+    var selectedDate = DateTime.now().add(const Duration(days: 7));
 
     showDialog(
       context: context,
@@ -127,7 +128,7 @@ class _ExamCountdownScreenState extends State<ExamCountdownScreen> {
   void _editExam(Exam exam) {
     final nameController = TextEditingController(text: exam.name);
     final subjectController = TextEditingController(text: exam.subject);
-    DateTime selectedDate = exam.date;
+    var selectedDate = exam.date;
 
     showDialog(
       context: context,
@@ -298,7 +299,7 @@ class _ExamCountdownScreenState extends State<ExamCountdownScreen> {
                               Container(
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: countdownColor.withOpacity(0.2),
+                                  color: countdownColor.withValues(alpha: 0.2),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Column(
@@ -348,7 +349,7 @@ class _ExamCountdownScreenState extends State<ExamCountdownScreen> {
                                         vertical: 4,
                                       ),
                                       decoration: BoxDecoration(
-                                        color: countdownColor.withOpacity(0.2),
+                                        color: countdownColor.withValues(alpha: 0.2),
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       child: Text(
@@ -402,21 +403,21 @@ class _ExamCountdownScreenState extends State<ExamCountdownScreen> {
 }
 
 class Exam {
-  String name;
-  String subject;
-  DateTime date;
 
   Exam({required this.name, required this.subject, required this.date});
-
-  Map<String, dynamic> toJson() => {
-        'name': name,
-        'subject': subject,
-        'date': date.toIso8601String(),
-      };
 
   factory Exam.fromJson(Map<String, dynamic> json) => Exam(
         name: json['name'],
         subject: json['subject'],
         date: DateTime.parse(json['date']),
       );
+  String name;
+  String subject;
+  DateTime date;
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'subject': subject,
+        'date': date.toIso8601String(),
+      };
 }

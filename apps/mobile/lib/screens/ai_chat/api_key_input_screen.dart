@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:campus_mesh/services/ai_chatbot_service.dart';
+import 'package:flutter/material.dart';
 
 class ApiKeyInputScreen extends StatefulWidget {
   const ApiKeyInputScreen({super.key});
@@ -71,7 +71,7 @@ class _ApiKeyInputScreenState extends State<ApiKeyInputScreen> {
       appBar: AppBar(title: const Text('Gemini API Key'), centerTitle: true),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(24),
           child: Form(
             key: _formKey,
             child: Column(
@@ -245,7 +245,7 @@ class _ApiKeyInputScreenState extends State<ApiKeyInputScreen> {
 
   Widget _buildInstructionStep(String number, String text) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
+      padding: const EdgeInsets.only(bottom: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -269,7 +269,7 @@ class _ApiKeyInputScreenState extends State<ApiKeyInputScreen> {
           const SizedBox(width: 12),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(top: 4.0),
+              padding: const EdgeInsets.only(top: 4),
               child: Text(text),
             ),
           ),

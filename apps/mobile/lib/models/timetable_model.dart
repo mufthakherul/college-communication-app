@@ -9,13 +9,6 @@ enum DayOfWeek {
 }
 
 class TimetableModel {
-  final String id;
-  final String className; // e.g., "Computer 3rd Year"
-  final String department;
-  final String shift;
-  final List<ClassPeriod> periods;
-  final DateTime createdAt;
-  final DateTime? updatedAt;
 
   TimetableModel({
     required this.id,
@@ -34,7 +27,7 @@ class TimetableModel {
         .toList();
 
     return TimetableModel(
-      id: data['id'] ?? data['\$id'] ?? '',
+      id: data['id'] ?? data[r'$id'] ?? '',
       className: data['class_name'] ?? '',
       department: data['department'] ?? '',
       shift: data['shift'] ?? '',
@@ -47,6 +40,13 @@ class TimetableModel {
           : null,
     );
   }
+  final String id;
+  final String className; // e.g., "Computer 3rd Year"
+  final String department;
+  final String shift;
+  final List<ClassPeriod> periods;
+  final DateTime createdAt;
+  final DateTime? updatedAt;
 
   Map<String, dynamic> toJson() {
     return {
@@ -66,13 +66,6 @@ class TimetableModel {
 }
 
 class ClassPeriod {
-  final DayOfWeek day;
-  final String startTime; // e.g., "09:00"
-  final String endTime; // e.g., "10:00"
-  final String subject;
-  final String teacherName;
-  final String room;
-  final String? notes;
 
   ClassPeriod({
     required this.day,
@@ -95,6 +88,13 @@ class ClassPeriod {
       notes: data['notes'],
     );
   }
+  final DayOfWeek day;
+  final String startTime; // e.g., "09:00"
+  final String endTime; // e.g., "10:00"
+  final String subject;
+  final String teacherName;
+  final String room;
+  final String? notes;
 
   Map<String, dynamic> toJson() {
     return {

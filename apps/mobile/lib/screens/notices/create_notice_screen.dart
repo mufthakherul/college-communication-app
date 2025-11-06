@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:campus_mesh/models/notice_model.dart';
 import 'package:campus_mesh/models/user_model.dart';
-import 'package:campus_mesh/services/notice_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
+import 'package:campus_mesh/services/notice_service.dart';
 import 'package:campus_mesh/widgets/markdown_editor.dart';
+import 'package:flutter/material.dart';
 
 class CreateNoticeScreen extends StatefulWidget {
   const CreateNoticeScreen({super.key});
@@ -206,7 +206,7 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
           IconButton(
             icon: const Icon(Icons.info_outline),
             tooltip: 'Help',
-            onPressed: () => _showHelpDialog(),
+            onPressed: _showHelpDialog,
           ),
         ],
       ),
@@ -309,7 +309,7 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<NoticeType>(
-              value: _selectedType,
+              initialValue: _selectedType,
               decoration: const InputDecoration(
                 labelText: 'Type',
                 border: OutlineInputBorder(),
@@ -325,7 +325,7 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
-              value: _selectedAudience,
+              initialValue: _selectedAudience,
               decoration: const InputDecoration(
                 labelText: 'Target Audience',
                 border: OutlineInputBorder(),
@@ -449,7 +449,7 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
       children: [
         CircleAvatar(
           radius: 12,
-          backgroundColor: color.withOpacity(0.2),
+          backgroundColor: color.withValues(alpha: 0.2),
           child: Icon(icon, size: 14, color: color),
         ),
         const SizedBox(width: 12),

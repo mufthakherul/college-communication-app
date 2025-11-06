@@ -1,12 +1,12 @@
-import 'package:flutter/material.dart';
 import 'package:campus_mesh/models/notice_model.dart';
 import 'package:campus_mesh/models/user_model.dart';
-import 'package:campus_mesh/services/notice_service.dart';
-import 'package:campus_mesh/services/auth_service.dart';
-import 'package:campus_mesh/services/website_scraper_service.dart';
-import 'package:campus_mesh/screens/notices/notice_detail_screen.dart';
 import 'package:campus_mesh/screens/notices/create_notice_screen.dart';
+import 'package:campus_mesh/screens/notices/notice_detail_screen.dart';
 import 'package:campus_mesh/screens/notices/website_notices_fallback_screen.dart';
+import 'package:campus_mesh/services/auth_service.dart';
+import 'package:campus_mesh/services/notice_service.dart';
+import 'package:campus_mesh/services/website_scraper_service.dart';
+import 'package:flutter/material.dart';
 
 class NoticesScreen extends StatefulWidget {
   const NoticesScreen({super.key});
@@ -77,7 +77,7 @@ class _NoticesScreenState extends State<NoticesScreen>
       }
 
       // Sync notices to database
-      int successCount = 0;
+      var successCount = 0;
       for (final notice in notices) {
         try {
           await _noticeService.createNotice(
@@ -383,7 +383,7 @@ class _NoticesScreenState extends State<NoticesScreen>
                 margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                 child: ListTile(
                   leading: CircleAvatar(
-                    backgroundColor: color.withOpacity(0.2),
+                    backgroundColor: color.withValues(alpha: 0.2),
                     child: Icon(icon, color: color),
                   ),
                   title: Row(

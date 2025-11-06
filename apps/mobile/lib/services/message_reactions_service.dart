@@ -1,6 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:campus_mesh/services/app_logger_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
+import 'package:flutter/foundation.dart';
 
 /// Available reaction emojis for messages
 enum MessageReaction {
@@ -71,11 +71,6 @@ extension MessageReactionEmoji on MessageReaction {
 
 /// Reaction data model
 class ReactionData {
-  final String messageId;
-  final String userId;
-  final String userName;
-  final MessageReaction reaction;
-  final DateTime createdAt;
 
   ReactionData({
     required this.messageId,
@@ -97,6 +92,11 @@ class ReactionData {
       createdAt: DateTime.parse(json['created_at'] as String),
     );
   }
+  final String messageId;
+  final String userId;
+  final String userName;
+  final MessageReaction reaction;
+  final DateTime createdAt;
 
   Map<String, dynamic> toJson() => {
         'message_id': messageId,
@@ -109,10 +109,10 @@ class ReactionData {
 
 /// Service to handle message reactions (emojis)
 class MessageReactionsService {
-  static final MessageReactionsService _instance =
-      MessageReactionsService._internal();
   factory MessageReactionsService() => _instance;
   MessageReactionsService._internal();
+  static final MessageReactionsService _instance =
+      MessageReactionsService._internal();
 
   final _authService = AuthService();
 

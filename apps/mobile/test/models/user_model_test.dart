@@ -1,5 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:campus_mesh/models/user_model.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('UserModel', () {

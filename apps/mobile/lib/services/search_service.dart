@@ -1,13 +1,14 @@
-import 'package:campus_mesh/models/notice_model.dart';
-import 'package:campus_mesh/models/message_model.dart';
-import 'package:campus_mesh/services/auth_service.dart';
-import 'package:campus_mesh/services/appwrite_service.dart';
-import 'package:campus_mesh/appwrite_config.dart';
-import 'package:campus_mesh/utils/input_validator.dart';
-import 'package:appwrite/appwrite.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/foundation.dart';
 import 'dart:convert';
+
+import 'package:appwrite/appwrite.dart';
+import 'package:campus_mesh/appwrite_config.dart';
+import 'package:campus_mesh/models/message_model.dart';
+import 'package:campus_mesh/models/notice_model.dart';
+import 'package:campus_mesh/services/appwrite_service.dart';
+import 'package:campus_mesh/services/auth_service.dart';
+import 'package:campus_mesh/utils/input_validator.dart';
+import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Search service for full-text search across notices, messages, and more
 /// Note: Simplified implementation using Appwrite search capabilities
@@ -323,7 +324,7 @@ class SearchService {
       }
 
       final prefs = await SharedPreferences.getInstance();
-      List<String> history = await getRecentSearches();
+      var history = await getRecentSearches();
 
       // Remove duplicate if exists
       history.remove(sanitizedQuery);
@@ -348,7 +349,7 @@ class SearchService {
   Future<void> removeSearchQuery(String query) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      List<String> history = await getRecentSearches();
+      final history = await getRecentSearches();
 
       history.remove(query);
 

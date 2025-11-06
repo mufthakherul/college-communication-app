@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
+
+import 'package:flutter/material.dart';
 
 class WorldClockScreen extends StatefulWidget {
   const WorldClockScreen({super.key});
@@ -127,7 +128,7 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
                   margin: const EdgeInsets.only(bottom: 8),
                   child: ListTile(
                     leading: CircleAvatar(
-                      backgroundColor: color.withOpacity(0.2),
+                      backgroundColor: color.withValues(alpha: 0.2),
                       child: Icon(icon, color: color),
                     ),
                     title: Row(
@@ -209,10 +210,10 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
 }
 
 class TimeZoneInfo {
+
+  TimeZoneInfo(this.city, this.timezone, this.utcOffset, this.flag);
   final String city;
   final String timezone;
   final int utcOffset;
   final String flag;
-
-  TimeZoneInfo(this.city, this.timezone, this.utcOffset, this.flag);
 }

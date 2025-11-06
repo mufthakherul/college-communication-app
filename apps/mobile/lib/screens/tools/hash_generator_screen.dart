@@ -1,7 +1,8 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:crypto/crypto.dart';
-import 'dart:convert';
 
 class HashGeneratorScreen extends StatefulWidget {
   const HashGeneratorScreen({super.key});
@@ -225,7 +226,7 @@ class _HashGeneratorScreenState extends State<HashGeneratorScreen> {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.1),
+                    color: color.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
@@ -256,7 +257,7 @@ class _HashGeneratorScreenState extends State<HashGeneratorScreen> {
               decoration: BoxDecoration(
                 color: Colors.grey[100],
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: color.withOpacity(0.3)),
+                border: Border.all(color: color.withValues(alpha: 0.3)),
               ),
               child: SelectableText(
                 hash,

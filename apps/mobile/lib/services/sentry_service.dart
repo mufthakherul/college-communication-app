@@ -4,10 +4,10 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 /// Sentry crash reporting service
 /// Provides error tracking and performance monitoring
 class SentryService {
-  // Singleton pattern
-  static final SentryService _instance = SentryService._internal();
   factory SentryService() => _instance;
   SentryService._internal();
+  // Singleton pattern
+  static final SentryService _instance = SentryService._internal();
 
   /// Initialize Sentry
   /// Should be called in main() before runApp()
@@ -147,9 +147,7 @@ class SentryService {
     );
 
     if (data != null) {
-      data.forEach((key, value) {
-        transaction.setData(key, value);
-      });
+      data.forEach(transaction.setData);
     }
 
     return transaction;

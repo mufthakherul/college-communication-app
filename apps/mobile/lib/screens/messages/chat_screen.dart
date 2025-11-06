@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/models/message_model.dart';
-import 'package:campus_mesh/services/message_service.dart';
+import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/services/connectivity_service.dart';
+import 'package:campus_mesh/services/message_service.dart';
+import 'package:flutter/material.dart';
 
 /// Screen for chatting with a specific user
 class ChatScreen extends StatefulWidget {
-  final UserModel otherUser;
 
   const ChatScreen({super.key, required this.otherUser});
+  final UserModel otherUser;
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -324,7 +324,7 @@ class _ChatScreenState extends State<ChatScreen> {
         color: Theme.of(context).cardColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 4,
             offset: const Offset(0, -2),
           ),

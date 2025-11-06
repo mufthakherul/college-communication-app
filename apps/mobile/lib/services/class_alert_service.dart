@@ -1,5 +1,5 @@
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:campus_mesh/models/timetable_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ClassAlertService {
   static const String _keyAlertEnabled = 'class_alert_enabled';

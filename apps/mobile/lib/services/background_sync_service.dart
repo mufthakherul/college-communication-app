@@ -1,8 +1,8 @@
+import 'package:campus_mesh/services/app_logger_service.dart';
+import 'package:campus_mesh/services/connectivity_service.dart';
+import 'package:campus_mesh/services/offline_queue_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:workmanager/workmanager.dart';
-import 'package:campus_mesh/services/offline_queue_service.dart';
-import 'package:campus_mesh/services/connectivity_service.dart';
-import 'package:campus_mesh/services/app_logger_service.dart';
 
 /// Background callback for WorkManager
 @pragma('vm:entry-point')
@@ -136,10 +136,10 @@ Future<void> _syncWebsiteNotices() async {
 
 /// Service to manage background synchronization
 class BackgroundSyncService {
-  static final BackgroundSyncService _instance =
-      BackgroundSyncService._internal();
   factory BackgroundSyncService() => _instance;
   BackgroundSyncService._internal();
+  static final BackgroundSyncService _instance =
+      BackgroundSyncService._internal();
 
   bool _isInitialized = false;
 

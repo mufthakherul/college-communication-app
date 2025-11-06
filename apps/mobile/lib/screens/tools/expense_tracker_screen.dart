@@ -1,6 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 class ExpenseTrackerScreen extends StatefulWidget {
   const ExpenseTrackerScreen({super.key});
@@ -100,7 +101,7 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
   void _addExpense() {
     final amountController = TextEditingController();
     final descriptionController = TextEditingController();
-    String selectedCategory = _categories[0];
+    var selectedCategory = _categories[0];
 
     showDialog(
       context: context,
@@ -122,7 +123,7 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
-                  value: selectedCategory,
+                  initialValue: selectedCategory,
                   decoration: const InputDecoration(
                     labelText: 'Category',
                     border: OutlineInputBorder(),
@@ -208,7 +209,7 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
 
   Map<String, double> _getCategoryTotals() {
     final totals = <String, double>{};
-    for (var expense in _expenses) {
+    for (final expense in _expenses) {
       totals[expense.category] =
           (totals[expense.category] ?? 0) + expense.amount;
     }
@@ -261,7 +262,7 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.bar_chart),
-            onPressed: () => _showCategoryBreakdown(),
+            onPressed: _showCategoryBreakdown,
           ),
           IconButton(
             icon: const Icon(Icons.account_balance_wallet),
@@ -405,7 +406,7 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
                               margin: const EdgeInsets.only(bottom: 8),
                               child: ListTile(
                                 leading: CircleAvatar(
-                                  backgroundColor: color.withOpacity(0.2),
+                                  backgroundColor: color.withValues(alpha: 0.2),
                                   child: Icon(
                                     _getCategoryIcon(expense.category),
                                     color: color,
@@ -532,10 +533,6 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
 }
 
 class Expense {
-  final double amount;
-  final String category;
-  final String description;
-  final DateTime date;
 
   Expense({
     required this.amount,
@@ -544,17 +541,21 @@ class Expense {
     required this.date,
   });
 
-  Map<String, dynamic> toJson() => {
-        'amount': amount,
-        'category': category,
-        'description': description,
-        'date': date.toIso8601String(),
-      };
-
   factory Expense.fromJson(Map<String, dynamic> json) => Expense(
         amount: json['amount'],
         category: json['category'],
         description: json['description'],
         date: DateTime.parse(json['date']),
       );
+  final double amount;
+  final String category;
+  final String description;
+  final DateTime date;
+
+  Map<String, dynamic> toJson() => {
+        'amount': amount,
+        'category': category,
+        'description': description,
+        'date': date.toIso8601String(),
+      };
 }

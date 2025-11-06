@@ -3,9 +3,6 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 
 /// A markdown editor widget with formatting toolbar and live preview
 class MarkdownEditor extends StatefulWidget {
-  final TextEditingController controller;
-  final String hintText;
-  final bool showPreview;
 
   const MarkdownEditor({
     super.key,
@@ -13,6 +10,9 @@ class MarkdownEditor extends StatefulWidget {
     this.hintText = 'Enter content...',
     this.showPreview = true,
   });
+  final TextEditingController controller;
+  final String hintText;
+  final bool showPreview;
 
   @override
   State<MarkdownEditor> createState() => _MarkdownEditorState();
@@ -52,7 +52,7 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
           decoration: BoxDecoration(
             color: Theme.of(
               context,
-            ).colorScheme.surfaceVariant.withOpacity(0.5),
+            ).colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
             borderRadius: const BorderRadius.vertical(top: Radius.circular(8)),
           ),
           child: SingleChildScrollView(
@@ -112,7 +112,7 @@ class _MarkdownEditorState extends State<MarkdownEditor> {
         ),
         // Editor/Preview area
         Expanded(
-          child: Container(
+          child: DecoratedBox(
             decoration: BoxDecoration(
               border: Border.all(color: Colors.grey.shade300),
               borderRadius: const BorderRadius.vertical(

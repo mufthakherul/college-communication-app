@@ -1,19 +1,20 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter/foundation.dart';
+
+import 'package:campus_mesh/models/message_model.dart';
+import 'package:campus_mesh/models/notice_model.dart';
 import 'package:campus_mesh/services/app_logger_service.dart';
 import 'package:campus_mesh/services/connectivity_service.dart';
-import 'package:campus_mesh/services/notice_service.dart';
 import 'package:campus_mesh/services/message_service.dart';
-import 'package:campus_mesh/models/notice_model.dart';
-import 'package:campus_mesh/models/message_model.dart';
+import 'package:campus_mesh/services/notice_service.dart';
+import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// Service to queue actions when offline and sync when online with retry logic
 class OfflineQueueService {
-  static final OfflineQueueService _instance = OfflineQueueService._internal();
   factory OfflineQueueService() => _instance;
   OfflineQueueService._internal();
+  static final OfflineQueueService _instance = OfflineQueueService._internal();
 
   static const String _queueKey = 'offline_queue';
   static const String _analyticsKey = 'sync_analytics';
@@ -150,16 +151,16 @@ class OfflineQueueService {
     final actions = List<OfflineAction>.from(_queue);
     _queue.clear();
 
-    int successCount = 0;
-    int failureCount = 0;
+    var successCount = 0;
+    var failureCount = 0;
 
     // Process actions with retry logic
     for (final action in actions) {
-      bool success = false;
+      var success = false;
       Exception? lastError;
 
       // Retry with exponential backoff
-      for (int attempt = 0;
+      for (var attempt = 0;
           attempt <= action.retryCount && attempt < _maxRetries;
           attempt++) {
         try {
@@ -389,12 +390,6 @@ class OfflineQueueService {
 
 /// Represents an offline action to be synced later with retry support
 class OfflineAction {
-  final String type;
-  final Map<String, dynamic> data;
-  final DateTime timestamp;
-  final int retryCount;
-  final int priority; // Higher number = higher priority
-  final String? lastError;
 
   OfflineAction({
     required this.type,
@@ -405,15 +400,6 @@ class OfflineAction {
     this.lastError,
   }) : timestamp = timestamp ?? DateTime.now();
 
-  Map<String, dynamic> toJson() => {
-        'type': type,
-        'data': data,
-        'timestamp': timestamp.toIso8601String(),
-        'retryCount': retryCount,
-        'priority': priority,
-        'lastError': lastError,
-      };
-
   factory OfflineAction.fromJson(Map<String, dynamic> json) => OfflineAction(
         type: json['type'] as String,
         data: json['data'] as Map<String, dynamic>,
@@ -422,4 +408,19 @@ class OfflineAction {
         priority: json['priority'] ?? 5,
         lastError: json['lastError'] as String?,
       );
+  final String type;
+  final Map<String, dynamic> data;
+  final DateTime timestamp;
+  final int retryCount;
+  final int priority; // Higher number = higher priority
+  final String? lastError;
+
+  Map<String, dynamic> toJson() => {
+        'type': type,
+        'data': data,
+        'timestamp': timestamp.toIso8601String(),
+        'retryCount': retryCount,
+        'priority': priority,
+        'lastError': lastError,
+      };
 }
