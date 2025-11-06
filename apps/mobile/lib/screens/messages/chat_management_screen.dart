@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/services/chat_service.dart';
 import 'package:campus_mesh/services/local_chat_database.dart';
-import 'package:campus_mesh/services/auth_service.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// Screen for admins/teachers to manage chats
 class ChatManagementScreen extends StatefulWidget {

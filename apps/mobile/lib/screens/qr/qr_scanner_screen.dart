@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:campus_mesh/services/qr_data_service.dart';
 import 'package:campus_mesh/services/mesh_network_service.dart';
 import 'package:campus_mesh/services/permission_service.dart';
+import 'package:campus_mesh/services/qr_data_service.dart';
+import 'package:flutter/material.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 /// Universal QR scanner screen that handles different QR code types
 class QRScannerScreen extends StatefulWidget {
@@ -83,12 +83,12 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
             IconButton(
               icon: const Icon(Icons.flash_on),
               tooltip: 'Toggle Flash',
-              onPressed: () => _controller.toggleTorch(),
+              onPressed: _controller.toggleTorch,
             ),
             IconButton(
               icon: const Icon(Icons.flip_camera_ios),
               tooltip: 'Switch Camera',
-              onPressed: () => _controller.switchCamera(),
+              onPressed: _controller.switchCamera,
             ),
           ],
         ],
@@ -96,7 +96,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
       body: !_hasPermission
           ? Center(
               child: Padding(
-                padding: const EdgeInsets.all(24.0),
+                padding: const EdgeInsets.all(24),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -137,7 +137,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                       MobileScanner(
                         controller: _controller,
                         onDetect: (capture) {
-                          final List<Barcode> barcodes = capture.barcodes;
+                          final barcodes = capture.barcodes;
                           for (final barcode in barcodes) {
                             if (barcode.rawValue != null && !_isProcessing) {
                               _handleScannedData(barcode.rawValue!);
@@ -320,7 +320,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
       ),
     );
 
-    if (result == true && mounted) {
+    if (result ?? false && mounted) {
       Navigator.pop(context, {
         'success': true,
         'type': 'notice',
@@ -396,7 +396,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
       ),
     );
 
-    if (result == true && mounted) {
+    if (result ?? false && mounted) {
       _showSuccess('Contact saved successfully!');
     }
   }

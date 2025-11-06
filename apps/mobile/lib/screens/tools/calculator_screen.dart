@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'dart:math';
+
+import 'package:flutter/material.dart';
 
 class CalculatorScreen extends StatefulWidget {
   const CalculatorScreen({super.key});
@@ -11,7 +12,7 @@ class CalculatorScreen extends StatefulWidget {
 class _CalculatorScreenState extends State<CalculatorScreen> {
   String _display = '0';
   String _expression = '';
-  List<String> _history = [];
+  final List<String> _history = [];
   bool _isScientific = false;
 
   void _onButtonPressed(String value) {
@@ -67,11 +68,11 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
 
     // Simple evaluation for basic operations
     // This is a simplified version - in production, use a proper expression parser
-    List<String> tokens = [];
-    String currentNumber = '';
+    final tokens = <String>[];
+    var currentNumber = '';
 
-    for (int i = 0; i < expr.length; i++) {
-      String char = expr[i];
+    for (var i = 0; i < expr.length; i++) {
+      final char = expr[i];
       if ('0123456789.'.contains(char)) {
         currentNumber += char;
       } else if ('+-*/'.contains(char)) {
@@ -87,11 +88,11 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     }
 
     // Handle multiplication and division first
-    for (int i = 1; i < tokens.length - 1; i++) {
+    for (var i = 1; i < tokens.length - 1; i++) {
       if (tokens[i] == '*' || tokens[i] == '/') {
-        double left = double.parse(tokens[i - 1]);
-        double right = double.parse(tokens[i + 1]);
-        double result = tokens[i] == '*' ? left * right : left / right;
+        final left = double.parse(tokens[i - 1]);
+        final right = double.parse(tokens[i + 1]);
+        final result = tokens[i] == '*' ? left * right : left / right;
         tokens[i - 1] = result.toString();
         tokens.removeAt(i);
         tokens.removeAt(i);
@@ -100,10 +101,10 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
     }
 
     // Handle addition and subtraction
-    double result = double.parse(tokens[0]);
-    for (int i = 1; i < tokens.length - 1; i += 2) {
-      String operator = tokens[i];
-      double operand = double.parse(tokens[i + 1]);
+    var result = double.parse(tokens[0]);
+    for (var i = 1; i < tokens.length - 1; i += 2) {
+      final operator = tokens[i];
+      final operand = double.parse(tokens[i + 1]);
       if (operator == '+') {
         result += operand;
       } else if (operator == '-') {
@@ -144,7 +145,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
           if (_history.isNotEmpty)
             TextButton(
               onPressed: () {
-                setState(() => _history.clear());
+                setState(_history.clear);
                 Navigator.pop(context);
               },
               child: const Text('Clear'),

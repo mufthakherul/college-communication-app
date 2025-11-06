@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
+
 import 'package:campus_mesh/services/app_logger_service.dart';
+import 'package:flutter/foundation.dart';
 
 /// Connection type for mesh network
 enum MeshConnectionType {
@@ -17,13 +18,7 @@ enum MeshConnectionType {
 }
 
 /// Mesh network node information
-class MeshNode {
-  final String id;
-  final String name;
-  final DateTime connectedAt;
-  final MeshConnectionType connectionType;
-  bool isActive;
-  bool isVisible; // Whether connection is visible to user
+class MeshNode { // Whether connection is visible to user
 
   MeshNode({
     required this.id,
@@ -33,15 +28,6 @@ class MeshNode {
     this.isActive = true,
     this.isVisible = false, // Hidden by default until authenticated
   });
-
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'name': name,
-        'connectedAt': connectedAt.toIso8601String(),
-        'connectionType': connectionType.name,
-        'isActive': isActive,
-        'isVisible': isVisible,
-      };
 
   factory MeshNode.fromJson(Map<String, dynamic> json) => MeshNode(
         id: json['id'] as String,
@@ -54,6 +40,21 @@ class MeshNode {
         isActive: json['isActive'] ?? true,
         isVisible: json['isVisible'] ?? false,
       );
+  final String id;
+  final String name;
+  final DateTime connectedAt;
+  final MeshConnectionType connectionType;
+  bool isActive;
+  bool isVisible;
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'connectedAt': connectedAt.toIso8601String(),
+        'connectionType': connectionType.name,
+        'isActive': isActive,
+        'isVisible': isVisible,
+      };
 
   String getConnectionTypeDisplay() {
     switch (connectionType) {
@@ -89,14 +90,7 @@ enum QRPairingPurpose {
 }
 
 /// QR code pairing data with enhanced permissions
-class MeshPairingData {
-  final String deviceId;
-  final String deviceName;
-  final String pairingToken; // Unique token for this pairing session
-  final DateTime? expiresAt; // Null means no expiry
-  final List<String> supportedConnections; // Connection types supported
-  final List<QRPairingPurpose> purposes; // What this QR code allows
-  final Map<String, dynamic>? sharedInfo; // Optional info to share
+class MeshPairingData { // Optional info to share
 
   MeshPairingData({
     required this.deviceId,
@@ -107,16 +101,6 @@ class MeshPairingData {
     this.purposes = const [QRPairingPurpose.privateChat],
     this.sharedInfo,
   });
-
-  Map<String, dynamic> toJson() => {
-        'deviceId': deviceId,
-        'deviceName': deviceName,
-        'pairingToken': pairingToken,
-        'expiresAt': expiresAt?.toIso8601String(),
-        'supportedConnections': supportedConnections,
-        'purposes': purposes.map((p) => p.name).toList(),
-        'sharedInfo': sharedInfo,
-      };
 
   factory MeshPairingData.fromJson(Map<String, dynamic> json) =>
       MeshPairingData(
@@ -141,12 +125,29 @@ class MeshPairingData {
         sharedInfo: json['sharedInfo'] as Map<String, dynamic>?,
       );
 
-  String toQRString() => jsonEncode(toJson());
-
   factory MeshPairingData.fromQRString(String qrString) {
     final json = jsonDecode(qrString) as Map<String, dynamic>;
     return MeshPairingData.fromJson(json);
   }
+  final String deviceId;
+  final String deviceName;
+  final String pairingToken; // Unique token for this pairing session
+  final DateTime? expiresAt; // Null means no expiry
+  final List<String> supportedConnections; // Connection types supported
+  final List<QRPairingPurpose> purposes; // What this QR code allows
+  final Map<String, dynamic>? sharedInfo;
+
+  Map<String, dynamic> toJson() => {
+        'deviceId': deviceId,
+        'deviceName': deviceName,
+        'pairingToken': pairingToken,
+        'expiresAt': expiresAt?.toIso8601String(),
+        'supportedConnections': supportedConnections,
+        'purposes': purposes.map((p) => p.name).toList(),
+        'sharedInfo': sharedInfo,
+      };
+
+  String toQRString() => jsonEncode(toJson());
 
   bool get isExpired => expiresAt != null && DateTime.now().isAfter(expiresAt!);
 
@@ -156,13 +157,7 @@ class MeshPairingData {
 }
 
 /// Mesh message for peer-to-peer communication
-class MeshMessage {
-  final String id;
-  final String senderId;
-  final String type; // 'notice', 'message', 'sync_request', 'sync_response'
-  final Map<String, dynamic> payload;
-  final DateTime timestamp;
-  final List<String> routePath; // Track message route to prevent loops
+class MeshMessage { // Track message route to prevent loops
 
   MeshMessage({
     required this.id,
@@ -174,15 +169,6 @@ class MeshMessage {
   })  : timestamp = timestamp ?? DateTime.now(),
         routePath = routePath ?? [];
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'senderId': senderId,
-        'type': type,
-        'payload': payload,
-        'timestamp': timestamp.toIso8601String(),
-        'routePath': routePath,
-      };
-
   factory MeshMessage.fromJson(Map<String, dynamic> json) => MeshMessage(
         id: json['id'] as String,
         senderId: json['senderId'] as String,
@@ -191,6 +177,21 @@ class MeshMessage {
         timestamp: DateTime.parse(json['timestamp'] as String),
         routePath: (json['routePath'] as List?)?.cast<String>() ?? [],
       );
+  final String id;
+  final String senderId;
+  final String type; // 'notice', 'message', 'sync_request', 'sync_response'
+  final Map<String, dynamic> payload;
+  final DateTime timestamp;
+  final List<String> routePath;
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'senderId': senderId,
+        'type': type,
+        'payload': payload,
+        'timestamp': timestamp.toIso8601String(),
+        'routePath': routePath,
+      };
 
   MeshMessage copyWithRoute(String nodeId) {
     return MeshMessage(
@@ -207,9 +208,9 @@ class MeshMessage {
 /// Mesh network service for peer-to-peer communication
 /// Enables communication even without internet using Bluetooth and WiFi Direct
 class MeshNetworkService {
-  static final MeshNetworkService _instance = MeshNetworkService._internal();
   factory MeshNetworkService() => _instance;
   MeshNetworkService._internal();
+  static final MeshNetworkService _instance = MeshNetworkService._internal();
 
   final Map<String, MeshNode> _connectedNodes = {};
   final Map<String, MeshNode> _hiddenNodes =
@@ -350,7 +351,7 @@ class MeshNetworkService {
     }
 
     final pairingToken = _generatePairingToken();
-    final DateTime? expiresAt = expiryDuration != null
+    final expiresAt = expiryDuration != null
         ? DateTime.now().add(expiryDuration)
         : null; // No expiry if duration not provided
 

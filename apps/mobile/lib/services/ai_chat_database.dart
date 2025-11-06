@@ -1,15 +1,15 @@
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
 import 'package:campus_mesh/models/ai_chat_message_model.dart';
 import 'package:campus_mesh/models/ai_chat_session_model.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 class AIChatDatabase {
-  static final AIChatDatabase _instance = AIChatDatabase._internal();
-  static Database? _database;
 
   factory AIChatDatabase() => _instance;
 
   AIChatDatabase._internal();
+  static final AIChatDatabase _instance = AIChatDatabase._internal();
+  static Database? _database;
 
   Future<Database> get database async {
     if (_database != null) return _database!;
@@ -21,7 +21,7 @@ class AIChatDatabase {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'ai_chat.db');
 
-    return await openDatabase(
+    return openDatabase(
       path,
       version: 1,
       onCreate: (db, version) async {
@@ -75,7 +75,7 @@ class AIChatDatabase {
       whereArgs: [userId],
       orderBy: 'lastMessageAt DESC',
     );
-    return maps.map((map) => AIChatSession.fromMap(map)).toList();
+    return maps.map(AIChatSession.fromMap).toList();
   }
 
   Future<AIChatSession?> getSession(String sessionId) async {
@@ -120,7 +120,7 @@ class AIChatDatabase {
       whereArgs: [sessionId],
       orderBy: 'timestamp ASC',
     );
-    return maps.map((map) => AIChatMessage.fromMap(map)).toList();
+    return maps.map(AIChatMessage.fromMap).toList();
   }
 
   Future<void> deleteMessage(String messageId) async {

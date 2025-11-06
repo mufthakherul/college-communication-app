@@ -1,13 +1,13 @@
-import 'package:google_generative_ai/google_generative_ai.dart';
-import 'package:campus_mesh/services/secure_storage_service.dart';
-import 'package:campus_mesh/services/ai_chat_database.dart';
 import 'package:campus_mesh/models/ai_chat_message_model.dart';
 import 'package:campus_mesh/models/ai_chat_session_model.dart';
+import 'package:campus_mesh/services/ai_chat_database.dart';
+import 'package:campus_mesh/services/secure_storage_service.dart';
+import 'package:google_generative_ai/google_generative_ai.dart';
 
 class AIChatbotService {
-  static final AIChatbotService _instance = AIChatbotService._internal();
   factory AIChatbotService() => _instance;
   AIChatbotService._internal();
+  static final AIChatbotService _instance = AIChatbotService._internal();
 
   final _secureStorage = SecureStorageService();
   final _database = AIChatDatabase();
@@ -193,17 +193,17 @@ Always maintain a respectful and supportive tone.
 
   // Get all sessions for a user
   Future<List<AIChatSession>> getSessions(String userId) async {
-    return await _database.getSessions(userId);
+    return _database.getSessions(userId);
   }
 
   // Get a specific session
   Future<AIChatSession?> getSession(String sessionId) async {
-    return await _database.getSession(sessionId);
+    return _database.getSession(sessionId);
   }
 
   // Get messages for a session
   Future<List<AIChatMessage>> getMessages(String sessionId) async {
-    return await _database.getMessages(sessionId);
+    return _database.getMessages(sessionId);
   }
 
   // Save a message

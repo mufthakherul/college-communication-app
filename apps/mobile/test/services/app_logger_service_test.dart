@@ -144,7 +144,7 @@ void main() {
     });
 
     test('getRecentLogs should return last N logs', () {
-      for (int i = 0; i < 10; i++) {
+      for (var i = 0; i < 10; i++) {
         service.info('Message $i');
       }
 

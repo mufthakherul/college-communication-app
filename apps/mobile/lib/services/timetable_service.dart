@@ -1,10 +1,11 @@
 import 'dart:async';
+
 import 'package:appwrite/appwrite.dart';
-import 'package:flutter/foundation.dart';
+import 'package:campus_mesh/appwrite_config.dart';
 import 'package:campus_mesh/models/timetable_model.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
-import 'package:campus_mesh/appwrite_config.dart';
+import 'package:flutter/foundation.dart';
 
 class TimetableService {
   final _appwrite = AppwriteService();
@@ -18,8 +19,8 @@ class TimetableService {
   // Get all timetables (polling-based stream)
   Stream<List<TimetableModel>> getTimetables() {
     _timetablesController ??= StreamController<List<TimetableModel>>.broadcast(
-      onListen: () => _startPolling(),
-      onCancel: () => _stopPolling(),
+      onListen: _startPolling,
+      onCancel: _stopPolling,
     );
     return _timetablesController!.stream;
   }

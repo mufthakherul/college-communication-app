@@ -1,30 +1,30 @@
-import 'package:flutter/material.dart';
-import 'package:campus_mesh/screens/tools/gpa_calculator_screen.dart';
-import 'package:campus_mesh/screens/tools/study_timer_screen.dart';
-import 'package:campus_mesh/screens/tools/assignment_tracker_screen.dart';
-import 'package:campus_mesh/screens/tools/timetable_screen.dart';
-import 'package:campus_mesh/screens/tools/events_screen.dart';
-import 'package:campus_mesh/screens/tools/unit_converter_screen.dart';
-import 'package:campus_mesh/screens/tools/notes_screen.dart';
 import 'package:campus_mesh/screens/ai_chat/ai_chat_history_screen.dart';
-import 'package:campus_mesh/screens/tools/calculator_screen.dart';
+import 'package:campus_mesh/screens/tools/algorithm_complexity_screen.dart';
+import 'package:campus_mesh/screens/tools/ascii_table_screen.dart';
+import 'package:campus_mesh/screens/tools/assignment_tracker_screen.dart';
 import 'package:campus_mesh/screens/tools/attendance_tracker_screen.dart';
+import 'package:campus_mesh/screens/tools/base64_converter_screen.dart';
+import 'package:campus_mesh/screens/tools/binary_converter_screen.dart';
+import 'package:campus_mesh/screens/tools/calculator_screen.dart';
+import 'package:campus_mesh/screens/tools/code_snippet_manager_screen.dart';
+import 'package:campus_mesh/screens/tools/color_picker_screen.dart';
+import 'package:campus_mesh/screens/tools/dictionary_screen.dart';
+import 'package:campus_mesh/screens/tools/events_screen.dart';
 import 'package:campus_mesh/screens/tools/exam_countdown_screen.dart';
 import 'package:campus_mesh/screens/tools/expense_tracker_screen.dart';
-import 'package:campus_mesh/screens/tools/dictionary_screen.dart';
-import 'package:campus_mesh/screens/tools/periodic_table_screen.dart';
 import 'package:campus_mesh/screens/tools/formula_sheet_screen.dart';
-import 'package:campus_mesh/screens/tools/world_clock_screen.dart';
-import 'package:campus_mesh/screens/tools/binary_converter_screen.dart';
-import 'package:campus_mesh/screens/tools/ascii_table_screen.dart';
-import 'package:campus_mesh/screens/tools/code_snippet_manager_screen.dart';
-import 'package:campus_mesh/screens/tools/ip_calculator_screen.dart';
-import 'package:campus_mesh/screens/tools/regex_tester_screen.dart';
-import 'package:campus_mesh/screens/tools/json_formatter_screen.dart';
+import 'package:campus_mesh/screens/tools/gpa_calculator_screen.dart';
 import 'package:campus_mesh/screens/tools/hash_generator_screen.dart';
-import 'package:campus_mesh/screens/tools/base64_converter_screen.dart';
-import 'package:campus_mesh/screens/tools/color_picker_screen.dart';
-import 'package:campus_mesh/screens/tools/algorithm_complexity_screen.dart';
+import 'package:campus_mesh/screens/tools/ip_calculator_screen.dart';
+import 'package:campus_mesh/screens/tools/json_formatter_screen.dart';
+import 'package:campus_mesh/screens/tools/notes_screen.dart';
+import 'package:campus_mesh/screens/tools/periodic_table_screen.dart';
+import 'package:campus_mesh/screens/tools/regex_tester_screen.dart';
+import 'package:campus_mesh/screens/tools/study_timer_screen.dart';
+import 'package:campus_mesh/screens/tools/timetable_screen.dart';
+import 'package:campus_mesh/screens/tools/unit_converter_screen.dart';
+import 'package:campus_mesh/screens/tools/world_clock_screen.dart';
+import 'package:flutter/material.dart';
 
 class ToolsScreen extends StatefulWidget {
   const ToolsScreen({super.key});
@@ -609,7 +609,7 @@ class _ToolsScreenState extends State<ToolsScreen>
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
+                color: color.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(icon, size: 48, color: color),
@@ -627,7 +627,7 @@ class _ToolsScreenState extends State<ToolsScreen>
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.2),
+                  color: color.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
@@ -678,9 +678,9 @@ class ImportantLinksScreen extends StatelessWidget {
           return Card(
             margin: const EdgeInsets.only(bottom: 12),
             child: ListTile(
-              leading: CircleAvatar(child: Icon(link['icon'] as IconData)),
-              title: Text(link['title'] as String),
-              subtitle: Text(link['url'] as String),
+              leading: CircleAvatar(child: Icon(link['icon']! as IconData)),
+              title: Text(link['title']! as String),
+              subtitle: Text(link['url']! as String),
               trailing: const Icon(Icons.open_in_new),
               onTap: () {
                 // Open URL

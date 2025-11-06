@@ -1,17 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:campus_mesh/screens/auth/login_screen.dart';
 import 'package:campus_mesh/screens/home_screen.dart';
-import 'package:campus_mesh/services/theme_service.dart';
-import 'package:campus_mesh/services/cache_service.dart';
-import 'package:campus_mesh/services/offline_queue_service.dart';
-import 'package:campus_mesh/services/background_sync_service.dart';
-import 'package:campus_mesh/services/sentry_service.dart';
-import 'package:campus_mesh/services/onesignal_service.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
-import 'package:campus_mesh/services/security_service.dart';
+import 'package:campus_mesh/services/background_sync_service.dart';
+import 'package:campus_mesh/services/cache_service.dart';
 import 'package:campus_mesh/services/offline_message_sync_service.dart';
+import 'package:campus_mesh/services/offline_queue_service.dart';
+import 'package:campus_mesh/services/onesignal_service.dart';
+import 'package:campus_mesh/services/security_service.dart';
+import 'package:campus_mesh/services/sentry_service.dart';
+import 'package:campus_mesh/services/theme_service.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 void main() async {
   // Wrap entire initialization in error handler
@@ -26,7 +26,7 @@ void main() async {
         home: Scaffold(
           body: Center(
             child: Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.all(24),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -128,7 +128,7 @@ Future<void> _initializeApp() async {
         home: Scaffold(
           body: Center(
             child: Padding(
-              padding: const EdgeInsets.all(24.0),
+              padding: const EdgeInsets.all(24),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -304,9 +304,9 @@ class _CampusMeshAppState extends State<CampusMeshApp> {
 
 /// Security blocked app - shown when critical security checks fail
 class SecurityBlockedApp extends StatelessWidget {
-  final String message;
 
   const SecurityBlockedApp({super.key, required this.message});
+  final String message;
 
   @override
   Widget build(BuildContext context) {
@@ -317,7 +317,7 @@ class SecurityBlockedApp extends StatelessWidget {
       home: Scaffold(
         body: Center(
           child: Padding(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(24),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:campus_mesh/services/demo_mode_service.dart';
 import 'package:campus_mesh/screens/home_screen.dart';
+import 'package:campus_mesh/services/demo_mode_service.dart';
+import 'package:flutter/material.dart';
 
 class DemoLoginScreen extends StatefulWidget {
   const DemoLoginScreen({super.key});
@@ -82,7 +82,7 @@ class _DemoLoginScreenState extends State<DemoLoginScreen> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(24),
             child: Form(
               key: _formKey,
               child: Column(

@@ -24,7 +24,7 @@ class _NotesScreenState extends State<NotesScreen> {
 
     setState(() {
       _notes = notesJson
-          .map((json) => Note.fromString(json))
+          .map(Note.fromString)
           .where((note) => note != null)
           .cast<Note>()
           .toList();
@@ -211,10 +211,6 @@ class _NotesScreenState extends State<NotesScreen> {
 }
 
 class Note {
-  final String id;
-  final String title;
-  final String content;
-  final DateTime createdAt;
 
   Note({
     required this.id,
@@ -222,6 +218,10 @@ class Note {
     required this.content,
     required this.createdAt,
   });
+  final String id;
+  final String title;
+  final String content;
+  final DateTime createdAt;
 
   @override
   String toString() {
@@ -246,10 +246,10 @@ class Note {
 }
 
 class _NoteDialog extends StatefulWidget {
-  final Note? note;
-  final Function(String title, String content) onSave;
 
   const _NoteDialog({this.note, required this.onSave});
+  final Note? note;
+  final Function(String title, String content) onSave;
 
   @override
   State<_NoteDialog> createState() => _NoteDialogState();

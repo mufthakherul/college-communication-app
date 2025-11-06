@@ -1,18 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
+
+import 'package:campus_mesh/services/app_logger_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
-import 'package:campus_mesh/services/app_logger_service.dart';
 
 /// WebRTC signaling message type
 enum SignalingMessageType { offer, answer, candidate, bye }
 
 /// WebRTC signaling message
 class SignalingMessage {
-  final String from;
-  final String to;
-  final SignalingMessageType type;
-  final Map<String, dynamic> payload;
 
   SignalingMessage({
     required this.from,
@@ -20,13 +17,6 @@ class SignalingMessage {
     required this.type,
     required this.payload,
   });
-
-  Map<String, dynamic> toJson() => {
-        'from': from,
-        'to': to,
-        'type': type.name,
-        'payload': payload,
-      };
 
   factory SignalingMessage.fromJson(Map<String, dynamic> json) =>
       SignalingMessage(
@@ -37,6 +27,17 @@ class SignalingMessage {
         ),
         payload: json['payload'] as Map<String, dynamic>,
       );
+  final String from;
+  final String to;
+  final SignalingMessageType type;
+  final Map<String, dynamic> payload;
+
+  Map<String, dynamic> toJson() => {
+        'from': from,
+        'to': to,
+        'type': type.name,
+        'payload': payload,
+      };
 }
 
 /// WebRTC connection state
@@ -50,6 +51,12 @@ enum WebRTCConnectionState {
 
 /// WebRTC peer connection wrapper
 class WebRTCPeerConnection {
+
+  WebRTCPeerConnection({
+    required this.peerId,
+    required this.connection,
+    this.dataChannel,
+  });
   final String peerId;
   final RTCPeerConnection connection;
   final RTCDataChannel? dataChannel;
@@ -57,12 +64,6 @@ class WebRTCPeerConnection {
   DateTime? connectedAt;
   int bytesSent = 0;
   int bytesReceived = 0;
-
-  WebRTCPeerConnection({
-    required this.peerId,
-    required this.connection,
-    this.dataChannel,
-  });
 
   Future<void> close() async {
     await dataChannel?.close();
@@ -74,10 +75,10 @@ class WebRTCPeerConnection {
 /// WebRTC signaling service for P2P connections
 /// Provides reliable data channels for mesh networking
 class WebRTCSignalingService {
-  static final WebRTCSignalingService _instance =
-      WebRTCSignalingService._internal();
   factory WebRTCSignalingService() => _instance;
   WebRTCSignalingService._internal();
+  static final WebRTCSignalingService _instance =
+      WebRTCSignalingService._internal();
 
   final Map<String, WebRTCPeerConnection> _connections = {};
   final _messageController = StreamController<Map<String, dynamic>>.broadcast();
@@ -473,7 +474,7 @@ class WebRTCSignalingService {
 
   /// Broadcast message to all connected peers
   Future<int> broadcastMessage(Map<String, dynamic> message) async {
-    int successCount = 0;
+    var successCount = 0;
 
     for (final peerId in connectedPeers) {
       if (await sendMessage(peerId, message)) {
@@ -529,12 +530,12 @@ class WebRTCSignalingService {
 
     for (final conn in _connections.values) {
       stats['totalBytesSent'] =
-          (stats['totalBytesSent'] as int) + conn.bytesSent;
+          (stats['totalBytesSent']! as int) + conn.bytesSent;
       stats['totalBytesReceived'] =
-          (stats['totalBytesReceived'] as int) + conn.bytesReceived;
+          (stats['totalBytesReceived']! as int) + conn.bytesReceived;
 
       final stateKey = conn.state.name;
-      final stateMap = stats['connectionStates'] as Map<String, int>;
+      final stateMap = stats['connectionStates']! as Map<String, int>;
       stateMap[stateKey] = (stateMap[stateKey] ?? 0) + 1;
     }
 

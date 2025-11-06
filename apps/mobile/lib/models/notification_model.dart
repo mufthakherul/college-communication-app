@@ -1,12 +1,4 @@
 class NotificationModel {
-  final String id;
-  final String userId;
-  final String type;
-  final String title;
-  final String body;
-  final Map<String, dynamic> data;
-  final DateTime? createdAt;
-  final bool read;
 
   NotificationModel({
     required this.id,
@@ -33,6 +25,14 @@ class NotificationModel {
       read: data['read'] ?? false,
     );
   }
+  final String id;
+  final String userId;
+  final String type;
+  final String title;
+  final String body;
+  final Map<String, dynamic> data;
+  final DateTime? createdAt;
+  final bool read;
 
   Map<String, dynamic> toJson() {
     return {

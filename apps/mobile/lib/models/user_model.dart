@@ -1,22 +1,6 @@
 enum UserRole { student, teacher, admin }
 
-class UserModel {
-  final String uid;
-  final String email;
-  final String displayName;
-  final String photoURL;
-  final UserRole role;
-  final String department;
-  final String year;
-  final bool isActive;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-  // New student-specific fields
-  final String shift; // Morning/Day/Evening
-  final String group; // Academic group (A, B, C, etc.)
-  final String classRoll; // Roll number in class
-  final String academicSession; // Academic year/session
-  final String phoneNumber; // Contact phone (private)
+class UserModel { // Contact phone (private)
 
   UserModel({
     required this.uid,
@@ -59,6 +43,22 @@ class UserModel {
       phoneNumber: data['phone_number'] ?? '',
     );
   }
+  final String uid;
+  final String email;
+  final String displayName;
+  final String photoURL;
+  final UserRole role;
+  final String department;
+  final String year;
+  final bool isActive;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  // New student-specific fields
+  final String shift; // Morning/Day/Evening
+  final String group; // Academic group (A, B, C, etc.)
+  final String classRoll; // Roll number in class
+  final String academicSession; // Academic year/session
+  final String phoneNumber;
 
   Map<String, dynamic> toJson() {
     return {

@@ -1,9 +1,11 @@
-import 'package:flutter/foundation.dart';
 import 'package:campus_mesh/services/analytics_service.dart';
+import 'package:flutter/foundation.dart';
 
 /// Performance monitoring service for tracking app performance
 /// Tracks operation durations and identifies bottlenecks
 class PerformanceMonitoringService {
+  factory PerformanceMonitoringService() => _instance;
+  PerformanceMonitoringService._internal();
   final Map<String, DateTime> _startTimes = {};
   final Map<String, List<int>> _durations = {};
   final AnalyticsService _analytics = AnalyticsService();
@@ -11,8 +13,6 @@ class PerformanceMonitoringService {
   // Singleton pattern
   static final PerformanceMonitoringService _instance =
       PerformanceMonitoringService._internal();
-  factory PerformanceMonitoringService() => _instance;
-  PerformanceMonitoringService._internal();
 
   /// Start tracking a named operation
   void startTrace(String name) {

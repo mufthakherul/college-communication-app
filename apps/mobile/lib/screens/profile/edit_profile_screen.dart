@@ -1,11 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/services/auth_service.dart';
+import 'package:flutter/material.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  final UserModel user;
 
   const EditProfileScreen({super.key, required this.user});
+  final UserModel user;
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -123,7 +123,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           children: [
             // Basic Information Section
             Text(
@@ -187,7 +187,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                value: _selectedShift,
+                initialValue: _selectedShift,
                 decoration: const InputDecoration(
                   labelText: 'Shift',
                   prefixIcon: Icon(Icons.schedule),

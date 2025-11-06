@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:campus_mesh/models/timetable_model.dart';
-import 'package:campus_mesh/services/timetable_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/services/class_alert_service.dart';
+import 'package:campus_mesh/services/timetable_service.dart';
+import 'package:flutter/material.dart';
 
 class TimetableScreen extends StatefulWidget {
   const TimetableScreen({super.key});

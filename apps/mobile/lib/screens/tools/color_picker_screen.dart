@@ -16,9 +16,9 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
   final TextEditingController _gController = TextEditingController();
   final TextEditingController _bController = TextEditingController();
 
-  double _hue = 211.0;
-  double _saturation = 100.0;
-  double _lightness = 50.0;
+  double _hue = 211;
+  double _saturation = 100;
+  double _lightness = 50;
 
   final List<Color> _presetColors = [
     Colors.red,
@@ -74,7 +74,7 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
     if (hex.isEmpty) return;
 
     try {
-      String hexColor = hex.replaceAll('#', '');
+      var hexColor = hex.replaceAll('#', '');
       if (hexColor.length == 6) {
         hexColor = 'FF$hexColor';
       }
@@ -101,7 +101,7 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
 
   void _updateFromHSL() {
     final hslColor = HSLColor.fromAHSL(
-      1.0,
+      1,
       _hue,
       _saturation / 100,
       _lightness / 100,
@@ -153,7 +153,7 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: _selectedColor.withOpacity(0.5),
+              color: _selectedColor.withValues(alpha: 0.5),
               blurRadius: 20,
               spreadRadius: 2,
             ),
@@ -194,11 +194,11 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
+            const Row(
               children: [
-                const Icon(Icons.tag, color: Colors.blue),
-                const SizedBox(width: 8),
-                const Text(
+                Icon(Icons.tag, color: Colors.blue),
+                SizedBox(width: 8),
+                Text(
                   'HEX Color',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
@@ -234,11 +234,11 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
+                const Row(
                   children: [
-                    const Icon(Icons.palette, color: Colors.red),
-                    const SizedBox(width: 8),
-                    const Text(
+                    Icon(Icons.palette, color: Colors.red),
+                    SizedBox(width: 8),
+                    Text(
                       'RGB Color',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -335,11 +335,11 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
+                const Row(
                   children: [
-                    const Icon(Icons.gradient, color: Colors.purple),
-                    const SizedBox(width: 8),
-                    const Text(
+                    Icon(Icons.gradient, color: Colors.purple),
+                    SizedBox(width: 8),
+                    Text(
                       'HSL Color',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,

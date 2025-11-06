@@ -1,10 +1,4 @@
 class AIChatSession {
-  final String id;
-  final String userId;
-  final String title;
-  final DateTime createdAt;
-  final DateTime lastMessageAt;
-  final int messageCount;
 
   AIChatSession({
     required this.id,
@@ -15,17 +9,6 @@ class AIChatSession {
     required this.messageCount,
   });
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'userId': userId,
-      'title': title,
-      'createdAt': createdAt.toIso8601String(),
-      'lastMessageAt': lastMessageAt.toIso8601String(),
-      'messageCount': messageCount,
-    };
-  }
-
   factory AIChatSession.fromMap(Map<String, dynamic> map) {
     return AIChatSession(
       id: map['id'] as String,
@@ -35,6 +18,23 @@ class AIChatSession {
       lastMessageAt: DateTime.parse(map['lastMessageAt'] as String),
       messageCount: map['messageCount'] as int,
     );
+  }
+  final String id;
+  final String userId;
+  final String title;
+  final DateTime createdAt;
+  final DateTime lastMessageAt;
+  final int messageCount;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'userId': userId,
+      'title': title,
+      'createdAt': createdAt.toIso8601String(),
+      'lastMessageAt': lastMessageAt.toIso8601String(),
+      'messageCount': messageCount,
+    };
   }
 
   AIChatSession copyWith({

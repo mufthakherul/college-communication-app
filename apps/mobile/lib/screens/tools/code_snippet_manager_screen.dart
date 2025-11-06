@@ -1,7 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 class CodeSnippetManagerScreen extends StatefulWidget {
   const CodeSnippetManagerScreen({super.key});
@@ -61,7 +62,8 @@ class _CodeSnippetManagerScreenState extends State<CodeSnippetManagerScreen> {
       CodeSnippet(
         title: 'Hello World',
         language: 'C',
-        code: '''#include <stdio.h>
+        code: '''
+#include <stdio.h>
 
 int main() {
     printf("Hello, World!");
@@ -73,7 +75,8 @@ int main() {
       CodeSnippet(
         title: 'Bubble Sort',
         language: 'C',
-        code: '''void bubbleSort(int arr[], int n) {
+        code: '''
+void bubbleSort(int arr[], int n) {
     for (int i = 0; i < n-1; i++) {
         for (int j = 0; j < n-i-1; j++) {
             if (arr[j] > arr[j+1]) {
@@ -90,7 +93,8 @@ int main() {
       CodeSnippet(
         title: 'Linked List Node',
         language: 'C',
-        code: '''struct Node {
+        code: '''
+struct Node {
     int data;
     struct Node* next;
 };
@@ -406,11 +410,6 @@ struct Node* createNode(int data) {
 }
 
 class CodeSnippet {
-  String title;
-  String language;
-  String code;
-  String description;
-  List<String> tags;
 
   CodeSnippet({
     required this.title,
@@ -420,14 +419,6 @@ class CodeSnippet {
     this.tags = const [],
   });
 
-  Map<String, dynamic> toJson() => {
-        'title': title,
-        'language': language,
-        'code': code,
-        'description': description,
-        'tags': tags,
-      };
-
   factory CodeSnippet.fromJson(Map<String, dynamic> json) => CodeSnippet(
         title: json['title'],
         language: json['language'],
@@ -435,18 +426,31 @@ class CodeSnippet {
         description: json['description'],
         tags: List<String>.from(json['tags'] ?? []),
       );
+  String title;
+  String language;
+  String code;
+  String description;
+  List<String> tags;
+
+  Map<String, dynamic> toJson() => {
+        'title': title,
+        'language': language,
+        'code': code,
+        'description': description,
+        'tags': tags,
+      };
 }
 
 class _SnippetDialog extends StatefulWidget {
-  final CodeSnippet? snippet;
-  final List<String> languages;
-  final Function(CodeSnippet) onSave;
 
   const _SnippetDialog({
     this.snippet,
     required this.languages,
     required this.onSave,
   });
+  final CodeSnippet? snippet;
+  final List<String> languages;
+  final Function(CodeSnippet) onSave;
 
   @override
   State<_SnippetDialog> createState() => _SnippetDialogState();
@@ -486,7 +490,7 @@ class _SnippetDialogState extends State<_SnippetDialog> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
-              value: _selectedLanguage,
+              initialValue: _selectedLanguage,
               decoration: const InputDecoration(
                 labelText: 'Language',
                 border: OutlineInputBorder(),

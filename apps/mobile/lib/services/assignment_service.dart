@@ -1,10 +1,11 @@
 import 'dart:async';
+
 import 'package:appwrite/appwrite.dart';
-import 'package:flutter/foundation.dart';
+import 'package:campus_mesh/appwrite_config.dart';
 import 'package:campus_mesh/models/assignment_model.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
-import 'package:campus_mesh/appwrite_config.dart';
+import 'package:flutter/foundation.dart';
 
 class AssignmentService {
   final _appwrite = AppwriteService();
@@ -19,8 +20,8 @@ class AssignmentService {
   Stream<List<AssignmentModel>> getAssignments() {
     _assignmentsController ??=
         StreamController<List<AssignmentModel>>.broadcast(
-      onListen: () => _startPolling(),
-      onCancel: () => _stopPolling(),
+      onListen: _startPolling,
+      onCancel: _stopPolling,
     );
     return _assignmentsController!.stream;
   }

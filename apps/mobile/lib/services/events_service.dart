@@ -1,10 +1,11 @@
 import 'dart:async';
+
 import 'package:appwrite/appwrite.dart';
-import 'package:flutter/foundation.dart';
+import 'package:campus_mesh/appwrite_config.dart';
 import 'package:campus_mesh/models/event_model.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
-import 'package:campus_mesh/appwrite_config.dart';
+import 'package:flutter/foundation.dart';
 
 class EventsService {
   final _appwrite = AppwriteService();
@@ -18,8 +19,8 @@ class EventsService {
   // Get all events (polling-based stream)
   Stream<List<EventModel>> getEvents() {
     _eventsController ??= StreamController<List<EventModel>>.broadcast(
-      onListen: () => _startPolling(),
-      onCancel: () => _stopPolling(),
+      onListen: _startPolling,
+      onCancel: _stopPolling,
     );
     return _eventsController!.stream;
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 /// Fallback screen to display the college website notices page
 /// when scraped notices are not available or fail to load
@@ -117,7 +117,7 @@ class _WebsiteNoticesFallbackScreenState
           IconButton(
             icon: const Icon(Icons.info_outline),
             tooltip: 'About',
-            onPressed: () => _showAboutDialog(),
+            onPressed: _showAboutDialog,
           ),
         ],
       ),
@@ -126,7 +126,7 @@ class _WebsiteNoticesFallbackScreenState
           if (_error != null)
             Center(
               child: Padding(
-                padding: const EdgeInsets.all(24.0),
+                padding: const EdgeInsets.all(24),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -185,9 +185,9 @@ class _WebsiteNoticesFallbackScreenState
           else
             WebViewWidget(controller: _controller),
           if (_isLoading)
-            Container(
+            const ColoredBox(
               color: Colors.white,
-              child: const Center(
+              child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

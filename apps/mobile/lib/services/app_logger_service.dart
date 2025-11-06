@@ -9,12 +9,6 @@ enum LogLevel { debug, info, warning, error, fatal }
 
 /// Log entry
 class LogEntry {
-  final LogLevel level;
-  final String message;
-  final DateTime timestamp;
-  final String? category;
-  final Map<String, dynamic>? metadata;
-  final StackTrace? stackTrace;
 
   LogEntry({
     required this.level,
@@ -24,15 +18,6 @@ class LogEntry {
     this.metadata,
     this.stackTrace,
   });
-
-  Map<String, dynamic> toJson() => {
-        'level': level.name,
-        'message': message,
-        'timestamp': timestamp.toIso8601String(),
-        'category': category,
-        'metadata': metadata,
-        'stackTrace': stackTrace?.toString(),
-      };
 
   factory LogEntry.fromJson(Map<String, dynamic> json) => LogEntry(
         level: LogLevel.values.byName(json['level']),
@@ -44,6 +29,21 @@ class LogEntry {
             ? StackTrace.fromString(json['stackTrace'])
             : null,
       );
+  final LogLevel level;
+  final String message;
+  final DateTime timestamp;
+  final String? category;
+  final Map<String, dynamic>? metadata;
+  final StackTrace? stackTrace;
+
+  Map<String, dynamic> toJson() => {
+        'level': level.name,
+        'message': message,
+        'timestamp': timestamp.toIso8601String(),
+        'category': category,
+        'metadata': metadata,
+        'stackTrace': stackTrace?.toString(),
+      };
 
   @override
   String toString() {
@@ -60,9 +60,9 @@ class LogEntry {
 /// Comprehensive logging service for the app
 /// Supports multiple log levels, categories, file logging, and log export
 class AppLoggerService {
-  static final AppLoggerService _instance = AppLoggerService._internal();
   factory AppLoggerService() => _instance;
   AppLoggerService._internal();
+  static final AppLoggerService _instance = AppLoggerService._internal();
 
   // In-memory log buffer
   final List<LogEntry> _logs = [];

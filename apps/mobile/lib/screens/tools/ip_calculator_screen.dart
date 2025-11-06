@@ -205,7 +205,7 @@ class _IPCalculatorScreenState extends State<IPCalculatorScreen>
 
     // Remove leading zeros
     return sections.map((s) {
-      final trimmed = s.replaceFirst(RegExp(r'^0+'), '');
+      final trimmed = s.replaceFirst(RegExp('^0+'), '');
       return trimmed.isEmpty ? '0' : trimmed;
     }).join(':');
   }

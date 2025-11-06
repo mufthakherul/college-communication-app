@@ -1,6 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:convert';
 
 class JSONFormatterScreen extends StatefulWidget {
   const JSONFormatterScreen({super.key});
@@ -90,11 +91,11 @@ class _JSONFormatterScreenState extends State<JSONFormatterScreen>
     if (_inputController.text.trim().isEmpty) return;
 
     final escaped = _inputController.text
-        .replaceAll('\\', '\\\\')
-        .replaceAll('"', '\\"')
-        .replaceAll('\n', '\\n')
-        .replaceAll('\r', '\\r')
-        .replaceAll('\t', '\\t');
+        .replaceAll(r'\', r'\\')
+        .replaceAll('"', r'\"')
+        .replaceAll('\n', r'\n')
+        .replaceAll('\r', r'\r')
+        .replaceAll('\t', r'\t');
 
     setState(() {
       _outputController.text = escaped;
@@ -105,11 +106,11 @@ class _JSONFormatterScreenState extends State<JSONFormatterScreen>
     if (_inputController.text.trim().isEmpty) return;
 
     final unescaped = _inputController.text
-        .replaceAll('\\\\', '\\')
-        .replaceAll('\\"', '"')
-        .replaceAll('\\n', '\n')
-        .replaceAll('\\r', '\r')
-        .replaceAll('\\t', '\t');
+        .replaceAll(r'\\', r'\')
+        .replaceAll(r'\"', '"')
+        .replaceAll(r'\n', '\n')
+        .replaceAll(r'\r', '\r')
+        .replaceAll(r'\t', '\t');
 
     setState(() {
       _outputController.text = unescaped;
@@ -429,7 +430,8 @@ class _JSONFormatterScreenState extends State<JSONFormatterScreen>
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const SelectableText(
-                '''<?xml version="1.0" encoding="UTF-8"?>
+                '''
+<?xml version="1.0" encoding="UTF-8"?>
 <student>
   <name>John Doe</name>
   <id>12345</id>

@@ -1,21 +1,21 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:campus_mesh/models/user_model.dart';
+import 'package:campus_mesh/screens/auth/login_screen.dart';
+import 'package:campus_mesh/screens/developer/debug_console_screen.dart';
+import 'package:campus_mesh/screens/developer/developer_info_screen.dart';
+import 'package:campus_mesh/screens/profile/edit_profile_screen.dart';
+import 'package:campus_mesh/screens/settings/mesh_network_screen.dart';
+import 'package:campus_mesh/screens/settings/sync_settings_screen.dart';
 import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/services/theme_service.dart';
-import 'package:campus_mesh/screens/auth/login_screen.dart';
-import 'package:campus_mesh/screens/developer/developer_info_screen.dart';
-import 'package:campus_mesh/screens/developer/debug_console_screen.dart';
-import 'package:campus_mesh/screens/settings/sync_settings_screen.dart';
-import 'package:campus_mesh/screens/settings/mesh_network_screen.dart';
-import 'package:campus_mesh/screens/profile/edit_profile_screen.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class ProfileScreen extends StatefulWidget {
-  final UserModel? user;
-  final UserModel? currentUser; // Current logged-in user to check permissions
+class ProfileScreen extends StatefulWidget { // Current logged-in user to check permissions
 
   const ProfileScreen({super.key, this.user, this.currentUser});
+  final UserModel? user;
+  final UserModel? currentUser;
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -69,7 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   radius: 60,
                   backgroundColor: Theme.of(
                     context,
-                  ).primaryColor.withOpacity(0.2),
+                  ).primaryColor.withValues(alpha: 0.2),
                   child: widget.user!.photoURL.isNotEmpty
                       ? ClipOval(
                           child: Image.network(
@@ -336,7 +336,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           );
 
-                          if (confirmed == true && context.mounted) {
+                          if (confirmed ?? false && context.mounted) {
                             await authService.signOut();
                             if (context.mounted) {
                               Navigator.of(context).pushAndRemoveUntil(

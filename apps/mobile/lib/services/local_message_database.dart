@@ -1,14 +1,15 @@
 import 'dart:async';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
+
 import 'package:flutter/foundation.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 /// Local database service for storing messages offline
 class LocalMessageDatabase {
-  static final LocalMessageDatabase _instance =
-      LocalMessageDatabase._internal();
   factory LocalMessageDatabase() => _instance;
   LocalMessageDatabase._internal();
+  static final LocalMessageDatabase _instance =
+      LocalMessageDatabase._internal();
 
   Database? _database;
 
@@ -24,7 +25,7 @@ class LocalMessageDatabase {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'campus_mesh_messages.db');
 
-    return await openDatabase(
+    return openDatabase(
       path,
       version: 1,
       onCreate: _onCreate,
@@ -96,7 +97,7 @@ class LocalMessageDatabase {
   /// Get all pending messages for sync
   Future<List<Map<String, dynamic>>> getPendingMessages() async {
     final db = await database;
-    return await db.query(
+    return db.query(
       'local_messages',
       where: 'sync_status = ?',
       whereArgs: ['pending'],
@@ -110,7 +111,7 @@ class LocalMessageDatabase {
     String userId2,
   ) async {
     final db = await database;
-    return await db.query(
+    return db.query(
       'local_messages',
       where: '(sender_id = ? AND recipient_id = ?) OR '
           '(sender_id = ? AND recipient_id = ?)',
@@ -122,7 +123,7 @@ class LocalMessageDatabase {
   /// Get group messages
   Future<List<Map<String, dynamic>>> getGroupMessages(String groupId) async {
     final db = await database;
-    return await db.query(
+    return db.query(
       'local_messages',
       where: 'group_id = ?',
       whereArgs: [groupId],
@@ -191,7 +192,7 @@ class LocalMessageDatabase {
     final cutoffDate =
         DateTime.now().subtract(Duration(days: daysToKeep)).toIso8601String();
 
-    return await db.delete(
+    return db.delete(
       'local_messages',
       where: 'sync_status = ? AND synced_at < ?',
       whereArgs: ['synced', cutoffDate],
@@ -230,7 +231,7 @@ class LocalMessageDatabase {
 
     final stats = <String, int>{};
     for (final row in results) {
-      stats[row['sync_status'] as String] = row['count'] as int;
+      stats[row['sync_status']! as String] = row['count']! as int;
     }
     return stats;
   }

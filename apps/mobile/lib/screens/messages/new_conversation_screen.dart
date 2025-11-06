@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:appwrite/appwrite.dart';
+import 'package:campus_mesh/appwrite_config.dart';
 import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
-import 'package:campus_mesh/appwrite_config.dart';
-import 'package:appwrite/appwrite.dart';
+import 'package:flutter/material.dart';
 
 /// Screen for selecting a user to start a new conversation
 class NewConversationScreen extends StatefulWidget {
@@ -107,7 +107,7 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(60),
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8),
             child: TextField(
               controller: _searchController,
               decoration: InputDecoration(

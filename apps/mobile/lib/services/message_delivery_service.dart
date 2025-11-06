@@ -1,6 +1,7 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
+
 import 'package:campus_mesh/services/app_logger_service.dart';
+import 'package:flutter/foundation.dart';
 
 /// Message delivery status
 enum MessageDeliveryStatus {
@@ -16,12 +17,6 @@ enum TypingStatus { typing, stopped }
 
 /// Message delivery tracking
 class MessageDeliveryTracking {
-  final String messageId;
-  MessageDeliveryStatus status;
-  DateTime? sentAt;
-  DateTime? deliveredAt;
-  DateTime? readAt;
-  String? errorMessage;
 
   MessageDeliveryTracking({
     required this.messageId,
@@ -31,15 +26,6 @@ class MessageDeliveryTracking {
     this.readAt,
     this.errorMessage,
   });
-
-  Map<String, dynamic> toJson() => {
-        'messageId': messageId,
-        'status': status.name,
-        'sentAt': sentAt?.toIso8601String(),
-        'deliveredAt': deliveredAt?.toIso8601String(),
-        'readAt': readAt?.toIso8601String(),
-        'errorMessage': errorMessage,
-      };
 
   factory MessageDeliveryTracking.fromJson(Map<String, dynamic> json) =>
       MessageDeliveryTracking(
@@ -59,14 +45,25 @@ class MessageDeliveryTracking {
             : null,
         errorMessage: json['errorMessage'] as String?,
       );
+  final String messageId;
+  MessageDeliveryStatus status;
+  DateTime? sentAt;
+  DateTime? deliveredAt;
+  DateTime? readAt;
+  String? errorMessage;
+
+  Map<String, dynamic> toJson() => {
+        'messageId': messageId,
+        'status': status.name,
+        'sentAt': sentAt?.toIso8601String(),
+        'deliveredAt': deliveredAt?.toIso8601String(),
+        'readAt': readAt?.toIso8601String(),
+        'errorMessage': errorMessage,
+      };
 }
 
 /// Typing indicator
 class TypingIndicator {
-  final String userId;
-  final String conversationId;
-  final TypingStatus status;
-  final DateTime timestamp;
 
   TypingIndicator({
     required this.userId,
@@ -74,13 +71,6 @@ class TypingIndicator {
     required this.status,
     DateTime? timestamp,
   }) : timestamp = timestamp ?? DateTime.now();
-
-  Map<String, dynamic> toJson() => {
-        'userId': userId,
-        'conversationId': conversationId,
-        'status': status.name,
-        'timestamp': timestamp.toIso8601String(),
-      };
 
   factory TypingIndicator.fromJson(Map<String, dynamic> json) =>
       TypingIndicator(
@@ -92,6 +82,17 @@ class TypingIndicator {
         ),
         timestamp: DateTime.parse(json['timestamp'] as String),
       );
+  final String userId;
+  final String conversationId;
+  final TypingStatus status;
+  final DateTime timestamp;
+
+  Map<String, dynamic> toJson() => {
+        'userId': userId,
+        'conversationId': conversationId,
+        'status': status.name,
+        'timestamp': timestamp.toIso8601String(),
+      };
 
   bool get isStale {
     final now = DateTime.now();
@@ -103,10 +104,10 @@ class TypingIndicator {
 /// Note: This is a simplified implementation. Real-time features would require
 /// Appwrite Realtime subscriptions or custom implementation
 class MessageDeliveryService {
-  static final MessageDeliveryService _instance =
-      MessageDeliveryService._internal();
   factory MessageDeliveryService() => _instance;
   MessageDeliveryService._internal();
+  static final MessageDeliveryService _instance =
+      MessageDeliveryService._internal();
 
   final Map<String, MessageDeliveryTracking> _deliveryTracking = {};
   final Map<String, TypingIndicator> _typingIndicators = {};
@@ -392,19 +393,19 @@ class MessageDeliveryService {
     for (final tracking in _deliveryTracking.values) {
       switch (tracking.status) {
         case MessageDeliveryStatus.sending:
-          stats['sending'] = (stats['sending'] as int) + 1;
+          stats['sending'] = (stats['sending']!) + 1;
           break;
         case MessageDeliveryStatus.sent:
-          stats['sent'] = (stats['sent'] as int) + 1;
+          stats['sent'] = (stats['sent']!) + 1;
           break;
         case MessageDeliveryStatus.delivered:
-          stats['delivered'] = (stats['delivered'] as int) + 1;
+          stats['delivered'] = (stats['delivered']!) + 1;
           break;
         case MessageDeliveryStatus.read:
-          stats['read'] = (stats['read'] as int) + 1;
+          stats['read'] = (stats['read']!) + 1;
           break;
         case MessageDeliveryStatus.failed:
-          stats['failed'] = (stats['failed'] as int) + 1;
+          stats['failed'] = (stats['failed']!) + 1;
           break;
       }
     }

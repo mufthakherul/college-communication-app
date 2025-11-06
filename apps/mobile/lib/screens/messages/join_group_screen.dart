@@ -1,6 +1,6 @@
+import 'package:campus_mesh/services/chat_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:campus_mesh/services/chat_service.dart';
 
 /// Screen for joining a group chat using invite code
 class JoinGroupScreen extends StatefulWidget {
@@ -68,7 +68,7 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Join Group')),
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -103,7 +103,7 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> {
               ),
               textCapitalization: TextCapitalization.characters,
               inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'[A-Z0-9]')),
+                FilteringTextInputFormatter.allow(RegExp('[A-Z0-9]')),
                 LengthLimitingTextInputFormatter(8),
               ],
               textAlign: TextAlign.center,

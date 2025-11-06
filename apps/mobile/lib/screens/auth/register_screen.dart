@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/screens/home_screen.dart';
+import 'package:campus_mesh/services/auth_service.dart';
+import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -70,8 +70,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       }
     } catch (e) {
       if (mounted) {
-        String errorMessage = 'Failed to register';
-        String errorDetails = e.toString();
+        var errorMessage = 'Failed to register';
+        var errorDetails = e.toString();
 
         // Provide more helpful error messages
         if (errorDetails.contains('email-already-in-use')) {
@@ -118,7 +118,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(24),
             child: Form(
               key: _formKey,
               child: Column(

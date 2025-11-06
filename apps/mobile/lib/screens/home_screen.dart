@@ -1,18 +1,18 @@
-import 'package:flutter/material.dart';
-import 'package:campus_mesh/screens/notices/notices_screen.dart';
-import 'package:campus_mesh/screens/messages/messages_screen.dart';
-import 'package:campus_mesh/screens/books/books_screen.dart';
-import 'package:campus_mesh/screens/tools/tools_screen.dart';
-import 'package:campus_mesh/screens/profile/profile_screen.dart';
-import 'package:campus_mesh/services/auth_service.dart';
-import 'package:campus_mesh/services/demo_mode_service.dart';
-import 'package:campus_mesh/services/connectivity_service.dart';
-import 'package:campus_mesh/services/offline_queue_service.dart';
 import 'package:campus_mesh/models/user_model.dart';
+import 'package:campus_mesh/screens/books/books_screen.dart';
+import 'package:campus_mesh/screens/messages/messages_screen.dart';
+import 'package:campus_mesh/screens/notices/notices_screen.dart';
+import 'package:campus_mesh/screens/profile/profile_screen.dart';
+import 'package:campus_mesh/screens/qr/qr_generator_menu_screen.dart';
+import 'package:campus_mesh/screens/qr/qr_scanner_screen.dart';
+import 'package:campus_mesh/screens/tools/tools_screen.dart';
+import 'package:campus_mesh/services/auth_service.dart';
+import 'package:campus_mesh/services/connectivity_service.dart';
+import 'package:campus_mesh/services/demo_mode_service.dart';
+import 'package:campus_mesh/services/offline_queue_service.dart';
 import 'package:campus_mesh/widgets/connectivity_banner.dart';
 import 'package:campus_mesh/widgets/network_status_widget.dart';
-import 'package:campus_mesh/screens/qr/qr_scanner_screen.dart';
-import 'package:campus_mesh/screens/qr/qr_generator_menu_screen.dart';
+import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

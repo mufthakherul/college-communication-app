@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:campus_mesh/services/mesh_network_service.dart';
 import 'package:campus_mesh/services/permission_service.dart';
+import 'package:flutter/material.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 /// Screen for mesh network QR code pairing
 class MeshQRPairingScreen extends StatefulWidget {
@@ -122,7 +122,7 @@ class _MeshQRPairingScreenState extends State<MeshQRPairingScreen> {
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   blurRadius: 20,
                   offset: const Offset(0, 4),
                 ),
@@ -215,7 +215,7 @@ class _MeshQRPairingScreenState extends State<MeshQRPairingScreen> {
                 onDetect: (capture) {
                   if (_isProcessing) return;
 
-                  final List<Barcode> barcodes = capture.barcodes;
+                  final barcodes = capture.barcodes;
                   for (final barcode in barcodes) {
                     if (barcode.rawValue != null) {
                       _handleScannedCode(barcode.rawValue!);

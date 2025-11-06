@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:campus_mesh/models/book_model.dart';
-import 'package:campus_mesh/services/books_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
+import 'package:campus_mesh/services/books_service.dart';
+import 'package:flutter/material.dart';
 
 class CreateBookScreen extends StatefulWidget {
   const CreateBookScreen({super.key});
@@ -145,7 +145,7 @@ class _CreateBookScreenState extends State<CreateBookScreen> {
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<BookCategory>(
-              value: _selectedCategory,
+              initialValue: _selectedCategory,
               decoration: const InputDecoration(
                 labelText: 'Category *',
                 border: OutlineInputBorder(),

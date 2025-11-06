@@ -268,7 +268,7 @@ class _FormulaSheetScreenState extends State<FormulaSheetScreen> {
                 setState(() => _selectedSubject = selection.first);
               },
               style: ButtonStyle(
-                textStyle: MaterialStateProperty.all(
+                textStyle: WidgetStateProperty.all(
                   const TextStyle(fontSize: 12),
                 ),
               ),
@@ -363,9 +363,9 @@ class _FormulaSheetScreenState extends State<FormulaSheetScreen> {
 }
 
 class Formula {
+
+  Formula(this.name, this.formula, this.description);
   final String name;
   final String formula;
   final String description;
-
-  Formula(this.name, this.formula, this.description);
 }

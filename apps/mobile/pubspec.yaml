@@ -1,12 +1,12 @@
 name: campus_mesh
 description: RPI Communication App - Rangpur Polytechnic Institute (Developed by Mufthakherul)
 
-publish_to: 'none'
+publish_to: "none"
 
 version: 2.0.0+2
 
 environment:
-  sdk: '>=3.3.0 <4.0.0'
+  sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
   flutter:
@@ -17,6 +17,8 @@ dependencies:
   webview_flutter: ^4.4.2
   shared_preferences: ^2.2.2
   cupertino_icons: ^1.0.2
+  # Note: flutter_markdown is discontinued, but flutter_markdown_plus has API breaking changes
+  # Keeping flutter_markdown until we can properly test the migration
   flutter_markdown: ^0.6.18
   # Network improvements
   connectivity_plus: ^6.0.0

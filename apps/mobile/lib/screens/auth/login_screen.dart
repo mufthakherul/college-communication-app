@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:campus_mesh/screens/auth/demo_login_screen.dart';
+import 'package:campus_mesh/screens/auth/register_screen.dart';
+import 'package:campus_mesh/screens/home_screen.dart';
 import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/services/demo_mode_service.dart';
-import 'package:campus_mesh/screens/home_screen.dart';
-import 'package:campus_mesh/screens/auth/register_screen.dart';
-import 'package:campus_mesh/screens/auth/demo_login_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -47,8 +47,8 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } catch (e) {
       if (mounted) {
-        String errorMessage = 'Failed to sign in';
-        String errorDetails = e.toString();
+        var errorMessage = 'Failed to sign in';
+        var errorDetails = e.toString();
 
         // Provide more helpful error messages
         if (errorDetails.contains('user-not-found')) {
@@ -93,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.all(24),
             child: Form(
               key: _formKey,
               child: Column(

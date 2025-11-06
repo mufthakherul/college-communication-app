@@ -1,14 +1,15 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
-import 'package:campus_mesh/services/cache_service.dart';
-import 'package:campus_mesh/services/offline_queue_service.dart';
-import 'package:campus_mesh/services/connectivity_service.dart';
-import 'package:campus_mesh/services/auth_service.dart';
-import 'package:campus_mesh/services/debug_logger_service.dart';
 import 'dart:io';
-import 'package:package_info_plus/package_info_plus.dart';
+
+import 'package:campus_mesh/services/auth_service.dart';
+import 'package:campus_mesh/services/cache_service.dart';
+import 'package:campus_mesh/services/connectivity_service.dart';
+import 'package:campus_mesh/services/debug_logger_service.dart';
+import 'package:campus_mesh/services/offline_queue_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 /// Debug Console Screen - Only available in debug mode
 /// Provides detailed debugging information about the app state
@@ -44,7 +45,7 @@ class _DebugConsoleScreenState extends State<DebugConsoleScreen> {
       final packageInfo = await PackageInfo.fromPlatform();
       final deviceInfo = DeviceInfoPlugin();
 
-      Map<String, dynamic> deviceData = {};
+      var deviceData = <String, dynamic>{};
       if (Platform.isAndroid) {
         final androidInfo = await deviceInfo.androidInfo;
         deviceData = {
@@ -324,7 +325,7 @@ class _DebugConsoleScreenState extends State<DebugConsoleScreen> {
                     label: Text(
                       '${level.name} (${_debugLogger.getLogsByLevel(level).length})',
                     ),
-                    backgroundColor: _getLogLevelColor(level).withOpacity(0.2),
+                    backgroundColor: _getLogLevelColor(level).withValues(alpha: 0.2),
                     onSelected: (selected) {},
                   ),
               ],
@@ -386,9 +387,7 @@ class _DebugConsoleScreenState extends State<DebugConsoleScreen> {
                   ),
                   ElevatedButton.icon(
                     onPressed: () {
-                      setState(() {
-                        _debugLogger.clearLogs();
-                      });
+                      setState(_debugLogger.clearLogs);
                     },
                     icon: const Icon(Icons.delete_outline),
                     label: const Text('Clear Logs'),

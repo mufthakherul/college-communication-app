@@ -2,19 +2,7 @@ enum NoticeType { announcement, event, urgent }
 
 enum NoticeSource { admin, scraped }
 
-class NoticeModel {
-  final String id;
-  final String title;
-  final String content;
-  final NoticeType type;
-  final String targetAudience;
-  final String authorId;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-  final DateTime? expiresAt;
-  final bool isActive;
-  final NoticeSource source;
-  final String? sourceUrl; // For scraped notices
+class NoticeModel { // For scraped notices
 
   NoticeModel({
     required this.id,
@@ -33,7 +21,7 @@ class NoticeModel {
 
   factory NoticeModel.fromJson(Map<String, dynamic> data) {
     return NoticeModel(
-      id: data['id'] ?? data['\$id'] ?? '',
+      id: data['id'] ?? data[r'$id'] ?? '',
       title: data['title'] ?? '',
       content: data['content'] ?? '',
       type: _parseType(data['type']),
@@ -54,6 +42,18 @@ class NoticeModel {
       sourceUrl: data['source_url'] ?? data['sourceUrl'],
     );
   }
+  final String id;
+  final String title;
+  final String content;
+  final NoticeType type;
+  final String targetAudience;
+  final String authorId;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final DateTime? expiresAt;
+  final bool isActive;
+  final NoticeSource source;
+  final String? sourceUrl;
 
   Map<String, dynamic> toJson() {
     return {

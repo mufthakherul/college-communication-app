@@ -1,17 +1,17 @@
-import 'package:flutter/foundation.dart';
 import 'package:appwrite/appwrite.dart';
-import 'package:campus_mesh/models/user_model.dart';
-import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/appwrite_config.dart';
-import 'package:campus_mesh/utils/input_validator.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/services/ai_chatbot_service.dart';
+import 'package:campus_mesh/services/appwrite_service.dart';
+import 'package:campus_mesh/utils/input_validator.dart';
+import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
-  // Singleton pattern
-  static final AuthService _instance = AuthService._internal();
   factory AuthService() => _instance;
   AuthService._internal();
+  // Singleton pattern
+  static final AuthService _instance = AuthService._internal();
 
   final _appwrite = AppwriteService();
   static const String _userIdKey = 'current_user_id';
@@ -63,7 +63,7 @@ class AuthService {
 
   // Check if user is authenticated
   Future<bool> isAuthenticated() async {
-    return await _appwrite.isAuthenticated();
+    return _appwrite.isAuthenticated();
   }
 
   // Sign in with email and password
@@ -101,12 +101,12 @@ class AuthService {
       debugPrint('❌ Sign in failed: ${e.message} (Code: ${e.code})');
 
       // Provide user-friendly error messages
-      if (e.code == 401 || e.message?.contains('Invalid credentials') == true) {
+      if (e.code == 401 || (e.message?.contains('Invalid credentials') ?? false)) {
         throw Exception('invalid-credentials: Invalid email or password.');
-      } else if (e.message?.contains('network') == true || e.code == 0) {
+      } else if ((e.message?.contains('network') ?? false) || e.code == 0) {
         throw Exception('network: Please check your internet connection.');
-      } else if (e.message?.contains('user') == true &&
-          e.message?.contains('blocked') == true) {
+      } else if ((e.message?.contains('user') ?? false) &&
+          (e.message?.contains('blocked') ?? false)) {
         throw Exception('user-blocked: This account has been disabled.');
       }
 
@@ -240,15 +240,15 @@ class AuthService {
       debugPrint('   Code: ${e.code}, Type: ${e.type}');
 
       // Provide user-friendly error messages
-      if (e.code == 409 || e.message?.contains('already exists') == true) {
+      if (e.code == 409 || (e.message?.contains('already exists') ?? false)) {
         throw Exception(
           'email-already-in-use: This email is already registered.',
         );
-      } else if (e.code == 400 && e.message?.contains('password') == true) {
+      } else if (e.code == 400 && (e.message?.contains('password') ?? false)) {
         throw Exception(
           'weak-password: Password must be at least 8 characters.',
         );
-      } else if (e.message?.contains('network') == true || e.code == 0) {
+      } else if ((e.message?.contains('network') ?? false) || e.code == 0) {
         throw Exception(
           'network: Please check your internet connection and try again.',
         );

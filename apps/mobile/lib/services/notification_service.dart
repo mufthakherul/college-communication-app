@@ -1,11 +1,12 @@
-import 'package:flutter/foundation.dart';
-import 'package:appwrite/appwrite.dart';
-import 'package:campus_mesh/models/notification_model.dart';
-import 'package:campus_mesh/services/auth_service.dart';
-import 'package:campus_mesh/services/appwrite_service.dart';
-import 'package:campus_mesh/services/website_scraper_service.dart';
-import 'package:campus_mesh/appwrite_config.dart';
 import 'dart:async';
+
+import 'package:appwrite/appwrite.dart';
+import 'package:campus_mesh/appwrite_config.dart';
+import 'package:campus_mesh/models/notification_model.dart';
+import 'package:campus_mesh/services/appwrite_service.dart';
+import 'package:campus_mesh/services/auth_service.dart';
+import 'package:campus_mesh/services/website_scraper_service.dart';
+import 'package:flutter/foundation.dart';
 
 /// Notification sources
 enum NotificationSource {
@@ -178,7 +179,7 @@ class NotificationService {
 
   // Get last website check time
   Future<DateTime?> getLastWebsiteCheckTime() async {
-    return await _websiteScraper.getLastCheckTime();
+    return _websiteScraper.getLastCheckTime();
   }
 
   void dispose() {

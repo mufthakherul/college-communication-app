@@ -1,14 +1,14 @@
-import 'package:flutter/material.dart';
 import 'package:campus_mesh/models/book_model.dart';
 import 'package:campus_mesh/models/user_model.dart';
-import 'package:campus_mesh/services/books_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
+import 'package:campus_mesh/services/books_service.dart';
+import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BookDetailScreen extends StatefulWidget {
-  final BookModel book;
 
   const BookDetailScreen({super.key, required this.book});
+  final BookModel book;
 
   @override
   State<BookDetailScreen> createState() => _BookDetailScreenState();
@@ -120,7 +120,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                     borderRadius: BorderRadius.circular(8),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),

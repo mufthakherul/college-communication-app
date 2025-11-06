@@ -2,22 +2,7 @@ enum MessageType { text, image, file, video, audio, document }
 
 enum MessageSyncStatus { synced, pending, failed, pendingApproval }
 
-class MessageModel {
-  final String id;
-  final String senderId;
-  final String recipientId;
-  final String content;
-  final MessageType type;
-  final DateTime? createdAt;
-  final bool read;
-  final DateTime? readAt;
-  final String? attachmentUrl; // URL for file attachments
-  final String? attachmentName; // Original file name
-  final int? attachmentSize; // File size in bytes
-  final String? thumbnailUrl; // Thumbnail for images/videos
-  final Map<String, dynamic>? metadata; // Additional metadata
-  final MessageSyncStatus? syncStatus; // Sync status for offline messages
-  final String? approvalStatus; // Approval status for group messages
+class MessageModel { // Approval status for group messages
 
   MessageModel({
     required this.id,
@@ -58,6 +43,21 @@ class MessageModel {
       approvalStatus: data['approval_status'] as String?,
     );
   }
+  final String id;
+  final String senderId;
+  final String recipientId;
+  final String content;
+  final MessageType type;
+  final DateTime? createdAt;
+  final bool read;
+  final DateTime? readAt;
+  final String? attachmentUrl; // URL for file attachments
+  final String? attachmentName; // Original file name
+  final int? attachmentSize; // File size in bytes
+  final String? thumbnailUrl; // Thumbnail for images/videos
+  final Map<String, dynamic>? metadata; // Additional metadata
+  final MessageSyncStatus? syncStatus; // Sync status for offline messages
+  final String? approvalStatus;
 
   Map<String, dynamic> toJson() {
     return {

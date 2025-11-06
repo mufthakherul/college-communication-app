@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:flutter/foundation.dart';
+
 import 'package:appwrite/appwrite.dart';
+import 'package:campus_mesh/appwrite_config.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
-import 'package:campus_mesh/services/local_chat_database.dart';
 import 'package:campus_mesh/services/connectivity_service.dart';
-import 'package:campus_mesh/appwrite_config.dart';
+import 'package:campus_mesh/services/local_chat_database.dart';
+import 'package:flutter/foundation.dart';
 
 /// Service for managing chats and conversations
 class ChatService {

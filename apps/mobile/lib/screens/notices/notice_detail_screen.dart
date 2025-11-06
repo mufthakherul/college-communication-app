@@ -1,16 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:campus_mesh/models/notice_model.dart';
+import 'package:campus_mesh/screens/qr/qr_share_screen.dart';
+import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/services/notice_service.dart';
 import 'package:campus_mesh/services/qr_data_service.dart';
-import 'package:campus_mesh/services/auth_service.dart';
-import 'package:campus_mesh/screens/qr/qr_share_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NoticeDetailScreen extends StatelessWidget {
-  final String noticeId;
 
   const NoticeDetailScreen({super.key, required this.noticeId});
+  final String noticeId;
 
   Color _getNoticeColor(NoticeType type) {
     switch (type) {
@@ -119,7 +119,7 @@ class NoticeDetailScreen extends StatelessWidget {
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.all(16),
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -156,14 +156,12 @@ class NoticeDetailScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Check if content contains markdown syntax
-                      _containsMarkdown(notice.content)
-                          ? MarkdownBody(
+                      if (_containsMarkdown(notice.content)) MarkdownBody(
                               data: notice.content,
                               styleSheet: MarkdownStyleSheet.fromTheme(
                                 Theme.of(context),
                               ),
-                            )
-                          : Text(
+                            ) else Text(
                               notice.content,
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
@@ -185,11 +183,11 @@ class NoticeDetailScreen extends StatelessWidget {
                       // Show website link for scraped notices
                       if (notice.source == NoticeSource.scraped) ...[
                         const Divider(),
-                        ListTile(
-                          leading: const Icon(Icons.source),
-                          title: const Text('Source'),
-                          subtitle: const Text('College Website'),
-                          trailing: const Icon(
+                        const ListTile(
+                          leading: Icon(Icons.source),
+                          title: Text('Source'),
+                          subtitle: Text('College Website'),
+                          trailing: Icon(
                             Icons.verified,
                             color: Colors.blue,
                           ),

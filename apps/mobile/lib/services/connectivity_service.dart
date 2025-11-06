@@ -1,6 +1,7 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/foundation.dart';
 
 /// Network quality levels
 enum NetworkQuality {
@@ -12,11 +13,11 @@ enum NetworkQuality {
 
 /// Service to monitor network connectivity status with automatic detection
 class ConnectivityService {
-  static final ConnectivityService _instance = ConnectivityService._internal();
   factory ConnectivityService() => _instance;
   ConnectivityService._internal() {
     _initConnectivityListener();
   }
+  static final ConnectivityService _instance = ConnectivityService._internal();
 
   final _connectivity = Connectivity();
   final _connectivityController = StreamController<bool>.broadcast();
@@ -51,9 +52,7 @@ class ConnectivityService {
 
     // Listen for connectivity changes
     _connectivitySubscription = _connectivity.onConnectivityChanged.listen(
-      (List<ConnectivityResult> results) {
-        _handleConnectivityChange(results);
-      },
+      _handleConnectivityChange,
       onError: (error) {
         if (kDebugMode) {
           debugPrint('Connectivity listener error: $error');
@@ -106,7 +105,7 @@ class ConnectivityService {
 
   /// Update network quality based on connection type
   Future<void> _updateNetworkQuality(List<ConnectivityResult> results) async {
-    NetworkQuality quality = NetworkQuality.good;
+    var quality = NetworkQuality.good;
 
     if (results.contains(ConnectivityResult.ethernet) ||
         results.contains(ConnectivityResult.wifi)) {

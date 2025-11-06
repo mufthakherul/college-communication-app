@@ -1,12 +1,13 @@
-import 'package:flutter/foundation.dart';
 import 'dart:collection';
+
+import 'package:flutter/foundation.dart';
 
 /// Debug Logger Service - Only active in debug mode
 /// Provides centralized logging for debugging purposes
 class DebugLoggerService {
-  static final DebugLoggerService _instance = DebugLoggerService._internal();
   factory DebugLoggerService() => _instance;
   DebugLoggerService._internal();
+  static final DebugLoggerService _instance = DebugLoggerService._internal();
 
   final Queue<LogEntry> _logs = Queue<LogEntry>();
   static const int _maxLogEntries = 500;
@@ -123,10 +124,6 @@ class DebugLoggerService {
 
 /// Log entry model
 class LogEntry {
-  final String message;
-  final LogLevel level;
-  final String? tag;
-  final DateTime timestamp;
 
   LogEntry({
     required this.message,
@@ -134,6 +131,10 @@ class LogEntry {
     this.tag,
     required this.timestamp,
   });
+  final String message;
+  final LogLevel level;
+  final String? tag;
+  final DateTime timestamp;
 
   @override
   String toString() {

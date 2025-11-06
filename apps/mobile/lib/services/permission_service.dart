@@ -4,9 +4,9 @@ import 'package:permission_handler/permission_handler.dart';
 /// Service for handling runtime permissions
 /// Ensures proper permission handling for Android 15 and above
 class PermissionService {
-  static final PermissionService _instance = PermissionService._internal();
   factory PermissionService() => _instance;
   PermissionService._internal();
+  static final PermissionService _instance = PermissionService._internal();
 
   /// Request camera permission for QR scanning
   Future<bool> requestCameraPermission() async {

@@ -1,6 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 
 class AttendanceTrackerScreen extends StatefulWidget {
   const AttendanceTrackerScreen({super.key});
@@ -401,21 +402,21 @@ class _AttendanceTrackerScreenState extends State<AttendanceTrackerScreen> {
 }
 
 class Subject {
-  String name;
-  int attended;
-  int total;
 
   Subject({required this.name, required this.attended, required this.total});
-
-  Map<String, dynamic> toJson() => {
-        'name': name,
-        'attended': attended,
-        'total': total,
-      };
 
   factory Subject.fromJson(Map<String, dynamic> json) => Subject(
         name: json['name'],
         attended: json['attended'],
         total: json['total'],
       );
+  String name;
+  int attended;
+  int total;
+
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'attended': attended,
+        'total': total,
+      };
 }

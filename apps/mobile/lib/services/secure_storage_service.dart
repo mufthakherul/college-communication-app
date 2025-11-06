@@ -1,7 +1,8 @@
 import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:crypto/crypto.dart';
 
 /// Secure storage service for sensitive data
 /// Provides basic obfuscation for stored data
@@ -28,10 +29,10 @@ import 'package:crypto/crypto.dart';
 /// 2. Replace this service with FlutterSecureStorage
 /// 3. Use await secureStorage.write(key: key, value: value)
 class SecureStorageService {
-  static final SecureStorageService _instance =
-      SecureStorageService._internal();
   factory SecureStorageService() => _instance;
   SecureStorageService._internal();
+  static final SecureStorageService _instance =
+      SecureStorageService._internal();
 
   // Simple obfuscation key - in production, derive this from device-specific data
   // This is a basic implementation; for production, use flutter_secure_storage
@@ -174,17 +175,17 @@ class SecureStorageService {
 
   /// Stores authentication token securely
   Future<bool> storeAuthToken(String token) async {
-    return await setSecureValue('auth_token', token);
+    return setSecureValue('auth_token', token);
   }
 
   /// Retrieves authentication token
   Future<String?> getAuthToken() async {
-    return await getSecureValue('auth_token');
+    return getSecureValue('auth_token');
   }
 
   /// Removes authentication token
   Future<bool> removeAuthToken() async {
-    return await removeSecureValue('auth_token');
+    return removeSecureValue('auth_token');
   }
 
   /// Stores user session data securely
@@ -212,7 +213,7 @@ class SecureStorageService {
 
   /// Removes user session data
   Future<bool> removeSessionData() async {
-    return await removeSecureValue('session_data');
+    return removeSecureValue('session_data');
   }
 
   /// Generic write method for compatibility
@@ -222,7 +223,7 @@ class SecureStorageService {
 
   /// Generic read method for compatibility
   Future<String?> read(String key) async {
-    return await getSecureValue(key);
+    return getSecureValue(key);
   }
 
   /// Generic delete method for compatibility
