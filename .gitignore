@@ -79,3 +79,6 @@ api-keys.json
 build/
 dist/
 release/
+
+# Appwrite MCP credentials
+tools/mcp/appwrite.mcp.env

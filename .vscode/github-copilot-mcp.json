@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "appwrite-docs": {
+      "url": "https://mcp-for-docs.appwrite.io",
+      "type": "http"
+    },
+    "appwrite-api": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-appwrite",
+        "--sites"
+      ],
+      "env": {
+        "APPWRITE_PROJECT_ID": "6904cfb1001e5253725b",
+        "APPWRITE_API_KEY": "standard_9d897d6a5ca9386d571fbe76aa68fc402b4a71d529770482dfd330509fcf5ea4fb10154585f23143d58725579327643d3921041c7fdd57515f60291b3f5f7564523a5e36632d909b97e6d0883d53e358888a7a1e42ba08be705662ce03ad1dd58c2a76ab3c07e17437341c9297eaa5ab6f06d86473f854bd0a46029792364a11",
+        "APPWRITE_ENDPOINT": "https://sgp.cloud.appwrite.io/v1"
+      }
+    }
+  }
+}
