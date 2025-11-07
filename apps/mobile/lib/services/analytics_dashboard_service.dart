@@ -228,7 +228,7 @@ class AnalyticsDashboardService {
       }
 
       // Get top users
-      // TODO: Optimize by fetching all users in a single query instead of individual queries
+      // TODO(optimization): Fetch all users in a single query instead of individual queries
       final sortedUsers = userMessageCounts.entries.toList()
         ..sort((a, b) => b.value.compareTo(a.value));
 

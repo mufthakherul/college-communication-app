@@ -1,0 +1,13 @@
+{
+    "$schema": "https://appwrite.io/schemas/appwrite.json",
+    "projectId": "6904cfb1001e5253725b",
+    "projectName": "rpi-communication",
+    "sites": [
+        {
+            "$id": "web-dashboard",
+            "name": "RPI Communication Dashboard",
+            "buildCommand": "cd apps/web && npm install && npm run build",
+            "outputDirectory": "apps/web/dist"
+        }
+    ]
+}
