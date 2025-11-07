@@ -1,6 +1,6 @@
 /**
  * About Page
- * Information about the Campus Mesh project
+ * Information about the RPI Echo System project
  */
 
 import React from 'react';
@@ -25,7 +25,6 @@ import {
   Speed,
   Lock,
   CloudSync,
-  Chat,
 } from '@mui/icons-material';
 
 const AboutPage: React.FC = () => {
@@ -69,7 +68,7 @@ const AboutPage: React.FC = () => {
           </IconButton>
           <School sx={{ mr: 2 }} />
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Campus Mesh
+            RPI Echo System
           </Typography>
           <Button color="inherit" onClick={() => navigate('/login')}>
             Login
@@ -88,7 +87,7 @@ const AboutPage: React.FC = () => {
       >
         <Container maxWidth="md">
           <Typography variant="h3" component="h1" gutterBottom fontWeight="bold">
-            About Campus Mesh
+            About RPI Echo System
           </Typography>
           <Typography variant="h6" component="h2">
             Revolutionizing College Communication
@@ -101,18 +100,16 @@ const AboutPage: React.FC = () => {
         {/* Overview */}
         <Paper elevation={2} sx={{ p: 4, mb: 4 }}>
           <Typography variant="h4" gutterBottom fontWeight="bold" color="primary">
-            What is Campus Mesh?
+            What is RPI Echo System?
           </Typography>
           <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
-            Campus Mesh is a comprehensive college communication platform designed to bridge the gap
-            between students, teachers, and administrators. Built with modern technology and security
-            in mind, it provides a seamless experience for managing notices, messages, schedules, and
-            more.
+            RPI Echo System is a college communication platform that connects students, teachers, and
+            administrators. It makes it easy to manage notices, messages, schedules, and more, all in
+            one place.
           </Typography>
           <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
-            Whether you're a student staying updated with college announcements, a teacher managing
-            classes and assignments, or an administrator coordinating campus activities, Campus Mesh
-            offers tailored solutions for everyone.
+            Whether you're a student keeping up with announcements, a teacher managing classes, or an
+            admin coordinating activities, RPI Echo System has everything you need to stay connected.
           </Typography>
         </Paper>
 
@@ -150,7 +147,7 @@ const AboutPage: React.FC = () => {
 
         {/* Key Benefits */}
         <Typography variant="h4" gutterBottom fontWeight="bold" color="primary" sx={{ mb: 4 }}>
-          Why Campus Mesh?
+          Why RPI Echo System?
         </Typography>
         <Grid container spacing={4} sx={{ mb: 4 }}>
           {benefits.map((benefit, index) => (
@@ -183,70 +180,70 @@ const AboutPage: React.FC = () => {
         {/* Technology Stack */}
         <Paper elevation={2} sx={{ p: 4, mb: 4 }}>
           <Typography variant="h4" gutterBottom fontWeight="bold" color="primary">
-            Built with Modern Technology
+            Reliable & Secure
           </Typography>
           <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
-            Campus Mesh is built using cutting-edge technologies to ensure reliability, security,
-            and performance:
+            RPI Echo System uses modern, reliable technology to keep your data safe and the app running
+            smoothly.
           </Typography>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6} md={4}>
               <Box sx={{ p: 2, bgcolor: 'grey.100', borderRadius: 1 }}>
                 <Typography variant="subtitle1" fontWeight="bold">
-                  🚀 Flutter
+                  � Secure
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Cross-platform mobile app development
+                  Your data is encrypted and protected
                 </Typography>
               </Box>
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
               <Box sx={{ p: 2, bgcolor: 'grey.100', borderRadius: 1 }}>
                 <Typography variant="subtitle1" fontWeight="bold">
-                  ⚛️ React
+                  🔔 Real-time
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Modern web dashboard interface
+                  Get instant notifications
                 </Typography>
               </Box>
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
               <Box sx={{ p: 2, bgcolor: 'grey.100', borderRadius: 1 }}>
                 <Typography variant="subtitle1" fontWeight="bold">
-                  ☁️ Appwrite
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Backend-as-a-Service platform
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Box sx={{ p: 2, bgcolor: 'grey.100', borderRadius: 1 }}>
-                <Typography variant="subtitle1" fontWeight="bold">
-                  🔒 End-to-End Encryption
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Secure message encryption
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Box sx={{ p: 2, bgcolor: 'grey.100', borderRadius: 1 }}>
-                <Typography variant="subtitle1" fontWeight="bold">
-                  🔔 Real-time Notifications
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Instant push notifications
-                </Typography>
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Box sx={{ p: 2, bgcolor: 'grey.100', borderRadius: 1 }}>
-                <Typography variant="subtitle1" fontWeight="bold">
-                  📱 Offline Support
+                  📱 Works Offline
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   Access data without internet
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <Box sx={{ p: 2, bgcolor: 'grey.100', borderRadius: 1 }}>
+                <Typography variant="subtitle1" fontWeight="bold">
+                  ⚡ Fast
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Quick and responsive
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <Box sx={{ p: 2, bgcolor: 'grey.100', borderRadius: 1 }}>
+                <Typography variant="subtitle1" fontWeight="bold">
+                  � Cross-platform
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Works on mobile and web
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <Box sx={{ p: 2, bgcolor: 'grey.100', borderRadius: 1 }}>
+                <Typography variant="subtitle1" fontWeight="bold">
+                  🌐 Always Available
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  24/7 access to your data
                 </Typography>
               </Box>
             </Grid>
@@ -259,7 +256,7 @@ const AboutPage: React.FC = () => {
             Ready to Get Started?
           </Typography>
           <Typography variant="body1" color="text.secondary" paragraph>
-            Download the app or access the web dashboard to experience Campus Mesh
+            Download the app or access the web dashboard to experience RPI Echo System
           </Typography>
           <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap', mt: 3 }}>
             <Button

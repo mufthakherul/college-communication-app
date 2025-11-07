@@ -1,6 +1,6 @@
 /**
  * Features Page
- * Detailed features and guides for Campus Mesh
+ * Detailed features and guides for RPI Echo System
  */
 
 import React from 'react';
@@ -72,7 +72,7 @@ const FeaturesPage: React.FC = () => {
     {
       icon: <Group sx={{ fontSize: 50, color: '#1976d2' }} />,
       title: 'User Management',
-      description: 'Comprehensive user management for students, teachers, and administrators.',
+      description: 'Manage students, teachers, and administrators with ease.',
       roles: ['Admins'],
       highlights: [
         'Add/edit/delete users',
@@ -189,7 +189,7 @@ const FeaturesPage: React.FC = () => {
     {
       icon: <Analytics sx={{ fontSize: 50, color: '#1976d2' }} />,
       title: 'Analytics & Reports',
-      description: 'Comprehensive analytics and reporting for administrators.',
+      description: 'Track usage and generate reports for better insights.',
       roles: ['Admins'],
       highlights: [
         'User activity analytics',
@@ -205,7 +205,7 @@ const FeaturesPage: React.FC = () => {
     {
       title: 'Getting Started',
       content: [
-        'Download the Campus Mesh app for your role (Student/Teacher/Admin)',
+        'Download the RPI Echo System app for your role (Student/Teacher/Admin)',
         'Install the APK on your Android device',
         'Open the app and login with your credentials provided by the college',
         'Complete your profile setup',
@@ -270,7 +270,7 @@ const FeaturesPage: React.FC = () => {
           </IconButton>
           <School sx={{ mr: 2 }} />
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Campus Mesh
+            RPI Echo System
           </Typography>
           <Button color="inherit" onClick={() => navigate('/login')}>
             Login
@@ -292,7 +292,7 @@ const FeaturesPage: React.FC = () => {
             Features & Guides
           </Typography>
           <Typography variant="h6" component="h2">
-            Everything you need to know about Campus Mesh
+            Everything you need to know about RPI Echo System
           </Typography>
         </Container>
       </Box>
@@ -392,7 +392,7 @@ const FeaturesPage: React.FC = () => {
         {/* CTA Section */}
         <Box sx={{ textAlign: 'center', py: 4, mt: 4 }}>
           <Typography variant="h5" gutterBottom fontWeight="bold">
-            Ready to Experience Campus Mesh?
+            Ready to Experience RPI Echo System?
           </Typography>
           <Typography variant="body1" color="text.secondary" paragraph>
             Download the app now and start connecting with your college community

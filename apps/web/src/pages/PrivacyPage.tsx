@@ -36,7 +36,7 @@ const PrivacyPage: React.FC = () => {
           </IconButton>
           <School sx={{ mr: 2 }} />
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Campus Mesh
+            RPI Echo System
           </Typography>
           <Button color="inherit" onClick={() => navigate('/login')}>
             Login
@@ -75,7 +75,7 @@ const PrivacyPage: React.FC = () => {
             1. Introduction
           </Typography>
           <Typography variant="body1" paragraph sx={{ lineHeight: 1.8 }}>
-            Welcome to Campus Mesh. We are committed to protecting your personal information and
+            Welcome to RPI Echo System. We are committed to protecting your personal information and
             your right to privacy. This Privacy Policy explains how we collect, use, disclose, and
             safeguard your information when you use our mobile application and web dashboard.
           </Typography>
@@ -264,7 +264,7 @@ const PrivacyPage: React.FC = () => {
             8. Children's Privacy
           </Typography>
           <Typography variant="body1" paragraph sx={{ lineHeight: 1.8 }}>
-            Campus Mesh is intended for use by college students, faculty, and staff. We do not
+            RPI Echo System is intended for use by college students, faculty, and staff. We do not
             knowingly collect personal information from children under 13 years of age. If you
             believe we have collected information from a child under 13, please contact us
             immediately.
@@ -342,7 +342,7 @@ const PrivacyPage: React.FC = () => {
             12. Consent
           </Typography>
           <Typography variant="body1" paragraph sx={{ lineHeight: 1.8 }}>
-            By using Campus Mesh, you consent to our Privacy Policy and agree to its terms.
+            By using RPI Echo System, you consent to our Privacy Policy and agree to its terms.
           </Typography>
         </Paper>
 

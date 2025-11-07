@@ -1,8 +1,8 @@
 {
-  "name": "rpi-web-dashboard",
+  "name": "rpi-echo-system",
   "version": "1.0.0",
   "type": "module",
-  "description": "Web dashboard for RPI Communication App - supports teachers, admins, and students",
+  "description": "RPI Echo System - Complete communication and ecosystem platform for Rangpur Polytechnic Institute",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

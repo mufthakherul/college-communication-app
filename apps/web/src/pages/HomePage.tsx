@@ -80,7 +80,7 @@ const HomePage: React.FC = () => {
         <Toolbar>
           <School sx={{ mr: 2 }} />
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Campus Mesh
+            RPI Echo System
           </Typography>
           <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2 }}>
             <Button color="inherit" onClick={() => navigate('/')}>
@@ -95,11 +95,17 @@ const HomePage: React.FC = () => {
             <Button color="inherit" onClick={() => navigate('/downloads')}>
               Downloads
             </Button>
-            <Button color="inherit" onClick={() => navigate('/privacy')}>
-              Privacy
+            <Button color="inherit" onClick={() => navigate('/support')}>
+              Support
             </Button>
-            <Button color="inherit" onClick={() => navigate('/developer')}>
-              Developer
+            <Button color="inherit" onClick={() => navigate('/documentation')}>
+              Docs
+            </Button>
+            <Button color="inherit" onClick={() => navigate('/contact')}>
+              Contact
+            </Button>
+            <Button color="inherit" onClick={() => navigate('/stats')}>
+              Stats
             </Button>
             <Button
               variant="contained"
@@ -140,6 +146,11 @@ const HomePage: React.FC = () => {
               <MenuItem onClick={() => handleNavigate('/about')}>About</MenuItem>
               <MenuItem onClick={() => handleNavigate('/features')}>Features</MenuItem>
               <MenuItem onClick={() => handleNavigate('/downloads')}>Downloads</MenuItem>
+              <MenuItem onClick={() => handleNavigate('/support')}>Support</MenuItem>
+              <MenuItem onClick={() => handleNavigate('/documentation')}>Documentation</MenuItem>
+              <MenuItem onClick={() => handleNavigate('/contact')}>Contact</MenuItem>
+              <MenuItem onClick={() => handleNavigate('/changelog')}>Changelog</MenuItem>
+              <MenuItem onClick={() => handleNavigate('/stats')}>Stats</MenuItem>
               <MenuItem onClick={() => handleNavigate('/privacy')}>Privacy</MenuItem>
               <MenuItem onClick={() => handleNavigate('/developer')}>Developer</MenuItem>
               <MenuItem onClick={() => handleNavigate('/login')}>Login</MenuItem>
@@ -160,7 +171,7 @@ const HomePage: React.FC = () => {
         <Container maxWidth="md">
           <School sx={{ fontSize: 80, mb: 2 }} />
           <Typography variant="h2" component="h1" gutterBottom fontWeight="bold">
-            Campus Mesh
+            RPI Echo System
           </Typography>
           <Typography variant="h5" component="h2" gutterBottom sx={{ mb: 4 }}>
             Your Complete College Communication Platform
@@ -195,10 +206,10 @@ const HomePage: React.FC = () => {
       {/* Features Section */}
       <Container maxWidth="lg" sx={{ py: 8 }}>
         <Typography variant="h3" component="h2" align="center" gutterBottom fontWeight="bold">
-          Why Choose Campus Mesh?
+          Why Choose RPI Echo System?
         </Typography>
         <Typography variant="body1" align="center" color="text.secondary" sx={{ mb: 6 }}>
-          Everything you need for seamless college communication in one app
+          Everything you need for easy college communication in one app
         </Typography>
         <Grid container spacing={4}>
           {features.map((feature, index) => (
@@ -246,7 +257,7 @@ const HomePage: React.FC = () => {
                     About Project
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Learn more about Campus Mesh and how it can transform college communication.
+                    Learn more about RPI Echo System and how it can transform college communication.
                   </Typography>
                 </CardContent>
                 <CardActions>
@@ -318,7 +329,7 @@ const HomePage: React.FC = () => {
                     About Developer
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Meet the developer behind Campus Mesh and explore more projects.
+                    Meet the developer behind RPI Echo System and explore more projects.
                   </Typography>
                 </CardContent>
                 <CardActions>
@@ -338,7 +349,7 @@ const HomePage: React.FC = () => {
           <Grid container spacing={4}>
             <Grid item xs={12} md={6}>
               <Typography variant="h6" gutterBottom>
-                Campus Mesh
+                RPI Echo System
               </Typography>
               <Typography variant="body2">
                 Your complete college communication platform. Secure, reliable, and easy to use.
@@ -358,15 +369,33 @@ const HomePage: React.FC = () => {
                 <Button color="inherit" size="small" sx={{ justifyContent: 'flex-start' }} onClick={() => navigate('/downloads')}>
                   Downloads
                 </Button>
+                <Button color="inherit" size="small" sx={{ justifyContent: 'flex-start' }} onClick={() => navigate('/support')}>
+                  Support
+                </Button>
+                <Button color="inherit" size="small" sx={{ justifyContent: 'flex-start' }} onClick={() => navigate('/documentation')}>
+                  Documentation
+                </Button>
               </Box>
             </Grid>
             <Grid item xs={12} md={3}>
               <Typography variant="h6" gutterBottom>
-                Legal
+                More
               </Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                <Button color="inherit" size="small" sx={{ justifyContent: 'flex-start' }} onClick={() => navigate('/contact')}>
+                  Contact
+                </Button>
+                <Button color="inherit" size="small" sx={{ justifyContent: 'flex-start' }} onClick={() => navigate('/changelog')}>
+                  Changelog
+                </Button>
+                <Button color="inherit" size="small" sx={{ justifyContent: 'flex-start' }} onClick={() => navigate('/stats')}>
+                  Stats
+                </Button>
                 <Button color="inherit" size="small" sx={{ justifyContent: 'flex-start' }} onClick={() => navigate('/privacy')}>
                   Privacy Policy
+                </Button>
+                <Button color="inherit" size="small" sx={{ justifyContent: 'flex-start' }} onClick={() => navigate('/terms')}>
+                  Terms of Service
                 </Button>
                 <Button color="inherit" size="small" sx={{ justifyContent: 'flex-start' }} onClick={() => navigate('/developer')}>
                   Developer
@@ -376,7 +405,7 @@ const HomePage: React.FC = () => {
           </Grid>
           <Box sx={{ mt: 4, pt: 3, borderTop: '1px solid rgba(255,255,255,0.1)', textAlign: 'center' }}>
             <Typography variant="body2">
-              © 2025 Campus Mesh. All rights reserved. Developed by{' '}
+              © 2025 RPI Echo System. All rights reserved. Developed by{' '}
               <a
                 href="https://www.mufthakherul.me"
                 target="_blank"
