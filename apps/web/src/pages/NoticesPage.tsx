@@ -249,7 +249,7 @@ const NoticesPage: React.FC = () => {
         // createdAt timestamp will be set by the service layer
         await noticeService.createNotice({
           ...formData,
-          authorId: currentUser.userId,
+          authorId: currentUser.$id,
           authorName: currentUser.name,
           createdAt: new Date().toISOString(), // Temporary value, server will override
         });

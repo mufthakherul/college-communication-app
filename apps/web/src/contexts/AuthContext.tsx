@@ -37,8 +37,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const checkAuth = async () => {
     try {
       const authUser = await appwriteService.getCurrentUser();
-      // Fetch user profile from database using efficient query
-      const userProfile = await userService.getUserByAuthId(authUser.$id);
+      // Fetch user profile from database using email (matches Appwrite schema)
+      const userProfile = await userService.getUserByEmail(authUser.email);
 
       if (
         userProfile &&

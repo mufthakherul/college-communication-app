@@ -76,7 +76,7 @@ const MessagesPage: React.FC = () => {
       ]);
       
       // Create a map of userId to user for quick lookup
-      const userMap = new Map(usersData.map(u => [u.userId, u]));
+      const userMap = new Map(usersData.map(u => [u.$id, u]));
       
       setMessages(messagesData);
       setFilteredMessages(messagesData);
