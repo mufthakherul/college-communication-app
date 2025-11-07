@@ -26,11 +26,9 @@ This interactive script will walk you through each step with clear instructions.
   - Site ID: `web-dashboard`
   - Deployment: `690dd4c265e76eb86f16`
   - Status: **LIVE & READY**
-  
 - **Option B**: Permissions configuration guide created
   - Script: `scripts/apply-appwrite-permissions.sh`
   - Covers all 8 collections
-  
 - **Option C**: Code quality improvements
   - TODOs normalized
   - Cascades refactored
@@ -47,6 +45,7 @@ This interactive script will walk you through each step with clear instructions.
 **Problem**: You can't login to the web dashboard because no platforms are registered in Appwrite.
 
 **Solution**:
+
 ```bash
 ./scripts/configure-platforms-guide.sh
 ```
@@ -54,15 +53,19 @@ This interactive script will walk you through each step with clear instructions.
 Or manually at: https://cloud.appwrite.io/console/project-6904cfb1001e5253725b/settings
 
 **Platforms to add**:
+
 1. Web Platform
+
    - Name: `Web (Development)`
    - Hostname: `localhost`
 
 2. Web Platform
+
    - Name: `Web (Production)`
    - Hostname: `*.appwrite.app`
 
 3. Android Platform
+
    - Name: `Android App`
    - Package Name: `com.rpi.communication`
 
@@ -81,6 +84,7 @@ Or manually at: https://cloud.appwrite.io/console/project-6904cfb1001e5253725b/s
 **Why**: Secure data access (students can't see admin data, etc.)
 
 **Solution**:
+
 ```bash
 ./scripts/apply-appwrite-permissions.sh
 ```
@@ -98,6 +102,7 @@ This interactive script will guide you through setting permissions for all 8 col
 **Why**: Verify authentication works
 
 **Option A - Test Locally**:
+
 ```bash
 cd apps/web
 npm run dev
@@ -105,6 +110,7 @@ npm run dev
 ```
 
 **Option B - Test Production**:
+
 ```bash
 # Get deployment URL
 appwrite sites get --site-id web-dashboard
@@ -112,6 +118,7 @@ appwrite sites get --site-id web-dashboard
 ```
 
 **Test Credentials** (existing users):
+
 - `mufthakherul@outlook.com` (Admin)
 - `miraj090906@gmail.com` (Admin/Teacher)
 
@@ -124,6 +131,7 @@ appwrite sites get --site-id web-dashboard
 **Why**: Ensure code quality and no regressions
 
 **Commands**:
+
 ```bash
 cd apps/mobile
 flutter analyze
@@ -131,6 +139,7 @@ flutter test
 ```
 
 **Expected Results**:
+
 - Analyzer: ~134 issues (all info/warnings)
 - Tests: 163/163 passing
 
@@ -184,7 +193,8 @@ flutter test
 
 **Problem**: Login fails with CORS or network errors
 
-**Solution**: 
+**Solution**:
+
 1. Check platform configuration (Step 1)
 2. Verify at: https://cloud.appwrite.io/console/project-6904cfb1001e5253725b/settings
 3. Must have `localhost` and `*.appwrite.app` platforms
@@ -197,6 +207,7 @@ flutter test
 **Reason**: API key lacks `platforms.write` scope
 
 **Solution**: Use manual configuration instead:
+
 ```bash
 ./scripts/configure-platforms-guide.sh
 ```
@@ -205,10 +216,11 @@ flutter test
 
 **Problem**: Not sure what permissions to set
 
-**Solution**: 
-1. Read `APPWRITE_INDEXES_PERMISSIONS.md` 
+**Solution**:
+
+1. Read `APPWRITE_INDEXES_PERMISSIONS.md`
 2. Run `./scripts/apply-appwrite-permissions.sh` - it shows recommended settings
-3. General rule: 
+3. General rule:
    - Users collection: Any user can read themselves
    - Posts/notices: Everyone can read, only admins can write
    - Events/resources: Role-based access
@@ -218,17 +230,20 @@ flutter test
 ## 📊 Current System Status
 
 ### Appwrite Cloud (Singapore)
+
 - **Endpoint**: `https://sgp.cloud.appwrite.io/v1`
 - **Project**: `6904cfb1001e5253725b`
 - **Region**: Singapore
 
 ### Database
+
 - **Name**: `rpi_communication`
 - **Collections**: 8 (users, posts, events, notices, resources, courses, grades, attendance)
 - **Indexes**: 22 configured
 - **Permissions**: Pending configuration
 
 ### Sites
+
 - **Site ID**: `web-dashboard`
 - **Deployment**: `690dd4c265e76eb86f16`
 - **Status**: LIVE & READY
@@ -236,6 +251,7 @@ flutter test
 - **Size**: 1.9 MB
 
 ### Users
+
 - **Total**: 6 users
 - **Admins**: 2 verified
   - `mufthakherul@outlook.com`
@@ -243,10 +259,11 @@ flutter test
 - **Students**: 4 accounts
 
 ### Platforms
+
 - **Configured**: 0/4 ⚠️
-- **Required**: 
+- **Required**:
   - localhost
-  - *.appwrite.app
+  - \*.appwrite.app
   - com.rpi.communication (Android)
   - com.rpi.communication (iOS)
 
@@ -268,11 +285,11 @@ After completing all steps, you should have:
 
 ## 📚 Reference Documents
 
-| Document | Purpose |
-|----------|---------|
-| `WEB_DASHBOARD_LOGIN_FIX.md` | Login troubleshooting guide |
-| `APPWRITE_INDEXES_PERMISSIONS.md` | Permissions recommendations |
-| `APPWRITE_DATABASE_VERIFICATION.md` | Database verification results |
+| Document                             | Purpose                        |
+| ------------------------------------ | ------------------------------ |
+| `WEB_DASHBOARD_LOGIN_FIX.md`         | Login troubleshooting guide    |
+| `APPWRITE_INDEXES_PERMISSIONS.md`    | Permissions recommendations    |
+| `APPWRITE_DATABASE_VERIFICATION.md`  | Database verification results  |
 | `COMPLETE_IMPLEMENTATION_SUMMARY.md` | Options A-C completion summary |
 
 ---
@@ -282,16 +299,19 @@ After completing all steps, you should have:
 Once all steps are done, you can:
 
 1. **Build Mobile App**:
+
    ```bash
    cd apps/mobile
    flutter build apk
    ```
 
 2. **Set Up Git Auto-Deploy**:
+
    - Configure GitHub Actions
    - Auto-deploy to Appwrite Sites on push
 
 3. **Add Custom Domain**:
+
    - Configure custom domain in Appwrite Console
    - Update CNAME records
 
@@ -313,13 +333,13 @@ Once all steps are done, you can:
 
 ## ⏱️ Time Breakdown
 
-| Step | Task | Time |
-|------|------|------|
-| 1 | Platform Configuration | 5 min |
-| 2 | Collection Permissions | 5 min |
-| 3 | Web Dashboard Testing | 2 min |
-| 4 | Final Validation | 2 min |
-| **Total** | | **~15 min** |
+| Step      | Task                   | Time        |
+| --------- | ---------------------- | ----------- |
+| 1         | Platform Configuration | 5 min       |
+| 2         | Collection Permissions | 5 min       |
+| 3         | Web Dashboard Testing  | 2 min       |
+| 4         | Final Validation       | 2 min       |
+| **Total** |                        | **~15 min** |
 
 ---
 
