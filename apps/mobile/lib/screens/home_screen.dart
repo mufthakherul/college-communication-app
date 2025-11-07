@@ -143,10 +143,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-          scheme.surface,
-          isDark
-            ? scheme.surfaceContainerHighest.withValues(alpha: 0.4)
-            : scheme.secondaryContainer.withValues(alpha: 0.25),
+                    scheme.surface,
+                    if (isDark)
+                      scheme.surfaceContainerHighest.withValues(alpha: 0.4)
+                    else
+                      scheme.secondaryContainer.withValues(alpha: 0.25),
                   ],
                 ),
               ),
@@ -241,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      bottomNavigationBar: Container(
+      bottomNavigationBar: DecoratedBox(
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(

@@ -138,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ],
                         ),
                         child: const Icon(Icons.school, size: 64, color: Colors.white),
-                      ).animate().fadeIn(duration: 400.ms).scaleXY(begin: 0.8, end: 1.0, curve: Curves.easeOut),
+                      ).animate().fadeIn(duration: 400.ms).scaleXY(begin: 0.8, end: 1, curve: Curves.easeOut),
                       const SizedBox(height: 28),
                       Text(
                         'RPI Communication',
