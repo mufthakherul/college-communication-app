@@ -5,6 +5,8 @@ import 'package:campus_mesh/screens/home_screen.dart';
 import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/services/demo_mode_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -90,55 +92,93 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Icon(Icons.school, size: 80, color: Colors.blue),
-                  const SizedBox(height: 24),
-                  Text(
-                    'RPI Communication',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Rangpur Government Polytechnic Institute',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 4),
-                  InkWell(
-                    onTap: () async {
-                      final url = Uri.parse('https://rangpur.polytech.gov.bd');
-                      if (await canLaunchUrl(url)) {
-                        await launchUrl(
-                          url,
-                          mode: LaunchMode.externalApplication,
-                        );
-                      }
-                    },
-                    child: Text(
-                      'rangpur.polytech.gov.bd',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.blue,
-                            decoration: TextDecoration.underline,
+      body: Stack(
+        children: [
+          Positioned.fill(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    scheme.surface,
+                    scheme.secondaryContainer.withOpacity(0.5),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          SafeArea(
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                            colors: [scheme.primary, scheme.secondary],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
                           ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  const SizedBox(height: 48),
+                          boxShadow: [
+                            BoxShadow(
+                              color: scheme.primary.withOpacity(0.35),
+                              blurRadius: 30,
+                              offset: const Offset(0, 12),
+                            ),
+                          ],
+                        ),
+                        child: const Icon(Icons.school, size: 64, color: Colors.white),
+                      ).animate().fadeIn(duration: 400.ms).scale(begin: const Offset(0.8,0.8), curve: Curves.easeOut),
+                      const SizedBox(height: 28),
+                      Text(
+                        'RPI Communication',
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w800,
+                          fontSize: 28,
+                          letterSpacing: -0.5,
+                        ),
+                        textAlign: TextAlign.center,
+                      ).animate().fadeIn(duration: 450.ms).moveY(begin: 12, end: 0, curve: Curves.easeOut),
+                      const SizedBox(height: 10),
+                      Text(
+                        'Rangpur Government Polytechnic Institute',
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                          color: scheme.onSurface.withOpacity(0.75),
+                        ),
+                        textAlign: TextAlign.center,
+                      ).animate().fadeIn(duration: 500.ms),
+                      const SizedBox(height: 6),
+                      InkWell(
+                        onTap: () async {
+                          final url = Uri.parse('https://rangpur.polytech.gov.bd');
+                          if (await canLaunchUrl(url)) {
+                            await launchUrl(url, mode: LaunchMode.externalApplication);
+                          }
+                        },
+                        child: Text(
+                          'rangpur.polytech.gov.bd',
+                          style: GoogleFonts.inter(
+                            color: scheme.primary,
+                            fontSize: 12,
+                            decoration: TextDecoration.underline,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ).animate().fadeIn(duration: 550.ms),
+                      const SizedBox(height: 42),
                   Semantics(
                     label: 'Email address input field',
                     hint: 'Enter your email address',
@@ -205,18 +245,40 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  ElevatedButton(
-                    onPressed: _isLoading ? null : _signIn,
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                    ),
+                  AnimatedSwitcher(
+                    duration: 300.ms,
                     child: _isLoading
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2),
+                        ? const Center(
+                            child: SizedBox(
+                              height: 24,
+                              width: 24,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            ),
                           )
-                        : const Text('Sign In', style: TextStyle(fontSize: 16)),
+                        : ElevatedButton(
+                            onPressed: _signIn,
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              backgroundColor: scheme.primary,
+                              foregroundColor: scheme.onPrimary,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                            ).merge(
+                              ButtonStyle(
+                                elevation: WidgetStateProperty.resolveWith(
+                                  (states) => states.contains(WidgetState.pressed) ? 0 : 2,
+                                ),
+                              ),
+                            ),
+                            child: Text(
+                              'Sign In',
+                              style: GoogleFonts.inter(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ).animate().fadeIn(duration: 400.ms),
                   ),
                   const SizedBox(height: 16),
                   TextButton(
@@ -227,7 +289,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       );
                     },
-                    child: const Text('Don\'t have an account? Register'),
+                    child: Text(
+                      'Don\'t have an account? Register',
+                      style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+                    ),
                   ),
                   const SizedBox(height: 24),
                   const Divider(),
@@ -243,28 +308,32 @@ class _LoginScreenState extends State<LoginScreen> {
                         );
                       },
                       icon: const Icon(Icons.preview),
-                      label: const Text('Try Demo Mode (No Firebase)'),
+                      label: Text(
+                        'Try Demo Mode (No Firebase)',
+                        style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+                      ),
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 14),
-                        side: BorderSide(color: Colors.blue[700]!),
+                        side: BorderSide(color: scheme.primary),
                       ),
-                    ),
+                    ).animate().fadeIn(duration: 400.ms),
                   if (_demoModeService.isDemoModeAvailable())
                     const SizedBox(height: 8),
                   if (_demoModeService.isDemoModeAvailable())
                     Text(
                       'Demo mode: Local sample data only, no real data access',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Colors.grey,
-                            fontStyle: FontStyle.italic,
-                          ),
+                      style: GoogleFonts.inter(
+                        color: scheme.onSurface.withOpacity(0.6),
+                        fontStyle: FontStyle.italic,
+                        fontSize: 12,
+                      ),
                       textAlign: TextAlign.center,
-                    ),
+                    ).animate().fadeIn(duration: 500.ms),
                 ],
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
