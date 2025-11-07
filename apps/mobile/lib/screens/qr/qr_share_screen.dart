@@ -4,7 +4,6 @@ import 'package:qr_flutter/qr_flutter.dart';
 
 /// Screen for generating QR codes to share data
 class QRShareScreen extends StatelessWidget {
-
   const QRShareScreen({super.key, required this.qrData});
   final QRCodeData qrData;
 

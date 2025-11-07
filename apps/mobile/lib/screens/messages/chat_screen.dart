@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 
 /// Screen for chatting with a specific user
 class ChatScreen extends StatefulWidget {
-
   const ChatScreen({super.key, required this.otherUser});
   final UserModel otherUser;
 

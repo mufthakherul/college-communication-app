@@ -89,14 +89,12 @@ Always maintain a respectful and supportive tone.
       );
 
       // Test with a simple prompt - use timeout to avoid hanging
-      final response = await testModel
-          .generateContent([
-            Content.text('Test'),
-          ])
-          .timeout(
-            const Duration(seconds: 10),
-            onTimeout: () => throw Exception('API validation timeout'),
-          );
+      final response = await testModel.generateContent([
+        Content.text('Test'),
+      ]).timeout(
+        const Duration(seconds: 10),
+        onTimeout: () => throw Exception('API validation timeout'),
+      );
 
       return response.text != null && response.text!.isNotEmpty;
     } catch (e) {

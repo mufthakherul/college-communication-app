@@ -305,7 +305,6 @@ class _CampusMeshAppState extends State<CampusMeshApp> {
 
 /// Security blocked app - shown when critical security checks fail
 class SecurityBlockedApp extends StatelessWidget {
-
   const SecurityBlockedApp({super.key, required this.message});
   final String message;
 

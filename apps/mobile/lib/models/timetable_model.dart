@@ -9,7 +9,6 @@ enum DayOfWeek {
 }
 
 class TimetableModel {
-
   TimetableModel({
     required this.id,
     required this.className,
@@ -66,7 +65,6 @@ class TimetableModel {
 }
 
 class ClassPeriod {
-
   ClassPeriod({
     required this.day,
     required this.startTime,

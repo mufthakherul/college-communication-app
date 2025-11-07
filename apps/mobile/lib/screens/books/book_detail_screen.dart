@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BookDetailScreen extends StatefulWidget {
-
   const BookDetailScreen({super.key, required this.book});
   final BookModel book;
 

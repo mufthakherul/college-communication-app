@@ -9,7 +9,6 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class NoticeDetailScreen extends StatelessWidget {
-
   const NoticeDetailScreen({super.key, required this.noticeId});
   final String noticeId;
 
@@ -157,15 +156,18 @@ class NoticeDetailScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Check if content contains markdown syntax
-                      if (_containsMarkdown(notice.content)) MarkdownBody(
-                              data: notice.content,
-                              styleSheet: MarkdownStyleSheet.fromTheme(
-                                Theme.of(context),
-                              ),
-                            ) else Text(
-                              notice.content,
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            ),
+                      if (_containsMarkdown(notice.content))
+                        MarkdownBody(
+                          data: notice.content,
+                          styleSheet: MarkdownStyleSheet.fromTheme(
+                            Theme.of(context),
+                          ),
+                        )
+                      else
+                        Text(
+                          notice.content,
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
                       const SizedBox(height: 16),
                       if (notice.expiresAt != null) ...[
                         const Divider(),

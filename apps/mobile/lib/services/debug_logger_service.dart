@@ -125,7 +125,6 @@ class DebugLoggerService {
 
 /// Log entry model
 class LogEntry {
-
   LogEntry({
     required this.message,
     required this.level,

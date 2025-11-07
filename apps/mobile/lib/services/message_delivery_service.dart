@@ -18,7 +18,6 @@ enum TypingStatus { typing, stopped }
 
 /// Message delivery tracking
 class MessageDeliveryTracking {
-
   MessageDeliveryTracking({
     required this.messageId,
     this.status = MessageDeliveryStatus.sending,
@@ -65,7 +64,6 @@ class MessageDeliveryTracking {
 
 /// Typing indicator
 class TypingIndicator {
-
   TypingIndicator({
     required this.userId,
     required this.conversationId,

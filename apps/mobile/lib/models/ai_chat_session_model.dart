@@ -1,5 +1,4 @@
 class AIChatSession {
-
   AIChatSession({
     required this.id,
     required this.userId,

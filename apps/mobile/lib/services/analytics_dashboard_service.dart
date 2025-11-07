@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 
 /// Analytics data models
 class UserActivityData {
-
   UserActivityData({
     required this.userId,
     required this.userName,
@@ -23,7 +22,6 @@ class UserActivityData {
 }
 
 class NoticeAnalytics {
-
   NoticeAnalytics({
     required this.totalNotices,
     required this.activeNotices,
@@ -41,7 +39,6 @@ class NoticeAnalytics {
 }
 
 class TopNotice {
-
   TopNotice({
     required this.id,
     required this.title,
@@ -55,7 +52,6 @@ class TopNotice {
 }
 
 class MessageAnalytics {
-
   MessageAnalytics({
     required this.totalMessages,
     required this.todayMessages,
@@ -73,7 +69,6 @@ class MessageAnalytics {
 }
 
 class ActiveUser {
-
   ActiveUser({
     required this.userId,
     required this.name,
@@ -85,7 +80,6 @@ class ActiveUser {
 }
 
 class SystemAnalytics {
-
   SystemAnalytics({
     required this.totalUsers,
     required this.activeUsers,
@@ -471,10 +465,10 @@ class AnalyticsDashboardService {
         messagesByDay[dayKey] = (messagesByDay[dayKey] ?? 0) + 1;
       }
 
-  // Convert to chart-ready format
-  final usersData = <Map<String, Object>>[];
-  final noticesData = <Map<String, Object>>[];
-  final messagesData = <Map<String, Object>>[];
+      // Convert to chart-ready format
+      final usersData = <Map<String, Object>>[];
+      final noticesData = <Map<String, Object>>[];
+      final messagesData = <Map<String, Object>>[];
 
       usersByDay.forEach((day, count) {
         usersData.add({'date': day, 'count': count});

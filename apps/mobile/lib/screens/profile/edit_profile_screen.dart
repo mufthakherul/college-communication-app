@@ -3,7 +3,6 @@ import 'package:campus_mesh/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class EditProfileScreen extends StatefulWidget {
-
   const EditProfileScreen({super.key, required this.user});
   final UserModel user;
 

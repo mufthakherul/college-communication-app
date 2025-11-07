@@ -403,7 +403,6 @@ class _AttendanceTrackerScreenState extends State<AttendanceTrackerScreen> {
 }
 
 class Subject {
-
   Subject({required this.name, required this.attended, required this.total});
 
   factory Subject.fromJson(Map<String, dynamic> json) => Subject(

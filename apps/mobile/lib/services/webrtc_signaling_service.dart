@@ -11,7 +11,6 @@ enum SignalingMessageType { offer, answer, candidate, bye }
 
 /// WebRTC signaling message
 class SignalingMessage {
-
   SignalingMessage({
     required this.from,
     required this.to,
@@ -52,7 +51,6 @@ enum WebRTCConnectionState {
 
 /// WebRTC peer connection wrapper
 class WebRTCPeerConnection {
-
   WebRTCPeerConnection({
     required this.peerId,
     required this.connection,

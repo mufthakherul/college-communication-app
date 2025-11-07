@@ -19,7 +19,8 @@ enum MeshConnectionType {
 }
 
 /// Mesh network node information
-class MeshNode { // Whether connection is visible to user
+class MeshNode {
+  // Whether connection is visible to user
 
   MeshNode({
     required this.id,
@@ -91,7 +92,8 @@ enum QRPairingPurpose {
 }
 
 /// QR code pairing data with enhanced permissions
-class MeshPairingData { // Optional info to share
+class MeshPairingData {
+  // Optional info to share
 
   MeshPairingData({
     required this.deviceId,
@@ -158,7 +160,8 @@ class MeshPairingData { // Optional info to share
 }
 
 /// Mesh message for peer-to-peer communication
-class MeshMessage { // Track message route to prevent loops
+class MeshMessage {
+  // Track message route to prevent loops
 
   MeshMessage({
     required this.id,
@@ -256,7 +259,7 @@ class MeshNetworkService {
 
       // Initialize the nearby connections
       // Note: Actual initialization is handled by the flutter_nearby_connections plugin
-  // TODO(dev): Integrate flutter_nearby_connections plugin for full functionality
+      // TODO(dev): Integrate flutter_nearby_connections plugin for full functionality
       // See MESH_NETWORKING_FIX_GUIDE.md for implementation details
 
       _isInitialized = true;
@@ -357,8 +360,8 @@ class MeshNetworkService {
         : null; // No expiry if duration not provided
 
     final pairingData = MeshPairingData(
-  deviceId: _deviceId,
-  deviceName: _deviceName,
+      deviceId: _deviceId,
+      deviceName: _deviceName,
       pairingToken: pairingToken,
       expiresAt: expiresAt,
       supportedConnections: _getSupportedConnectionTypes(),
@@ -709,7 +712,7 @@ class MeshNetworkService {
   /// Broadcast message to all connected nodes
   Future<void> broadcastMessage(MeshMessage message) async {
     // Add self to route path to prevent echo
-  final routedMessage = message.copyWithRoute(_deviceId);
+    final routedMessage = message.copyWithRoute(_deviceId);
 
     for (final node in _connectedNodes.values) {
       if (node.isActive && !routedMessage.routePath.contains(node.id)) {

@@ -137,7 +137,8 @@ class _ApiKeyInputScreenState extends State<ApiKeyInputScreen> {
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.warning_amber, color: Colors.orange[700]),
+                            Icon(Icons.warning_amber,
+                                color: Colors.orange[700]),
                             const SizedBox(width: 12),
                             Expanded(
                               child: Text(

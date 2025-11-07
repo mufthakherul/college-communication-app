@@ -71,7 +71,6 @@ extension MessageReactionEmoji on MessageReaction {
 
 /// Reaction data model
 class ReactionData {
-
   ReactionData({
     required this.messageId,
     required this.userId,

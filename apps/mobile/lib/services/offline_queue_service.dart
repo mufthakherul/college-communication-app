@@ -391,7 +391,6 @@ class OfflineQueueService {
 
 /// Represents an offline action to be synced later with retry support
 class OfflineAction {
-
   OfflineAction({
     required this.type,
     required this.data,

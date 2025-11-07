@@ -12,7 +12,8 @@ enum ConflictStrategy {
 }
 
 /// Represents a data conflict
-class DataConflict<T> { // 'edit', 'delete', 'create'
+class DataConflict<T> {
+  // 'edit', 'delete', 'create'
 
   DataConflict({
     required this.documentId,

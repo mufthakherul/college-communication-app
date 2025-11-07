@@ -533,7 +533,6 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen> {
 }
 
 class Expense {
-
   Expense({
     required this.amount,
     required this.category,

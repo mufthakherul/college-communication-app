@@ -314,7 +314,6 @@ class _PeriodicTableScreenState extends State<PeriodicTableScreen> {
 }
 
 class Element {
-
   Element(
     this.atomicNumber,
     this.symbol,

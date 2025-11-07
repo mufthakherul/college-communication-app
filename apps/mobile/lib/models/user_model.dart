@@ -1,6 +1,7 @@
 enum UserRole { student, teacher, admin }
 
-class UserModel { // Contact phone (private)
+class UserModel {
+  // Contact phone (private)
 
   UserModel({
     required this.uid,
