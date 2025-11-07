@@ -144,13 +144,14 @@ class _DebugConsoleScreenState extends State<DebugConsoleScreen> {
   }
 
   void _copyAllInfo() {
-    final buffer = StringBuffer();
-    buffer.writeln('=== DEBUG CONSOLE INFO ===');
-    buffer.writeln('Generated: ${DateTime.now().toIso8601String()}');
-    buffer.writeln();
+    final buffer = StringBuffer()
+      ..writeln('=== DEBUG CONSOLE INFO ===')
+      ..writeln('Generated: ${DateTime.now().toIso8601String()}')
+      ..writeln();
 
     _debugInfo.forEach((key, value) {
-      buffer.writeln('[$key]');
+      buffer
+        ..writeln('[$key]');
       if (value is Map) {
         value.forEach((k, v) {
           buffer.writeln('  $k: $v');
@@ -161,8 +162,9 @@ class _DebugConsoleScreenState extends State<DebugConsoleScreen> {
       buffer.writeln();
     });
 
-    buffer.writeln();
-    buffer.writeln(_debugLogger.exportLogs());
+    buffer
+      ..writeln()
+      ..writeln(_debugLogger.exportLogs());
 
     _copyToClipboard(buffer.toString());
   }

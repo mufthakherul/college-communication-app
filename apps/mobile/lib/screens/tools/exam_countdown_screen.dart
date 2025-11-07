@@ -184,9 +184,10 @@ class _ExamCountdownScreenState extends State<ExamCountdownScreen> {
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  exam.name = nameController.text;
-                  exam.subject = subjectController.text;
-                  exam.date = selectedDate;
+                  exam
+                    ..name = nameController.text
+                    ..subject = subjectController.text
+                    ..date = selectedDate;
                   _exams.sort((a, b) => a.date.compareTo(b.date));
                 });
                 _saveExams();

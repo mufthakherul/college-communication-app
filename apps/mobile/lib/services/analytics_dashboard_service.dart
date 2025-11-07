@@ -357,7 +357,7 @@ class AnalyticsDashboardService {
 
       final activityData = <UserActivityData>[];
 
-      // TODO: Optimize with batch queries or server-side aggregation for large user bases
+      // TODO(performance): Optimize with batch queries or server-side aggregation for large user bases
       for (final doc in users.documents) {
         final data = doc.data;
         final userId = doc.$id;
