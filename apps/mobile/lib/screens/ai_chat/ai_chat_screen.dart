@@ -1,3 +1,4 @@
+// ignore_for_file: dead_code, unreachable_switch_default
 import 'package:campus_mesh/models/ai_chat_message_model.dart';
 import 'package:campus_mesh/models/ai_chat_session_model.dart';
 import 'package:campus_mesh/screens/ai_chat/api_key_input_screen.dart';

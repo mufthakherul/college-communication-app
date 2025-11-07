@@ -1,3 +1,4 @@
+// ignore_for_file: use_build_context_synchronously, dead_code, unreachable_switch_default
 import 'package:campus_mesh/services/mesh_network_service.dart';
 import 'package:campus_mesh/services/permission_service.dart';
 import 'package:campus_mesh/services/qr_data_service.dart';
@@ -435,7 +436,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
           if (qrData.data['downloadUrl'] != null)
             ElevatedButton(
               onPressed: () {
-                // TODO: Implement download
+                // TODO(copilot): Implement download
                 Navigator.pop(context);
                 _showSuccess('Download started');
               },

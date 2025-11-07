@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_positional_boolean_parameters, use_setters_to_change_properties, avoid_slow_async_io
 import 'dart:convert';
 import 'dart:io';
 

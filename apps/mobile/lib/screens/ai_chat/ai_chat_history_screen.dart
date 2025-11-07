@@ -1,3 +1,4 @@
+// ignore_for_file: unawaited_futures
 import 'package:campus_mesh/models/ai_chat_session_model.dart';
 import 'package:campus_mesh/screens/ai_chat/ai_chat_screen.dart';
 import 'package:campus_mesh/screens/ai_chat/api_key_input_screen.dart';

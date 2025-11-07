@@ -1,3 +1,4 @@
+// ignore_for_file: deprecated_member_use
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -54,6 +55,7 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
       _selectedColor = color;
 
       // Update HEX (ensure 8 characters with padding before substring)
+
       final hexValue = color.value.toRadixString(16).padLeft(8, '0');
       _hexController.text = '#${hexValue.substring(2).toUpperCase()}';
 

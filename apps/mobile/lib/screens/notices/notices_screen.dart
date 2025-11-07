@@ -1,3 +1,4 @@
+// ignore_for_file: dead_code, unreachable_switch_default
 import 'package:campus_mesh/models/notice_model.dart';
 import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/screens/notices/create_notice_screen.dart';

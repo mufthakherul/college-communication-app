@@ -287,7 +287,7 @@ class ChatService {
     // This would fetch all messages for the chat
     // Implementation depends on message storage structure
     debugPrint('Fetching chat history for: $chatId');
-    // TODO: Implement based on message service structure
+    // TODO(copilot): Implement based on message service structure
     return [];
   }
 }

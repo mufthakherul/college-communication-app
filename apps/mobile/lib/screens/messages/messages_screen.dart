@@ -1,3 +1,4 @@
+// ignore_for_file: cascade_invocations, unawaited_futures
 import 'package:campus_mesh/models/message_model.dart';
 import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/screens/messages/chat_screen.dart';

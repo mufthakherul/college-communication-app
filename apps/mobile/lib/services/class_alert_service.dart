@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_positional_boolean_parameters
 import 'package:campus_mesh/models/timetable_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

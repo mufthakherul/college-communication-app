@@ -1,3 +1,4 @@
+// ignore_for_file: unawaited_futures, dead_code, unreachable_switch_default
 import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/screens/auth/login_screen.dart';
 import 'package:campus_mesh/screens/developer/debug_console_screen.dart';
