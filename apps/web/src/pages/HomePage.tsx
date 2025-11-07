@@ -25,9 +25,9 @@ import {
   Info,
   Policy,
   Code,
-  Sparkles,
-  Zap,
-  Users,
+  Star,
+  LocalFireDepartment,
+  People,
 } from '@mui/icons-material';
 import Navigation from '../components/Navigation';
 
@@ -114,7 +114,7 @@ const HomePage: React.FC = () => {
                 border: '1px solid rgba(255, 255, 255, 0.2)',
               }}
             >
-              <Sparkles sx={{ fontSize: 20 }} />
+              <Star sx={{ fontSize: 20 }} />
               <Typography variant="body2" sx={{ fontWeight: 600 }}>
                 Next-Gen College Communication
               </Typography>
@@ -284,10 +284,10 @@ const HomePage: React.FC = () => {
         <Container maxWidth="lg">
           <Grid container spacing={4}>
             {[
-              { icon: <Users />, value: '5000+', label: 'Active Users' },
+              { icon: <People />, value: '5000+', label: 'Active Users' },
               { icon: <Message />, value: '50K+', label: 'Messages Sent' },
               { icon: <Notifications />, value: '1000+', label: 'Notices' },
-              { icon: <Zap />, value: '99.9%', label: 'Uptime' },
+              { icon: <LocalFireDepartment />, value: '99.9%', label: 'Uptime' },
             ].map((stat, index) => (
               <Grid item xs={12} sm={6} md={3} key={index}>
                 <Box sx={{ textAlign: 'center' }}>
@@ -470,7 +470,6 @@ const HomePage: React.FC = () => {
       </Box>
     </Box>
   );
-};
 };
 
 export default HomePage;

@@ -6,7 +6,6 @@
 import React, { useState, useEffect } from 'react';
 import {
   Container,
-  Paper,
   Typography,
   Box,
   Card,
@@ -118,6 +117,27 @@ const DashboardPage: React.FC = () => {
         noticeService.getNoticeStats(),
         messageService.getMessageStats(),
       ]);
+
+      setStats({
+        users: userStats,
+        notices: noticeStats,
+        messages: messageStats,
+      });
+    } catch (error) {
+      console.error('Error loading stats:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <Container sx={{ display: 'flex', justifyContent: 'center', mt: 8 }}>
+        <CircularProgress />
+      </Container>
+    );
+  }
+
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Box sx={{ mb: 6 }}>
@@ -280,27 +300,6 @@ const DashboardPage: React.FC = () => {
               </Box>
             </CardContent>
           </Card>
-        </Grid>
-      </Grid>
-    </Container>
-  );        <Typography variant="h6" gutterBottom>
-              Quick Tips
-            </Typography>
-            <Box sx={{ mt: 2 }}>
-              <Typography variant="body2" color="text.secondary" gutterBottom>
-                • Click on status chips to toggle active/inactive
-              </Typography>
-              <Typography variant="body2" color="text.secondary" gutterBottom>
-                • Use the search bar to quickly find items
-              </Typography>
-              <Typography variant="body2" color="text.secondary" gutterBottom>
-                • Filter users by role for better management
-              </Typography>
-              <Typography variant="body2" color="text.secondary" gutterBottom>
-                • Attach files to notices for additional information
-              </Typography>
-            </Box>
-          </Paper>
         </Grid>
       </Grid>
     </Container>
