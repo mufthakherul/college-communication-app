@@ -5,6 +5,7 @@ A web-based dashboard for the RPI Communication App. Currently supports teachers
 ## ✨ What's New
 
 **Latest Updates** (Latest version - fully tested ✅):
+
 - 🔍 **Search & Filter**: Quickly find users, notices, and messages with powerful search
 - 📎 **File Attachments**: Upload documents and images to notices (validated)
 - 🎯 **Quick Actions**: Toggle active/inactive status by clicking chips
@@ -36,6 +37,7 @@ A web-based dashboard for the RPI Communication App. Currently supports teachers
 ## Future Features (Students)
 
 Planning to add:
+
 - 📚 **Personal Dashboard** - View notices, assignments, and grades
 - 💬 **Direct Messaging** - Chat with teachers and classmates
 - 📖 **Course Materials** - Access study resources and books
@@ -61,6 +63,7 @@ Planning to add:
 ## Installation
 
 1. Navigate to the web directory:
+
    ```bash
    cd apps/web
    ```
@@ -73,6 +76,7 @@ Planning to add:
 ## Configuration
 
 The app is pre-configured to use the same Appwrite backend as the mobile app. The configuration is located in:
+
 - `src/config/appwrite.ts`
 
 No additional configuration is needed if using the default setup.
@@ -105,34 +109,46 @@ npm run preview
 
 ## Deployment
 
-### 🚀 Automatic Deployment with Vercel (Recommended!)
+### 🚀 Deploy to Appwrite (Recommended!)
 
-**Why Vercel?** Appwrite doesn't have native static site hosting. Appwrite is excellent for the backend (database, auth, storage), but for hosting the frontend web app, you need a platform like Vercel, Netlify, or GitHub Pages. This is the **officially recommended approach** by Appwrite.
+**Appwrite now supports static site hosting!** Since your backend is already on Appwrite, you can host the entire application (backend + frontend) in one place.
 
-✅ **100% Free Forever** - Generous free tier, no credit card required
-✅ **Automatic** - Deploy on every push to main branch  
-✅ **Fast** - Live in ~2 minutes, global CDN  
-✅ **Professional** - HTTPS, custom domains, instant rollbacks  
-✅ **Zero Configuration** - Works out of the box with Vite  
+✅ **All-in-One** - Backend and frontend on the same platform
+✅ **Automatic** - Deploy with a single command  
+✅ **Fast** - Global CDN included
+✅ **Secure** - HTTPS by default
+✅ **Simple** - No external services needed
 
-**⚡ Quick Setup (15 minutes):**
+**⚡ Quick Deploy:**
 
-**[📖 Complete Setup Guide: DEPLOYMENT_SETUP.md](DEPLOYMENT_SETUP.md)** ⭐ **START HERE**
+```bash
+# From project root
+./deploy-appwrite.sh
+```
 
-**TL;DR:**
-1. Create free Vercel account (connect with GitHub)
-2. Import this repo, set root to `apps/web`
-3. Add 3 secrets to GitHub (Vercel token, project ID, org ID)
-4. Add Vercel domain to Appwrite CORS settings
-5. Push code → auto-deploy! 🚀
+**Manual Deploy:**
 
-**Your site will be live at**: `https://your-project.vercel.app`
+```bash
+# Build the app
+cd apps/web
+npm install
+npm run build
+
+# Deploy to Appwrite
+cd ../..
+appwrite push sites
+```
+
+**📖 Complete Guide**: See [DEPLOY_TO_APPWRITE.md](../../DEPLOY_TO_APPWRITE.md) for detailed instructions.
+
+**Your site will be live at**: Check your Appwrite console for the hosting URL
 
 ---
 
 ### Alternative Options
 
 See **[DEPLOYMENT.md](DEPLOYMENT.md)** for other hosting options:
+
 - Netlify (similar to Vercel)
 - GitHub Pages (free for public repos)
 - Cloudflare Pages
@@ -141,6 +157,7 @@ See **[DEPLOYMENT.md](DEPLOYMENT.md)** for other hosting options:
 #### Other Hosting Platforms
 
 If you prefer external hosting:
+
 - **Vercel**: Connect GitHub, auto-deploy
 - **Netlify**: Connect GitHub, auto-deploy
 - **GitHub Pages**: Free for public repos
@@ -156,6 +173,7 @@ See [GITHUB_DEPLOYMENT.md](GITHUB_DEPLOYMENT.md) for other options.
 ### Other Hosting Options
 
 After building, upload the `dist` folder to any static hosting service:
+
 - GitHub Pages
 - AWS S3 + CloudFront
 - Firebase Hosting
@@ -252,16 +270,19 @@ apps/web-teacher/
 ## Troubleshooting
 
 ### Cannot login
+
 - Ensure your user has `teacher` or `admin` role in the Appwrite database
 - Check that the Appwrite project ID and endpoint are correct
 - Verify network connectivity to Appwrite server
 
 ### Data not loading
+
 - Check browser console for errors
 - Verify Appwrite database collections exist
 - Ensure proper permissions are set on collections
 
 ### Build errors
+
 - Clear `node_modules` and reinstall: `rm -rf node_modules && npm install`
 - Check Node.js version: `node --version` (should be 18+)
 - Run type check: `npm run lint`
@@ -269,6 +290,7 @@ apps/web-teacher/
 ## Contributing
 
 When contributing to the teacher dashboard:
+
 1. Follow the existing code structure
 2. Use TypeScript for all new files
 3. Follow Material-UI design patterns
@@ -281,6 +303,7 @@ MIT License - Same as the main project
 ## Support
 
 For issues or questions:
+
 - Check the main project documentation
 - Review Appwrite documentation: https://appwrite.io/docs
 - Open an issue on GitHub

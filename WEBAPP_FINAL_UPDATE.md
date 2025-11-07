@@ -115,33 +115,34 @@ dist/
     └── index-BFSSJMpz.js (793.85 kB)
 ```
 
-### Deployment Options:
+### Deployment Platform:
 
-1. **Vercel** (Recommended)
+**Appwrite** - Backend & Static Hosting
 
-   - Free tier available
-   - Automatic HTTPS
-   - CDN included
-
-2. **Netlify** (Alternative)
-
-   - Similar to Vercel
-   - Good GitHub integration
-
-3. **Appwrite Storage**
-
-   - Since backend is on Appwrite
-   - Can serve static files
-
-4. **Traditional Server**
-   - Nginx/Apache
-   - Self-hosted option
+- Project ID: `6904cfb1001e5253725b`
+- Project Name: `rpi-communication`
+- Site ID: `web-dashboard`
+- Site Name: `RPI Communication Dashboard`
+- Configured in: `appwrite.json`
 
 ### Quick Deploy:
 
 ```bash
-cd /workspaces/college-communication-app/apps/web
-./deploy.sh
+cd /workspaces/college-communication-app
+./deploy-appwrite.sh
+```
+
+Or manually:
+
+```bash
+# Build the app
+cd apps/web
+npm install
+npm run build
+
+# Deploy to Appwrite
+cd ../..
+appwrite push sites
 ```
 
 ## 🔍 Testing Checklist
@@ -227,10 +228,10 @@ apps/web/
 
 ### Immediate:
 
-1. Deploy to production (use Vercel/Netlify)
+1. Deploy to Appwrite (run `./deploy-appwrite.sh`)
 2. Test all features in production
-3. Set up custom domain
-4. Configure HTTPS
+3. Set up custom domain in Appwrite console
+4. Verify HTTPS is working
 
 ### Optional Future Enhancements:
 
@@ -238,7 +239,7 @@ apps/web/
 2. Implement dark mode
 3. Add accessibility features (ARIA labels)
 4. Optimize bundle size (code splitting)
-5. Add analytics (Google Analytics)
+5. Add analytics integration
 6. Add PWA support
 7. Add skeleton loaders
 8. Implement caching strategy
