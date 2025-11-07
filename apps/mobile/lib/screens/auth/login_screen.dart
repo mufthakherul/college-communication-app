@@ -104,7 +104,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   end: Alignment.bottomRight,
                   colors: [
                     scheme.surface,
-                    scheme.secondaryContainer.withOpacity(0.5),
+                    scheme.secondaryContainer.withValues(alpha: 0.5),
                   ],
                 ),
               ),
@@ -131,14 +131,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: scheme.primary.withOpacity(0.35),
+                              color: scheme.primary.withValues(alpha: 0.35),
                               blurRadius: 30,
                               offset: const Offset(0, 12),
                             ),
                           ],
                         ),
                         child: const Icon(Icons.school, size: 64, color: Colors.white),
-                      ).animate().fadeIn(duration: 400.ms).scale(begin: const Offset(0.8,0.8), curve: Curves.easeOut),
+                      ).animate().fadeIn(duration: 400.ms).scaleXY(begin: 0.8, end: 1.0, curve: Curves.easeOut),
                       const SizedBox(height: 28),
                       Text(
                         'RPI Communication',
@@ -148,14 +148,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           letterSpacing: -0.5,
                         ),
                         textAlign: TextAlign.center,
-                      ).animate().fadeIn(duration: 450.ms).moveY(begin: 12, end: 0, curve: Curves.easeOut),
+                      ).animate().fadeIn(duration: 450.ms).slideY(begin: 0.12, end: 0, curve: Curves.easeOut),
                       const SizedBox(height: 10),
                       Text(
                         'Rangpur Government Polytechnic Institute',
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.w500,
                           fontSize: 14,
-                          color: scheme.onSurface.withOpacity(0.75),
+                          color: scheme.onSurface.withValues(alpha: 0.75),
                         ),
                         textAlign: TextAlign.center,
                       ).animate().fadeIn(duration: 500.ms),
@@ -264,12 +264,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(14),
                               ),
-                            ).merge(
-                              ButtonStyle(
-                                elevation: WidgetStateProperty.resolveWith(
-                                  (states) => states.contains(WidgetState.pressed) ? 0 : 2,
-                                ),
-                              ),
                             ),
                             child: Text(
                               'Sign In',
@@ -323,7 +317,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Text(
                       'Demo mode: Local sample data only, no real data access',
                       style: GoogleFonts.inter(
-                        color: scheme.onSurface.withOpacity(0.6),
+                        color: scheme.onSurface.withValues(alpha: 0.6),
                         fontStyle: FontStyle.italic,
                         fontSize: 12,
                       ),
@@ -333,6 +327,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
+        ),
+      ),
         ],
       ),
     );
