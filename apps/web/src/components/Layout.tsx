@@ -23,6 +23,7 @@ import {
   Menu as MenuIcon,
   Dashboard as DashboardIcon,
   People as PeopleIcon,
+  School as SchoolIcon,
   Announcement as AnnouncementIcon,
   Message as MessageIcon,
   Logout as LogoutIcon,
@@ -58,6 +59,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const menuItems = [
     { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
     { text: 'Users', icon: <PeopleIcon />, path: '/users' },
+  { text: 'Teachers', icon: <SchoolIcon />, path: '/teachers' },
     { text: 'Notices', icon: <AnnouncementIcon />, path: '/notices' },
     { text: 'Messages', icon: <MessageIcon />, path: '/messages' },
   ];

@@ -11,6 +11,7 @@ import Layout from './components/Layout';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import UsersPage from './pages/UsersPage';
+import TeachersPage from './pages/TeachersPage';
 import NoticesPage from './pages/NoticesPage';
 import MessagesPage from './pages/MessagesPage';
 
@@ -59,6 +60,16 @@ const AppRoutes: React.FC = () => {
           </ProtectedRoute>
         }
       />
+        <Route
+          path="/teachers"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <TeachersPage />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
       <Route
         path="/notices"
         element={
