@@ -8,6 +8,7 @@ import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/services/notice_service.dart';
 import 'package:campus_mesh/services/website_scraper_service.dart';
 import 'package:flutter/material.dart';
+import 'dart:ui';
 import 'package:flutter_animate/flutter_animate.dart';
 
 class NoticesScreen extends StatefulWidget {
@@ -381,31 +382,34 @@ class _NoticesScreenState extends State<NoticesScreen>
               final color = _getNoticeColor(notice.type);
               final icon = _getNoticeIcon(notice.type);
 
-              final card = Container(
-                margin: const EdgeInsets.symmetric(vertical: 8),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Theme.of(context).colorScheme.surface.withOpacity(0.85),
-                      Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
-                    ],
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.06),
-                      blurRadius: 16,
-                      offset: const Offset(0, 8),
+              final card = ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          Theme.of(context).colorScheme.surface.withOpacity(0.85),
+                          Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
+                        ],
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.06),
+                          blurRadius: 16,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.outlineVariant,
+                      ),
                     ),
-                  ],
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.outlineVariant,
-                  ),
-                  backdropFilter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
-                ),
-                child: Material(
+                    child: Material(
                   color: Colors.transparent,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(16),
