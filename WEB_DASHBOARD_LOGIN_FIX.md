@@ -7,6 +7,7 @@ The web dashboard login failure is caused by **missing platform configuration** 
 ### Why This Happens
 
 Appwrite requires **explicit platform registration** for security and CORS validation:
+
 - Web apps must register their hostnames (e.g., `localhost`, `*.appwrite.app`)
 - Mobile apps must register their package/bundle IDs
 - Without platform registration, authentication requests are blocked due to origin validation
@@ -27,18 +28,22 @@ Appwrite requires **explicit platform registration** for security and CORS valid
 ### Required Platforms
 
 #### Web Platforms (2 required)
+
 1. **Localhost** (Development)
+
    - Type: Web App
    - Name: Web Dashboard (Localhost)
    - Hostname: `localhost`
 
 2. **Appwrite Sites** (Production)
-   - Type: Web App  
+   - Type: Web App
    - Name: Web Dashboard (Appwrite Sites)
    - Hostname: `*.appwrite.app`
 
 #### Mobile Platforms (2 required)
+
 3. **Android**
+
    - Type: Android
    - Name: RPI Communication App (Android)
    - Package: `com.rpi.communication`
@@ -55,6 +60,7 @@ Appwrite requires **explicit platform registration** for security and CORS valid
 The automated script requires an API key with `platforms.write` scope. Current key only has database/storage permissions.
 
 To use automation:
+
 1. Create new API key in Appwrite Console with platform permissions
 2. Update `tools/mcp/appwrite.mcp.env`
 3. Run: `./scripts/configure-appwrite-platforms.sh`
@@ -62,11 +68,13 @@ To use automation:
 ### Option 2: Manual (Recommended - 5 minutes)
 
 Run the interactive guide:
+
 ```bash
 ./scripts/configure-platforms-guide.sh
 ```
 
 This will walk you through adding each platform in the Appwrite Console:
+
 1. Opens to the correct Console URL
 2. Shows exact values to enter for each platform
 3. Provides troubleshooting tips
@@ -106,12 +114,14 @@ appwrite sites get --site-id web-dashboard
 From the database, you can use these existing accounts:
 
 1. **Admin Account #1**
+
    - Name: MD. MUFTHAKHERUL ISLAM MIRAZ
    - Email: mufthakherul@outlook.com
    - Labels: admin, developer
    - Verified: ✅ Email & Phone
 
 2. **Admin Account #2**
+
    - Name: miraz
    - Email: miraj090906@gmail.com
    - Labels: admin, teacher, developer
@@ -125,6 +135,7 @@ From the database, you can use these existing accounts:
 ### Why Manual Configuration is Safer
 
 Appwrite requires manual platform configuration through the Console because:
+
 1. **Origin Validation**: Prevents unauthorized domains from accessing your API
 2. **CORS Security**: Protects against cross-site request forgery
 3. **Audit Trail**: Console tracks who added each platform
@@ -133,12 +144,14 @@ Appwrite requires manual platform configuration through the Console because:
 ### Best Practices
 
 ✅ **DO:**
+
 - Add only domains you control
 - Use wildcards sparingly (`*.appwrite.app` is safe for Appwrite Sites)
 - Remove unused platforms
 - Use different platforms for dev/staging/prod
 
 ❌ **DON'T:**
+
 - Add `*` as hostname (allows any origin)
 - Share API keys with platform permissions
 - Add domains you don't own
@@ -147,6 +160,7 @@ Appwrite requires manual platform configuration through the Console because:
 ## 📊 **Current Project State**
 
 ### ✅ Completed
+
 - Web dashboard built and deployed to Appwrite Sites
 - Database verified (8 collections, 83 attributes, 22 indexes)
 - 6 storage buckets configured
@@ -154,6 +168,7 @@ Appwrite requires manual platform configuration through the Console because:
 - Deployment successful (ID: 690dd4c265e76eb86f16)
 
 ### ⏳ Pending
+
 - Platform configuration (blocks login)
 - Collection permissions setup
 - Mobile platform registration
@@ -165,34 +180,41 @@ Appwrite requires manual platform configuration through the Console because:
 ## 🛠️ **Troubleshooting**
 
 ### Error: "Origin not allowed"
+
 **Cause:** Platform not configured or hostname mismatch
 **Fix:** Add platform with exact hostname (case-sensitive)
 
 ### Error: "Invalid credentials"
+
 **Cause:** Wrong email/password
 **Fix:** Use existing account or create new with `./scripts/create-test-user.sh`
 
 ### Error: "Project not found"
+
 **Cause:** Wrong project ID in config
 **Fix:** Verify `projectId` in `apps/web/src/config/appwrite.ts` matches `6904cfb1001e5253725b`
 
 ### CORS errors in browser console
+
 **Cause:** Platform not configured
 **Fix:** Add web platform for current hostname
 
 ### Login redirects to wrong page
+
 **Cause:** Callback URL misconfiguration
 **Fix:** Check web app routing, ensure auth flow handles redirects
 
 ## 📞 **Quick Reference**
 
 ### Console URLs
+
 - **Project Dashboard:** https://cloud.appwrite.io/console/project-6904cfb1001e5253725b
 - **Platform Settings:** https://cloud.appwrite.io/console/project-6904cfb1001e5253725b/settings
 - **Database:** https://cloud.appwrite.io/console/project-6904cfb1001e5253725b/databases/database-rpi_communication
 - **Sites:** https://cloud.appwrite.io/console/project-6904cfb1001e5253725b/sites/site-web-dashboard
 
 ### Key Commands
+
 ```bash
 # Configure platforms (interactive guide)
 ./scripts/configure-platforms-guide.sh
