@@ -109,14 +109,14 @@ class ThemeService extends ChangeNotifier {
           fontWeight: FontWeight.w700,
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 0,
         color: scheme.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
           side: BorderSide(color: scheme.outlineVariant, width: 1),
         ),
-        margin: const EdgeInsets.all(0),
+        margin: EdgeInsets.zero,
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -154,7 +154,8 @@ class ThemeService extends ChangeNotifier {
       chipTheme: ChipThemeData(
         backgroundColor: scheme.surface,
         selectedColor: scheme.primaryContainer,
-        labelStyle: textTheme.labelLarge!,
+        labelStyle: textTheme.labelLarge ??
+            const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         side: BorderSide(color: scheme.outlineVariant),
       ),
@@ -224,14 +225,14 @@ class ThemeService extends ChangeNotifier {
           fontWeight: FontWeight.w700,
         ),
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 0,
         color: const Color(0xFF131A2B),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
           side: BorderSide(color: scheme.outlineVariant, width: 1),
         ),
-        margin: const EdgeInsets.all(0),
+        margin: EdgeInsets.zero,
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
@@ -269,7 +270,8 @@ class ThemeService extends ChangeNotifier {
       chipTheme: ChipThemeData(
         backgroundColor: const Color(0xFF0F172A),
         selectedColor: scheme.primaryContainer,
-        labelStyle: textTheme.labelLarge!,
+        labelStyle: textTheme.labelLarge ??
+            const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         side: BorderSide(color: scheme.outlineVariant),
       ),

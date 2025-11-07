@@ -143,10 +143,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    scheme.surface,
-                    isDark
-                        ? scheme.surfaceVariant.withOpacity(0.4)
-                        : scheme.secondaryContainer.withOpacity(0.25),
+          scheme.surface,
+          isDark
+            ? scheme.surfaceContainerHighest.withValues(alpha: 0.4)
+            : scheme.secondaryContainer.withValues(alpha: 0.25),
                   ],
                 ),
               ),
@@ -175,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.orange.shade800.withOpacity(0.3),
+                        color: Colors.orange.shade800.withValues(alpha: 0.3),
                         blurRadius: 12,
                         offset: const Offset(0, 4),
                       ),
@@ -245,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withValues(alpha: 0.08),
               blurRadius: 16,
               offset: const Offset(0, -2),
             ),

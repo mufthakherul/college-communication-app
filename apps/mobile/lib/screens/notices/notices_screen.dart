@@ -1,4 +1,5 @@
 // ignore_for_file: dead_code, unreachable_switch_default
+import 'dart:ui';
 import 'package:campus_mesh/models/notice_model.dart';
 import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/screens/notices/create_notice_screen.dart';
@@ -8,7 +9,6 @@ import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/services/notice_service.dart';
 import 'package:campus_mesh/services/website_scraper_service.dart';
 import 'package:flutter/material.dart';
-import 'dart:ui';
 import 'package:flutter_animate/flutter_animate.dart';
 
 class NoticesScreen extends StatefulWidget {
@@ -394,13 +394,13 @@ class _NoticesScreenState extends State<NoticesScreen>
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          Theme.of(context).colorScheme.surface.withOpacity(0.85),
-                          Theme.of(context).colorScheme.surfaceVariant.withOpacity(0.6),
+                          Theme.of(context).colorScheme.surface.withValues(alpha: 0.85),
+                          Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.6),
                         ],
                       ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.06),
+                          color: Colors.black.withValues(alpha: 0.06),
                           blurRadius: 16,
                           offset: const Offset(0, 8),
                         ),
@@ -430,7 +430,7 @@ class _NoticesScreenState extends State<NoticesScreen>
                             width: 44,
                             height: 44,
                             decoration: BoxDecoration(
-                              color: color.withOpacity(0.15),
+                              color: color.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Icon(icon, color: color),
@@ -482,7 +482,9 @@ class _NoticesScreenState extends State<NoticesScreen>
                     ),
                   ),
                 ),
-              );
+              ),
+            ),
+          );
 
               return card
                   .animate(delay: (50 * index).ms)
