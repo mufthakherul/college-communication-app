@@ -1,6 +1,7 @@
 enum EventType { seminar, workshop, exam, sports, cultural, other }
 
-class EventModel { // 'all', 'students', 'teachers', specific departments
+class EventModel {
+  // 'all', 'students', 'teachers', specific departments
 
   EventModel({
     required this.id,
@@ -62,8 +63,7 @@ class EventModel { // 'all', 'students', 'teachers', specific departments
   final String? registrationLink;
   final DateTime createdAt;
   final DateTime? updatedAt;
-  final List<String>
-      targetAudience;
+  final List<String> targetAudience;
 
   Map<String, dynamic> toJson() {
     return {

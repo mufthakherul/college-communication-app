@@ -10,7 +10,6 @@ enum LogLevel { debug, info, warning, error, fatal }
 
 /// Log entry
 class LogEntry {
-
   LogEntry({
     required this.level,
     required this.message,

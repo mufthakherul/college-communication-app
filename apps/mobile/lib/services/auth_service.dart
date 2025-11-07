@@ -101,7 +101,8 @@ class AuthService {
       debugPrint('❌ Sign in failed: ${e.message} (Code: ${e.code})');
 
       // Provide user-friendly error messages
-      if (e.code == 401 || (e.message?.contains('Invalid credentials') ?? false)) {
+      if (e.code == 401 ||
+          (e.message?.contains('Invalid credentials') ?? false)) {
         throw Exception('invalid-credentials: Invalid email or password.');
       } else if ((e.message?.contains('network') ?? false) || e.code == 0) {
         throw Exception('network: Please check your internet connection.');

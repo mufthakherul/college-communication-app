@@ -1,7 +1,6 @@
 enum AssignmentStatus { pending, submitted, graded, late }
 
 class AssignmentModel {
-
   AssignmentModel({
     required this.id,
     required this.title,
@@ -79,7 +78,6 @@ class AssignmentModel {
 }
 
 class AssignmentSubmissionModel {
-
   AssignmentSubmissionModel({
     required this.id,
     required this.assignmentId,

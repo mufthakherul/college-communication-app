@@ -3,7 +3,6 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 
 /// A markdown editor widget with formatting toolbar and live preview
 class MarkdownEditor extends StatefulWidget {
-
   const MarkdownEditor({
     super.key,
     required this.controller,

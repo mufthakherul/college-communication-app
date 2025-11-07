@@ -497,7 +497,6 @@ class WebsiteScraperService {
 
 /// Model for scraped notice from website
 class ScrapedNotice {
-
   ScrapedNotice({
     required this.id,
     required this.title,

@@ -7,7 +7,6 @@ import 'package:campus_mesh/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class AIChatScreen extends StatefulWidget {
-
   const AIChatScreen({super.key, this.sessionId});
   final String? sessionId;
 

@@ -530,7 +530,6 @@ class _AlgorithmComplexityScreenState extends State<AlgorithmComplexityScreen> {
 }
 
 class AlgorithmInfo {
-
   AlgorithmInfo({
     required this.name,
     required this.bestTime,

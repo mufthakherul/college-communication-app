@@ -210,7 +210,6 @@ class _WorldClockScreenState extends State<WorldClockScreen> {
 }
 
 class TimeZoneInfo {
-
   TimeZoneInfo(this.city, this.timezone, this.utcOffset, this.flag);
   final String city;
   final String timezone;

@@ -351,7 +351,8 @@ class _ExamCountdownScreenState extends State<ExamCountdownScreen> {
                                         vertical: 4,
                                       ),
                                       decoration: BoxDecoration(
-                                        color: countdownColor.withValues(alpha: 0.2),
+                                        color: countdownColor.withValues(
+                                            alpha: 0.2),
                                         borderRadius: BorderRadius.circular(12),
                                       ),
                                       child: Text(
@@ -405,7 +406,6 @@ class _ExamCountdownScreenState extends State<ExamCountdownScreen> {
 }
 
 class Exam {
-
   Exam({required this.name, required this.subject, required this.date});
 
   factory Exam.fromJson(Map<String, dynamic> json) => Exam(

@@ -1,5 +1,4 @@
 class NotificationModel {
-
   NotificationModel({
     required this.id,
     required this.userId,

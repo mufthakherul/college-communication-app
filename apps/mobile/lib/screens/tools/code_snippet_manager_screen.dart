@@ -410,7 +410,6 @@ struct Node* createNode(int data) {
 }
 
 class CodeSnippet {
-
   CodeSnippet({
     required this.title,
     required this.language,
@@ -442,7 +441,6 @@ class CodeSnippet {
 }
 
 class _SnippetDialog extends StatefulWidget {
-
   const _SnippetDialog({
     this.snippet,
     required this.languages,

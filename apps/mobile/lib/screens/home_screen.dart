@@ -255,7 +255,8 @@ class _HomeScreenState extends State<HomeScreen> {
         child: ClipRRect(
           child: NavigationBar(
             selectedIndex: _currentIndex,
-            onDestinationSelected: (index) => setState(() => _currentIndex = index),
+            onDestinationSelected: (index) =>
+                setState(() => _currentIndex = index),
             height: 70,
             labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
             destinations: const [

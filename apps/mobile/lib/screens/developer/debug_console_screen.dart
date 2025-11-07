@@ -150,8 +150,7 @@ class _DebugConsoleScreenState extends State<DebugConsoleScreen> {
       ..writeln();
 
     _debugInfo.forEach((key, value) {
-      buffer
-        .writeln('[$key]');
+      buffer.writeln('[$key]');
       if (value is Map) {
         value.forEach((k, v) {
           buffer.writeln('  $k: $v');
@@ -327,7 +326,8 @@ class _DebugConsoleScreenState extends State<DebugConsoleScreen> {
                     label: Text(
                       '${level.name} (${_debugLogger.getLogsByLevel(level).length})',
                     ),
-                    backgroundColor: _getLogLevelColor(level).withValues(alpha: 0.2),
+                    backgroundColor:
+                        _getLogLevelColor(level).withValues(alpha: 0.2),
                     onSelected: (selected) {},
                   ),
               ],

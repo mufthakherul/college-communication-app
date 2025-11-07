@@ -2,7 +2,8 @@ enum NoticeType { announcement, event, urgent }
 
 enum NoticeSource { admin, scraped }
 
-class NoticeModel { // For scraped notices
+class NoticeModel {
+  // For scraped notices
 
   NoticeModel({
     required this.id,

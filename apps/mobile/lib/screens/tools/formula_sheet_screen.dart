@@ -363,7 +363,6 @@ class _FormulaSheetScreenState extends State<FormulaSheetScreen> {
 }
 
 class Formula {
-
   Formula(this.name, this.formula, this.description);
   final String name;
   final String formula;

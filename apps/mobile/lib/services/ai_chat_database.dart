@@ -4,7 +4,6 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class AIChatDatabase {
-
   factory AIChatDatabase() => _instance;
 
   AIChatDatabase._internal();

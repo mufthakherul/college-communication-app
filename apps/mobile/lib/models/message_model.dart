@@ -2,7 +2,8 @@ enum MessageType { text, image, file, video, audio, document }
 
 enum MessageSyncStatus { synced, pending, failed, pendingApproval }
 
-class MessageModel { // Approval status for group messages
+class MessageModel {
+  // Approval status for group messages
 
   MessageModel({
     required this.id,

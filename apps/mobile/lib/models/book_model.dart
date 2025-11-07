@@ -11,7 +11,8 @@ enum BookCategory {
 
 enum BookStatus { available, borrowed, reserved, maintenance }
 
-class BookModel { // User ID who added the book
+class BookModel {
+  // User ID who added the book
 
   BookModel({
     required this.id,
@@ -225,7 +226,6 @@ class BookModel { // User ID who added the book
 
 // Book Borrowing Record Model
 class BookBorrowModel {
-
   BookBorrowModel({
     required this.id,
     required this.bookId,

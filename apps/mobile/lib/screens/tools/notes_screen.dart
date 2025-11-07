@@ -211,7 +211,6 @@ class _NotesScreenState extends State<NotesScreen> {
 }
 
 class Note {
-
   Note({
     required this.id,
     required this.title,
@@ -246,7 +245,6 @@ class Note {
 }
 
 class _NoteDialog extends StatefulWidget {
-
   const _NoteDialog({this.note, required this.onSave});
   final Note? note;
   final Function(String title, String content) onSave;

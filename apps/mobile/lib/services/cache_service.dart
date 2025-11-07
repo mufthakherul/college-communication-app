@@ -7,7 +7,8 @@ import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 
 /// Cache entry with metadata
-class CacheEntry<T> { // Time to live
+class CacheEntry<T> {
+  // Time to live
 
   CacheEntry({required this.data, required this.timestamp, required this.ttl});
 

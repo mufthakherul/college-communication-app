@@ -13,7 +13,6 @@ enum QRDataType {
 
 /// QR code data wrapper for sharing information
 class QRCodeData {
-
   QRCodeData({
     required this.type,
     required this.data,

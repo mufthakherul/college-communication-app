@@ -394,8 +394,14 @@ class _NoticesScreenState extends State<NoticesScreen>
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          Theme.of(context).colorScheme.surface.withValues(alpha: 0.85),
-                          Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: 0.6),
+                          Theme.of(context)
+                              .colorScheme
+                              .surface
+                              .withValues(alpha: 0.85),
+                          Theme.of(context)
+                              .colorScheme
+                              .surfaceContainerHighest
+                              .withValues(alpha: 0.6),
                         ],
                       ),
                       boxShadow: [
@@ -410,86 +416,98 @@ class _NoticesScreenState extends State<NoticesScreen>
                       ),
                     ),
                     child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(16),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              NoticeDetailScreen(noticeId: notice.id),
-                        ),
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(14),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: 44,
-                            height: 44,
-                            decoration: BoxDecoration(
-                              color: color.withValues(alpha: 0.15),
-                              borderRadius: BorderRadius.circular(12),
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(16),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  NoticeDetailScreen(noticeId: notice.id),
                             ),
-                            child: Icon(icon, color: color),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
+                          );
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(14),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: 44,
+                                height: 44,
+                                decoration: BoxDecoration(
+                                  color: color.withValues(alpha: 0.15),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Icon(icon, color: color),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Expanded(
-                                      child: Text(
-                                        notice.title,
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            notice.title,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium
+                                                ?.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                        if (notice.source ==
+                                            NoticeSource.scraped)
+                                          const Padding(
+                                            padding: EdgeInsets.only(left: 6),
+                                            child: Icon(Icons.link,
+                                                size: 16, color: Colors.blue),
+                                          ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 6),
+                                    Text(
+                                      notice.content,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium,
+                                    ),
+                                    const SizedBox(height: 6),
+                                    if (notice.createdAt != null)
+                                      Text(
+                                        _formatDate(notice.createdAt!),
                                         style: Theme.of(context)
                                             .textTheme
-                                            .titleMedium
-                                            ?.copyWith(fontWeight: FontWeight.w700),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    if (notice.source == NoticeSource.scraped)
-                                      const Padding(
-                                        padding: EdgeInsets.only(left: 6),
-                                        child: Icon(Icons.link, size: 16, color: Colors.blue),
+                                            .bodySmall,
                                       ),
                                   ],
                                 ),
-                                const SizedBox(height: 6),
-                                Text(
-                                  notice.content,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: Theme.of(context).textTheme.bodyMedium,
-                                ),
-                                const SizedBox(height: 6),
-                                if (notice.createdAt != null)
-                                  Text(
-                                    _formatDate(notice.createdAt!),
-                                    style: Theme.of(context).textTheme.bodySmall,
-                                  ),
-                              ],
-                            ),
+                              ),
+                              const Icon(Icons.chevron_right),
+                            ],
                           ),
-                          const Icon(Icons.chevron_right),
-                        ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ),
-          );
+              );
 
               return card
                   .animate(delay: (50 * index).ms)
                   .fadeIn(duration: 350.ms, curve: Curves.easeOut)
-                  .slideY(begin: 0.06, end: 0, duration: 300.ms, curve: Curves.easeOut);
+                  .slideY(
+                      begin: 0.06,
+                      end: 0,
+                      duration: 300.ms,
+                      curve: Curves.easeOut);
             },
           ),
         );

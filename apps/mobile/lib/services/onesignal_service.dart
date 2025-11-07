@@ -165,7 +165,7 @@ class OneSignalService {
 
     if (type == null || id == null) return;
 
-  // TODO(dev): Implement navigation based on type
+    // TODO(dev): Implement navigation based on type
     // Example:
     // - type: 'notice' -> Navigate to notice detail
     // - type: 'message' -> Navigate to message thread
