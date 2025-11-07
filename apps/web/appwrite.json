@@ -1,4 +1,22 @@
 {
+    "$schema": "https://appwrite.io/schemas/appwrite.json",
     "projectId": "6904cfb1001e5253725b",
-    "projectName": "RPI Communication"
+    "projectName": "rpi-communication",
+    "sites": [
+        {
+            "$id": "web-dashboard",
+            "name": "RPI Communication Dashboard",
+            "enabled": true,
+            "logging": true,
+            "framework": "vite",
+            "timeout": 30,
+            "installCommand": "npm install",
+            "buildCommand": "npm run build",
+            "outputDirectory": "dist",
+            "specification": "s-0.5vcpu-512mb",
+            "buildRuntime": "node-22",
+            "adapter": "static",
+            "fallbackFile": "index.html"
+        }
+    ]
 }

@@ -6,8 +6,17 @@
         {
             "$id": "web-dashboard",
             "name": "RPI Communication Dashboard",
-            "buildCommand": "cd apps/web && npm install && npm run build",
-            "outputDirectory": "apps/web/dist"
+            "enabled": true,
+            "logging": true,
+            "framework": "vite",
+            "timeout": 30,
+            "installCommand": "npm install",
+            "buildCommand": "npm run build",
+            "outputDirectory": "dist",
+            "specification": "s-0.5vcpu-512mb",
+            "buildRuntime": "node-22",
+            "adapter": "static",
+            "fallbackFile": "index.html"
         }
     ]
 }
