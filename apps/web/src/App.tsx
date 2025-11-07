@@ -8,6 +8,12 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Layout from './components/Layout';
+import HomePage from './pages/HomePage';
+import AboutPage from './pages/AboutPage';
+import FeaturesPage from './pages/FeaturesPage';
+import DownloadsPage from './pages/DownloadsPage';
+import PrivacyPage from './pages/PrivacyPage';
+import DeveloperPage from './pages/DeveloperPage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import UsersPage from './pages/UsersPage';
@@ -39,7 +45,16 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 const AppRoutes: React.FC = () => {
   return (
     <Routes>
+      {/* Public Routes */}
+      <Route path="/" element={<HomePage />} />
+      <Route path="/about" element={<AboutPage />} />
+      <Route path="/features" element={<FeaturesPage />} />
+      <Route path="/downloads" element={<DownloadsPage />} />
+      <Route path="/privacy" element={<PrivacyPage />} />
+      <Route path="/developer" element={<DeveloperPage />} />
       <Route path="/login" element={<LoginPage />} />
+      
+      {/* Protected Routes */}
       <Route
         path="/dashboard"
         element={
@@ -90,7 +105,6 @@ const AppRoutes: React.FC = () => {
           </ProtectedRoute>
         }
       />
-      <Route path="/" element={<Navigate to="/dashboard" />} />
     </Routes>
   );
 };
