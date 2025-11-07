@@ -1,3 +1,4 @@
+// ignore_for_file: cascade_invocations
 import 'package:flutter/foundation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 

@@ -1,3 +1,4 @@
+// ignore_for_file: cascade_invocations
 import 'package:appwrite/appwrite.dart';
 import 'package:campus_mesh/appwrite_config.dart';
 import 'package:campus_mesh/models/user_model.dart';

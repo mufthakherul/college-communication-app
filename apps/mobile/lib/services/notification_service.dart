@@ -163,7 +163,7 @@ class NotificationService {
       );
 
       // Mark each as read (consider using batch operations if available)
-      // TODO: Use batch operations when Appwrite supports it for better performance
+      // TODO(copilot): Use batch operations when Appwrite supports it for better performance
       final futures = response.documents.map((doc) => markAsRead(doc.$id));
       await Future.wait(futures);
     } catch (e) {

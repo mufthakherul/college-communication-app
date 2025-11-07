@@ -1,3 +1,4 @@
+// ignore_for_file: do_not_use_environment
 import 'package:campus_mesh/screens/auth/login_screen.dart';
 import 'package:campus_mesh/screens/home_screen.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';

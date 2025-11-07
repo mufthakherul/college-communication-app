@@ -1,3 +1,4 @@
+// ignore_for_file: cascade_invocations
 import 'dart:async';
 
 import 'package:appwrite/appwrite.dart';

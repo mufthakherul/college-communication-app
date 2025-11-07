@@ -88,7 +88,7 @@ class _EventsScreenState extends State<EventsScreen> {
       floatingActionButton: _canCreateEvents
           ? FloatingActionButton.extended(
               onPressed: () {
-                // TODO: Navigate to create event screen
+                // TODO(copilot): Navigate to create event screen
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Create event feature coming soon'),

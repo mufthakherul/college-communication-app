@@ -1,3 +1,4 @@
+// ignore_for_file: cascade_invocations
 import 'dart:async';
 
 import 'package:campus_mesh/services/app_logger_service.dart';

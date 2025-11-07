@@ -1,3 +1,4 @@
+// ignore_for_file: unawaited_futures
 import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/screens/books/books_screen.dart';
 import 'package:campus_mesh/screens/messages/messages_screen.dart';

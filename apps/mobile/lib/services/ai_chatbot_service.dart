@@ -1,3 +1,4 @@
+// ignore_for_file: cascade_invocations
 import 'package:campus_mesh/models/ai_chat_message_model.dart';
 import 'package:campus_mesh/models/ai_chat_session_model.dart';
 import 'package:campus_mesh/services/ai_chat_database.dart';

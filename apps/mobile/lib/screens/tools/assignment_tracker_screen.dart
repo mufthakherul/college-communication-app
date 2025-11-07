@@ -120,7 +120,7 @@ class _AssignmentTrackerScreenState extends State<AssignmentTrackerScreen> {
       floatingActionButton: _canCreateAssignments
           ? FloatingActionButton.extended(
               onPressed: () {
-                // TODO: Navigate to create assignment screen
+                // TODO(copilot): Navigate to create assignment screen
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Create assignment feature coming soon'),
@@ -312,7 +312,7 @@ class _AssignmentTrackerScreenState extends State<AssignmentTrackerScreen> {
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     onPressed: () {
-                      // TODO: Navigate to submission screen
+                      // TODO(copilot): Navigate to submission screen
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text(

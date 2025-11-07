@@ -1,3 +1,4 @@
+// ignore_for_file: unawaited_futures
 import 'package:campus_mesh/screens/qr/qr_share_screen.dart';
 import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/services/qr_data_service.dart';

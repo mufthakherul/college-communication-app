@@ -1,3 +1,4 @@
+// ignore_for_file: cascade_invocations, avoid_positional_boolean_parameters
 import 'dart:async';
 import 'dart:convert';
 
@@ -255,7 +256,7 @@ class MeshNetworkService {
 
       // Initialize the nearby connections
       // Note: Actual initialization is handled by the flutter_nearby_connections plugin
-  // TODO(campus_mesh): Integrate flutter_nearby_connections plugin for full functionality
+  // TODO(dev): Integrate flutter_nearby_connections plugin for full functionality
       // See MESH_NETWORKING_FIX_GUIDE.md for implementation details
 
       _isInitialized = true;

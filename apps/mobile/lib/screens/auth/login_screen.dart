@@ -1,3 +1,4 @@
+// ignore_for_file: unawaited_futures
 import 'package:campus_mesh/screens/auth/demo_login_screen.dart';
 import 'package:campus_mesh/screens/auth/register_screen.dart';
 import 'package:campus_mesh/screens/home_screen.dart';

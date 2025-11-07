@@ -151,7 +151,7 @@ class _DebugConsoleScreenState extends State<DebugConsoleScreen> {
 
     _debugInfo.forEach((key, value) {
       buffer
-        ..writeln('[$key]');
+        .writeln('[$key]');
       if (value is Map) {
         value.forEach((k, v) {
           buffer.writeln('  $k: $v');
