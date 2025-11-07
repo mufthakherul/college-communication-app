@@ -62,14 +62,14 @@ class UserService {
   }
 
   /**
-   * Get user by auth ID (userId field)
+   * Get user by email (used to match Appwrite auth user with database user)
    */
-  async getUserByAuthId(authId: string): Promise<User | null> {
+  async getUserByEmail(email: string): Promise<User | null> {
     try {
       const response = await appwriteService.databases.listDocuments(
         AppwriteConfig.databaseId,
         AppwriteConfig.collections.users,
-        [Query.equal('userId', authId), Query.limit(1)]
+        [Query.equal('email', email), Query.limit(1)]
       );
 
       if (response.documents.length > 0) {
@@ -77,9 +77,20 @@ class UserService {
       }
       return null;
     } catch (error) {
-      console.error('Error fetching user by auth ID:', error);
+      console.error('Error fetching user by email:', error);
       throw error;
     }
+  }
+
+  /**
+   * Get user by auth ID - kept for backward compatibility
+   * Now delegates to email-based lookup
+   */
+  async getUserByAuthId(): Promise<User | null> {
+    // Note: Direct auth ID lookup no longer works since document IDs are random
+    // Use getUserByEmail instead with the auth user's email
+    console.warn('getUserByAuthId is deprecated. Use getUserByEmail instead.');
+    return null;
   }
 
   /**

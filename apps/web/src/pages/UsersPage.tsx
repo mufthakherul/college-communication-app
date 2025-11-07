@@ -155,7 +155,6 @@ const UsersPage: React.FC = () => {
         // Note: userId should be set by Appwrite auth when the actual user account is created
         // This creates the user profile document; a separate auth account creation is needed
         await userService.createUser({
-          userId: 'pending', // Placeholder until auth account is created
           ...formData,
           isActive: true,
         });

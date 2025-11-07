@@ -1,0 +1,34 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e88e5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1565c0;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  
+  <!-- Accent shapes -->
+  <circle cx="1100" cy="100" r="120" fill="#42a5f5" opacity="0.3"/>
+  <circle cx="100" cy="550" r="100" fill="#42a5f5" opacity="0.3"/>
+  
+  <!-- Main text -->
+  <text x="600" y="200" font-size="72" font-weight="bold" text-anchor="middle" fill="white" font-family="Arial, sans-serif">
+    RPI Echo System
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="300" font-size="36" text-anchor="middle" fill="#e3f2fd" font-family="Arial, sans-serif">
+    College Communication Platform
+  </text>
+  
+  <!-- Tagline -->
+  <text x="600" y="450" font-size="28" text-anchor="middle" fill="#b3e5fc" font-family="Arial, sans-serif">
+    Connect • Communicate • Collaborate
+  </text>
+  
+  <!-- Bottom accent line -->
+  <line x1="200" y1="550" x2="1000" y2="550" stroke="white" stroke-width="3" opacity="0.5"/>
+</svg>
