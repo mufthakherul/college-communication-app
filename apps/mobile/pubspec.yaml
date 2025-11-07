@@ -59,6 +59,8 @@ dependencies:
   google_generative_ai: ^0.2.2
   # Charts for analytics
   fl_chart: ^0.66.0
+  # Modern typography
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:
