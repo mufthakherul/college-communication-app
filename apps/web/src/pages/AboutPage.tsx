@@ -250,6 +250,49 @@ const AboutPage: React.FC = () => {
           </Grid>
         </Paper>
 
+          {/* Developer & Credits */}
+          <Paper elevation={2} sx={{ p: 4, mb: 4 }}>
+            <Typography variant="h4" gutterBottom fontWeight="bold" color="primary">
+              Developer & Credits
+            </Typography>
+            <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
+              <strong>Developer:</strong> Md Mufthakherul Islam Miraz
+            </Typography>
+            <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
+              A full-stack developer passionate about creating solutions for education and communication.
+              Check out more projects at{' '}
+              <a
+                href="https://www.mufthakherul.me"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: '#1976d2', textDecoration: 'none' }}
+              >
+                mufthakherul.me
+              </a>
+            </Typography>
+          
+            <Typography variant="h6" gutterBottom fontWeight="bold" sx={{ mt: 3 }}>
+              Technical & Planning Support
+            </Typography>
+            <Typography variant="body1" paragraph sx={{ lineHeight: 1.8 }}>
+              <strong>Student Team:</strong> CST 2025-2026 Session, Day Shift, Group A
+            </Typography>
+            <Typography variant="body1" paragraph sx={{ lineHeight: 1.8 }}>
+              <strong>Guide Teacher:</strong> Alamgir Kabir<br />
+              <strong>Email:</strong>{' '}
+              <a
+                href="mailto:md.kabir.cse@gmail.com"
+                style={{ color: '#1976d2', textDecoration: 'none' }}
+              >
+                md.kabir.cse@gmail.com
+              </a>
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 2, fontStyle: 'italic' }}>
+              Special thanks to all students and faculty who contributed ideas, feedback, and testing 
+              to make RPI Echo System a reality.
+            </Typography>
+          </Paper>
+
         {/* CTA Section */}
         <Box sx={{ textAlign: 'center', py: 4 }}>
           <Typography variant="h5" gutterBottom fontWeight="bold">

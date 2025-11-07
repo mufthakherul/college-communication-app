@@ -120,10 +120,10 @@ const DeveloperPage: React.FC = () => {
                   fontSize: 80,
                 }}
               >
-                MH
+             MMIM
               </Avatar>
               <Typography variant="h4" sx={{ mt: 2 }} fontWeight="bold">
-                Mufthak Herul
+             Md Mufthakherul Islam Miraz
               </Typography>
               <Typography variant="h6" color="text.secondary" gutterBottom>
                 Full Stack Developer
@@ -154,7 +154,7 @@ const DeveloperPage: React.FC = () => {
                 Hello! 👋
               </Typography>
               <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
-                I'm Mufthak Herul, a passionate full-stack developer with expertise in building
+             I'm Md Mufthakherul Islam Miraz, a passionate full-stack developer with expertise in building
                 mobile and web applications. I created RPI Echo System to solve real communication
                 challenges in educational institutions and make college life more connected and
                 organized.
