@@ -61,6 +61,9 @@ dependencies:
   fl_chart: ^0.66.0
   # Modern typography
   google_fonts: ^6.2.1
+  # Advanced animations & micro-interactions
+  flutter_animate: ^4.5.0
+  animations: ^2.0.10
 
 dev_dependencies:
   flutter_test:
