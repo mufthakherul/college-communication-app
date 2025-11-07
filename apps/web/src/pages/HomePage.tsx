@@ -412,7 +412,7 @@ const HomePage: React.FC = () => {
                 rel="noopener noreferrer"
                 style={{ color: 'white', textDecoration: 'underline' }}
               >
-                Mufthak Herul
+                  Md Mufthakherul Islam Miraz
               </a>
             </Typography>
           </Box>

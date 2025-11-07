@@ -318,7 +318,7 @@ const PrivacyPage: React.FC = () => {
           </Typography>
           <Box sx={{ pl: 2, mb: 2 }}>
             <Typography variant="body1" paragraph>
-              <strong>Developer:</strong> Mufthak Herul
+            <strong>Developer:</strong> Md Mufthakherul Islam Miraz
             </Typography>
             <Typography variant="body1" paragraph>
               <strong>Website:</strong>{' '}
@@ -332,7 +332,15 @@ const PrivacyPage: React.FC = () => {
               </a>
             </Typography>
             <Typography variant="body1" paragraph>
-              <strong>Email:</strong> Contact through website
+                <strong>Email:</strong>{' '}
+                <a
+                  href="https://www.mufthakherul.me/contact"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: '#1976d2' }}
+                >
+                  Contact through website
+                </a>
             </Typography>
           </Box>
 
@@ -355,8 +363,12 @@ const PrivacyPage: React.FC = () => {
             <Button variant="contained" size="large" onClick={() => navigate('/')}>
               Back to Home
             </Button>
-            <Button variant="outlined" size="large" onClick={() => navigate('/about')}>
-              Learn More
+              <Button 
+                variant="outlined" 
+                size="large" 
+                onClick={() => window.open('https://www.mufthakherul.me/contact', '_blank')}
+              >
+                Contact Developer
             </Button>
           </Box>
         </Box>

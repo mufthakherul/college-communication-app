@@ -1,0 +1,21 @@
+{
+  "name": "RPI Echo System",
+  "short_name": "RPI Echo",
+  "description": "College communication and dashboard for Rangpur Polytechnic Institute.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0D47A1",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
