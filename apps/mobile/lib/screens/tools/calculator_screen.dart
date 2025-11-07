@@ -94,8 +94,9 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         final right = double.parse(tokens[i + 1]);
         final result = tokens[i] == '*' ? left * right : left / right;
         tokens[i - 1] = result.toString();
-        tokens.removeAt(i);
-        tokens.removeAt(i);
+        tokens
+          ..removeAt(i)
+          ..removeAt(i);
         i--;
       }
     }
