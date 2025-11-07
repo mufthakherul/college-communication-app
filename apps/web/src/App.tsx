@@ -14,6 +14,13 @@ import FeaturesPage from './pages/FeaturesPage';
 import DownloadsPage from './pages/DownloadsPage';
 import PrivacyPage from './pages/PrivacyPage';
 import DeveloperPage from './pages/DeveloperPage';
+import SupportPage from './pages/SupportPage';
+import DocumentationPage from './pages/DocumentationPage';
+import ContactPage from './pages/ContactPage';
+import ChangelogPage from './pages/ChangelogPage';
+import StatsPage from './pages/StatsPage';
+import TermsPage from './pages/TermsPage';
+import NotFoundPage from './pages/NotFoundPage';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import UsersPage from './pages/UsersPage';
@@ -52,6 +59,12 @@ const AppRoutes: React.FC = () => {
       <Route path="/downloads" element={<DownloadsPage />} />
       <Route path="/privacy" element={<PrivacyPage />} />
       <Route path="/developer" element={<DeveloperPage />} />
+      <Route path="/support" element={<SupportPage />} />
+      <Route path="/documentation" element={<DocumentationPage />} />
+      <Route path="/contact" element={<ContactPage />} />
+      <Route path="/changelog" element={<ChangelogPage />} />
+      <Route path="/stats" element={<StatsPage />} />
+      <Route path="/terms" element={<TermsPage />} />
       <Route path="/login" element={<LoginPage />} />
       
       {/* Protected Routes */}
@@ -105,6 +118,9 @@ const AppRoutes: React.FC = () => {
           </ProtectedRoute>
         }
       />
+      
+      {/* 404 Not Found - Must be last */}
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 };

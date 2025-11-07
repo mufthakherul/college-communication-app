@@ -51,7 +51,7 @@ const DeveloperPage: React.FC = () => {
 
   const projects = [
     {
-      name: 'Campus Mesh',
+      name: 'RPI Echo System',
       description: 'Complete college communication platform with mobile and web dashboards',
       tech: ['Flutter', 'React', 'TypeScript', 'Appwrite'],
     },
@@ -77,7 +77,7 @@ const DeveloperPage: React.FC = () => {
           </IconButton>
           <School sx={{ mr: 2 }} />
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Campus Mesh
+            RPI Echo System
           </Typography>
           <Button color="inherit" onClick={() => navigate('/login')}>
             Login
@@ -100,7 +100,7 @@ const DeveloperPage: React.FC = () => {
             About the Developer
           </Typography>
           <Typography variant="h6" component="h2">
-            Meet the Mind Behind Campus Mesh
+            Meet the Mind Behind RPI Echo System
           </Typography>
         </Container>
       </Box>
@@ -155,7 +155,7 @@ const DeveloperPage: React.FC = () => {
               </Typography>
               <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
                 I'm Mufthak Herul, a passionate full-stack developer with expertise in building
-                mobile and web applications. I created Campus Mesh to solve real communication
+                mobile and web applications. I created RPI Echo System to solve real communication
                 challenges in educational institutions and make college life more connected and
                 organized.
               </Typography>
@@ -233,12 +233,12 @@ const DeveloperPage: React.FC = () => {
           </Grid>
         </Box>
 
-        {/* Why Campus Mesh */}
+        {/* Why RPI Echo System */}
         <Paper elevation={2} sx={{ p: 4, mb: 4, bgcolor: '#e3f2fd' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
             <EmojiObjects sx={{ fontSize: 50, color: '#1976d2', mr: 2 }} />
             <Typography variant="h4" fontWeight="bold" color="primary">
-              Why I Built Campus Mesh
+              Why I Built RPI Echo System
             </Typography>
           </Box>
           <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
@@ -248,9 +248,9 @@ const DeveloperPage: React.FC = () => {
             was unnecessarily complicated.
           </Typography>
           <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
-            Campus Mesh was born from the vision of creating a unified platform that brings together
+            RPI Echo System was born from the vision of creating a unified platform that brings together
             all college communication needs - from instant messaging and announcements to assignment
-            tracking and administrative tools. The goal was to make college communication seamless,
+            tracking and administrative tools. The goal was to make college communication easier,
             secure, and accessible to everyone.
           </Typography>
           <Typography variant="body1" sx={{ fontSize: '1.1rem', lineHeight: 1.8 }}>
@@ -317,7 +317,7 @@ const DeveloperPage: React.FC = () => {
             </Grid>
             <Box sx={{ textAlign: 'center', mt: 4 }}>
               <Typography variant="body1" color="text.secondary" paragraph>
-                Interested in collaboration or have questions about Campus Mesh?
+                Interested in collaboration or have questions about RPI Echo System?
               </Typography>
               <Button
                 variant="contained"
@@ -334,10 +334,10 @@ const DeveloperPage: React.FC = () => {
         {/* CTA Section */}
         <Box sx={{ textAlign: 'center', py: 4 }}>
           <Typography variant="h5" gutterBottom fontWeight="bold">
-            Explore Campus Mesh
+            Explore RPI Echo System
           </Typography>
           <Typography variant="body1" color="text.secondary" paragraph>
-            Try Campus Mesh and experience the future of college communication
+            Try RPI Echo System and experience the future of college communication
           </Typography>
           <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap', mt: 3 }}>
             <Button

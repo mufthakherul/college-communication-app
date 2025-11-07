@@ -32,7 +32,6 @@ import {
   Person,
   Engineering,
   AdminPanelSettings,
-  CheckCircle,
   Warning,
   Info,
 } from '@mui/icons-material';
@@ -112,7 +111,7 @@ const DownloadsPage: React.FC = () => {
     },
     {
       title: 'Open and Login',
-      description: 'Launch Campus Mesh and login with your credentials',
+      description: 'Launch RPI Echo System and login with your credentials',
     },
   ];
 
@@ -131,7 +130,7 @@ const DownloadsPage: React.FC = () => {
           </IconButton>
           <School sx={{ mr: 2 }} />
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Campus Mesh
+            RPI Echo System
           </Typography>
           <Button color="inherit" onClick={() => navigate('/login')}>
             Login
@@ -151,7 +150,7 @@ const DownloadsPage: React.FC = () => {
         <Container maxWidth="md">
           <Download sx={{ fontSize: 80, mb: 2 }} />
           <Typography variant="h3" component="h1" gutterBottom fontWeight="bold">
-            Download Campus Mesh
+            Download RPI Echo System
           </Typography>
           <Typography variant="h6" component="h2">
             Get the app for your role - Available for Android
@@ -305,7 +304,7 @@ const DownloadsPage: React.FC = () => {
             Security Notice
           </Typography>
           <Typography variant="body2">
-            Only download Campus Mesh from this official website. Do not install APK files from
+            Only download RPI Echo System from this official website. Do not install APK files from
             untrusted sources. If you encounter any issues during installation, please contact your
             college administrator or visit the support section.
           </Typography>
