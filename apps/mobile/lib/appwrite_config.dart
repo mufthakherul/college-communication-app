@@ -29,6 +29,10 @@ class AppwriteConfig {
   static const String timetablesCollectionId = 'timetables';
   static const String studyGroupsCollectionId = 'study_groups';
   static const String eventsCollectionId = 'events';
+  
+  // Group chat collection IDs
+  static const String groupsCollectionId = 'groups';
+  static const String groupMembersCollectionId = 'group_members';
 
   // Storage bucket IDs
   static const String profileImagesBucketId = 'profile-images';
