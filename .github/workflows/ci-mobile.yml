@@ -1,0 +1,100 @@
+name: Mobile CI
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'apps/mobile/**'
+      - '.github/workflows/ci-mobile.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'apps/mobile/**'
+      - '.github/workflows/ci-mobile.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  analyze-and-test:
+    name: Analyze and Test (Flutter)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.7'
+          channel: 'stable'
+          cache: true
+
+      - name: Flutter Pub Get
+        working-directory: apps/mobile
+        run: flutter pub get
+
+      - name: Check Formatting
+        working-directory: apps/mobile
+        run: dart format --set-exit-if-changed .
+
+      - name: Analyze (treat warnings as failures)
+        working-directory: apps/mobile
+        run: flutter analyze
+
+      - name: Run Tests
+        working-directory: apps/mobile
+        run: flutter test --coverage --reporter expanded
+
+      - name: Upload Coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-coverage
+          path: apps/mobile/coverage/lcov.info
+          retention-days: 14
+
+  build-apk-debug:
+    name: Build Debug APK
+    runs-on: ubuntu-latest
+    needs: analyze-and-test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.35.7'
+          channel: 'stable'
+          cache: true
+
+      - name: Flutter Pub Get
+        working-directory: apps/mobile
+        run: flutter pub get
+
+      - name: Build APK (Debug)
+        working-directory: apps/mobile
+        run: flutter build apk --debug
+
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: rpi-communication-debug-apk
+          path: apps/mobile/build/app/outputs/flutter-apk/app-debug.apk
+          retention-days: 14
