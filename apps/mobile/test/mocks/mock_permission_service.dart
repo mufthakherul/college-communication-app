@@ -1,6 +1,6 @@
 import 'package:campus_mesh/services/permission_service.dart';
 
-class MockPermissionService extends PermissionService {
+class MockPermissionService implements PermissionProvider {
   MockPermissionService({required this.allGranted});
 
   final bool allGranted;
@@ -19,4 +19,10 @@ class MockPermissionService extends PermissionService {
 
   @override
   Future<bool> checkNfcPermissions() async => allGranted;
+
+  @override
+  Future<bool> checkCameraPermissions() async => allGranted;
+
+  @override
+  Future<bool> checkMicrophonePermissions() async => allGranted;
 }

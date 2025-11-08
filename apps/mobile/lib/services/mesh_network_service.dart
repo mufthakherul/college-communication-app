@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:meta/meta.dart';
 
 import 'package:campus_mesh/services/app_logger_service.dart';
+import 'package:campus_mesh/services/permission_service.dart';
 import 'package:flutter/foundation.dart';
 
 /// Connection type for mesh network
@@ -232,6 +233,8 @@ class MeshNetworkService {
   bool _autoConnectEnabled = true; // Auto-connect to all available connections
   late String _deviceId;
   late String _deviceName;
+  final List<MeshConnectionType> _availableConnectionTypes = [];
+  PermissionProvider _permissionService = PermissionService();
 
   static const Duration _nodeTimeout = Duration(minutes: 5);
 
@@ -243,6 +246,15 @@ class MeshNetworkService {
 
   /// List of currently connected nodes
   List<MeshNode> get connectedNodes => _connectedNodes.values.toList();
+
+  /// Available connection types detected on the device (based on permissions/hardware)
+  List<MeshConnectionType> get availableConnectionTypes =>
+      List.unmodifiable(_availableConnectionTypes);
+
+  /// Allow tests to inject a mock PermissionService
+  void setPermissionService(PermissionProvider service) {
+    _permissionService = service;
+  }
 
   /// Check if mesh network is active
   bool get isActive => _isInitialized && (_isAdvertising || _isDiscovering);
@@ -256,8 +268,8 @@ class MeshNetworkService {
 
     try {
       // Check all runtime permissions first
-      final permissionService = PermissionService();
-      
+      final permissionService = _permissionService;
+
       // Check permissions for all connection types
       final permissionsResult = await Future.wait([
         permissionService.checkBluetoothPermissions(),
@@ -295,6 +307,8 @@ class MeshNetworkService {
         _availableConnectionTypes.add(MeshConnectionType.nfc);
       }
       _availableConnectionTypes.add(MeshConnectionType.ethernet); // Always available
+
+      // allow test injection override of available connection types if needed
 
       if (_availableConnectionTypes.isEmpty) {
         debugPrint('Mesh networking disabled: no available connection types');

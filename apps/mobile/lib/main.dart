@@ -14,6 +14,7 @@ import 'package:campus_mesh/services/sentry_service.dart';
 import 'package:campus_mesh/services/theme_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 /// Initialize essential services that are required for basic app functionality
 Future<void> _initializeEssentialServices() async {
@@ -53,7 +54,7 @@ void main() {
       FlutterError.presentError(details);
       // Log to crash reporting
       if (kReleaseMode) {
-        SentryService.captureException(details.exception, stackTrace: details.stack);
+        SentryService().captureException(details.exception, stackTrace: details.stack);
       }
     };
     
@@ -62,11 +63,11 @@ void main() {
     debugPrint('Fatal error: $error');
     debugPrint('Stack trace: $stack');
     if (kReleaseMode) {
-      SentryService.captureException(error, stackTrace: stack);
+      SentryService().captureException(error, stackTrace: stack);
     }
     // If initialization fails catastrophically, show error screen
-    debugPrint('Fatal initialization error: $e');
-    debugPrint('Stack trace: $stackTrace');
+    debugPrint('Fatal initialization error: $error');
+    debugPrint('Stack trace: $stack');
     runApp(
       MaterialApp(
         home: Scaffold(
@@ -91,7 +92,7 @@ void main() {
                   if (kDebugMode) ...[
                     const SizedBox(height: 16),
                     SelectableText(
-                      'Error: $e',
+                      'Error: $error',
                       textAlign: TextAlign.center,
                       style: const TextStyle(fontSize: 12, color: Colors.grey),
                     ),

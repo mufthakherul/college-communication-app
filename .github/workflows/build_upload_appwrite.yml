@@ -1,0 +1,140 @@
+name: Build APK & Upload to Appwrite
+
+on:
+  workflow_dispatch:
+    inputs:
+      role:
+        description: 'Which role build to upload (student, teacher, admin)'
+        required: false
+        default: 'student'
+  push:
+    # optional: allow running on new release tags like v1.2.3
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-upload:
+    runs-on: ubuntu-latest
+    env:
+      APPWRITE_ENDPOINT: ${{ secrets.APPWRITE_ENDPOINT }}
+      APPWRITE_PROJECT: ${{ secrets.APPWRITE_PROJECT }}
+      APPWRITE_API_KEY: ${{ secrets.APPWRITE_API_KEY }}
+      APPWRITE_BUCKET: ${{ secrets.APPWRITE_BUCKET }}
+      ROLE: ${{ github.event.inputs.role || 'student' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+
+      - name: Install dependencies (mobile)
+        working-directory: apps/mobile
+        run: |
+          flutter pub get
+
+      - name: Build release APK
+        working-directory: apps/mobile
+        run: |
+          flutter build apk --release
+
+      - name: Locate APK
+        id: locate_apk
+        run: |
+          # Standard flutter build location
+          APK_PATH=build/app/outputs/flutter-apk/app-release.apk
+          if [ -f "apps/mobile/$APK_PATH" ]; then
+            echo "apk=apps/mobile/$APK_PATH" >> $GITHUB_OUTPUT
+          elif [ -f "apps/mobile/build/app/outputs/flutter-apk/app-release.apk" ]; then
+            echo "apk=apps/mobile/build/app/outputs/flutter-apk/app-release.apk" >> $GITHUB_OUTPUT
+          else
+            echo "Could not find APK. Listing build tree:"; ls -R apps/mobile/build || true; exit 1
+          fi
+
+      - name: Upload APK to Appwrite
+        id: upload
+        run: |
+          set -euo pipefail
+          APK=${{ steps.locate_apk.outputs.apk }}
+          echo "Uploading $APK to Appwrite bucket $APPWRITE_BUCKET"
+          resp=$(curl -s -X POST "$APPWRITE_ENDPOINT/v1/storage/buckets/$APPWRITE_BUCKET/files" \
+            -H "X-Appwrite-Project: $APPWRITE_PROJECT" \
+            -H "X-Appwrite-Key: $APPWRITE_API_KEY" \
+            -F "file=@$APK")
+          echo "$resp" > upload_response.json
+          echo "upload_response<<EOF" >> $GITHUB_OUTPUT
+          cat upload_response.json >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          FILE_ID=$(jq -r '."$id"' upload_response.json)
+          if [ "$FILE_ID" = "null" ] || [ -z "$FILE_ID" ]; then
+            echo "Upload failed or no file id returned:" >&2
+            cat upload_response.json >&2
+            exit 1
+          fi
+          echo "file_id=$FILE_ID" >> $GITHUB_OUTPUT
+
+      - name: Update downloads config with new fileId
+        env:
+          FILE_ID: ${{ steps.upload.outputs.file_id }}
+          ROLE: ${{ env.ROLE }}
+        run: |
+          set -euo pipefail
+          echo "Updating apps/web/src/config/downloads.ts for role=$ROLE with fileId=$FILE_ID"
+          FILE=apps/web/src/config/downloads.ts
+          if [ ! -f "$FILE" ]; then
+            echo "$FILE not found"; exit 1
+          fi
+          # Choose which key to update
+          if [ "$ROLE" = "teacher" ]; then
+            KEY=teacherFileId
+          elif [ "$ROLE" = "admin" ]; then
+            KEY=adminFileId
+          else
+            KEY=studentFileId
+          fi
+          # Use python for robust replacement
+          python3 - <<PY
+import re
+path='''$FILE'''
+key='''${KEY}'''
+val='''${FILE_ID}'''
+with open(path,'r',encoding='utf-8') as f:
+    s=f.read()
+pattern = rf"({key}\s*:\s*)'[^']*'"
+new = rf"\1'" + val + "'"
+if re.search(pattern,s):
+    s2 = re.sub(pattern,new,s)
+    with open(path,'w',encoding='utf-8') as f:
+        f.write(s2)
+    print('updated',key)
+else:
+    print('pattern not found, aborting')
+    raise SystemExit(1)
+PY
+
+      - name: Commit and push config update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b update/download-${{ env.ROLE }}-${{ github.sha::8 }}
+          git add apps/web/src/config/downloads.ts
+          git commit -m "chore(release): set ${{ env.ROLE }} Appwrite fileId ${{ steps.upload.outputs.file_id }}"
+          git push --set-upstream origin HEAD
+
+      - name: Output results
+        run: |
+          echo "Uploaded file id: ${{ steps.upload.outputs.file_id }}"
+          echo "Downloads config updated for role: ${{ env.ROLE }}"

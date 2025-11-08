@@ -36,6 +36,11 @@ import {
   Info,
 } from '@mui/icons-material';
 
+// Imports for canonical downloads
+import { storageService } from '../services/storage.service';
+import { AppwriteConfig } from '../config/appwrite';
+import { DownloadConfig } from '../config/downloads';
+
 const DownloadsPage: React.FC = () => {
   const navigate = useNavigate();
 
@@ -56,7 +61,8 @@ const DownloadsPage: React.FC = () => {
         'Event calendar',
       ],
       requirements: 'Android 5.0 (Lollipop) or higher',
-      downloadLink: '#', // Replace with actual link
+      // Will be resolved at render time using DownloadConfig and storageService
+      downloadLink: '#',
     },
     {
       icon: <Engineering sx={{ fontSize: 60, color: '#4caf50' }} />,
@@ -74,7 +80,7 @@ const DownloadsPage: React.FC = () => {
         'Analytics and reports',
       ],
       requirements: 'Android 5.0 (Lollipop) or higher',
-      downloadLink: '#', // Replace with actual link
+      downloadLink: '#',
     },
     {
       icon: <AdminPanelSettings sx={{ fontSize: 60, color: '#ff9800' }} />,
@@ -92,7 +98,7 @@ const DownloadsPage: React.FC = () => {
         'Full administrative control',
       ],
       requirements: 'Android 5.0 (Lollipop) or higher',
-      downloadLink: '#', // Replace with actual link
+      downloadLink: '#',
     },
   ];
 
@@ -175,81 +181,105 @@ const DownloadsPage: React.FC = () => {
       {/* Download Cards */}
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Grid container spacing={4} sx={{ mb: 6 }}>
-          {apps.map((app, index) => (
-            <Grid item xs={12} md={4} key={index}>
-              <Card
-                sx={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  borderTop: `4px solid ${app.color}`,
-                  transition: 'transform 0.2s, box-shadow 0.2s',
-                  '&:hover': {
-                    transform: 'translateY(-8px)',
-                    boxShadow: 6,
-                  },
-                }}
-              >
-                <CardContent sx={{ flexGrow: 1, textAlign: 'center' }}>
-                  <Box sx={{ mb: 2 }}>{app.icon}</Box>
-                  <Typography variant="h5" gutterBottom fontWeight="bold">
-                    {app.title}
-                  </Typography>
-                  <Box sx={{ mb: 2 }}>
-                    <Chip label={app.version} size="small" color="primary" sx={{ mr: 1 }} />
-                    <Chip label={app.size} size="small" variant="outlined" />
-                  </Box>
-                  <Typography variant="body2" color="text.secondary" paragraph>
-                    {app.description}
-                  </Typography>
-                  <Typography
-                    variant="subtitle2"
-                    fontWeight="bold"
-                    gutterBottom
-                    align="left"
-                    sx={{ mt: 2 }}
-                  >
-                    Key Features:
-                  </Typography>
-                  <Box component="ul" sx={{ textAlign: 'left', pl: 2, pr: 0 }}>
-                    {app.features.map((feature, idx) => (
-                      <Typography
-                        component="li"
-                        variant="body2"
-                        color="text.secondary"
-                        key={idx}
-                        sx={{ mb: 0.5 }}
-                      >
-                        {feature}
-                      </Typography>
-                    ))}
-                  </Box>
-                  <Alert severity="success" icon={<Android />} sx={{ mt: 2, textAlign: 'left' }}>
-                    <Typography variant="caption">
-                      <strong>Requirements:</strong> {app.requirements}
+          {apps.map((app, index) => {
+            // Compute canonical download URL (Appwrite file download if fileId present,
+            // otherwise use any configured direct URL or fallback to '#')
+            const roleKey: 'student' | 'teacher' | 'admin' = index === 0 ? 'student' : index === 1 ? 'teacher' : 'admin';
+            const fileId = roleKey === 'student' ? DownloadConfig.studentFileId : roleKey === 'teacher' ? DownloadConfig.teacherFileId : DownloadConfig.adminFileId;
+            const directUrl = roleKey === 'student' ? DownloadConfig.studentDirectUrl : roleKey === 'teacher' ? DownloadConfig.teacherDirectUrl : DownloadConfig.adminDirectUrl;
+            let downloadUrl = '#';
+            if (fileId) {
+              try {
+                downloadUrl = storageService.getFileDownload(AppwriteConfig.buckets.releases, fileId);
+              } catch (e) {
+                // If storageService or Appwrite not configured, fall back to directUrl
+                console.error('Error building download URL from Appwrite:', e);
+                downloadUrl = directUrl || '#';
+              }
+            } else if (directUrl) {
+              downloadUrl = directUrl;
+            }
+
+            return (
+              <Grid item xs={12} md={4} key={index}>
+                <Card
+                  sx={{
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    borderTop: `4px solid ${app.color}`,
+                    transition: 'transform 0.2s, box-shadow 0.2s',
+                    '&:hover': {
+                      transform: 'translateY(-8px)',
+                      boxShadow: 6,
+                    },
+                  }}
+                >
+                  <CardContent sx={{ flexGrow: 1, textAlign: 'center' }}>
+                    <Box sx={{ mb: 2 }}>{app.icon}</Box>
+                    <Typography variant="h5" gutterBottom fontWeight="bold">
+                      {app.title}
                     </Typography>
-                  </Alert>
-                </CardContent>
-                <CardActions sx={{ p: 2, pt: 0 }}>
-                  <Button
-                    variant="contained"
-                    fullWidth
-                    size="large"
-                    startIcon={<Download />}
-                    sx={{ bgcolor: app.color, '&:hover': { bgcolor: app.color, opacity: 0.9 } }}
-                    onClick={() => {
-                      // In production, this would trigger the actual download
-                      alert(
-                        `Download for ${app.title} will start soon.\n\nIn production, this will download the APK file.`
-                      );
-                    }}
-                  >
-                    Download APK
-                  </Button>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
+                    <Box sx={{ mb: 2 }}>
+                      <Chip label={app.version} size="small" color="primary" sx={{ mr: 1 }} />
+                      <Chip label={app.size} size="small" variant="outlined" />
+                    </Box>
+                    <Typography variant="body2" color="text.secondary" paragraph>
+                      {app.description}
+                    </Typography>
+                    <Typography
+                      variant="subtitle2"
+                      fontWeight="bold"
+                      gutterBottom
+                      align="left"
+                      sx={{ mt: 2 }}
+                    >
+                      Key Features:
+                    </Typography>
+                    <Box component="ul" sx={{ textAlign: 'left', pl: 2, pr: 0 }}>
+                      {app.features.map((feature, idx) => (
+                        <Typography
+                          component="li"
+                          variant="body2"
+                          color="text.secondary"
+                          key={idx}
+                          sx={{ mb: 0.5 }}
+                        >
+                          {feature}
+                        </Typography>
+                      ))}
+                    </Box>
+                    <Alert severity="success" icon={<Android />} sx={{ mt: 2, textAlign: 'left' }}>
+                      <Typography variant="caption">
+                        <strong>Requirements:</strong> {app.requirements}
+                      </Typography>
+                    </Alert>
+                  </CardContent>
+                  <CardActions sx={{ p: 2, pt: 0 }}>
+                    <Button
+                      component="a"
+                      href={downloadUrl}
+                      target={downloadUrl && downloadUrl !== '#' ? '_blank' : undefined}
+                      rel={downloadUrl && downloadUrl !== '#' ? 'noopener noreferrer' : undefined}
+                      variant="contained"
+                      fullWidth
+                      size="large"
+                      startIcon={<Download />}
+                      disabled={downloadUrl === '#'}
+                      sx={{ bgcolor: app.color, '&:hover': { bgcolor: app.color, opacity: 0.9 } }}
+                      onClick={() => {
+                        if (downloadUrl === '#') {
+                          alert('Download not available yet. Please contact your administrator or check back later.');
+                        }
+                      }}
+                    >
+                      {downloadUrl === '#' ? 'Not Available' : 'Download APK'}
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            );
+          })}
         </Grid>
 
         {/* Installation Guide */}
