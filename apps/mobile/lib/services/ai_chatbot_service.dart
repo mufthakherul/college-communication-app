@@ -91,12 +91,11 @@ Always maintain a respectful and supportive tone.
       );
 
       // Test with a simple prompt - use timeout to avoid hanging
-      final response = await testModel
-          .generateContent([Content.text('Say hello')])
-          .timeout(
-            const Duration(seconds: 15),
-            onTimeout: () => throw Exception('API validation timeout'),
-          );
+      final response =
+          await testModel.generateContent([Content.text('Say hello')]).timeout(
+        const Duration(seconds: 15),
+        onTimeout: () => throw Exception('API validation timeout'),
+      );
 
       return response.text != null && response.text!.isNotEmpty;
     } catch (e) {
@@ -173,9 +172,7 @@ Always maintain a respectful and supportive tone.
       history.add(Content.text(message));
 
       // Generate response with timeout
-      final response = await _model!
-          .generateContent(history)
-          .timeout(
+      final response = await _model!.generateContent(history).timeout(
             const Duration(seconds: 60),
             onTimeout: () => throw Exception(
               'Gemini API took too long to respond. Please try again.',

@@ -116,9 +116,8 @@ class LocalNoticeDatabase {
   /// Delete notices older than [daysToKeep] or expired
   Future<int> cleanupOldNotices({int daysToKeep = 30}) async {
     final db = await database;
-    final cutoff = DateTime.now()
-        .subtract(Duration(days: daysToKeep))
-        .toIso8601String();
+    final cutoff =
+        DateTime.now().subtract(Duration(days: daysToKeep)).toIso8601String();
 
     // Delete expired by expires_at OR cached_at older than cutoff
     final deleted = await db.delete(

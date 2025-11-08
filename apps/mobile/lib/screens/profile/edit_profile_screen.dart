@@ -94,9 +94,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _guardianPhoneController = TextEditingController(
       text: widget.profile.guardianPhone ?? '',
     );
-    _selectedShift = widget.profile.shift?.isEmpty ?? true
-        ? null
-        : widget.profile.shift;
+    _selectedShift =
+        widget.profile.shift?.isEmpty ?? true ? null : widget.profile.shift;
 
     // Initialize teacher fields
     _designationController = TextEditingController(

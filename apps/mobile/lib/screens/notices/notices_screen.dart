@@ -160,11 +160,11 @@ class _NoticesScreenState extends State<NoticesScreen>
 
     return notices.where((notice) {
       final titleMatch = notice.title.toLowerCase().contains(
-        _searchQuery.toLowerCase(),
-      );
+            _searchQuery.toLowerCase(),
+          );
       final contentMatch = notice.content.toLowerCase().contains(
-        _searchQuery.toLowerCase(),
-      );
+            _searchQuery.toLowerCase(),
+          );
       return titleMatch || contentMatch;
     }).toList();
   }
@@ -397,7 +397,9 @@ class _NoticesScreenState extends State<NoticesScreen>
                           Theme.of(
                             context,
                           ).colorScheme.surface.withValues(alpha: 0.85),
-                          Theme.of(context).colorScheme.surfaceContainerHighest
+                          Theme.of(context)
+                              .colorScheme
+                              .surfaceContainerHighest
                               .withValues(alpha: 0.6),
                         ],
                       ),

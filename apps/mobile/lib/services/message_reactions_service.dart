@@ -98,12 +98,12 @@ class ReactionData {
   final DateTime createdAt;
 
   Map<String, dynamic> toJson() => {
-    'message_id': messageId,
-    'user_id': userId,
-    'user_name': userName,
-    'reaction': reaction.name,
-    'created_at': createdAt.toIso8601String(),
-  };
+        'message_id': messageId,
+        'user_id': userId,
+        'user_name': userName,
+        'reaction': reaction.name,
+        'created_at': createdAt.toIso8601String(),
+      };
 }
 
 /// Service to handle message reactions (emojis)

@@ -90,8 +90,8 @@ class _DocumentScannerScreenState extends State<DocumentScannerScreen> {
                 Text(
                   'Scan Documents',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 const SizedBox(height: 12),
                 TextField(

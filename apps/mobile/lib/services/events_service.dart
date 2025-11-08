@@ -46,9 +46,8 @@ class EventsService {
         queries: [Query.orderDesc('start_date'), Query.limit(100)],
       );
 
-      final events = docs.documents
-          .map((doc) => EventModel.fromJson(doc.data))
-          .toList();
+      final events =
+          docs.documents.map((doc) => EventModel.fromJson(doc.data)).toList();
 
       _eventsController?.add(events);
     } catch (e) {

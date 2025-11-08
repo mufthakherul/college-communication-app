@@ -41,13 +41,16 @@ class LocalCallLogDatabase {
     required String startedAt,
   }) async {
     final db = await database;
-    await db.insert('call_logs', {
-      'id': id,
-      'peer_id': peerId,
-      'is_video': isVideo ? 1 : 0,
-      'started_at': startedAt,
-      'status': 'ongoing',
-    }, conflictAlgorithm: ConflictAlgorithm.ignore);
+    await db.insert(
+        'call_logs',
+        {
+          'id': id,
+          'peer_id': peerId,
+          'is_video': isVideo ? 1 : 0,
+          'started_at': startedAt,
+          'status': 'ongoing',
+        },
+        conflictAlgorithm: ConflictAlgorithm.ignore);
   }
 
   Future<void> logEnd({
@@ -71,9 +74,8 @@ class LocalCallLogDatabase {
 
   Future<int> cleanupOld({int daysToKeep = 30}) async {
     final db = await database;
-    final cutoff = DateTime.now()
-        .subtract(Duration(days: daysToKeep))
-        .toIso8601String();
+    final cutoff =
+        DateTime.now().subtract(Duration(days: daysToKeep)).toIso8601String();
     return db.delete(
       'call_logs',
       where: 'ended_at IS NOT NULL AND ended_at < ?',

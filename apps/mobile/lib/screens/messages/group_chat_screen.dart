@@ -232,60 +232,63 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                       child: Center(child: CircularProgressIndicator()),
                     )
                   : _participants.isEmpty
-                  ? const SizedBox(
-                      height: 50,
-                      child: Center(child: Text('No participants loaded')),
-                    )
-                  : SizedBox(
-                      height: 70,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: _participants.length,
-                        itemBuilder: (context, index) {
-                          final participant = _participants[index];
-                          final displayName = participant['name'] ?? 'Unknown';
-                          final photoUrl = participant['photo'] as String?;
+                      ? const SizedBox(
+                          height: 50,
+                          child: Center(child: Text('No participants loaded')),
+                        )
+                      : SizedBox(
+                          height: 70,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: _participants.length,
+                            itemBuilder: (context, index) {
+                              final participant = _participants[index];
+                              final displayName =
+                                  participant['name'] ?? 'Unknown';
+                              final photoUrl = participant['photo'] as String?;
 
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 4),
-                            child: Column(
-                              children: [
-                                CircleAvatar(
-                                  radius: 24,
-                                  backgroundColor: Colors.blue,
-                                  backgroundImage:
-                                      photoUrl != null && photoUrl.isNotEmpty
-                                      ? NetworkImage(photoUrl)
-                                      : null,
-                                  child: photoUrl == null || photoUrl.isEmpty
-                                      ? Text(
-                                          displayName.isNotEmpty
-                                              ? displayName[0].toUpperCase()
-                                              : '?',
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        )
-                                      : null,
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4),
+                                child: Column(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 24,
+                                      backgroundColor: Colors.blue,
+                                      backgroundImage: photoUrl != null &&
+                                              photoUrl.isNotEmpty
+                                          ? NetworkImage(photoUrl)
+                                          : null,
+                                      child: photoUrl == null ||
+                                              photoUrl.isEmpty
+                                          ? Text(
+                                              displayName.isNotEmpty
+                                                  ? displayName[0].toUpperCase()
+                                                  : '?',
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            )
+                                          : null,
+                                    ),
+                                    const SizedBox(height: 4),
+                                    SizedBox(
+                                      width: 60,
+                                      child: Text(
+                                        displayName,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(fontSize: 11),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(height: 4),
-                                SizedBox(
-                                  width: 60,
-                                  child: Text(
-                                    displayName,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(fontSize: 11),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ),
+                              );
+                            },
+                          ),
+                        ),
             ),
 
           // Messages list
@@ -350,8 +353,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                 // Auto-scroll to bottom
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   if (_scrollController.hasClients) {
-                    final isAtBottom =
-                        _scrollController.position.pixels >=
+                    final isAtBottom = _scrollController.position.pixels >=
                         _scrollController.position.maxScrollExtent - 100;
                     if (isAtBottom) {
                       _scrollController.animateTo(
@@ -372,11 +374,9 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                     final isMe = message.senderId == _authService.currentUserId;
 
                     // Group messages by sender and time
-                    final previousMessage = index > 0
-                        ? messages[index - 1]
-                        : null;
-                    final showSenderInfo =
-                        previousMessage == null ||
+                    final previousMessage =
+                        index > 0 ? messages[index - 1] : null;
+                    final showSenderInfo = previousMessage == null ||
                         previousMessage.senderId != message.senderId ||
                         _shouldShowTimeSeparator(previousMessage, message);
 
@@ -409,9 +409,8 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     bool showSenderInfo,
   ) {
     return Column(
-      crossAxisAlignment: isMe
-          ? CrossAxisAlignment.end
-          : CrossAxisAlignment.start,
+      crossAxisAlignment:
+          isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       children: [
         // Sender info (only show if it's from someone else)
         if (!isMe && showSenderInfo)
@@ -460,9 +459,8 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
             8,
           ),
           child: Row(
-            mainAxisAlignment: isMe
-                ? MainAxisAlignment.end
-                : MainAxisAlignment.start,
+            mainAxisAlignment:
+                isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
             children: [
               Flexible(
                 child: Container(

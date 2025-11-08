@@ -20,15 +20,15 @@ class LogEntry {
   });
 
   factory LogEntry.fromJson(Map<String, dynamic> json) => LogEntry(
-    level: LogLevel.values.byName(json['level']),
-    message: json['message'],
-    timestamp: DateTime.parse(json['timestamp']),
-    category: json['category'],
-    metadata: json['metadata'],
-    stackTrace: json['stackTrace'] != null
-        ? StackTrace.fromString(json['stackTrace'])
-        : null,
-  );
+        level: LogLevel.values.byName(json['level']),
+        message: json['message'],
+        timestamp: DateTime.parse(json['timestamp']),
+        category: json['category'],
+        metadata: json['metadata'],
+        stackTrace: json['stackTrace'] != null
+            ? StackTrace.fromString(json['stackTrace'])
+            : null,
+      );
   final LogLevel level;
   final String message;
   final DateTime timestamp;
@@ -37,13 +37,13 @@ class LogEntry {
   final StackTrace? stackTrace;
 
   Map<String, dynamic> toJson() => {
-    'level': level.name,
-    'message': message,
-    'timestamp': timestamp.toIso8601String(),
-    'category': category,
-    'metadata': metadata,
-    'stackTrace': stackTrace?.toString(),
-  };
+        'level': level.name,
+        'message': message,
+        'timestamp': timestamp.toIso8601String(),
+        'category': category,
+        'metadata': metadata,
+        'stackTrace': stackTrace?.toString(),
+      };
 
   @override
   String toString() {
@@ -331,14 +331,11 @@ class AppLoggerService {
     }
 
     final byCategory = <String, int>{};
-    final categories = _logs
-        .map((log) => log.category)
-        .whereType<String>()
-        .toSet();
+    final categories =
+        _logs.map((log) => log.category).whereType<String>().toSet();
     for (final category in categories) {
-      byCategory[category] = _logs
-          .where((log) => log.category == category)
-          .length;
+      byCategory[category] =
+          _logs.where((log) => log.category == category).length;
     }
 
     final stats = <String, dynamic>{

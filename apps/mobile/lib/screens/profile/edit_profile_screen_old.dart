@@ -180,9 +180,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               Text(
                 'These details are only visible to you and teachers',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Colors.grey[600],
-                  fontStyle: FontStyle.italic,
-                ),
+                      color: Colors.grey[600],
+                      fontStyle: FontStyle.italic,
+                    ),
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(

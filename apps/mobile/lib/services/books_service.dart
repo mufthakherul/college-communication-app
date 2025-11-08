@@ -47,9 +47,8 @@ class BooksService {
         queries: [Query.orderDesc('created_at'), Query.limit(100)],
       );
 
-      final books = docs.documents
-          .map((doc) => BookModel.fromJson(doc.data))
-          .toList();
+      final books =
+          docs.documents.map((doc) => BookModel.fromJson(doc.data)).toList();
 
       _booksController?.add(books);
     } catch (e) {

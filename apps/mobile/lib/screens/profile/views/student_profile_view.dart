@@ -53,16 +53,16 @@ class StudentProfileView extends StatelessWidget {
                 Text(
                   'Student Details',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
                 const Spacer(),
                 Text(
                   'Private',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.grey[600],
-                    fontStyle: FontStyle.italic,
-                  ),
+                        color: Colors.grey[600],
+                        fontStyle: FontStyle.italic,
+                      ),
                 ),
               ],
             ),
@@ -121,8 +121,8 @@ class StudentProfileView extends StatelessWidget {
                   Text(
                     'Bio',
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                   const SizedBox(height: 8),
                   Text(profile.bio!),

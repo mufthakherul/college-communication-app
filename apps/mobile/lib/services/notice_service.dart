@@ -49,9 +49,8 @@ class NoticeService {
     // Always start with local cache for fast offline access
     try {
       final localRows = await _localDb.getActiveNotices(limit: 100);
-      final localNotices = localRows
-          .map((r) => NoticeModel.fromJson(r))
-          .toList();
+      final localNotices =
+          localRows.map((r) => NoticeModel.fromJson(r)).toList();
 
       if (localNotices.isNotEmpty) {
         _noticesController?.add(localNotices);
@@ -77,9 +76,8 @@ class NoticeService {
         ],
       );
 
-      final remoteNotices = docs.documents
-          .map((doc) => NoticeModel.fromJson(doc.data))
-          .toList();
+      final remoteNotices =
+          docs.documents.map((doc) => NoticeModel.fromJson(doc.data)).toList();
 
       // Upsert into local cache
       try {
@@ -219,9 +217,8 @@ class NoticeService {
       // Generate a custom document ID so we can also populate the required `id` attribute
       final timePart = DateTime.now().microsecondsSinceEpoch.toString();
       final userPart = currentUserId ?? 'sys';
-      final userFrag = userPart.length >= 6
-          ? userPart.substring(0, 6)
-          : userPart;
+      final userFrag =
+          userPart.length >= 6 ? userPart.substring(0, 6) : userPart;
       final documentId = 'ntc_${timePart}_$userFrag';
 
       // Lightweight de-duplication for scraped notices based on source URL

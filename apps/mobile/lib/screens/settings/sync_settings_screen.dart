@@ -144,10 +144,10 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
   }
 
   Widget _buildCacheSection() {
-    final sizeMB = ((_cacheStats['totalSizeMB'] as num?) ?? 0.0)
-        .toStringAsFixed(2);
-    final usagePercent = ((_cacheStats['usagePercent'] as num?) ?? 0.0)
-        .toStringAsFixed(1);
+    final sizeMB =
+        ((_cacheStats['totalSizeMB'] as num?) ?? 0.0).toStringAsFixed(2);
+    final usagePercent =
+        ((_cacheStats['usagePercent'] as num?) ?? 0.0).toStringAsFixed(1);
     final diskSize = (_cacheStats['diskCacheSize'] as int?) ?? 0;
 
     return Card(

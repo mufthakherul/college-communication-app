@@ -24,12 +24,6 @@
 @import file_picker;
 #endif
 
-#if __has_include(<flutter_nearby_connections/FlutterNearbyConnectionsPlugin.h>)
-#import <flutter_nearby_connections/FlutterNearbyConnectionsPlugin.h>
-#else
-@import flutter_nearby_connections;
-#endif
-
 #if __has_include(<flutter_secure_storage/FlutterSecureStoragePlugin.h>)
 #import <flutter_secure_storage/FlutterSecureStoragePlugin.h>
 #else
@@ -150,7 +144,6 @@
   [ConnectivityPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"ConnectivityPlusPlugin"]];
   [FPPDeviceInfoPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"FPPDeviceInfoPlusPlugin"]];
   [FilePickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FilePickerPlugin"]];
-  [FlutterNearbyConnectionsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterNearbyConnectionsPlugin"]];
   [FlutterSecureStoragePlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterSecureStoragePlugin"]];
   [FlutterWebAuth2Plugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterWebAuth2Plugin"]];
   [FlutterWebRTCPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterWebRTCPlugin"]];
