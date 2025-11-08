@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
-
 import 'package:appwrite/appwrite.dart';
 import 'package:campus_mesh/appwrite_config.dart';
 import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/models/user_profile_model.dart';
 import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/services/user_profile_service.dart';
+import 'package:flutter/material.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({
@@ -340,7 +339,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             // Student fields
             if (widget.user.role == UserRole.student) ...[
               DropdownButtonFormField<String>(
-                value: _selectedShift,
+                initialValue: _selectedShift,
                 decoration: const InputDecoration(
                   labelText: 'Shift',
                   border: OutlineInputBorder(),

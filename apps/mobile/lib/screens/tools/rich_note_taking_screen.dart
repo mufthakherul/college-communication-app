@@ -90,8 +90,7 @@ class _NoteTakingScreenState extends State<NoteTakingScreen>
         controller: _tabController,
         children: [
           // All notes tab
-          _notes.isEmpty
-              ? Center(
+          if (_notes.isEmpty) Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -112,8 +111,7 @@ class _NoteTakingScreenState extends State<NoteTakingScreen>
                       ),
                     ],
                   ),
-                )
-              : ListView.builder(
+                ) else ListView.builder(
                   padding: const EdgeInsets.all(16),
                   itemCount: _notes.length,
                   itemBuilder: (context, index) {
@@ -307,10 +305,6 @@ class _NoteTakingScreenState extends State<NoteTakingScreen>
 }
 
 class Note {
-  final String title;
-  final String content;
-  final NoteCategory category;
-  final DateTime date;
 
   Note({
     required this.title,
@@ -318,6 +312,10 @@ class Note {
     required this.category,
     required this.date,
   });
+  final String title;
+  final String content;
+  final NoteCategory category;
+  final DateTime date;
 }
 
 enum NoteCategory {
@@ -380,7 +378,7 @@ class _CreateNoteDialogState extends State<CreateNoteDialog> {
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<NoteCategory>(
-              value: selectedCategory,
+              initialValue: selectedCategory,
               decoration: const InputDecoration(
                 labelText: 'Category',
                 border: OutlineInputBorder(),
@@ -429,9 +427,9 @@ class _CreateNoteDialogState extends State<CreateNoteDialog> {
 }
 
 class EditNoteDialog extends StatefulWidget {
-  final Note note;
 
   const EditNoteDialog({super.key, required this.note});
+  final Note note;
 
   @override
   State<EditNoteDialog> createState() => _EditNoteDialogState();
@@ -483,7 +481,7 @@ class _EditNoteDialogState extends State<EditNoteDialog> {
             ),
             const SizedBox(height: 12),
             DropdownButtonFormField<NoteCategory>(
-              value: selectedCategory,
+              initialValue: selectedCategory,
               decoration: const InputDecoration(
                 labelText: 'Category',
                 border: OutlineInputBorder(),

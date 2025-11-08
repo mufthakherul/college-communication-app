@@ -1,19 +1,4 @@
 class GroupMemberModel {
-  final String id; // Format: group_{groupId}_user_{userId}
-  final String groupId;
-  final String userId;
-  final String role; // 'admin', 'moderator', 'member'
-  final String? nickname;
-  final String status; // 'active', 'muted', 'blocked', 'inactive'
-  final DateTime joinedAt;
-  final DateTime? lastSeenAt;
-  final int unreadCount;
-  final Map<String, dynamic>? metadata;
-
-  // Denormalized fields for UI display
-  final String? userDisplayName;
-  final String? userPhotoUrl;
-  final String? userEmail;
 
   GroupMemberModel({
     required this.id,
@@ -33,7 +18,7 @@ class GroupMemberModel {
 
   factory GroupMemberModel.fromJson(Map<String, dynamic> data) {
     return GroupMemberModel(
-      id: data['\$id'] ?? data['id'] ?? '',
+      id: data[r'$id'] ?? data['id'] ?? '',
       groupId: data['group_id'] ?? data['groupId'] ?? '',
       userId: data['user_id'] ?? data['userId'] ?? '',
       role: data['role'] ?? 'member',
@@ -52,6 +37,21 @@ class GroupMemberModel {
       userEmail: data['user_email'] as String?,
     );
   }
+  final String id; // Format: group_{groupId}_user_{userId}
+  final String groupId;
+  final String userId;
+  final String role; // 'admin', 'moderator', 'member'
+  final String? nickname;
+  final String status; // 'active', 'muted', 'blocked', 'inactive'
+  final DateTime joinedAt;
+  final DateTime? lastSeenAt;
+  final int unreadCount;
+  final Map<String, dynamic>? metadata;
+
+  // Denormalized fields for UI display
+  final String? userDisplayName;
+  final String? userPhotoUrl;
+  final String? userEmail;
 
   Map<String, dynamic> toJson() {
     return {

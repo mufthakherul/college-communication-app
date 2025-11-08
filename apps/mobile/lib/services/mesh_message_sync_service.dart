@@ -106,7 +106,6 @@ class MeshMessageSyncService {
         (n) => n.id == recipientId,
         orElse: () => null as dynamic,
       );
-      if (node == null) continue;
 
       final id =
           m['id'] as String? ?? '${DateTime.now().millisecondsSinceEpoch}';

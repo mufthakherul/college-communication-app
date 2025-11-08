@@ -240,7 +240,7 @@ class WebsiteScraperService {
             var url = '';
             if (titleLink != null) {
               title = ((titleLink.text as String?) ?? '').trim();
-              url = ((titleLink.attributes['href'] as String?) ?? '');
+              url = (titleLink.attributes['href'] as String?) ?? '';
             } else {
               title = (((titleCell as dynamic).text as String?) ?? '').trim();
             }
@@ -299,7 +299,7 @@ class WebsiteScraperService {
         );
         return notices;
       }
-      final jsonData = decoded as Map<String, dynamic>;
+      final jsonData = decoded;
 
       // Support alternative key names used by DataTables
       final dynamic rowsRaw = jsonData['data'] ?? jsonData['aaData'];
@@ -313,7 +313,7 @@ class WebsiteScraperService {
         debugPrint('Data is not a list, got: ${rowsRaw.runtimeType}');
         return notices;
       }
-      final dataRows = rowsRaw as List;
+      final dataRows = rowsRaw;
 
       for (final row in dataRows) {
         if (row is List && row.length >= 3) {

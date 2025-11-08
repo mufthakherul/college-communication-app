@@ -54,9 +54,9 @@ class _CallScreenState extends State<CallScreen> {
                   children: [
                     const Icon(Icons.error, color: Colors.red, size: 64),
                     const SizedBox(height: 16),
-                    Text(
+                    const Text(
                       'Call setup failed',
-                      style: const TextStyle(color: Colors.white, fontSize: 18),
+                      style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -132,7 +132,7 @@ class _CallScreenState extends State<CallScreen> {
         child: Text(text, style: const TextStyle(color: Colors.white70)),
       );
 
-  Widget _buildMiniStatus() => Container(
+  Widget _buildMiniStatus() => DecoratedBox(
         decoration: BoxDecoration(
           color: Colors.white10,
           borderRadius: BorderRadius.circular(12),
