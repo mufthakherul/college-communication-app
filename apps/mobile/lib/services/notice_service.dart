@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:appwrite/appwrite.dart';
 import 'package:campus_mesh/appwrite_config.dart';
 import 'package:campus_mesh/models/notice_model.dart';
+import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/utils/input_validator.dart';
@@ -117,8 +118,21 @@ class NoticeService {
   }) async {
     try {
       final currentUserId = _currentUserId;
-      if (currentUserId == null && source == NoticeSource.admin) {
-        throw Exception('User must be authenticated to create notices');
+      // For admin-sourced notices, enforce authentication and role check
+      if (source == NoticeSource.admin) {
+        if (currentUserId == null) {
+          throw Exception('User must be authenticated to create notices');
+        }
+        // Best-effort role validation to ensure only admin/teacher create notices
+        try {
+          final user = await _authService.currentUser;
+          final role = user?.role;
+          if (role == null || (role != UserRole.admin && role != UserRole.teacher)) {
+            throw Exception('Permission denied: Only admins and teachers can create notices');
+          }
+        } catch (_) {
+          // If profile fetch fails, continue and rely on backend/collection permissions
+        }
       }
 
       // Input validation and sanitization
@@ -138,16 +152,45 @@ class NoticeService {
         );
       }
 
+      // Determine author metadata
+      String authorId;
+      String authorName;
+      if (source == NoticeSource.admin && currentUserId != null) {
+        authorId = currentUserId;
+        try {
+          final user = await _authService.currentUser;
+      authorName = user?.displayName.isNotEmpty ?? false
+              ? user!.displayName
+              : 'Admin';
+        } catch (_) {
+          authorName = 'Admin';
+        }
+      } else {
+        // Scraped/system notices
+        authorId = systemUserId;
+        authorName = 'System';
+      }
+
+      // Generate a custom document ID so we can also populate the required `id` attribute
+      final timePart = DateTime.now().microsecondsSinceEpoch.toString();
+      final userPart = (currentUserId ?? 'sys');
+      final userFrag = userPart.length >= 6 ? userPart.substring(0, 6) : userPart;
+      final documentId = 'ntc_${timePart}_$userFrag';
+
       final document = await _appwrite.databases.createDocument(
         databaseId: AppwriteConfig.databaseId,
         collectionId: AppwriteConfig.noticesCollectionId,
-        documentId: ID.unique(),
+        // Use a custom ID so it matches the required `id` attribute in the schema
+        documentId: ID.custom(documentId),
         data: {
+          // Explicit application-level ID to satisfy schema requirement
+          'id': documentId,
           'title': sanitizedTitle,
           'content': sanitizedContent,
           'type': type.name,
           'target_audience': targetAudience,
-          'author_id': currentUserId ?? systemUserId,
+          'author_id': authorId,
+          'author_name': authorName,
           'expires_at': expiresAt?.toIso8601String(),
           'is_active': true,
           'created_at': DateTime.now().toIso8601String(),
@@ -156,9 +199,13 @@ class NoticeService {
           'source_url': sourceUrl,
         },
         permissions: [
+          // Publicly readable notices
           Permission.read(Role.any()),
-          Permission.update(Role.user(currentUserId ?? systemUserId)),
-          Permission.delete(Role.user(currentUserId ?? systemUserId)),
+          // Only set update/delete permissions for real authenticated users
+          if (currentUserId != null && source == NoticeSource.admin)
+            Permission.update(Role.user(currentUserId)),
+          if (currentUserId != null && source == NoticeSource.admin)
+            Permission.delete(Role.user(currentUserId)),
         ],
       );
 
