@@ -1,0 +1,59 @@
+name: Deploy Web to Appwrite
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/web/**"
+      - ".github/workflows/deploy_web_to_appwrite.yml"
+  workflow_dispatch: {}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      APPWRITE_ENDPOINT: ${{ secrets.APPWRITE_ENDPOINT }}
+      APPWRITE_PROJECT: ${{ secrets.APPWRITE_PROJECT }}
+      APPWRITE_API_KEY: ${{ secrets.APPWRITE_API_KEY }}
+      APPWRITE_SITE_ID: ${{ secrets.APPWRITE_SITE_ID }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Build web app
+        working-directory: apps/web
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+
+      - name: Zip dist
+        run: |
+          cd apps/web/dist
+          zip -qr ../../webdist.zip .
+          cd -
+
+      - name: Deploy to Appwrite Sites
+        run: |
+          set -euo pipefail
+          if [ -z "${APPWRITE_ENDPOINT}" ] || [ -z "${APPWRITE_PROJECT}" ] || [ -z "${APPWRITE_API_KEY}" ] || [ -z "${APPWRITE_SITE_ID}" ]; then
+            echo "Missing one or more required secrets: APPWRITE_ENDPOINT APPWRITE_PROJECT APPWRITE_API_KEY APPWRITE_SITE_ID" >&2
+            exit 1
+          fi
+          echo "Deploying to Appwrite site ${APPWRITE_SITE_ID}"
+          resp=$(curl -s -X POST "$APPWRITE_ENDPOINT/sites/$APPWRITE_SITE_ID/deployments" \
+            -H "X-Appwrite-Project: $APPWRITE_PROJECT" \
+            -H "X-Appwrite-Key: $APPWRITE_API_KEY" \
+            -F "entry=@webdist.zip")
+          echo "$resp" | jq '.' || echo "$resp"
+          id=$(echo "$resp" | jq -r '."$id"')
+          if [ -z "$id" ] || [ "$id" = "null" ]; then
+            echo "Failed to create deployment" >&2
+            exit 1
+          fi
+          echo "Deployment created: $id"
