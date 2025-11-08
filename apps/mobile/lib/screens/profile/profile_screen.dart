@@ -1,23 +1,24 @@
 // ignore_for_file: unawaited_futures, dead_code, unreachable_switch_default
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
+import 'package:appwrite/appwrite.dart';
+import 'package:campus_mesh/appwrite_config.dart';
 import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/models/user_profile_model.dart';
 import 'package:campus_mesh/screens/auth/login_screen.dart';
 import 'package:campus_mesh/screens/developer/debug_console_screen.dart';
 import 'package:campus_mesh/screens/developer/developer_info_screen.dart';
 import 'package:campus_mesh/screens/profile/edit_profile_screen.dart';
+import 'package:campus_mesh/screens/profile/views/admin_profile_view.dart';
 import 'package:campus_mesh/screens/profile/views/student_profile_view.dart';
 import 'package:campus_mesh/screens/profile/views/teacher_profile_view.dart';
-import 'package:campus_mesh/screens/profile/views/admin_profile_view.dart';
 import 'package:campus_mesh/screens/settings/mesh_network_screen.dart';
 import 'package:campus_mesh/screens/settings/sync_settings_screen.dart';
 import 'package:campus_mesh/services/auth_service.dart';
-import 'package:campus_mesh/services/user_profile_service.dart';
 import 'package:campus_mesh/services/theme_service.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:campus_mesh/services/user_profile_service.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:appwrite/appwrite.dart';
-import 'package:campus_mesh/appwrite_config.dart';
 
 class ProfileScreen extends StatefulWidget {
   // Current logged-in user to check permissions
