@@ -30,7 +30,6 @@ class _QRGeneratorMenuScreenState extends State<QRGeneratorMenuScreen> {
           'email': user.email,
           'department': user.department,
           'role': user.role.name,
-          'phoneNumber': user.phoneNumber,
         },
         senderId: user.uid,
         senderName: user.displayName,
