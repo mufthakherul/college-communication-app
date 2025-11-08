@@ -1,9 +1,13 @@
 import 'package:campus_mesh/models/user_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+// NOTE: The user model now only contains core identity fields.
+// Extended profile fields (shift, group, classRoll, etc.) moved to UserProfile.
+// These tests were updated to reflect the split between authentication user and detailed profile.
+
 void main() {
   group('UserModel', () {
-    test('should create UserModel from valid data', () {
+    test('creates UserModel from valid data', () {
       final user = UserModel(
         uid: 'user123',
         email: 'test@example.com',
@@ -14,11 +18,6 @@ void main() {
         year: '2024',
         isActive: true,
         createdAt: DateTime(2024, 1, 1),
-        shift: 'Day',
-        group: 'A',
-        classRoll: '101',
-        academicSession: '2023-2024',
-        phoneNumber: '+880123456789',
       );
 
       expect(user.uid, 'user123');
@@ -28,135 +27,76 @@ void main() {
       expect(user.department, 'Computer Science');
       expect(user.year, '2024');
       expect(user.isActive, true);
-      expect(user.shift, 'Day');
-      expect(user.group, 'A');
-      expect(user.classRoll, '101');
-      expect(user.academicSession, '2023-2024');
-      expect(user.phoneNumber, '+880123456789');
+      expect(user.photoURL, isNotEmpty);
     });
 
-    test('should convert UserModel to JSON', () {
+    test('toJson outputs expected core fields', () {
       final user = UserModel(
-        uid: 'user123',
-        email: 'test@example.com',
-        displayName: 'Test User',
+        uid: 'u456',
+        email: 'teacher@example.com',
+        displayName: 'Teacher User',
         role: UserRole.teacher,
-        photoURL: '',
         department: 'Mathematics',
-        year: '2024',
-        isActive: true,
-        createdAt: DateTime(2024, 1, 1),
-        shift: 'Morning',
-        group: 'B',
-        classRoll: '205',
-        academicSession: '2024-2025',
-        phoneNumber: '+880987654321',
+        year: '2025',
+        isActive: false,
+        createdAt: DateTime(2024, 2, 10),
       );
-
       final json = user.toJson();
-
-      expect(json['id'], 'user123');
-      expect(json['email'], 'test@example.com');
-      expect(json['display_name'], 'Test User');
+      expect(json['id'], 'u456');
+      expect(json['email'], 'teacher@example.com');
+      expect(json['display_name'], 'Teacher User');
       expect(json['role'], 'teacher');
       expect(json['department'], 'Mathematics');
-      expect(json['is_active'], true);
-      expect(json['shift'], 'Morning');
-      expect(json['group'], 'B');
-      expect(json['class_roll'], '205');
-      expect(json['academic_session'], '2024-2025');
-      expect(json['phone_number'], '+880987654321');
+      expect(json['year'], '2025');
+      expect(json['is_active'], false);
+      expect(json.containsKey('shift'), isFalse);
     });
 
-    test('should parse UserRole enum correctly', () {
+    test('parseRole enum mapping', () {
       expect(UserRole.student.name, 'student');
       expect(UserRole.teacher.name, 'teacher');
       expect(UserRole.admin.name, 'admin');
     });
 
-    test('should handle empty optional fields', () {
+    test('empty optional fields default correctly', () {
       final user = UserModel(
-        uid: 'user123',
-        email: 'test@example.com',
-        displayName: 'Test User',
+        uid: 'user789',
+        email: 'empty@example.com',
+        displayName: 'Empty User',
         role: UserRole.student,
-        photoURL: '',
         department: '',
         year: '',
         isActive: true,
-        createdAt: DateTime.now(),
       );
-
-      expect(user.photoURL, '');
       expect(user.department, '');
       expect(user.year, '');
     });
 
-    test('should validate role types', () {
-      final roles = [UserRole.student, UserRole.teacher, UserRole.admin];
-
-      for (final role in roles) {
-        final user = UserModel(
-          uid: 'user123',
-          email: 'test@example.com',
-          displayName: 'Test User',
-          role: role,
-          photoURL: '',
-          department: 'Test',
-          year: '2024',
-          isActive: true,
-          createdAt: DateTime.now(),
-        );
-
-        expect(user.role, role);
-      }
-    });
-
-    test('should parse new student fields from JSON', () {
+    test('fromJson handles multiple id keys', () {
       final json = {
-        'id': 'student123',
+        r'$id': 'appwrite123',
         'email': 'student@example.com',
         'display_name': 'Student User',
         'role': 'student',
-        'department': 'Computer Technology',
+        'department': 'Computer Tech',
         'year': '3rd',
-        'is_active': true,
-        'created_at': '2024-01-01T00:00:00.000Z',
-        'shift': 'Day',
-        'group': 'A',
-        'class_roll': '12345',
-        'academic_session': '2023-2024',
-        'phone_number': '+8801712345678',
       };
-
       final user = UserModel.fromJson(json);
-
-      expect(user.shift, 'Day');
-      expect(user.group, 'A');
-      expect(user.classRoll, '12345');
-      expect(user.academicSession, '2023-2024');
-      expect(user.phoneNumber, '+8801712345678');
+      expect(user.uid, 'appwrite123');
+      expect(user.role, UserRole.student);
     });
 
-    test('should handle missing new fields gracefully', () {
-      final json = {
-        'id': 'student123',
-        'email': 'student@example.com',
-        'display_name': 'Student User',
-        'role': 'student',
-        'department': 'Computer Technology',
-        'year': '3rd',
-        'is_active': true,
-        'created_at': '2024-01-01T00:00:00.000Z',
-      };
-
-      final user = UserModel.fromJson(json);
-
-      expect(user.shift, '');
-      expect(user.group, '');
-      expect(user.classRoll, '');
-      expect(user.academicSession, '');
-      expect(user.phoneNumber, '');
+    test('copyWith returns modified instance', () {
+      final user = UserModel(
+        uid: 'base',
+        email: 'base@example.com',
+        displayName: 'Base User',
+        role: UserRole.teacher,
+      );
+      final updated = user.copyWith(displayName: 'Updated User', role: UserRole.admin);
+      expect(updated.displayName, 'Updated User');
+      expect(updated.role, UserRole.admin);
+      expect(updated.uid, 'base'); // unchanged
     });
   });
 }
