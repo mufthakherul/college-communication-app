@@ -87,6 +87,10 @@ dependency_overrides:
   # v4.1.0+ supports Flutter v2 embedding (required for Flutter 3.35.7+)
   # Used by appwrite package for OAuth authentication
   flutter_web_auth_2: ^4.1.0
+  # Override path_provider_android to fix v1 embedding compatibility
+  # v2.2.5+ supports Flutter v2 embedding (required for Flutter 3.35.7+)
+  # v2.2.4 uses deprecated PluginRegistry.Registrar which causes build failures
+  path_provider_android: ^2.2.5
 
 flutter:
   uses-material-design: true
