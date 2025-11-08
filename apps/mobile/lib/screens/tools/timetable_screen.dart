@@ -41,7 +41,7 @@ class _TimetableScreenState extends State<TimetableScreen> {
       if (profile != null && profile.department.isNotEmpty) {
         final timetable = await _timetableService.getTimetableByClass(
           profile.department,
-          profile.shift.isNotEmpty ? profile.shift : 'Day',
+          'Day', // Default shift
         );
 
         if (mounted) {

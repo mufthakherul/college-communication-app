@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
+
 import 'package:campus_mesh/services/cache_service.dart';
 import 'package:campus_mesh/services/conflict_resolution_service.dart';
 import 'package:campus_mesh/services/connectivity_service.dart';
-import 'package:campus_mesh/services/offline_queue_service.dart';
 import 'package:campus_mesh/services/local_message_database.dart';
 import 'package:campus_mesh/services/local_notice_database.dart';
-import 'package:flutter/material.dart';
+import 'package:campus_mesh/services/offline_queue_service.dart';
 
 /// Screen for sync and network settings
 class SyncSettingsScreen extends StatefulWidget {
@@ -369,6 +370,21 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
   }
 
   Future<void> _clearCache() async {
+    final confirmed = await _showConfirmDialog(
+      'Clear Cache',
+      'Are you sure you want to clear all cached data? This will require re-downloading data.',
+    );
+
+    if (confirmed ?? false) {
+      try {
+        await _cacheService.clear();
+        await _loadStatistics();
+        _showMessage('Cache cleared successfully');
+      } catch (e) {
+        _showMessage('Failed to clear cache: $e');
+      }
+    }
+  }
 
   Future<void> _clearLocalMessages({bool confirm = true}) async {
     bool proceed = true;
@@ -411,21 +427,6 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
       _showMessage('Cleared $count local notices');
     } catch (e) {
       _showMessage('Failed to clear local notices: $e');
-    }
-  }
-    final confirmed = await _showConfirmDialog(
-      'Clear Cache',
-      'Are you sure you want to clear all cached data? This will require re-downloading data.',
-    );
-
-    if (confirmed ?? false) {
-      try {
-        await _cacheService.clear();
-        await _loadStatistics();
-        _showMessage('Cache cleared successfully');
-      } catch (e) {
-        _showMessage('Failed to clear cache: $e');
-      }
     }
   }
 

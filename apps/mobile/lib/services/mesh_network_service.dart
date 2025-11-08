@@ -1,11 +1,11 @@
 // ignore_for_file: cascade_invocations, avoid_positional_boolean_parameters
 import 'dart:async';
 import 'dart:convert';
-import 'package:meta/meta.dart';
+
+import 'package:flutter/foundation.dart';
 
 import 'package:campus_mesh/services/app_logger_service.dart';
 import 'package:campus_mesh/services/permission_service.dart';
-import 'package:flutter/foundation.dart';
 
 /// Connection type for mesh network
 enum MeshConnectionType {

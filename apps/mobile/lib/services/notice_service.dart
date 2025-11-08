@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:appwrite/appwrite.dart';
 import 'package:campus_mesh/appwrite_config.dart';
 import 'package:campus_mesh/models/notice_model.dart';
-import 'package:campus_mesh/services/local_notice_database.dart';
-import 'package:campus_mesh/services/connectivity_service.dart';
 import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
+import 'package:campus_mesh/services/connectivity_service.dart';
+import 'package:campus_mesh/services/local_notice_database.dart';
 import 'package:campus_mesh/utils/input_validator.dart';
 
 class NoticeService {

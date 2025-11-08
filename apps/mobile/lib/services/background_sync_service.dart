@@ -1,10 +1,11 @@
+import 'package:flutter/foundation.dart';
+
 import 'package:campus_mesh/services/app_logger_service.dart';
-import 'package:campus_mesh/services/connectivity_service.dart';
 import 'package:campus_mesh/services/cache_service.dart';
+import 'package:campus_mesh/services/connectivity_service.dart';
 import 'package:campus_mesh/services/local_message_database.dart';
 import 'package:campus_mesh/services/local_notice_database.dart';
 import 'package:campus_mesh/services/offline_queue_service.dart';
-import 'package:flutter/foundation.dart';
 import 'package:workmanager/workmanager.dart';
 
 /// Background callback for WorkManager
