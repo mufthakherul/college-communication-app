@@ -1,0 +1,23 @@
+{
+  "name": "appwrite-database-setup",
+  "version": "1.0.0",
+  "description": "Automated Appwrite database setup for RPI Communication App",
+  "main": "setup-appwrite-database.js",
+  "scripts": {
+    "setup": "node setup-appwrite-database.js",
+    "verify": "bash verify-appwrite-db.sh",
+    "test": "node test-appwrite-features.js"
+  },
+  "keywords": [
+    "appwrite",
+    "database",
+    "setup",
+    "migration"
+  ],
+  "author": "Mufthakherul",
+  "license": "MIT",
+  "dependencies": {
+    "node-appwrite": "^13.0.0",
+    "dotenv": "^16.4.5"
+  }
+}
