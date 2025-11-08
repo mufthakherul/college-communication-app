@@ -1,10 +1,11 @@
+import 'package:flutter/material.dart';
+
 import 'package:campus_mesh/services/cache_service.dart';
 import 'package:campus_mesh/services/conflict_resolution_service.dart';
 import 'package:campus_mesh/services/connectivity_service.dart';
-import 'package:campus_mesh/services/offline_queue_service.dart';
 import 'package:campus_mesh/services/local_message_database.dart';
 import 'package:campus_mesh/services/local_notice_database.dart';
-import 'package:flutter/material.dart';
+import 'package:campus_mesh/services/offline_queue_service.dart';
 
 /// Screen for sync and network settings
 class SyncSettingsScreen extends StatefulWidget {
