@@ -1,16 +1,23 @@
 // ignore_for_file: unawaited_futures, dead_code, unreachable_switch_default
 import 'package:campus_mesh/models/user_model.dart';
+import 'package:campus_mesh/models/user_profile_model.dart';
 import 'package:campus_mesh/screens/auth/login_screen.dart';
 import 'package:campus_mesh/screens/developer/debug_console_screen.dart';
 import 'package:campus_mesh/screens/developer/developer_info_screen.dart';
 import 'package:campus_mesh/screens/profile/edit_profile_screen.dart';
+import 'package:campus_mesh/screens/profile/views/student_profile_view.dart';
+import 'package:campus_mesh/screens/profile/views/teacher_profile_view.dart';
+import 'package:campus_mesh/screens/profile/views/admin_profile_view.dart';
 import 'package:campus_mesh/screens/settings/mesh_network_screen.dart';
 import 'package:campus_mesh/screens/settings/sync_settings_screen.dart';
 import 'package:campus_mesh/services/auth_service.dart';
+import 'package:campus_mesh/services/user_profile_service.dart';
 import 'package:campus_mesh/services/theme_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:appwrite/appwrite.dart';
+import 'package:campus_mesh/appwrite_config.dart';
 
 class ProfileScreen extends StatefulWidget {
   // Current logged-in user to check permissions
@@ -24,6 +31,50 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  UserProfile? _userProfile;
+  bool _isLoadingProfile = false;
+  late UserProfileService _profileService;
+
+  @override
+  void initState() {
+    super.initState();
+    final client = Client()
+        .setEndpoint(AppwriteConfig.endpoint)
+        .setProject(AppwriteConfig.projectId);
+    _profileService = UserProfileService(client);
+    _loadUserProfile();
+  }
+
+  Future<void> _loadUserProfile() async {
+    if (widget.user == null) return;
+
+    setState(() {
+      _isLoadingProfile = true;
+    });
+
+    try {
+      final profile = await _profileService.getOrCreateUserProfile(
+        widget.user!.uid,
+        widget.user!.role.name,
+      );
+      if (mounted) {
+        setState(() {
+          _userProfile = profile;
+          _isLoadingProfile = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoadingProfile = false;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to load profile: $e')),
+        );
+      }
+    }
+  }
+
   bool _isTeacherOrAdmin(UserRole role) {
     return role == UserRole.teacher || role == UserRole.admin;
   }
@@ -115,96 +166,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   backgroundColor: _getRoleColor(widget.user!.role),
                 ),
-                const Divider(height: 32),
-                _buildInfoTile(
-                  context,
-                  Icons.business,
-                  'Department',
-                  widget.user!.department.isEmpty
-                      ? 'Not specified'
-                      : widget.user!.department,
-                ),
-                if (widget.user!.year.isNotEmpty)
-                  _buildInfoTile(
-                    context,
-                    Icons.calendar_today,
-                    'Year',
-                    widget.user!.year,
-                  ),
-                _buildInfoTile(
-                  context,
-                  Icons.check_circle,
-                  'Status',
-                  widget.user!.isActive ? 'Active' : 'Inactive',
-                ),
-                // Student-specific information (private - only visible to self and teachers)
-                if (widget.user!.role == UserRole.student &&
-                    _canViewPrivateInfo()) ...[
-                  const Divider(height: 32),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.lock, size: 16, color: Colors.grey[600]),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Student Details',
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ),
-                        const Spacer(),
-                        Text(
-                          'Private',
-                          style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    color: Colors.grey[600],
-                                    fontStyle: FontStyle.italic,
-                                  ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (widget.user!.shift.isNotEmpty)
-                    _buildInfoTile(
-                      context,
-                      Icons.schedule,
-                      'Shift',
-                      widget.user!.shift,
-                    ),
-                  if (widget.user!.group.isNotEmpty)
-                    _buildInfoTile(
-                      context,
-                      Icons.groups,
-                      'Group',
-                      widget.user!.group,
-                    ),
-                  if (widget.user!.classRoll.isNotEmpty)
-                    _buildInfoTile(
-                      context,
-                      Icons.confirmation_number,
-                      'Class Roll',
-                      widget.user!.classRoll,
-                    ),
-                  if (widget.user!.academicSession.isNotEmpty)
-                    _buildInfoTile(
-                      context,
-                      Icons.event,
-                      'Academic Session',
-                      widget.user!.academicSession,
-                    ),
-                  if (widget.user!.phoneNumber.isNotEmpty)
-                    _buildInfoTile(
-                      context,
-                      Icons.phone,
-                      'Phone Number',
-                      widget.user!.phoneNumber,
-                    ),
-                ],
+                // Role-specific views
+                  _isLoadingProfile
+                      ? const Padding(
+                          padding: EdgeInsets.all(24.0),
+                          child: Center(child: CircularProgressIndicator()),
+                        )
+                      : Builder(builder: (context) {
+                          if (_userProfile == null) {
+                            return const Padding(
+                              padding: EdgeInsets.all(24.0),
+                              child: Center(
+                                child: Text('Profile data not available'),
+                              ),
+                            );
+                          }
+
+                          switch (widget.user!.role) {
+                            case UserRole.student:
+                              return StudentProfileView(
+                                user: widget.user!,
+                                profile: _userProfile!,
+                                canViewPrivate: _canViewPrivateInfo(),
+                              );
+                            case UserRole.teacher:
+                              return TeacherProfileView(
+                                user: widget.user!,
+                                profile: _userProfile!,
+                              );
+                            case UserRole.admin:
+                              return AdminProfileView(
+                                user: widget.user!,
+                                profile: _userProfile!,
+                              );
+                          }
+                        }),
                 const Divider(height: 32),
                 // Theme Settings Section
                 Padding(
@@ -295,16 +291,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       ElevatedButton.icon(
                         onPressed: () async {
+                            if (_userProfile == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Profile data not loaded yet'),
+                                ),
+                              );
+                              return;
+                            }
+
                           final result = await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  EditProfileScreen(user: widget.user!),
+                                    EditProfileScreen(
+                                  user: widget.user!,
+                                  profile: _userProfile!,
+                                ),
                             ),
                           );
                           // Refresh profile if updated
                           if (result == true && mounted) {
-                            setState(() {});
+                              _loadUserProfile();
                           }
                         },
                         icon: const Icon(Icons.edit),
