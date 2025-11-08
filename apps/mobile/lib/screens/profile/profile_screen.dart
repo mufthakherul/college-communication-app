@@ -1,7 +1,4 @@
 // ignore_for_file: unawaited_futures, dead_code, unreachable_switch_default
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-
 import 'package:appwrite/appwrite.dart';
 import 'package:campus_mesh/appwrite_config.dart';
 import 'package:campus_mesh/models/user_model.dart';
@@ -18,6 +15,8 @@ import 'package:campus_mesh/screens/settings/sync_settings_screen.dart';
 import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/services/theme_service.dart';
 import 'package:campus_mesh/services/user_profile_service.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -168,16 +167,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   backgroundColor: _getRoleColor(widget.user!.role),
                 ),
                 // Role-specific views
-                _isLoadingProfile
-                    ? const Padding(
-                        padding: EdgeInsets.all(24.0),
+                if (_isLoadingProfile) const Padding(
+                        padding: EdgeInsets.all(24),
                         child: Center(child: CircularProgressIndicator()),
-                      )
-                    : Builder(
+                      ) else Builder(
                         builder: (context) {
                           if (_userProfile == null) {
                             return const Padding(
-                              padding: EdgeInsets.all(24.0),
+                              padding: EdgeInsets.all(24),
                               child: Center(
                                 child: Text('Profile data not available'),
                               ),

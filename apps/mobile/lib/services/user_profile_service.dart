@@ -5,9 +5,9 @@ import 'package:campus_mesh/models/user_profile_model.dart';
 
 /// Service for managing user profiles with role-specific data
 class UserProfileService {
-  final Databases _databases;
 
   UserProfileService(Client client) : _databases = Databases(client);
+  final Databases _databases;
 
   /// Get user profile by user ID
   /// Returns null if profile doesn't exist
@@ -118,7 +118,7 @@ class UserProfileService {
       role: _parseRole(role),
     );
 
-    return await createUserProfile(defaultProfile);
+    return createUserProfile(defaultProfile);
   }
 
   /// Helper to parse role string to UserRole enum

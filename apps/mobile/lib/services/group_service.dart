@@ -7,15 +7,15 @@ import 'package:campus_mesh/services/auth_service.dart';
 import 'package:flutter/foundation.dart';
 
 class GroupService {
+
+  GroupService({required Databases database, required AuthService authService})
+      : _database = database,
+        _authService = authService;
   final Databases _database;
   final AuthService _authService;
   static const String _groupsCollectionId = 'groups';
   static const String _groupMembersCollectionId = 'group_members';
   static const String _databaseId = 'rpi_communication';
-
-  GroupService({required Databases database, required AuthService authService})
-      : _database = database,
-        _authService = authService;
 
   /// Create a new group
   Future<GroupModel> createGroup({
@@ -405,7 +405,7 @@ class GroupService {
         return 0;
       }
 
-      final memberId = 'group_$groupId' + '_user_$currentUserId';
+      final memberId = 'group_$groupId' '_user_$currentUserId';
       final doc = await _database.getDocument(
         databaseId: _databaseId,
         collectionId: _groupMembersCollectionId,
@@ -427,7 +427,7 @@ class GroupService {
         throw Exception('User not authenticated');
       }
 
-      final memberId = 'group_$groupId' + '_user_$currentUserId';
+      final memberId = 'group_$groupId' '_user_$currentUserId';
       await _database.updateDocument(
         databaseId: _databaseId,
         collectionId: _groupMembersCollectionId,

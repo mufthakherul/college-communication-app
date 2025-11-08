@@ -222,7 +222,7 @@ class _QRCodeGeneratorScreenState extends State<QRCodeGeneratorScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.qr_code_2, size: 200, color: Colors.black),
+            const Icon(Icons.qr_code_2, size: 200, color: Colors.black),
             const SizedBox(height: 16),
             Text(
               'QR Code Ready',

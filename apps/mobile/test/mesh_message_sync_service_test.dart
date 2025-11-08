@@ -1,6 +1,7 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:campus_mesh/services/mesh_message_sync_service.dart';
 import 'package:campus_mesh/services/mesh_network_service.dart';
+import 'package:flutter_test/flutter_test.dart';
+
 import 'mocks/mock_permission_service.dart';
 
 void main() {

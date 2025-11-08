@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
-
 import 'package:campus_mesh/services/cache_service.dart';
 import 'package:campus_mesh/services/conflict_resolution_service.dart';
 import 'package:campus_mesh/services/connectivity_service.dart';
 import 'package:campus_mesh/services/local_message_database.dart';
 import 'package:campus_mesh/services/local_notice_database.dart';
 import 'package:campus_mesh/services/offline_queue_service.dart';
+import 'package:flutter/material.dart';
 
 /// Screen for sync and network settings
 class SyncSettingsScreen extends StatefulWidget {
@@ -387,7 +386,7 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
   }
 
   Future<void> _clearLocalMessages({bool confirm = true}) async {
-    bool proceed = true;
+    var proceed = true;
     if (confirm) {
       final confirmed = await _showConfirmDialog(
         'Clear Local Messages',
@@ -409,7 +408,7 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
   }
 
   Future<void> _clearLocalNotices({bool confirm = true}) async {
-    bool proceed = true;
+    var proceed = true;
     if (confirm) {
       final confirmed = await _showConfirmDialog(
         'Clear Local Notices',

@@ -1,15 +1,4 @@
 class GroupModel {
-  final String id;
-  final String name;
-  final String? description;
-  final String ownerId;
-  final String groupType; // 'class', 'department', 'project', 'interest'
-  final String? avatarUrl;
-  final int memberCount;
-  final bool isActive;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final Map<String, dynamic>? metadata;
 
   GroupModel({
     required this.id,
@@ -27,7 +16,7 @@ class GroupModel {
 
   factory GroupModel.fromJson(Map<String, dynamic> data) {
     return GroupModel(
-      id: data['\$id'] ?? data['id'] ?? '',
+      id: data[r'$id'] ?? data['id'] ?? '',
       name: data['name'] ?? '',
       description: data['description'] as String?,
       ownerId: data['owner_id'] ?? data['ownerId'] ?? '',
@@ -44,6 +33,17 @@ class GroupModel {
       metadata: data['metadata'] as Map<String, dynamic>?,
     );
   }
+  final String id;
+  final String name;
+  final String? description;
+  final String ownerId;
+  final String groupType; // 'class', 'department', 'project', 'interest'
+  final String? avatarUrl;
+  final int memberCount;
+  final bool isActive;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final Map<String, dynamic>? metadata;
 
   Map<String, dynamic> toJson() {
     return {

@@ -1,5 +1,5 @@
-import 'package:campus_mesh/models/user_profile_model.dart';
 import 'package:campus_mesh/models/user_model.dart';
+import 'package:campus_mesh/models/user_profile_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -38,7 +38,7 @@ void main() {
     });
 
     test('toJson includes only provided optional fields', () {
-      final profile = UserProfile(
+      const profile = UserProfile(
         id: 'p1',
         userId: 'u1',
         role: UserRole.teacher,
@@ -54,7 +54,7 @@ void main() {
     });
 
     test('copyWith updates selected fields', () {
-      final base = UserProfile(
+      const base = UserProfile(
         id: 'p2',
         userId: 'u2',
         role: UserRole.admin,

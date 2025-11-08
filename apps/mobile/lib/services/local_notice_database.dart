@@ -73,7 +73,7 @@ class LocalNoticeDatabase {
     final now = DateTime.now().toIso8601String();
     for (final n in notices) {
       final data = {
-        'id': n['id'] ?? n['\$id'] ?? '',
+        'id': n['id'] ?? n[r'$id'] ?? '',
         'title': n['title'],
         'content': n['content'],
         'type': n['type'],

@@ -2,10 +2,9 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
-
 import 'package:campus_mesh/services/app_logger_service.dart';
 import 'package:campus_mesh/services/permission_service.dart';
+import 'package:flutter/foundation.dart';
 
 /// Connection type for mesh network
 enum MeshConnectionType {
@@ -279,7 +278,7 @@ class MeshNetworkService {
         permissionService.checkNfcPermissions(),
       ]);
 
-      final Map<String, bool> permissions = {
+      final permissions = <String, bool>{
         'bluetooth': permissionsResult[0],
         'location': permissionsResult[1],
         'wifi': permissionsResult[2],

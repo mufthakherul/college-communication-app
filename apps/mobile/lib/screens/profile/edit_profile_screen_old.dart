@@ -35,17 +35,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     );
     _departmentController = TextEditingController(text: widget.user.department);
     _yearController = TextEditingController(text: widget.user.year);
-    _shiftController = TextEditingController(text: widget.user.shift);
-    _groupController = TextEditingController(text: widget.user.group);
-    _classRollController = TextEditingController(text: widget.user.classRoll);
-    _academicSessionController = TextEditingController(
-      text: widget.user.academicSession,
-    );
-    _phoneNumberController = TextEditingController(
-      text: widget.user.phoneNumber,
-    );
+    // Legacy screen: these fields are not available on UserModel anymore.
+    // Initialize with empty values to keep this screen functional if ever used.
+  _shiftController = TextEditingController(text: '');
+  _groupController = TextEditingController(text: '');
+  _classRollController = TextEditingController(text: '');
+  _academicSessionController = TextEditingController(text: '');
+  _phoneNumberController = TextEditingController(text: '');
 
-    _selectedShift = widget.user.shift.isEmpty ? null : widget.user.shift;
+    _selectedShift = null;
   }
 
   @override

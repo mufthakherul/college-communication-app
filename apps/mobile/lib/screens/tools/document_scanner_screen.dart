@@ -291,10 +291,6 @@ class _DocumentScannerScreenState extends State<DocumentScannerScreen> {
 }
 
 class ScannedDocument {
-  String name;
-  final DateTime scanDate;
-  final int pages;
-  final String size;
 
   ScannedDocument({
     required this.name,
@@ -302,4 +298,8 @@ class ScannedDocument {
     required this.pages,
     required this.size,
   });
+  String name;
+  final DateTime scanDate;
+  final int pages;
+  final String size;
 }

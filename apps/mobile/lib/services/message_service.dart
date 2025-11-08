@@ -538,7 +538,7 @@ class MessageService {
     final now = DateTime.now().toIso8601String();
 
     // Get sender info (name and photo)
-    String senderDisplayName = 'Unknown';
+    var senderDisplayName = 'Unknown';
     String? senderPhotoUrl;
     try {
       final authService = AuthService();

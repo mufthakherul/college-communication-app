@@ -234,7 +234,7 @@ class _ScheduleBuilderScreenState extends State<ScheduleBuilderScreen> {
     }
 
     return _days
-        .where((day) => grouped.containsKey(day))
+        .where(grouped.containsKey)
         .map((day) => _buildDaySection(day, grouped[day]!))
         .toList();
   }
@@ -310,7 +310,7 @@ class _ScheduleBuilderScreenState extends State<ScheduleBuilderScreen> {
     Function(String) onChanged,
   ) {
     return DropdownButtonFormField<String>(
-      value: value,
+      initialValue: value,
       decoration: InputDecoration(
         labelText: label,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
@@ -325,12 +325,6 @@ class _ScheduleBuilderScreenState extends State<ScheduleBuilderScreen> {
 }
 
 class ScheduleClass {
-  final String subject;
-  final String day;
-  final String time;
-  final String duration;
-  final String location;
-  final Color color;
 
   ScheduleClass({
     required this.subject,
@@ -340,4 +334,10 @@ class ScheduleClass {
     required this.location,
     required this.color,
   });
+  final String subject;
+  final String day;
+  final String time;
+  final String duration;
+  final String location;
+  final Color color;
 }

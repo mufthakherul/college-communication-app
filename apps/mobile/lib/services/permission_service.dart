@@ -21,6 +21,7 @@ class PermissionService implements PermissionProvider {
   static final PermissionService _instance = PermissionService._internal();
 
   /// Check location permissions
+  @override
   Future<bool> checkLocationPermissions() async {
     try {
       return await Permission.location.isGranted;
@@ -31,6 +32,7 @@ class PermissionService implements PermissionProvider {
   }
 
   /// Check Bluetooth permissions
+  @override
   Future<bool> checkBluetoothPermissions() async {
     try {
       if (await _isAndroid12OrAbove()) {
@@ -46,6 +48,7 @@ class PermissionService implements PermissionProvider {
   }
 
   /// Check WiFi permissions
+  @override
   Future<bool> checkWifiPermissions() async {
     try {
       // Permission_handler does not expose fine-grained WiFi control on all
@@ -58,6 +61,7 @@ class PermissionService implements PermissionProvider {
   }
 
   /// Check storage permissions
+  @override
   Future<bool> checkStoragePermissions() async {
     try {
       if (await _isAndroid13OrAbove()) {
@@ -81,6 +85,7 @@ class PermissionService implements PermissionProvider {
   }
 
   /// Check microphone permissions
+  @override
   Future<bool> checkMicrophonePermissions() async {
     try {
       return await Permission.microphone.isGranted;
@@ -91,6 +96,7 @@ class PermissionService implements PermissionProvider {
   }
 
   /// Check camera permissions
+  @override
   Future<bool> checkCameraPermissions() async {
     try {
       final hasCamera = await Permission.camera.isGranted;

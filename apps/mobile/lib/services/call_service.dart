@@ -1,9 +1,8 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
-
 import 'package:campus_mesh/services/local_call_log_database.dart';
 import 'package:campus_mesh/services/mesh_network_service.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 
 /// Simple 1:1 voice/video calling using WebRTC with mesh-based signaling.
@@ -119,7 +118,7 @@ class CallService {
 
   bool _isValidPeerId(String peerId) {
     if (peerId.isEmpty || peerId.length > 128) return false;
-    final invalid = RegExp(r"[^a-zA-Z0-9_\-]{}");
+    final invalid = RegExp(r'[^a-zA-Z0-9_\-]{}');
     return !invalid.hasMatch(peerId);
   }
 

@@ -50,7 +50,7 @@ class NoticeService {
     try {
       final localRows = await _localDb.getActiveNotices(limit: 100);
       final localNotices =
-          localRows.map((r) => NoticeModel.fromJson(r)).toList();
+          localRows.map(NoticeModel.fromJson).toList();
 
       if (localNotices.isNotEmpty) {
         _noticesController?.add(localNotices);
@@ -93,9 +93,9 @@ class NoticeService {
       _noticesController?.add(remoteNotices);
     } catch (e) {
       // If remote fails but we already showed local, keep silent; else emit error
-      if ((_noticesController?.hasListener ?? false)) {
+      if (_noticesController?.hasListener ?? false) {
         // Provide local fallback already; emit warning as error only if no local data
-        if ((_noticesController?.stream == null)) {
+        if (_noticesController?.stream == null) {
           _noticesController?.addError(e);
         }
       }
@@ -230,7 +230,7 @@ class NoticeService {
             databaseId: AppwriteConfig.databaseId,
             collectionId: AppwriteConfig.noticesCollectionId,
             queries: [
-              Query.equal('source_url', sourceUrl!),
+              Query.equal('source_url', sourceUrl),
               Query.equal('is_active', true),
             ],
           );
