@@ -1,5 +1,8 @@
 import 'package:campus_mesh/services/app_logger_service.dart';
 import 'package:campus_mesh/services/connectivity_service.dart';
+import 'package:campus_mesh/services/cache_service.dart';
+import 'package:campus_mesh/services/local_message_database.dart';
+import 'package:campus_mesh/services/local_notice_database.dart';
 import 'package:campus_mesh/services/offline_queue_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:workmanager/workmanager.dart';
@@ -87,8 +90,23 @@ Future<void> _syncOfflineQueue() async {
 /// Background cache cleanup
 Future<void> _cleanupCache() async {
   try {
-    // Cache cleanup logic would go here
-    // This is a placeholder for future implementation
+    // Clean app file-based cache
+    try {
+      await CacheService().cleanExpiredCache();
+    } catch (_) {}
+
+    // Cleanup local messages older than 30 days (monthly policy)
+    try {
+      final msgDb = LocalMessageDatabase();
+      await msgDb.cleanupSyncedMessages(daysToKeep: 30);
+    } catch (_) {}
+
+    // Cleanup local notices older than 30 days or expired
+    try {
+      final noticeDb = LocalNoticeDatabase();
+      await noticeDb.cleanupOldNotices(daysToKeep: 30);
+    } catch (_) {}
+
     if (kDebugMode) {
       logger.info(
         'Background cache cleanup completed',

@@ -6,6 +6,7 @@ import 'package:campus_mesh/services/auth_service.dart';
 import 'package:campus_mesh/services/background_sync_service.dart';
 import 'package:campus_mesh/services/cache_service.dart';
 import 'package:campus_mesh/services/offline_message_sync_service.dart';
+import 'package:campus_mesh/services/mesh_message_sync_service.dart';
 import 'package:campus_mesh/services/offline_queue_service.dart';
 import 'package:campus_mesh/services/onesignal_service.dart';
 import 'package:campus_mesh/services/security_service.dart';
@@ -232,6 +233,14 @@ Future<void> _initializeApp() async {
   } catch (e) {
     debugPrint('Failed to initialize offline message sync: $e');
     // Continue without offline message sync
+  }
+
+  // Initialize mesh message sync (P2P when nearby)
+  try {
+    final meshSync = MeshMessageSyncService();
+    await meshSync.initialize();
+  } catch (e) {
+    debugPrint('Failed to initialize mesh message sync: $e');
   }
 
   runApp(const CampusMeshApp());

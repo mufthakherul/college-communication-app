@@ -63,7 +63,25 @@ class AuthService {
 
   // Check if user is authenticated
   Future<bool> isAuthenticated() async {
-    return _appwrite.isAuthenticated();
+    try {
+      final online = await _appwrite.isAuthenticated();
+      if (online) return true;
+    } catch (_) {}
+
+    // Fallback: allow offline auth if we have cached user id
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final cachedUserId = prefs.getString(_userIdKey);
+      if (cachedUserId != null && cachedUserId.isNotEmpty) {
+        _currentUserId = cachedUserId;
+        if (kDebugMode) {
+          debugPrint('Offline auth: using cached user $cachedUserId');
+        }
+        return true;
+      }
+    } catch (_) {}
+
+    return false;
   }
 
   // Sign in with email and password

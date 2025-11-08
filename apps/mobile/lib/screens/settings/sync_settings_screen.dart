@@ -2,6 +2,8 @@ import 'package:campus_mesh/services/cache_service.dart';
 import 'package:campus_mesh/services/conflict_resolution_service.dart';
 import 'package:campus_mesh/services/connectivity_service.dart';
 import 'package:campus_mesh/services/offline_queue_service.dart';
+import 'package:campus_mesh/services/local_message_database.dart';
+import 'package:campus_mesh/services/local_notice_database.dart';
 import 'package:flutter/material.dart';
 
 /// Screen for sync and network settings
@@ -253,6 +255,37 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
                 label: const Text('Clear Queue'),
               ),
             ),
+            const SizedBox(height: 8),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: _clearLocalMessages,
+                icon: const Icon(Icons.message),
+                label: const Text('Clear Local Messages'),
+              ),
+            ),
+            const SizedBox(height: 8),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: _clearLocalNotices,
+                icon: const Icon(Icons.announcement),
+                label: const Text('Clear Local Notices'),
+              ),
+            ),
+            const SizedBox(height: 8),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () async {
+                  await _clearLocalMessages(confirm: false);
+                  await _clearLocalNotices(confirm: false);
+                  await _clearCache();
+                },
+                icon: const Icon(Icons.cleaning_services),
+                label: const Text('Clear All Offline Data'),
+              ),
+            ),
           ],
         ),
       ),
@@ -336,6 +369,50 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
   }
 
   Future<void> _clearCache() async {
+
+  Future<void> _clearLocalMessages({bool confirm = true}) async {
+    bool proceed = true;
+    if (confirm) {
+      final confirmed = await _showConfirmDialog(
+        'Clear Local Messages',
+        'This will delete locally stored unsent/synced messages (does not delete server messages). Proceed?',
+      );
+      proceed = confirmed ?? false;
+    }
+
+    if (!proceed) return;
+
+    try {
+      final db = LocalMessageDatabase();
+      final count = await (await db.database).delete('local_messages');
+      await _loadStatistics();
+      _showMessage('Cleared $count local messages');
+    } catch (e) {
+      _showMessage('Failed to clear local messages: $e');
+    }
+  }
+
+  Future<void> _clearLocalNotices({bool confirm = true}) async {
+    bool proceed = true;
+    if (confirm) {
+      final confirmed = await _showConfirmDialog(
+        'Clear Local Notices',
+        'This will delete cached notices stored on device. Proceed?',
+      );
+      proceed = confirmed ?? false;
+    }
+
+    if (!proceed) return;
+
+    try {
+      final db = LocalNoticeDatabase();
+      final count = await db.clearAll();
+      await _loadStatistics();
+      _showMessage('Cleared $count local notices');
+    } catch (e) {
+      _showMessage('Failed to clear local notices: $e');
+    }
+  }
     final confirmed = await _showConfirmDialog(
       'Clear Cache',
       'Are you sure you want to clear all cached data? This will require re-downloading data.',
