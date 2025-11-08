@@ -24,7 +24,10 @@ dependencies:
   connectivity_plus: ^6.0.0
   workmanager: ^0.5.2
   # Mesh networking
-  flutter_nearby_connections: ^1.1.2
+  # TODO(fix): flutter_nearby_connections uses deprecated v1 embedding API
+  # Temporarily commented out until plugin is updated or we fork it
+  # See: https://github.com/flutter/flutter/issues
+  # flutter_nearby_connections: ^1.1.2
   nearby_service: ^0.2.1
   flutter_webrtc: ^0.9.48
   # QR code support
@@ -43,7 +46,7 @@ dependencies:
   sqflite: ^2.3.0
   # File handling
   file_picker: ^8.0.0
-  image_picker: ^1.0.7
+  image_picker: ^1.2.0
   # Monitoring & Analytics
   sentry_flutter: ^7.14.0
   onesignal_flutter: ^5.0.0
@@ -77,6 +80,17 @@ dev_dependencies:
 dependency_overrides:
   # Override win32 to fix UnmodifiableUint8ListView errors with Dart 3.3+
   win32: ^5.5.0
+  # Override flutter_plugin_android_lifecycle to fix v1 embedding compatibility
+  # v2.0.32+ supports Flutter v2 embedding (required for Flutter 3.35.7+)
+  flutter_plugin_android_lifecycle: ^2.0.32
+  # Override flutter_web_auth_2 to fix v1 embedding compatibility
+  # v4.1.0+ supports Flutter v2 embedding (required for Flutter 3.35.7+)
+  # Used by appwrite package for OAuth authentication
+  flutter_web_auth_2: ^4.1.0
+  # Override flutter_webrtc to fix v1 embedding compatibility
+  # v1.2.0+ supports Flutter v2 embedding (required for Flutter 3.35.7+)
+  # Used for WebRTC peer-to-peer communication
+  flutter_webrtc: ^1.2.0
 
 flutter:
   uses-material-design: true
