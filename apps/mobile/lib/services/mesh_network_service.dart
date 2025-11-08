@@ -247,7 +247,7 @@ class MeshNetworkService {
   /// Check if mesh network is active
   bool get isActive => _isInitialized && (_isAdvertising || _isDiscovering);
 
-  /// Initialize mesh network service
+  /// Initialize mesh network service with all possible connection types
   Future<void> initialize({
     required String deviceId,
     required String deviceName,
@@ -255,6 +255,52 @@ class MeshNetworkService {
     if (_isInitialized) return;
 
     try {
+      // Check all runtime permissions first
+      final permissionService = PermissionService();
+      
+      // Check permissions for all connection types
+      final permissionsResult = await Future.wait([
+        permissionService.checkBluetoothPermissions(),
+        permissionService.checkLocationPermissions(),
+        permissionService.checkWifiPermissions(),
+        permissionService.checkStoragePermissions(),
+        permissionService.checkNfcPermissions(),
+      ]);
+
+      final Map<String, bool> permissions = {
+        'bluetooth': permissionsResult[0],
+        'location': permissionsResult[1],
+        'wifi': permissionsResult[2],
+        'storage': permissionsResult[3],
+        'nfc': permissionsResult[4],
+      };
+
+      _availableConnectionTypes.clear();
+      
+      // Enable connection types based on permissions
+      if (permissions['bluetooth']! && permissions['location']!) {
+        _availableConnectionTypes.add(MeshConnectionType.bluetooth);
+      }
+      if (permissions['wifi']! && permissions['location']!) {
+        _availableConnectionTypes.addAll([
+          MeshConnectionType.wifiDirect,
+          MeshConnectionType.wifiRouter,
+          MeshConnectionType.wifiHotspot,
+        ]);
+      }
+      if (permissions['storage']!) {
+        _availableConnectionTypes.add(MeshConnectionType.usb);
+      }
+      if (permissions['nfc']!) {
+        _availableConnectionTypes.add(MeshConnectionType.nfc);
+      }
+      _availableConnectionTypes.add(MeshConnectionType.ethernet); // Always available
+
+      if (_availableConnectionTypes.isEmpty) {
+        debugPrint('Mesh networking disabled: no available connection types');
+        return;
+      }
+      
       _deviceId = deviceId;
       _deviceName = deviceName;
 
