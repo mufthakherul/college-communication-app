@@ -22,6 +22,7 @@ e: Unresolved reference 'messenger'.
 1. `flutter_plugin_android_lifecycle:2.0.19` - Using v1 embedding API
 2. `flutter_nearby_connections:1.1.2` - Using v1 embedding API (Kotlin)
 3. `flutter_web_auth_2:3.1.2` - Using v1 embedding API (Kotlin) - **Added in second iteration**
+4. `flutter_webrtc:0.9.48+hotfix.1` - Using v1 embedding API (Java) - **Added in third iteration**
 
 ## Root Cause Analysis
 
@@ -57,11 +58,16 @@ dependency_overrides:
   # v4.1.0+ supports Flutter v2 embedding (required for Flutter 3.35.7+)
   # Used by appwrite package for OAuth authentication
   flutter_web_auth_2: ^4.1.0
+  # Override flutter_webrtc to fix v1 embedding compatibility
+  # v1.2.0+ supports Flutter v2 embedding (required for Flutter 3.35.7+)
+  # Used for WebRTC peer-to-peer communication
+  flutter_webrtc: ^1.2.0
 ```
 
 **Reason:** 
 - `flutter_plugin_android_lifecycle:2.0.32+` properly supports the v2 embedding API
 - `flutter_web_auth_2:4.1.0+` fixes v1 embedding issues (transitive dependency of appwrite)
+- `flutter_webrtc:1.2.0+` fixes v1 embedding issues (used for WebRTC communication)
 
 ### 3. Temporarily Disabled `flutter_nearby_connections`
 **Before:**
