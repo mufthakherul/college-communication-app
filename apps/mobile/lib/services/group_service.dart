@@ -14,8 +14,8 @@ class GroupService {
   static const String _databaseId = 'rpi_communication';
 
   GroupService({required Databases database, required AuthService authService})
-    : _database = database,
-      _authService = authService;
+      : _database = database,
+        _authService = authService;
 
   /// Create a new group
   Future<GroupModel> createGroup({
@@ -199,16 +199,15 @@ class GroupService {
       );
 
       // Filter by group IDs
-      final groupDocs =
-          allGroupDocs.documents
-              .where((doc) => groupIds.contains(doc.$id))
-              .toList()
-            ..sort((a, b) {
-              final aDate = DateTime.tryParse(a.data['updated_at'] ?? '');
-              final bDate = DateTime.tryParse(b.data['updated_at'] ?? '');
-              if (aDate == null || bDate == null) return 0;
-              return bDate.compareTo(aDate);
-            });
+      final groupDocs = allGroupDocs.documents
+          .where((doc) => groupIds.contains(doc.$id))
+          .toList()
+        ..sort((a, b) {
+          final aDate = DateTime.tryParse(a.data['updated_at'] ?? '');
+          final bDate = DateTime.tryParse(b.data['updated_at'] ?? '');
+          if (aDate == null || bDate == null) return 0;
+          return bDate.compareTo(aDate);
+        });
 
       return groupDocs.map((doc) => GroupModel.fromJson(doc.data)).toList();
     } catch (e) {

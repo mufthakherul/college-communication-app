@@ -27,9 +27,8 @@ void main() {
     });
 
     test('Cleanup removes expired notices', () async {
-      final pastDate = DateTime.now()
-          .subtract(const Duration(days: 40))
-          .toIso8601String();
+      final pastDate =
+          DateTime.now().subtract(const Duration(days: 40)).toIso8601String();
       await db.upsertNotices([
         {
           'id': 'expired',

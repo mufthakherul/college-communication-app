@@ -20,9 +20,9 @@ class AssignmentService {
   Stream<List<AssignmentModel>> getAssignments() {
     _assignmentsController ??=
         StreamController<List<AssignmentModel>>.broadcast(
-          onListen: _startPolling,
-          onCancel: _stopPolling,
-        );
+      onListen: _startPolling,
+      onCancel: _stopPolling,
+    );
     return _assignmentsController!.stream;
   }
 

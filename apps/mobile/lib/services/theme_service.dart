@@ -29,9 +29,8 @@ class ThemeService extends ChangeNotifier {
 
   /// Toggle between light and dark mode
   Future<void> toggleTheme() async {
-    _themeMode = _themeMode == ThemeMode.light
-        ? ThemeMode.dark
-        : ThemeMode.light;
+    _themeMode =
+        _themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
     await _saveThemePreference();
     notifyListeners();
   }
@@ -76,22 +75,22 @@ class ThemeService extends ChangeNotifier {
       tertiary: tertiary,
     );
 
-    final textTheme = GoogleFonts.interTextTheme(ThemeData.light().textTheme)
-        .copyWith(
-          headlineLarge: GoogleFonts.inter(
-            fontWeight: FontWeight.w800,
-            fontSize: 32,
-            height: 1.1,
-          ),
-          titleLarge: GoogleFonts.inter(
-            fontWeight: FontWeight.w700,
-            fontSize: 20,
-          ),
-          bodyLarge: GoogleFonts.inter(
-            fontWeight: FontWeight.w500,
-            fontSize: 14,
-          ),
-        );
+    final textTheme =
+        GoogleFonts.interTextTheme(ThemeData.light().textTheme).copyWith(
+      headlineLarge: GoogleFonts.inter(
+        fontWeight: FontWeight.w800,
+        fontSize: 32,
+        height: 1.1,
+      ),
+      titleLarge: GoogleFonts.inter(
+        fontWeight: FontWeight.w700,
+        fontSize: 20,
+      ),
+      bodyLarge: GoogleFonts.inter(
+        fontWeight: FontWeight.w500,
+        fontSize: 14,
+      ),
+    );
 
     return ThemeData(
       useMaterial3: true,
@@ -157,8 +156,7 @@ class ThemeService extends ChangeNotifier {
       chipTheme: ChipThemeData(
         backgroundColor: scheme.surface,
         selectedColor: scheme.primaryContainer,
-        labelStyle:
-            textTheme.labelLarge ??
+        labelStyle: textTheme.labelLarge ??
             const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         side: BorderSide(color: scheme.outlineVariant),
@@ -193,22 +191,22 @@ class ThemeService extends ChangeNotifier {
       tertiary: tertiary,
     );
 
-    final textTheme = GoogleFonts.interTextTheme(ThemeData.dark().textTheme)
-        .copyWith(
-          headlineLarge: GoogleFonts.inter(
-            fontWeight: FontWeight.w800,
-            fontSize: 32,
-            height: 1.1,
-          ),
-          titleLarge: GoogleFonts.inter(
-            fontWeight: FontWeight.w700,
-            fontSize: 20,
-          ),
-          bodyLarge: GoogleFonts.inter(
-            fontWeight: FontWeight.w500,
-            fontSize: 14,
-          ),
-        );
+    final textTheme =
+        GoogleFonts.interTextTheme(ThemeData.dark().textTheme).copyWith(
+      headlineLarge: GoogleFonts.inter(
+        fontWeight: FontWeight.w800,
+        fontSize: 32,
+        height: 1.1,
+      ),
+      titleLarge: GoogleFonts.inter(
+        fontWeight: FontWeight.w700,
+        fontSize: 20,
+      ),
+      bodyLarge: GoogleFonts.inter(
+        fontWeight: FontWeight.w500,
+        fontSize: 14,
+      ),
+    );
 
     return ThemeData(
       useMaterial3: true,
@@ -274,8 +272,7 @@ class ThemeService extends ChangeNotifier {
       chipTheme: ChipThemeData(
         backgroundColor: const Color(0xFF0F172A),
         selectedColor: scheme.primaryContainer,
-        labelStyle:
-            textTheme.labelLarge ??
+        labelStyle: textTheme.labelLarge ??
             const TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         side: BorderSide(color: scheme.outlineVariant),

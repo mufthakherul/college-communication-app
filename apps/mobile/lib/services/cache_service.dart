@@ -44,10 +44,10 @@ class CacheEntry<T> {
   }
 
   Map<String, dynamic> toJson() => {
-    'data': data,
-    'timestamp': timestamp.toIso8601String(),
-    'ttl': ttl.inMilliseconds,
-  };
+        'data': data,
+        'timestamp': timestamp.toIso8601String(),
+        'ttl': ttl.inMilliseconds,
+      };
 }
 
 /// Smart caching service with time-based expiry and size limits

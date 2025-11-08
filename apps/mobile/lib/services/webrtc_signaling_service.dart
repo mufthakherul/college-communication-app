@@ -33,11 +33,11 @@ class SignalingMessage {
   final Map<String, dynamic> payload;
 
   Map<String, dynamic> toJson() => {
-    'from': from,
-    'to': to,
-    'type': type.name,
-    'payload': payload,
-  };
+        'from': from,
+        'to': to,
+        'type': type.name,
+        'payload': payload,
+      };
 }
 
 /// WebRTC connection state

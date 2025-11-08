@@ -114,8 +114,8 @@ class _ScheduleBuilderScreenState extends State<ScheduleBuilderScreen> {
                     Text(
                       'Add Class',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
                     const SizedBox(height: 16),
 

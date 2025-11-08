@@ -204,9 +204,8 @@ class _ChatManagementScreenState extends State<ChatManagementScreen> {
                           ),
                           child: ListTile(
                             leading: CircleAvatar(
-                              backgroundColor: isRestricted
-                                  ? Colors.red
-                                  : Colors.blue,
+                              backgroundColor:
+                                  isRestricted ? Colors.red : Colors.blue,
                               child: Icon(
                                 type == 'p2p' ? Icons.person : Icons.group,
                                 color: Colors.white,
@@ -258,9 +257,8 @@ class _ChatManagementScreenState extends State<ChatManagementScreen> {
                                     isRestricted ? Icons.lock_open : Icons.lock,
                                   ),
                                   onPressed: () => _toggleRestriction(chat),
-                                  tooltip: isRestricted
-                                      ? 'Unrestrict'
-                                      : 'Restrict',
+                                  tooltip:
+                                      isRestricted ? 'Unrestrict' : 'Restrict',
                                 ),
                               ],
                             ),

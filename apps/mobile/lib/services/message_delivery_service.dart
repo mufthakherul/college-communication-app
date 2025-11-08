@@ -53,13 +53,13 @@ class MessageDeliveryTracking {
   String? errorMessage;
 
   Map<String, dynamic> toJson() => {
-    'messageId': messageId,
-    'status': status.name,
-    'sentAt': sentAt?.toIso8601String(),
-    'deliveredAt': deliveredAt?.toIso8601String(),
-    'readAt': readAt?.toIso8601String(),
-    'errorMessage': errorMessage,
-  };
+        'messageId': messageId,
+        'status': status.name,
+        'sentAt': sentAt?.toIso8601String(),
+        'deliveredAt': deliveredAt?.toIso8601String(),
+        'readAt': readAt?.toIso8601String(),
+        'errorMessage': errorMessage,
+      };
 }
 
 /// Typing indicator
@@ -87,11 +87,11 @@ class TypingIndicator {
   final DateTime timestamp;
 
   Map<String, dynamic> toJson() => {
-    'userId': userId,
-    'conversationId': conversationId,
-    'status': status.name,
-    'timestamp': timestamp.toIso8601String(),
-  };
+        'userId': userId,
+        'conversationId': conversationId,
+        'status': status.name,
+        'timestamp': timestamp.toIso8601String(),
+      };
 
   bool get isStale {
     final now = DateTime.now();
@@ -419,8 +419,7 @@ class MessageDeliveryService {
     final cutoff = DateTime.now().subtract(age);
 
     _deliveryTracking.removeWhere((key, tracking) {
-      final timestamp =
-          tracking.readAt ??
+      final timestamp = tracking.readAt ??
           tracking.deliveredAt ??
           tracking.sentAt ??
           DateTime.now();

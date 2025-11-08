@@ -255,137 +255,138 @@ class _AttendanceTrackerScreenState extends State<AttendanceTrackerScreen> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _subjects.isEmpty
-          ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.event_available,
-                    size: 64,
-                    color: Colors.grey[400],
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.event_available,
+                        size: 64,
+                        color: Colors.grey[400],
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'No subjects added yet',
+                        style: TextStyle(fontSize: 18, color: Colors.grey),
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Tap + to add a subject',
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'No subjects added yet',
-                    style: TextStyle(fontSize: 18, color: Colors.grey),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Tap + to add a subject',
-                    style: TextStyle(color: Colors.grey),
-                  ),
-                ],
-              ),
-            )
-          : ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: _subjects.length,
-              itemBuilder: (context, index) {
-                final subject = _subjects[index];
-                final percentage = subject.total > 0
-                    ? (subject.attended / subject.total * 100)
-                    : 0.0;
+                )
+              : ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: _subjects.length,
+                  itemBuilder: (context, index) {
+                    final subject = _subjects[index];
+                    final percentage = subject.total > 0
+                        ? (subject.attended / subject.total * 100)
+                        : 0.0;
 
-                return Card(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
+                    return Card(
+                      margin: const EdgeInsets.only(bottom: 12),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              child: Text(
-                                subject.name,
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    subject.name,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                                Text(
+                                  '${percentage.toStringAsFixed(1)}%',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: _getPercentageColor(percentage),
+                                  ),
+                                ),
+                              ],
                             ),
+                            const SizedBox(height: 8),
                             Text(
-                              '${percentage.toStringAsFixed(1)}%',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: _getPercentageColor(percentage),
-                              ),
+                              'Attended: ${subject.attended} / ${subject.total}',
+                              style: TextStyle(color: Colors.grey[600]),
+                            ),
+                            const SizedBox(height: 12),
+                            LinearProgressIndicator(
+                              value: subject.total > 0
+                                  ? subject.attended / subject.total
+                                  : 0,
+                              backgroundColor: Colors.grey[200],
+                              color: _getPercentageColor(percentage),
+                              minHeight: 8,
+                            ),
+                            const SizedBox(height: 16),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: OutlinedButton.icon(
+                                    onPressed: () =>
+                                        _markAttendance(subject, true),
+                                    icon: const Icon(
+                                      Icons.check,
+                                      color: Colors.green,
+                                    ),
+                                    label: const Text('Present'),
+                                    style: OutlinedButton.styleFrom(
+                                      foregroundColor: Colors.green,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: OutlinedButton.icon(
+                                    onPressed: () =>
+                                        _markAttendance(subject, false),
+                                    icon: const Icon(
+                                      Icons.close,
+                                      color: Colors.red,
+                                    ),
+                                    label: const Text('Absent'),
+                                    style: OutlinedButton.styleFrom(
+                                      foregroundColor: Colors.red,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextButton.icon(
+                                  onPressed: () => _editSubject(subject),
+                                  icon: const Icon(Icons.edit, size: 18),
+                                  label: const Text('Edit'),
+                                ),
+                                TextButton.icon(
+                                  onPressed: () => _deleteSubject(subject),
+                                  icon: const Icon(Icons.delete, size: 18),
+                                  label: const Text('Delete'),
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: Colors.red,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Attended: ${subject.attended} / ${subject.total}',
-                          style: TextStyle(color: Colors.grey[600]),
-                        ),
-                        const SizedBox(height: 12),
-                        LinearProgressIndicator(
-                          value: subject.total > 0
-                              ? subject.attended / subject.total
-                              : 0,
-                          backgroundColor: Colors.grey[200],
-                          color: _getPercentageColor(percentage),
-                          minHeight: 8,
-                        ),
-                        const SizedBox(height: 16),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: OutlinedButton.icon(
-                                onPressed: () => _markAttendance(subject, true),
-                                icon: const Icon(
-                                  Icons.check,
-                                  color: Colors.green,
-                                ),
-                                label: const Text('Present'),
-                                style: OutlinedButton.styleFrom(
-                                  foregroundColor: Colors.green,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: OutlinedButton.icon(
-                                onPressed: () =>
-                                    _markAttendance(subject, false),
-                                icon: const Icon(
-                                  Icons.close,
-                                  color: Colors.red,
-                                ),
-                                label: const Text('Absent'),
-                                style: OutlinedButton.styleFrom(
-                                  foregroundColor: Colors.red,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            TextButton.icon(
-                              onPressed: () => _editSubject(subject),
-                              icon: const Icon(Icons.edit, size: 18),
-                              label: const Text('Edit'),
-                            ),
-                            TextButton.icon(
-                              onPressed: () => _deleteSubject(subject),
-                              icon: const Icon(Icons.delete, size: 18),
-                              label: const Text('Delete'),
-                              style: TextButton.styleFrom(
-                                foregroundColor: Colors.red,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
+                      ),
+                    );
+                  },
+                ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addSubject,
         child: const Icon(Icons.add),
@@ -405,17 +406,17 @@ class Subject {
   Subject({required this.name, required this.attended, required this.total});
 
   factory Subject.fromJson(Map<String, dynamic> json) => Subject(
-    name: json['name'],
-    attended: json['attended'],
-    total: json['total'],
-  );
+        name: json['name'],
+        attended: json['attended'],
+        total: json['total'],
+      );
   String name;
   int attended;
   int total;
 
   Map<String, dynamic> toJson() => {
-    'name': name,
-    'attended': attended,
-    'total': total,
-  };
+        'name': name,
+        'attended': attended,
+        'total': total,
+      };
 }

@@ -10,9 +10,8 @@ class QRShareScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hasExpiry = qrData.expiresAt != null;
-    final expiresIn = hasExpiry
-        ? qrData.expiresAt!.difference(DateTime.now())
-        : null;
+    final expiresIn =
+        hasExpiry ? qrData.expiresAt!.difference(DateTime.now()) : null;
 
     return Scaffold(
       appBar: AppBar(
