@@ -83,6 +83,10 @@ dependency_overrides:
   # Override flutter_plugin_android_lifecycle to fix v1 embedding compatibility
   # v2.0.32+ supports Flutter v2 embedding (required for Flutter 3.35.7+)
   flutter_plugin_android_lifecycle: ^2.0.32
+  # Override flutter_web_auth_2 to fix v1 embedding compatibility
+  # v4.1.0+ supports Flutter v2 embedding (required for Flutter 3.35.7+)
+  # Used by appwrite package for OAuth authentication
+  flutter_web_auth_2: ^4.1.0
 
 flutter:
   uses-material-design: true

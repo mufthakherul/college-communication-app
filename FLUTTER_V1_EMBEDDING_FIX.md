@@ -21,6 +21,7 @@ e: Unresolved reference 'messenger'.
 ### Affected Plugins
 1. `flutter_plugin_android_lifecycle:2.0.19` - Using v1 embedding API
 2. `flutter_nearby_connections:1.1.2` - Using v1 embedding API (Kotlin)
+3. `flutter_web_auth_2:3.1.2` - Using v1 embedding API (Kotlin) - **Added in second iteration**
 
 ## Root Cause Analysis
 
@@ -44,7 +45,7 @@ image_picker: ^1.2.0
 
 **Reason:** Version 1.2.0 includes updated platform implementations that depend on newer versions of `flutter_plugin_android_lifecycle` with v2 embedding support.
 
-### 2. Added Dependency Override for `flutter_plugin_android_lifecycle`
+### 2. Added Dependency Overrides for v2 Embedding Compatibility
 ```yaml
 dependency_overrides:
   # Override win32 to fix UnmodifiableUint8ListView errors with Dart 3.3+
@@ -52,9 +53,15 @@ dependency_overrides:
   # Override flutter_plugin_android_lifecycle to fix v1 embedding compatibility
   # v2.0.32+ supports Flutter v2 embedding (required for Flutter 3.35.7+)
   flutter_plugin_android_lifecycle: ^2.0.32
+  # Override flutter_web_auth_2 to fix v1 embedding compatibility
+  # v4.1.0+ supports Flutter v2 embedding (required for Flutter 3.35.7+)
+  # Used by appwrite package for OAuth authentication
+  flutter_web_auth_2: ^4.1.0
 ```
 
-**Reason:** Forces all plugins to use version 2.0.32+ which properly supports the v2 embedding API.
+**Reason:** 
+- `flutter_plugin_android_lifecycle:2.0.32+` properly supports the v2 embedding API
+- `flutter_web_auth_2:4.1.0+` fixes v1 embedding issues (transitive dependency of appwrite)
 
 ### 3. Temporarily Disabled `flutter_nearby_connections`
 **Before:**
