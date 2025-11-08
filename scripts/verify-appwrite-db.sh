@@ -6,7 +6,7 @@ set -eo pipefail
 
 # Load credentials
 set -a
-source tools/mcp/appwrite.mcp.env
+source ../tools/mcp/appwrite.mcp.env
 set +a
 
 DBID="rpi_communication"
