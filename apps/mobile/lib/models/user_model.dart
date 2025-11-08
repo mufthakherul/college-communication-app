@@ -14,11 +14,6 @@ class UserModel {
     this.isActive = true,
     this.createdAt,
     this.updatedAt,
-    this.shift = '',
-    this.group = '',
-    this.classRoll = '',
-    this.academicSession = '',
-    this.phoneNumber = '',
   });
 
   factory UserModel.fromJson(Map<String, dynamic> data) {
@@ -37,11 +32,6 @@ class UserModel {
       updatedAt: data['updated_at'] != null
           ? DateTime.parse(data['updated_at'])
           : null,
-      shift: data['shift'] ?? '',
-      group: data['group'] ?? '',
-      classRoll: data['class_roll'] ?? '',
-      academicSession: data['academic_session'] ?? '',
-      phoneNumber: data['phone_number'] ?? '',
     );
   }
   final String uid;
@@ -54,12 +44,6 @@ class UserModel {
   final bool isActive;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  // New student-specific fields
-  final String shift; // Morning/Day/Evening
-  final String group; // Academic group (A, B, C, etc.)
-  final String classRoll; // Roll number in class
-  final String academicSession; // Academic year/session
-  final String phoneNumber;
 
   Map<String, dynamic> toJson() {
     return {
@@ -73,11 +57,6 @@ class UserModel {
       'is_active': isActive,
       'created_at': createdAt?.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
-      'shift': shift,
-      'group': group,
-      'class_roll': classRoll,
-      'academic_session': academicSession,
-      'phone_number': phoneNumber,
     };
   }
 
@@ -104,11 +83,6 @@ class UserModel {
     bool? isActive,
     DateTime? createdAt,
     DateTime? updatedAt,
-    String? shift,
-    String? group,
-    String? classRoll,
-    String? academicSession,
-    String? phoneNumber,
   }) {
     return UserModel(
       uid: uid ?? this.uid,
@@ -121,11 +95,6 @@ class UserModel {
       isActive: isActive ?? this.isActive,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
-      shift: shift ?? this.shift,
-      group: group ?? this.group,
-      classRoll: classRoll ?? this.classRoll,
-      academicSession: academicSession ?? this.academicSession,
-      phoneNumber: phoneNumber ?? this.phoneNumber,
     );
   }
 }
