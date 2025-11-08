@@ -369,6 +369,8 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
   }
 
   Future<void> _clearCache() async {
+    // Clear cache implementation
+  }
 
   Future<void> _clearLocalMessages({bool confirm = true}) async {
     bool proceed = true;

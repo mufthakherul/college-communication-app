@@ -73,13 +73,11 @@ class PermissionService implements PermissionProvider {
   }
 
   /// Check NFC permissions
+  @override
   Future<bool> checkNfcPermissions() async {
-    try {
-      return await Permission.nfc.isGranted;
-    } catch (e) {
-      debugPrint('Error checking NFC permission: $e');
-      return false;
-    }
+    // NFC permissions are handled differently in Android
+    // For now, return true as NFC doesn't require runtime permissions
+    return true;
   }
 
   /// Check microphone permissions

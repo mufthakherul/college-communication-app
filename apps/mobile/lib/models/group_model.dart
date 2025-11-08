@@ -1,5 +1,3 @@
-import 'package:intl/intl.dart';
-
 class GroupModel {
   final String id;
   final String name;
