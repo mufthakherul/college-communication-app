@@ -12,12 +12,14 @@
 
 **Location:** `apps/mobile/lib/screens/tools/tools_screen.dart` (Lines 651-698)
 
-**Problem:**  
+**Problem:**
+
 - The Important Links screen shows links but clicking them only displays a SnackBar message
 - `url_launcher` dependency is not being used
 - URLs are not actually opened in browser
 
 **Original Code:**
+
 ```dart
 onTap: () {
   // Open URL
@@ -28,6 +30,7 @@ onTap: () {
 ```
 
 **Fix Applied:**
+
 - Import `url_launcher` package
 - Implement actual URL opening functionality
 - Add error handling for invalid URLs
@@ -40,10 +43,12 @@ onTap: () {
 **Location:** `apps/mobile/lib/screens/tools/tools_screen.dart`
 
 **Problem:**
+
 - `url_launcher` package not imported
 - No implementation to actually launch URLs
 
 **Fix:**
+
 - Add import: `import 'package:url_launcher/url_launcher.dart';`
 - Create helper method `_launchURL(String url)`
 - Handle different URL schemes (http, https)
@@ -56,10 +61,12 @@ onTap: () {
 **Location:** `apps/mobile/lib/screens/tools/tools_screen.dart` (Lines 667-668)
 
 **Problem:**
+
 - Library Portal and Student Portal have '#' as URL
 - These are placeholders that don't work
 
 **Fix:**
+
 - Update with actual URLs or
 - Hide placeholders with disabled state
 - Or replace with functional URLs from college
@@ -70,38 +77,38 @@ onTap: () {
 
 ### ✅ Fully Functional Tools (24)
 
-| Tool | Status | Notes |
-|------|--------|-------|
-| Binary Converter | ✅ | Works correctly |
-| ASCII Table | ✅ | Extended ASCII included |
-| Code Snippets | ✅ | Search functionality works |
-| IP Calculator | ✅ | IPv4 & IPv6 support |
-| Regex Tester | ✅ | Pattern matching works |
-| JSON Formatter | ✅ | Validation & formatting |
-| Hash Generator | ✅ | Multiple algorithms |
-| Base64 Converter | ✅ | Encode/decode working |
-| Color Picker | ✅ | HEX & RGB support |
-| Calculator | ✅ | Scientific mode functional |
-| Algorithm Complexity | ✅ | Big-O notation reference |
-| Dictionary | ✅ | Offline dictionary works |
-| Periodic Table | ✅ | All elements displayed |
-| Formula Sheet | ✅ | Math/Physics/CS formulas |
-| GPA Calculator | ✅ | Accurate calculations |
-| Attendance Tracker | ✅ | Percentage tracking |
-| Exam Countdown | ✅ | Date tracking works |
-| Assignment Tracker | ✅ | Status management |
-| Timetable | ✅ | Schedule management |
-| Events | ✅ | Event calendar |
-| Study Timer | ✅ | Pomodoro timer works |
-| Quick Notes | ✅ | Note-taking functional |
-| Unit Converter | ✅ | Multiple unit types |
-| World Clock | ✅ | Time zone display |
+| Tool                 | Status | Notes                      |
+| -------------------- | ------ | -------------------------- |
+| Binary Converter     | ✅     | Works correctly            |
+| ASCII Table          | ✅     | Extended ASCII included    |
+| Code Snippets        | ✅     | Search functionality works |
+| IP Calculator        | ✅     | IPv4 & IPv6 support        |
+| Regex Tester         | ✅     | Pattern matching works     |
+| JSON Formatter       | ✅     | Validation & formatting    |
+| Hash Generator       | ✅     | Multiple algorithms        |
+| Base64 Converter     | ✅     | Encode/decode working      |
+| Color Picker         | ✅     | HEX & RGB support          |
+| Calculator           | ✅     | Scientific mode functional |
+| Algorithm Complexity | ✅     | Big-O notation reference   |
+| Dictionary           | ✅     | Offline dictionary works   |
+| Periodic Table       | ✅     | All elements displayed     |
+| Formula Sheet        | ✅     | Math/Physics/CS formulas   |
+| GPA Calculator       | ✅     | Accurate calculations      |
+| Attendance Tracker   | ✅     | Percentage tracking        |
+| Exam Countdown       | ✅     | Date tracking works        |
+| Assignment Tracker   | ✅     | Status management          |
+| Timetable            | ✅     | Schedule management        |
+| Events               | ✅     | Event calendar             |
+| Study Timer          | ✅     | Pomodoro timer works       |
+| Quick Notes          | ✅     | Note-taking functional     |
+| Unit Converter       | ✅     | Multiple unit types        |
+| World Clock          | ✅     | Time zone display          |
 
 ### ⚠️ Needs Fix (2)
 
-| Tool | Issue | Priority |
-|------|-------|----------|
-| Important Links | URL not opening | 🔴 HIGH |
+| Tool            | Issue                | Priority  |
+| --------------- | -------------------- | --------- |
+| Important Links | URL not opening      | 🔴 HIGH   |
 | Expense Tracker | Check implementation | 🟡 MEDIUM |
 
 ---
@@ -113,6 +120,7 @@ onTap: () {
 **File:** `apps/mobile/lib/screens/tools/tools_screen.dart`
 
 **Steps:**
+
 1. Add `url_launcher` import
 2. Create `_launchURL()` helper method
 3. Update `onTap` callback to use the helper
@@ -120,6 +128,7 @@ onTap: () {
 5. Test with actual URLs
 
 **Code Change:**
+
 ```dart
 // Add import at top
 import 'package:url_launcher/url_launcher.dart';
@@ -132,7 +141,7 @@ Future<void> _launchURL(String url) async {
     );
     return;
   }
-  
+
   try {
     if (await canLaunchUrl(Uri.parse(url))) {
       await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
@@ -165,12 +174,14 @@ onTap: () {
 **Options:**
 
 **Option A: Add actual URLs**
+
 ```dart
 {'title': 'Library Portal', 'url': 'https://library.rpi.edu.bd', 'icon': Icons.library_books},
 {'title': 'Student Portal', 'url': 'https://student.rpi.edu.bd', 'icon': Icons.person},
 ```
 
 **Option B: Disable placeholders**
+
 ```dart
 _buildLinkTile(
   title: 'Library Portal',
@@ -242,7 +253,6 @@ The tools section is **96% complete** with 24 out of 26 tools fully functional. 
 ✅ Properly imported  
 ✅ Correctly navigable  
 ✅ Compiling without errors  
-✅ Functional in their respective domains  
+✅ Functional in their respective domains
 
 Main fix needed: **Implement actual URL opening for Important Links**
-

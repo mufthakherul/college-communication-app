@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 class CalculatorScreen extends StatefulWidget {
@@ -13,7 +11,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   String _display = '0';
   String _expression = '';
   final List<String> _history = [];
-  bool _isScientific = false;
 
   void _onButtonPressed(String value) {
     setState(() {
@@ -36,10 +33,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         } catch (e) {
           _display = 'Error';
         }
-      } else if (value == 'π') {
-        _display = _display == '0' ? pi.toString() : _display + pi.toString();
-      } else if (value == 'e') {
-        _display = _display == '0' ? e.toString() : _display + e.toString();
       } else {
         if (_display == '0' && value != '.') {
           _display = value;
@@ -180,10 +173,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
         title: const Text('Calculator'),
         actions: [
           IconButton(icon: const Icon(Icons.history), onPressed: _showHistory),
-          IconButton(
-            icon: Icon(_isScientific ? Icons.calculate : Icons.functions),
-            onPressed: () => setState(() => _isScientific = !_isScientific),
-          ),
         ],
       ),
       body: Column(
@@ -222,9 +211,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
             flex: 5,
             child: Padding(
               padding: const EdgeInsets.all(8),
-              child: _isScientific
-                  ? _buildScientificLayout()
-                  : _buildBasicLayout(),
+              child: _buildBasicLayout(),
             ),
           ),
         ],
@@ -304,102 +291,6 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               const SizedBox(width: 8),
               Expanded(child: _buildButton('.')),
               const SizedBox(width: 8),
-              Expanded(
-                child: _buildButton(
-                  '=',
-                  color: Colors.green[400],
-                  textColor: Colors.white,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildScientificLayout() {
-    return Column(
-      children: [
-        Expanded(
-          child: Row(
-            children: [
-              Expanded(child: _buildButton('sin', color: Colors.purple[100])),
-              const SizedBox(width: 4),
-              Expanded(child: _buildButton('cos', color: Colors.purple[100])),
-              const SizedBox(width: 4),
-              Expanded(child: _buildButton('tan', color: Colors.purple[100])),
-              const SizedBox(width: 4),
-              Expanded(child: _buildButton('C', color: Colors.red[300])),
-            ],
-          ),
-        ),
-        const SizedBox(height: 4),
-        Expanded(
-          child: Row(
-            children: [
-              Expanded(child: _buildButton('√', color: Colors.purple[100])),
-              const SizedBox(width: 4),
-              Expanded(child: _buildButton('x²', color: Colors.purple[100])),
-              const SizedBox(width: 4),
-              Expanded(child: _buildButton('π', color: Colors.purple[100])),
-              const SizedBox(width: 4),
-              Expanded(child: _buildButton('⌫', color: Colors.orange[200])),
-            ],
-          ),
-        ),
-        const SizedBox(height: 4),
-        Expanded(
-          child: Row(
-            children: [
-              Expanded(child: _buildButton('7')),
-              const SizedBox(width: 4),
-              Expanded(child: _buildButton('8')),
-              const SizedBox(width: 4),
-              Expanded(child: _buildButton('9')),
-              const SizedBox(width: 4),
-              Expanded(child: _buildButton('÷', color: Colors.blue[200])),
-            ],
-          ),
-        ),
-        const SizedBox(height: 4),
-        Expanded(
-          child: Row(
-            children: [
-              Expanded(child: _buildButton('4')),
-              const SizedBox(width: 4),
-              Expanded(child: _buildButton('5')),
-              const SizedBox(width: 4),
-              Expanded(child: _buildButton('6')),
-              const SizedBox(width: 4),
-              Expanded(child: _buildButton('×', color: Colors.blue[200])),
-            ],
-          ),
-        ),
-        const SizedBox(height: 4),
-        Expanded(
-          child: Row(
-            children: [
-              Expanded(child: _buildButton('1')),
-              const SizedBox(width: 4),
-              Expanded(child: _buildButton('2')),
-              const SizedBox(width: 4),
-              Expanded(child: _buildButton('3')),
-              const SizedBox(width: 4),
-              Expanded(child: _buildButton('-', color: Colors.blue[200])),
-            ],
-          ),
-        ),
-        const SizedBox(height: 4),
-        Expanded(
-          child: Row(
-            children: [
-              Expanded(child: _buildButton('0')),
-              const SizedBox(width: 4),
-              Expanded(child: _buildButton('.')),
-              const SizedBox(width: 4),
-              Expanded(child: _buildButton('e', color: Colors.purple[100])),
-              const SizedBox(width: 4),
               Expanded(
                 child: _buildButton(
                   '=',
