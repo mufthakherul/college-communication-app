@@ -38,5 +38,7 @@ export const AppwriteConfig = {
     bookCovers: 'book-covers',
     bookFiles: 'book-files',
     assignmentFiles: 'assignment-files',
+    // Releases bucket: store APK/AAB release artifacts here and reference by fileId
+    releases: 'releases',
   },
 } as const;

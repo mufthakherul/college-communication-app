@@ -3,7 +3,19 @@ import 'package:permission_handler/permission_handler.dart';
 
 /// Service for handling runtime permissions
 /// Ensures proper permission handling for Android 15 and above
-class PermissionService {
+///
+/// PermissionProvider is an interface used for dependency injection in tests.
+abstract class PermissionProvider {
+  Future<bool> checkLocationPermissions();
+  Future<bool> checkBluetoothPermissions();
+  Future<bool> checkWifiPermissions();
+  Future<bool> checkStoragePermissions();
+  Future<bool> checkNfcPermissions();
+  Future<bool> checkCameraPermissions();
+  Future<bool> checkMicrophonePermissions();
+}
+
+class PermissionService implements PermissionProvider {
   factory PermissionService() => _instance;
   PermissionService._internal();
   static final PermissionService _instance = PermissionService._internal();
@@ -36,10 +48,9 @@ class PermissionService {
   /// Check WiFi permissions
   Future<bool> checkWifiPermissions() async {
     try {
-      final hasNearbyDevices = await Permission.nearbyWifiDevices.isGranted;
-      final hasWifiState = await Permission.accessWifiState.isGranted;
-      final hasChangeWifiState = await Permission.changeWifiState.isGranted;
-      return hasNearbyDevices && hasWifiState && hasChangeWifiState;
+      // Permission_handler does not expose fine-grained WiFi control on all
+      // platforms; scanning/discovery commonly requires location permission.
+      return await Permission.location.isGranted;
     } catch (e) {
       debugPrint('Error checking wifi permissions: $e');
       return false;
