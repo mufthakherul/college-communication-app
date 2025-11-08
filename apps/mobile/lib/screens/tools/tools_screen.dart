@@ -9,17 +9,20 @@ import 'package:campus_mesh/screens/tools/calculator_screen.dart';
 import 'package:campus_mesh/screens/tools/code_snippet_manager_screen.dart';
 import 'package:campus_mesh/screens/tools/color_picker_screen.dart';
 import 'package:campus_mesh/screens/tools/dictionary_screen.dart';
+import 'package:campus_mesh/screens/tools/document_scanner_screen.dart';
 import 'package:campus_mesh/screens/tools/events_screen.dart';
 import 'package:campus_mesh/screens/tools/exam_countdown_screen.dart';
 import 'package:campus_mesh/screens/tools/expense_tracker_screen.dart';
 import 'package:campus_mesh/screens/tools/formula_sheet_screen.dart';
-import 'package:campus_mesh/screens/tools/gpa_calculator_screen.dart';
 import 'package:campus_mesh/screens/tools/hash_generator_screen.dart';
 import 'package:campus_mesh/screens/tools/ip_calculator_screen.dart';
 import 'package:campus_mesh/screens/tools/json_formatter_screen.dart';
 import 'package:campus_mesh/screens/tools/notes_screen.dart';
 import 'package:campus_mesh/screens/tools/periodic_table_screen.dart';
+import 'package:campus_mesh/screens/tools/qr_code_generator_screen.dart';
 import 'package:campus_mesh/screens/tools/regex_tester_screen.dart';
+import 'package:campus_mesh/screens/tools/rich_note_taking_screen.dart';
+import 'package:campus_mesh/screens/tools/schedule_builder_screen.dart';
 import 'package:campus_mesh/screens/tools/study_timer_screen.dart';
 import 'package:campus_mesh/screens/tools/timetable_screen.dart';
 import 'package:campus_mesh/screens/tools/unit_converter_screen.dart';
@@ -199,14 +202,6 @@ class _ToolsScreenState extends State<ToolsScreen>
           Icons.functions,
           Colors.purple,
           const FormulaSheetScreen(),
-          'Academic',
-        ),
-        _buildToolCard(
-          context,
-          'GPA Calculator',
-          Icons.school,
-          Colors.indigo,
-          const GPACalculatorScreen(),
           'Academic',
         ),
         // Productivity Tools
@@ -459,10 +454,10 @@ class _ToolsScreenState extends State<ToolsScreen>
         ),
         _buildToolCard(
           context,
-          'GPA Calculator',
-          Icons.school,
-          Colors.indigo,
-          const GPACalculatorScreen(),
+          'QR Code Generator',
+          Icons.qr_code_2,
+          Colors.teal,
+          const QRCodeGeneratorScreen(),
           'Academic',
         ),
       ],
@@ -526,10 +521,26 @@ class _ToolsScreenState extends State<ToolsScreen>
         ),
         _buildToolCard(
           context,
-          'Quick Notes',
+          'Document Scanner',
+          Icons.document_scanner,
+          Colors.orange,
+          const DocumentScannerScreen(),
+          'Productivity',
+        ),
+        _buildToolCard(
+          context,
+          'Schedule Builder',
+          Icons.schedule,
+          Colors.cyan,
+          const ScheduleBuilderScreen(),
+          'Productivity',
+        ),
+        _buildToolCard(
+          context,
+          'Enhanced Notes',
           Icons.note,
           Colors.amber,
-          const NotesScreen(),
+          const NoteTakingScreen(),
           'Productivity',
         ),
       ],
