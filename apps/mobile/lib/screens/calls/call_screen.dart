@@ -44,10 +44,7 @@ class _CallScreenState extends State<CallScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        title: const Text('Call'),
-      ),
+      appBar: AppBar(backgroundColor: Colors.black, title: const Text('Call')),
       body: _error != null
           ? Center(
               child: Padding(
@@ -76,8 +73,8 @@ class _CallScreenState extends State<CallScreen> {
                 Positioned.fill(
                   child: widget.video
                       ? _callService.remoteRenderer.textureId != null
-                          ? _buildRTCVideo(_callService.remoteRenderer)
-                          : _buildStatus('Waiting for remote video...')
+                            ? _buildRTCVideo(_callService.remoteRenderer)
+                            : _buildStatus('Waiting for remote video...')
                       : _buildStatus('Voice call in progress'),
                 ),
                 Positioned(
@@ -87,11 +84,13 @@ class _CallScreenState extends State<CallScreen> {
                   height: 160,
                   child: widget.video
                       ? _callService.localRenderer.textureId != null
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: _buildRTCVideo(_callService.localRenderer),
-                            )
-                          : _buildMiniStatus()
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: _buildRTCVideo(
+                                  _callService.localRenderer,
+                                ),
+                              )
+                            : _buildMiniStatus()
                       : const SizedBox.shrink(),
                 ),
                 Positioned(
@@ -130,28 +129,22 @@ class _CallScreenState extends State<CallScreen> {
   }
 
   Widget _buildStatus(String text) => Center(
-        child: Text(
-          text,
-          style: const TextStyle(color: Colors.white70),
-        ),
-      );
+    child: Text(text, style: const TextStyle(color: Colors.white70)),
+  );
 
   Widget _buildMiniStatus() => Container(
-        decoration: BoxDecoration(
-          color: Colors.white10,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: const Center(
-          child: Text(
-            'Local',
-            style: TextStyle(color: Colors.white54),
-          ),
-        ),
-      );
+    decoration: BoxDecoration(
+      color: Colors.white10,
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: const Center(
+      child: Text('Local', style: TextStyle(color: Colors.white54)),
+    ),
+  );
 
   Widget _buildProgress() => Container(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        color: Colors.black54,
-        child: const LinearProgressIndicator(minHeight: 2),
-      );
+    padding: const EdgeInsets.symmetric(vertical: 8),
+    color: Colors.black54,
+    child: const LinearProgressIndicator(minHeight: 2),
+  );
 }

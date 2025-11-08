@@ -63,8 +63,8 @@ class _CreateGroupChatScreenState extends State<CreateGroupChatScreen> {
         queries: [Query.equal('is_active', true), Query.limit(100)],
       );
 
-    final users = response.documents
-      .map((doc) => UserModel.fromJson({...doc.data, 'id': doc.$id}))
+      final users = response.documents
+          .map((doc) => UserModel.fromJson({...doc.data, 'id': doc.$id}))
           .where((user) => user.uid != currentUserId)
           .toList();
 
@@ -269,33 +269,33 @@ class _CreateGroupChatScreenState extends State<CreateGroupChatScreen> {
             child: _isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : _errorMessage.isNotEmpty
-                    ? Center(child: Text(_errorMessage))
-                    : ListView.builder(
-                        itemCount: _filteredUsers.length,
-                        itemBuilder: (context, index) {
-                          final user = _filteredUsers[index];
-                          final isSelected = _selectedUsers.contains(user);
+                ? Center(child: Text(_errorMessage))
+                : ListView.builder(
+                    itemCount: _filteredUsers.length,
+                    itemBuilder: (context, index) {
+                      final user = _filteredUsers[index];
+                      final isSelected = _selectedUsers.contains(user);
 
-                          return ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: Colors.blue,
-                              child: Text(
-                                user.displayName.isNotEmpty
-                                    ? user.displayName[0].toUpperCase()
-                                    : '?',
-                                style: const TextStyle(color: Colors.white),
-                              ),
-                            ),
-                            title: Text(user.displayName),
-                            subtitle: Text(user.email),
-                            trailing: Checkbox(
-                              value: isSelected,
-                              onChanged: (_) => _toggleUserSelection(user),
-                            ),
-                            onTap: () => _toggleUserSelection(user),
-                          );
-                        },
-                      ),
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.blue,
+                          child: Text(
+                            user.displayName.isNotEmpty
+                                ? user.displayName[0].toUpperCase()
+                                : '?',
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        title: Text(user.displayName),
+                        subtitle: Text(user.email),
+                        trailing: Checkbox(
+                          value: isSelected,
+                          onChanged: (_) => _toggleUserSelection(user),
+                        ),
+                        onTap: () => _toggleUserSelection(user),
+                      );
+                    },
+                  ),
           ),
         ],
       ),

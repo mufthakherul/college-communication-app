@@ -681,15 +681,15 @@ class ImportantLinksScreen extends StatelessWidget {
         await launchUrl(uri, mode: LaunchMode.externalApplication);
       } else {
         if (!context.mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Could not launch $url')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Could not launch $url')));
       }
     } catch (e) {
       if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${e.toString()}')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
     }
   }
 
@@ -731,9 +731,7 @@ class ImportantLinksScreen extends StatelessWidget {
               ),
               title: Text(
                 link['title']! as String,
-                style: TextStyle(
-                  color: isActive ? null : Colors.grey,
-                ),
+                style: TextStyle(color: isActive ? null : Colors.grey),
               ),
               subtitle: Text(
                 isActive ? url : 'Not available yet',
@@ -745,9 +743,7 @@ class ImportantLinksScreen extends StatelessWidget {
                 Icons.open_in_new,
                 color: isActive ? Colors.blue : Colors.grey,
               ),
-              onTap: isActive
-                  ? () => _launchURL(context, url)
-                  : null,
+              onTap: isActive ? () => _launchURL(context, url) : null,
             ),
           );
         },

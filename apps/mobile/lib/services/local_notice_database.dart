@@ -50,8 +50,12 @@ class LocalNoticeDatabase {
       )
     ''');
 
-    await db.execute('CREATE INDEX idx_local_notices_active ON local_notices(is_active)');
-    await db.execute('CREATE INDEX idx_local_notices_created ON local_notices(created_at)');
+    await db.execute(
+      'CREATE INDEX idx_local_notices_active ON local_notices(is_active)',
+    );
+    await db.execute(
+      'CREATE INDEX idx_local_notices_created ON local_notices(created_at)',
+    );
 
     debugPrint('Local notice database created successfully');
   }
@@ -112,7 +116,9 @@ class LocalNoticeDatabase {
   /// Delete notices older than [daysToKeep] or expired
   Future<int> cleanupOldNotices({int daysToKeep = 30}) async {
     final db = await database;
-    final cutoff = DateTime.now().subtract(Duration(days: daysToKeep)).toIso8601String();
+    final cutoff = DateTime.now()
+        .subtract(Duration(days: daysToKeep))
+        .toIso8601String();
 
     // Delete expired by expires_at OR cached_at older than cutoff
     final deleted = await db.delete(

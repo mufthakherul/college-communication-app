@@ -237,10 +237,7 @@ void main() {
 
       // Use a wider range to ensure the log is captured
       // getLogsInRange uses isAfter and isBefore which are exclusive
-      final logs = service.getLogsInRange(
-        twoHoursAgo,
-        oneHourFromNow,
-      );
+      final logs = service.getLogsInRange(twoHoursAgo, oneHourFromNow);
       expect(logs.length, equals(1));
     });
   });

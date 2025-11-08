@@ -314,10 +314,7 @@ class AuthService {
         documentId: uid,
       );
       // Include Appwrite document ID in JSON mapping for proper UID resolution
-      return UserModel.fromJson({
-        ...document.data,
-        'id': document.$id,
-      });
+      return UserModel.fromJson({...document.data, 'id': document.$id});
     } on AppwriteException catch (e) {
       throw Exception('Failed to get user profile: ${e.message}');
     } catch (e) {

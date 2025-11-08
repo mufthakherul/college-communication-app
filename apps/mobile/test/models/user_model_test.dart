@@ -93,7 +93,10 @@ void main() {
         displayName: 'Base User',
         role: UserRole.teacher,
       );
-      final updated = user.copyWith(displayName: 'Updated User', role: UserRole.admin);
+      final updated = user.copyWith(
+        displayName: 'Updated User',
+        role: UserRole.admin,
+      );
       expect(updated.displayName, 'Updated User');
       expect(updated.role, UserRole.admin);
       expect(updated.uid, 'base'); // unchanged

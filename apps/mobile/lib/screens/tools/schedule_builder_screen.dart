@@ -21,7 +21,7 @@ class _ScheduleBuilderScreenState extends State<ScheduleBuilderScreen> {
     'Wednesday',
     'Thursday',
     'Friday',
-    'Saturday'
+    'Saturday',
   ];
   final List<String> _times = [
     '08:00 AM',
@@ -70,9 +70,9 @@ class _ScheduleBuilderScreenState extends State<ScheduleBuilderScreen> {
 
   void _deleteClass(int index) {
     setState(() => _schedule.removeAt(index));
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Class removed')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Class removed')));
   }
 
   Color _getColorForDay(String day) {
@@ -97,10 +97,7 @@ class _ScheduleBuilderScreenState extends State<ScheduleBuilderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Schedule Builder'),
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text('Schedule Builder'), elevation: 0),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -117,8 +114,8 @@ class _ScheduleBuilderScreenState extends State<ScheduleBuilderScreen> {
                     Text(
                       'Add Class',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 16),
 
@@ -217,9 +214,9 @@ class _ScheduleBuilderScreenState extends State<ScheduleBuilderScreen> {
             else ...[
               Text(
                 'Your Schedule (${_schedule.length} classes)',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
               ..._buildScheduleView(),
@@ -277,12 +274,7 @@ class _ScheduleBuilderScreenState extends State<ScheduleBuilderScreen> {
             color: cls.color.withOpacity(0.3),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Center(
-            child: Icon(
-              Icons.class_,
-              color: cls.color,
-            ),
-          ),
+          child: Center(child: Icon(Icons.class_, color: cls.color)),
         ),
         title: Text(
           cls.subject,
@@ -321,12 +313,12 @@ class _ScheduleBuilderScreenState extends State<ScheduleBuilderScreen> {
       value: value,
       decoration: InputDecoration(
         labelText: label,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         isDense: true,
       ),
-      items: items.map((item) => DropdownMenuItem(value: item, child: Text(item))).toList(),
+      items: items
+          .map((item) => DropdownMenuItem(value: item, child: Text(item)))
+          .toList(),
       onChanged: (v) => onChanged(v!),
     );
   }

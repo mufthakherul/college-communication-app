@@ -13,11 +13,9 @@ class GroupService {
   static const String _groupMembersCollectionId = 'group_members';
   static const String _databaseId = 'rpi_communication';
 
-  GroupService({
-    required Databases database,
-    required AuthService authService,
-  })  : _database = database,
-        _authService = authService;
+  GroupService({required Databases database, required AuthService authService})
+    : _database = database,
+      _authService = authService;
 
   /// Create a new group
   Future<GroupModel> createGroup({
@@ -34,7 +32,8 @@ class GroupService {
       }
 
       final now = DateTime.now();
-      final groupId = 'grp_${DateTime.now().millisecondsSinceEpoch}_${currentUserId.substring(0, 8)}';
+      final groupId =
+          'grp_${DateTime.now().millisecondsSinceEpoch}_${currentUserId.substring(0, 8)}';
 
       final data = {
         'name': name,
@@ -62,11 +61,7 @@ class GroupService {
       );
 
       // Add creator as admin member
-      await addMember(
-        groupId: groupId,
-        userId: currentUserId,
-        role: 'admin',
-      );
+      await addMember(groupId: groupId, userId: currentUserId, role: 'admin');
 
       debugPrint('✅ Group created: $groupId');
       return GroupModel.fromJson(response.data);
@@ -200,26 +195,22 @@ class GroupService {
       final allGroupDocs = await _database.listDocuments(
         databaseId: _databaseId,
         collectionId: _groupsCollectionId,
-        queries: [
-          Query.equal('is_active', true),
-          Query.limit(100),
-        ],
+        queries: [Query.equal('is_active', true), Query.limit(100)],
       );
 
       // Filter by group IDs
-      final groupDocs = allGroupDocs.documents
-          .where((doc) => groupIds.contains(doc.$id))
-          .toList()
-          ..sort((a, b) {
-            final aDate = DateTime.tryParse(a.data['updated_at'] ?? '');
-            final bDate = DateTime.tryParse(b.data['updated_at'] ?? '');
-            if (aDate == null || bDate == null) return 0;
-            return bDate.compareTo(aDate);
-          });
+      final groupDocs =
+          allGroupDocs.documents
+              .where((doc) => groupIds.contains(doc.$id))
+              .toList()
+            ..sort((a, b) {
+              final aDate = DateTime.tryParse(a.data['updated_at'] ?? '');
+              final bDate = DateTime.tryParse(b.data['updated_at'] ?? '');
+              if (aDate == null || bDate == null) return 0;
+              return bDate.compareTo(aDate);
+            });
 
-      return groupDocs
-          .map((doc) => GroupModel.fromJson(doc.data))
-          .toList();
+      return groupDocs.map((doc) => GroupModel.fromJson(doc.data)).toList();
     } catch (e) {
       debugPrint('❌ Error fetching user groups: $e');
       return [];

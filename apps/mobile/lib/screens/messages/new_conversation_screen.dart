@@ -55,8 +55,8 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
         queries: [Query.equal('is_active', true), Query.limit(100)],
       );
 
-    final users = response.documents
-      .map((doc) => UserModel.fromJson({...doc.data, 'id': doc.$id}))
+      final users = response.documents
+          .map((doc) => UserModel.fromJson({...doc.data, 'id': doc.$id}))
           .where((user) => user.uid != currentUserId)
           .toList();
 
@@ -204,8 +204,9 @@ class _NewConversationScreenState extends State<NewConversationScreen> {
     return ListTile(
       leading: CircleAvatar(
         backgroundColor: _getColorForRole(user.role),
-        backgroundImage:
-            user.photoURL.isNotEmpty ? NetworkImage(user.photoURL) : null,
+        backgroundImage: user.photoURL.isNotEmpty
+            ? NetworkImage(user.photoURL)
+            : null,
         child: user.photoURL.isNotEmpty
             ? null
             : Text(

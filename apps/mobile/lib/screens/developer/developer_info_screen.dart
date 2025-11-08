@@ -78,9 +78,7 @@ class DeveloperInfoScreen extends StatelessWidget {
                           const SizedBox(width: 8),
                           Text(
                             'About Developer',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
+                            style: Theme.of(context).textTheme.titleMedium
                                 ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -160,9 +158,7 @@ class DeveloperInfoScreen extends StatelessWidget {
                           const SizedBox(width: 8),
                           Text(
                             'Connect',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
+                            style: Theme.of(context).textTheme.titleMedium
                                 ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -210,9 +206,7 @@ class DeveloperInfoScreen extends StatelessWidget {
                           const SizedBox(width: 8),
                           Text(
                             'This App',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium
+                            style: Theme.of(context).textTheme.titleMedium
                                 ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ],

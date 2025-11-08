@@ -312,8 +312,9 @@ class _AIChatHistoryScreenState extends State<AIChatHistoryScreen> {
       margin: const EdgeInsets.only(bottom: 12),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor:
-              Theme.of(context).primaryColor.withValues(alpha: 0.2),
+          backgroundColor: Theme.of(
+            context,
+          ).primaryColor.withValues(alpha: 0.2),
           child: Icon(Icons.smart_toy, color: Theme.of(context).primaryColor),
         ),
         title: Text(

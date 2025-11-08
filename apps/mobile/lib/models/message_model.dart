@@ -32,7 +32,7 @@ class MessageModel {
   factory MessageModel.fromJson(Map<String, dynamic> data) {
     final groupId = data['group_id'] as String?;
     final isGroupMessage = groupId != null && groupId.isNotEmpty;
-    
+
     return MessageModel(
       id: data['id'] ?? '',
       senderId: data['sender_id'] ?? data['senderId'] ?? '',
@@ -74,7 +74,7 @@ class MessageModel {
   final Map<String, dynamic>? metadata; // Additional metadata
   final MessageSyncStatus? syncStatus; // Sync status for offline messages
   final String? approvalStatus;
-  
+
   // Group message support
   final String? groupId; // Group ID if this is a group message
   final String? groupName; // Group name for context

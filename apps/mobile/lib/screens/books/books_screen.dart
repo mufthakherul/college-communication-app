@@ -160,8 +160,8 @@ class _BooksScreenState extends State<BooksScreen> {
             child: _isSearching
                 ? _buildSearchResults()
                 : _selectedCategory == null
-                    ? _buildAllBooks()
-                    : _buildCategoryBooks(_selectedCategory!),
+                ? _buildAllBooks()
+                : _buildCategoryBooks(_selectedCategory!),
           ),
         ],
       ),
