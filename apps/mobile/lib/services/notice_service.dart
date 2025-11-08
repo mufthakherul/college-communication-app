@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:appwrite/appwrite.dart';
 import 'package:campus_mesh/appwrite_config.dart';
 import 'package:campus_mesh/models/notice_model.dart';
+import 'package:campus_mesh/services/local_notice_database.dart';
+import 'package:campus_mesh/services/connectivity_service.dart';
 import 'package:campus_mesh/models/user_model.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
 import 'package:campus_mesh/services/auth_service.dart';
@@ -11,6 +13,8 @@ import 'package:campus_mesh/utils/input_validator.dart';
 class NoticeService {
   final _appwrite = AppwriteService();
   final _authService = AuthService();
+  final _localDb = LocalNoticeDatabase();
+  final _connectivityService = ConnectivityService();
 
   StreamController<List<NoticeModel>>? _noticesController;
 
@@ -42,6 +46,24 @@ class NoticeService {
   }
 
   Future<void> _fetchNotices() async {
+    // Always start with local cache for fast offline access
+    try {
+      final localRows = await _localDb.getActiveNotices(limit: 100);
+      final localNotices = localRows.map((r) => NoticeModel.fromJson(r)).toList();
+
+      if (localNotices.isNotEmpty) {
+        _noticesController?.add(localNotices);
+      }
+    } catch (e) {
+      // Ignore local fetch errors
+    }
+
+    // If offline, stop here
+    if (!_connectivityService.isOnline) {
+      return;
+    }
+
+    // Fetch remote and merge/update cache
     try {
       final docs = await _appwrite.databases.listDocuments(
         databaseId: AppwriteConfig.databaseId,
@@ -53,12 +75,26 @@ class NoticeService {
         ],
       );
 
-      final notices =
-          docs.documents.map((doc) => NoticeModel.fromJson(doc.data)).toList();
+      final remoteNotices = docs.documents.map((doc) => NoticeModel.fromJson(doc.data)).toList();
 
-      _noticesController?.add(notices);
+      // Upsert into local cache
+      try {
+        await _localDb.upsertNotices(docs.documents.map((d) => d.data).toList());
+        // Cleanup expired/old notices monthly policy (30 days)
+        await _localDb.cleanupOldNotices(daysToKeep: 30);
+      } catch (_) {
+        // Ignore caching errors
+      }
+
+      _noticesController?.add(remoteNotices);
     } catch (e) {
-      _noticesController?.addError(e);
+      // If remote fails but we already showed local, keep silent; else emit error
+      if ((_noticesController?.hasListener ?? false)) {
+        // Provide local fallback already; emit warning as error only if no local data
+        if ((_noticesController?.stream == null)) {
+          _noticesController?.addError(e);
+        }
+      }
     }
   }
 
@@ -281,6 +317,16 @@ class NoticeService {
   Future<void> deleteNotice(String noticeId) async {
     try {
       await updateNotice(noticeId: noticeId, updates: {'is_active': false});
+      // Soft delete locally
+      try {
+        await _localDb.upsertNotices([
+          {
+            'id': noticeId,
+            'is_active': false,
+            'updated_at': DateTime.now().toIso8601String(),
+          },
+        ]);
+      } catch (_) {}
     } catch (e) {
       throw Exception('Failed to delete notice: $e');
     }
