@@ -3,6 +3,14 @@
 /**
  * Appwrite Database Test Script
  * Tests group chat functionality and storage buckets
+ * 
+ * Updated: November 2025
+ * Changes: Modified to work with the new database structure:
+ * - Authentication users: Created via Appwrite Users API
+ * - Database users: Created in 'users' collection with common fields
+ * - User profiles: Can be created in 'user_profiles' collection for role-specific data
+ * 
+ * This test creates both authentication users and database user entries.
  */
 
 require('dotenv').config({ path: '../tools/mcp/appwrite.mcp.env' });
@@ -56,7 +64,7 @@ async function testCreateUsers() {
   log.section('Test 1: Creating Test Users');
   
   try {
-    // Create test user 1
+    // Create test user 1 (Authentication user)
     try {
       const user1 = await users.create(
         sdk.ID.unique(),
@@ -66,14 +74,37 @@ async function testCreateUsers() {
         'testpass123'
       );
       testUserId1 = user1.$id;
-      log.success(`Created test user 1: ${testUserId1}`);
+      log.success(`Created auth user 1: ${testUserId1}`);
+      
+      // Also create database user entry
+      try {
+        await databases.createDocument(
+          DATABASE_ID,
+          'users',
+          sdk.ID.unique(),
+          {
+            email: 'testuser1@rpi.edu.bd',
+            display_name: 'Test User 1',
+            role: 'student',
+            department: 'Computer Science',
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          }
+        );
+        log.success(`Created database user 1`);
+      } catch (dbErr) {
+        if (dbErr.code !== 409) {
+          log.info(`Database user 1 may already exist or error: ${dbErr.message}`);
+        }
+      }
     } catch (err) {
       if (err.code === 409) {
         // User already exists, get existing user
         const usersList = await users.list([sdk.Query.equal('email', ['testuser1@rpi.edu.bd'])]);
         if (usersList.users.length > 0) {
           testUserId1 = usersList.users[0].$id;
-          log.info(`Using existing test user 1: ${testUserId1}`);
+          log.info(`Using existing auth user 1: ${testUserId1}`);
         }
       } else {
         throw err;
@@ -82,7 +113,7 @@ async function testCreateUsers() {
 
     await sleep(500);
 
-    // Create test user 2
+    // Create test user 2 (Authentication user)
     try {
       const user2 = await users.create(
         sdk.ID.unique(),
@@ -92,13 +123,36 @@ async function testCreateUsers() {
         'testpass123'
       );
       testUserId2 = user2.$id;
-      log.success(`Created test user 2: ${testUserId2}`);
+      log.success(`Created auth user 2: ${testUserId2}`);
+      
+      // Also create database user entry
+      try {
+        await databases.createDocument(
+          DATABASE_ID,
+          'users',
+          sdk.ID.unique(),
+          {
+            email: 'testuser2@rpi.edu.bd',
+            display_name: 'Test User 2',
+            role: 'student',
+            department: 'Computer Science',
+            is_active: true,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          }
+        );
+        log.success(`Created database user 2`);
+      } catch (dbErr) {
+        if (dbErr.code !== 409) {
+          log.info(`Database user 2 may already exist or error: ${dbErr.message}`);
+        }
+      }
     } catch (err) {
       if (err.code === 409) {
         const usersList = await users.list([sdk.Query.equal('email', ['testuser2@rpi.edu.bd'])]);
         if (usersList.users.length > 0) {
           testUserId2 = usersList.users[0].$id;
-          log.info(`Using existing test user 2: ${testUserId2}`);
+          log.info(`Using existing auth user 2: ${testUserId2}`);
         }
       } else {
         throw err;
