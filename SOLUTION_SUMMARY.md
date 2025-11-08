@@ -4,9 +4,10 @@
 Flutter Android build failing with v1 embedding compatibility errors on Flutter 3.35.7
 
 ## Root Cause
-Flutter 3.35.7 removed the deprecated v1 embedding API. Two plugins were still using the old API:
+Flutter 3.35.7 removed the deprecated v1 embedding API. Three plugins were still using the old API:
 1. `flutter_plugin_android_lifecycle:2.0.19` - Using `PluginRegistry.Registrar`
 2. `flutter_nearby_connections:1.1.2` - Using v1 embedding in Kotlin code
+3. `flutter_web_auth_2:3.1.2` - Using v1 embedding in Kotlin code (transitive dependency via appwrite)
 
 ## Solution Applied
 
@@ -16,9 +17,10 @@ Flutter 3.35.7 removed the deprecated v1 embedding API. Two plugins were still u
 # Updated image_picker to get newer dependencies
 image_picker: ^1.2.0  # Was: ^1.0.7
 
-# Added dependency override to force v2 embedding compatible version
+# Added dependency overrides to force v2 embedding compatible versions
 dependency_overrides:
   flutter_plugin_android_lifecycle: ^2.0.32  # New
+  flutter_web_auth_2: ^4.1.0  # New - fixes appwrite OAuth issues
 
 # Temporarily disabled problematic plugin
 # flutter_nearby_connections: ^1.1.2  # Commented out
@@ -33,7 +35,12 @@ dependency_overrides:
    - No longer uses removed `PluginRegistry.Registrar` API
    - Uses modern `FlutterPlugin` interface
 
-3. **Disabling flutter_nearby_connections**:
+3. **flutter_web_auth_2 v4.1.0**:
+   - Fixes v1 embedding compatibility issues
+   - Transitive dependency of appwrite package (used for OAuth)
+   - Version 4.1.0+ supports Flutter v2 embedding
+
+4. **Disabling flutter_nearby_connections**:
    - Eliminates Kotlin compilation errors
    - Safe because feature not yet implemented (only TODOs)
    - Can be re-enabled when updated version is available
