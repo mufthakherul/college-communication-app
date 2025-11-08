@@ -104,7 +104,7 @@ void main() {
         ),
       ),
     );
-  }
+  });
 }
 
 Future<void> _initializeApp() async {
