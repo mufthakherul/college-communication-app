@@ -42,7 +42,7 @@ dependencies:
   # Local database for offline storage
   sqflite: ^2.3.0
   # File handling
-  file_picker: ^6.1.1
+  file_picker: ^8.0.0
   image_picker: ^1.0.7
   # Monitoring & Analytics
   sentry_flutter: ^7.14.0
@@ -73,6 +73,10 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   mockito: ^5.4.2
   build_runner: ^2.4.6
+
+dependency_overrides:
+  # Override win32 to fix UnmodifiableUint8ListView errors with Dart 3.3+
+  win32: ^5.5.0
 
 flutter:
   uses-material-design: true
