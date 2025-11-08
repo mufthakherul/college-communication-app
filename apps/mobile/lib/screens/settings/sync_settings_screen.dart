@@ -370,7 +370,20 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
   }
 
   Future<void> _clearCache() async {
-    // Clear cache implementation
+    final confirmed = await _showConfirmDialog(
+      'Clear Cache',
+      'Are you sure you want to clear all cached data? This will require re-downloading data.',
+    );
+
+    if (confirmed ?? false) {
+      try {
+        await _cacheService.clear();
+        await _loadStatistics();
+        _showMessage('Cache cleared successfully');
+      } catch (e) {
+        _showMessage('Failed to clear cache: $e');
+      }
+    }
   }
 
   Future<void> _clearLocalMessages({bool confirm = true}) async {
@@ -414,21 +427,6 @@ class _SyncSettingsScreenState extends State<SyncSettingsScreen> {
       _showMessage('Cleared $count local notices');
     } catch (e) {
       _showMessage('Failed to clear local notices: $e');
-    }
-  }
-    final confirmed = await _showConfirmDialog(
-      'Clear Cache',
-      'Are you sure you want to clear all cached data? This will require re-downloading data.',
-    );
-
-    if (confirmed ?? false) {
-      try {
-        await _cacheService.clear();
-        await _loadStatistics();
-        _showMessage('Cache cleared successfully');
-      } catch (e) {
-        _showMessage('Failed to clear cache: $e');
-      }
     }
   }
 
