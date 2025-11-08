@@ -51,62 +51,74 @@ Future<void> _initializeEssentialServices() async {
 
 void main() {
   // Wrap in error zone to catch all errors including async ones
-  runZonedGuarded(() async {
-    FlutterError.onError = (FlutterErrorDetails details) {
-      FlutterError.presentError(details);
-      // Log to crash reporting
+  runZonedGuarded(
+    () async {
+      FlutterError.onError = (FlutterErrorDetails details) {
+        FlutterError.presentError(details);
+        // Log to crash reporting
+        if (kReleaseMode) {
+          SentryService().captureException(
+            details.exception,
+            stackTrace: details.stack,
+          );
+        }
+      };
+
+      await _initializeApp();
+    },
+    (error, stack) {
+      debugPrint('Fatal error: $error');
+      debugPrint('Stack trace: $stack');
       if (kReleaseMode) {
-        SentryService().captureException(details.exception, stackTrace: details.stack);
+        SentryService().captureException(error, stackTrace: stack);
       }
-    };
-    
-    await _initializeApp();
-  }, (error, stack) {
-    debugPrint('Fatal error: $error');
-    debugPrint('Stack trace: $stack');
-    if (kReleaseMode) {
-      SentryService().captureException(error, stackTrace: stack);
-    }
-    // If initialization fails catastrophically, show error screen
-    debugPrint('Fatal initialization error: $error');
-    debugPrint('Stack trace: $stack');
-    runApp(
-      MaterialApp(
-        home: Scaffold(
-          body: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.error, size: 80, color: Colors.red),
-                  const SizedBox(height: 24),
-                  const Text(
-                    'Initialization Error',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'The app encountered an error during startup. Please reinstall the app or contact support.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  if (kDebugMode) ...[
-                    const SizedBox(height: 16),
-                    SelectableText(
-                      'Error: $error',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 12, color: Colors.grey),
+      // If initialization fails catastrophically, show error screen
+      debugPrint('Fatal initialization error: $error');
+      debugPrint('Stack trace: $stack');
+      runApp(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.error, size: 80, color: Colors.red),
+                    const SizedBox(height: 24),
+                    const Text(
+                      'Initialization Error',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'The app encountered an error during startup. Please reinstall the app or contact support.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    if (kDebugMode) ...[
+                      const SizedBox(height: 16),
+                      SelectableText(
+                        'Error: $error',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
                   ],
-                ],
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
-  });
+      );
+    },
+  );
 }
 
 Future<void> _initializeApp() async {
@@ -126,7 +138,7 @@ Future<void> _initializeApp() async {
     try {
       // Load bare minimum cache and security services first
       await CacheService().initialize();
-      
+
       final securityService = SecurityService();
       final securityResult = await securityService.performSecurityChecks();
 

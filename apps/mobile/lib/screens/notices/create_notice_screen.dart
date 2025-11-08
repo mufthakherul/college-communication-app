@@ -116,8 +116,8 @@ class _CreateNoticeScreenState extends State<CreateNoticeScreen> {
         final errorMessage = e.toString();
         final isPermissionError =
             errorMessage.toLowerCase().contains('permission') ||
-                errorMessage.toLowerCase().contains('authenticated') ||
-                errorMessage.toLowerCase().contains('unauthorized');
+            errorMessage.toLowerCase().contains('authenticated') ||
+            errorMessage.toLowerCase().contains('unauthorized');
 
         showDialog(
           context: context,

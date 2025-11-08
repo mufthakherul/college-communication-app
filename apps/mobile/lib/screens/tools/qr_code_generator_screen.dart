@@ -56,10 +56,7 @@ class _QRCodeGeneratorScreenState extends State<QRCodeGeneratorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('QR Code Generator'),
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text('QR Code Generator'), elevation: 0),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -77,10 +74,7 @@ class _QRCodeGeneratorScreenState extends State<QRCodeGeneratorScreen> {
                     Expanded(
                       child: Text(
                         'Enter text, URLs, phone numbers, or emails to generate QR codes',
-                        style: TextStyle(
-                          color: Colors.blue[700],
-                          fontSize: 12,
-                        ),
+                        style: TextStyle(color: Colors.blue[700], fontSize: 12),
                       ),
                     ),
                   ],
@@ -92,9 +86,9 @@ class _QRCodeGeneratorScreenState extends State<QRCodeGeneratorScreen> {
             // Input section
             Text(
               'Text Input',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
             TextField(
@@ -120,9 +114,9 @@ class _QRCodeGeneratorScreenState extends State<QRCodeGeneratorScreen> {
             // Quick templates
             Text(
               'Quick Templates',
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Wrap(
@@ -167,9 +161,9 @@ class _QRCodeGeneratorScreenState extends State<QRCodeGeneratorScreen> {
               const SizedBox(height: 32),
               Text(
                 'QR Code',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
               Center(
@@ -186,9 +180,9 @@ class _QRCodeGeneratorScreenState extends State<QRCodeGeneratorScreen> {
               const SizedBox(height: 16),
               Text(
                 'Data: $_qrData',
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.grey[600],
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
@@ -196,9 +190,7 @@ class _QRCodeGeneratorScreenState extends State<QRCodeGeneratorScreen> {
                 onPressed: _copyText,
                 icon: const Icon(Icons.copy),
                 label: const Text('Copy Data'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                ),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
               ),
             ],
           ],
@@ -207,11 +199,7 @@ class _QRCodeGeneratorScreenState extends State<QRCodeGeneratorScreen> {
     );
   }
 
-  Widget _buildTemplateButton(
-    String label,
-    String prefix,
-    String example,
-  ) {
+  Widget _buildTemplateButton(String label, String prefix, String example) {
     return ActionChip(
       onPressed: () {
         setState(() {
@@ -234,24 +222,20 @@ class _QRCodeGeneratorScreenState extends State<QRCodeGeneratorScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.qr_code_2,
-              size: 200,
-              color: Colors.black,
-            ),
+            Icon(Icons.qr_code_2, size: 200, color: Colors.black),
             const SizedBox(height: 16),
             Text(
               'QR Code Ready',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Text(
               'Use a QR code library to render',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Colors.grey[600],
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
             ),
           ],
         ),

@@ -7,8 +7,7 @@ import 'package:campus_mesh/models/user_profile_model.dart';
 class UserProfileService {
   final Databases _databases;
 
-  UserProfileService(Client client)
-      : _databases = Databases(client);
+  UserProfileService(Client client) : _databases = Databases(client);
 
   /// Get user profile by user ID
   /// Returns null if profile doesn't exist
@@ -17,10 +16,7 @@ class UserProfileService {
       final response = await _databases.listDocuments(
         databaseId: AppwriteConfig.databaseId,
         collectionId: AppwriteConfig.userProfilesCollectionId,
-        queries: [
-          Query.equal('user_id', userId),
-          Query.limit(1),
-        ],
+        queries: [Query.equal('user_id', userId), Query.limit(1)],
       );
 
       if (response.documents.isEmpty) {
@@ -42,7 +38,7 @@ class UserProfileService {
     try {
       final data = profile.toJson();
       data['created_at'] = DateTime.now().toIso8601String();
-      
+
       final response = await _databases.createDocument(
         databaseId: AppwriteConfig.databaseId,
         collectionId: AppwriteConfig.userProfilesCollectionId,
@@ -109,10 +105,7 @@ class UserProfileService {
 
   /// Get or create user profile
   /// Returns existing profile if found, otherwise creates a new one with default values
-  Future<UserProfile> getOrCreateUserProfile(
-    String userId,
-    String role,
-  ) async {
+  Future<UserProfile> getOrCreateUserProfile(String userId, String role) async {
     final existingProfile = await getUserProfile(userId);
     if (existingProfile != null) {
       return existingProfile;
@@ -148,9 +141,7 @@ class UserProfileService {
       final response = await _databases.listDocuments(
         databaseId: AppwriteConfig.databaseId,
         collectionId: AppwriteConfig.userProfilesCollectionId,
-        queries: [
-          Query.equal('role', role.name),
-        ],
+        queries: [Query.equal('role', role.name)],
       );
 
       return response.documents

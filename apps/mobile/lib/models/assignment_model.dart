@@ -104,8 +104,9 @@ class AssignmentSubmissionModel {
       status: _parseStatus(data['status']),
       marksObtained: data['marks_obtained'],
       feedback: data['feedback'],
-      gradedAt:
-          data['graded_at'] != null ? DateTime.parse(data['graded_at']) : null,
+      gradedAt: data['graded_at'] != null
+          ? DateTime.parse(data['graded_at'])
+          : null,
     );
   }
   final String id;

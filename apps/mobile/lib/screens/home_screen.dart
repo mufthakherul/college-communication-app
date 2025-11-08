@@ -80,12 +80,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List<Widget> get _screens => [
-        const NoticesScreen(),
-        const MessagesScreen(),
-        const BooksScreen(),
-        const ToolsScreen(),
-        ProfileScreen(user: _currentUser, currentUser: _currentUser),
-      ];
+    const NoticesScreen(),
+    const MessagesScreen(),
+    const BooksScreen(),
+    const ToolsScreen(),
+    ProfileScreen(user: _currentUser, currentUser: _currentUser),
+  ];
 
   void _showQROptions() {
     showModalBottomSheet(
@@ -163,16 +163,15 @@ class _HomeScreenState extends State<HomeScreen> {
               if (_isDemoMode)
                 Container(
                   width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 10,
+                  ),
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
-                      colors: [
-                        Colors.orange.shade600,
-                        Colors.orange.shade400,
-                      ],
+                      colors: [Colors.orange.shade600, Colors.orange.shade400],
                     ),
                     boxShadow: [
                       BoxShadow(

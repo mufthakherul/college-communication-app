@@ -42,9 +42,9 @@ class _NoteTakingScreenState extends State<NoteTakingScreen>
     ).then((updatedNote) {
       if (updatedNote != null && mounted) {
         setState(() => _notes[index] = updatedNote);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Note updated!')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Note updated!')));
       }
     });
   }
@@ -82,10 +82,7 @@ class _NoteTakingScreenState extends State<NoteTakingScreen>
               text: 'All Notes (${_notes.length})',
               icon: const Icon(Icons.note),
             ),
-            const Tab(
-              text: 'Tips',
-              icon: Icon(Icons.lightbulb),
-            ),
+            const Tab(text: 'Tips', icon: Icon(Icons.lightbulb)),
           ],
         ),
       ),
@@ -111,10 +108,7 @@ class _NoteTakingScreenState extends State<NoteTakingScreen>
                       const SizedBox(height: 8),
                       Text(
                         'Create your first note to get started',
-                        style: TextStyle(
-                          color: Colors.grey[500],
-                          fontSize: 12,
-                        ),
+                        style: TextStyle(color: Colors.grey[500], fontSize: 12),
                       ),
                     ],
                   ),
@@ -218,10 +212,7 @@ class _NoteTakingScreenState extends State<NoteTakingScreen>
                 note.content,
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: Colors.grey[700],
-                  fontSize: 13,
-                ),
+                style: TextStyle(color: Colors.grey[700], fontSize: 13),
               ),
               const SizedBox(height: 8),
               Row(
@@ -247,10 +238,7 @@ class _NoteTakingScreenState extends State<NoteTakingScreen>
                   const Spacer(),
                   Text(
                     _formatDate(note.date),
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: Colors.grey[500],
-                    ),
+                    style: TextStyle(fontSize: 11, color: Colors.grey[500]),
                   ),
                 ],
               ),
@@ -275,9 +263,7 @@ class _NoteTakingScreenState extends State<NoteTakingScreen>
                 color: Colors.blue[100],
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Center(
-                child: Icon(icon, color: Colors.blue[700]),
-              ),
+              child: Center(child: Icon(icon, color: Colors.blue[700])),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -291,10 +277,7 @@ class _NoteTakingScreenState extends State<NoteTakingScreen>
                   const SizedBox(height: 4),
                   Text(
                     description,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                   ),
                 ],
               ),
@@ -403,10 +386,10 @@ class _CreateNoteDialogState extends State<CreateNoteDialog> {
                 border: OutlineInputBorder(),
               ),
               items: NoteCategory.values
-                  .map((cat) => DropdownMenuItem(
-                        value: cat,
-                        child: Text(cat.label),
-                      ))
+                  .map(
+                    (cat) =>
+                        DropdownMenuItem(value: cat, child: Text(cat.label)),
+                  )
                   .toList(),
               onChanged: (cat) => setState(() => selectedCategory = cat!),
             ),
@@ -506,10 +489,10 @@ class _EditNoteDialogState extends State<EditNoteDialog> {
                 border: OutlineInputBorder(),
               ),
               items: NoteCategory.values
-                  .map((cat) => DropdownMenuItem(
-                        value: cat,
-                        child: Text(cat.label),
-                      ))
+                  .map(
+                    (cat) =>
+                        DropdownMenuItem(value: cat, child: Text(cat.label)),
+                  )
                   .toList(),
               onChanged: (cat) => setState(() => selectedCategory = cat!),
             ),

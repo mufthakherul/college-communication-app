@@ -153,9 +153,7 @@ class _OfflineSyncStatusScreenState extends State<OfflineSyncStatusScreen> {
                         children: [
                           Text(
                             isOnline ? 'Online' : 'Offline',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge
+                            style: Theme.of(context).textTheme.titleLarge
                                 ?.copyWith(
                                   color: isOnline ? Colors.green : Colors.red,
                                   fontWeight: FontWeight.bold,
@@ -235,9 +233,9 @@ class _OfflineSyncStatusScreenState extends State<OfflineSyncStatusScreen> {
           Text(
             count.toString(),
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: color,
-                  fontWeight: FontWeight.bold,
-                ),
+              color: color,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ],
       ),
@@ -276,9 +274,9 @@ class _OfflineSyncStatusScreenState extends State<OfflineSyncStatusScreen> {
                 Text(
                   'About Offline Sync',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Colors.blue[700],
-                        fontWeight: FontWeight.bold,
-                      ),
+                    color: Colors.blue[700],
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),

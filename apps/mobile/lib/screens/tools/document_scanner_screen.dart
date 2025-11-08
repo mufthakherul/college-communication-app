@@ -57,9 +57,9 @@ class _DocumentScannerScreenState extends State<DocumentScannerScreen> {
             onPressed: () {
               setState(() => _documents.removeAt(index));
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Document deleted')),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('Document deleted')));
             },
             child: const Text('Delete', style: TextStyle(color: Colors.red)),
           ),
@@ -77,10 +77,7 @@ class _DocumentScannerScreenState extends State<DocumentScannerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Document Scanner'),
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text('Document Scanner'), elevation: 0),
       body: Column(
         children: [
           // Scan section
@@ -93,8 +90,8 @@ class _DocumentScannerScreenState extends State<DocumentScannerScreen> {
                 Text(
                   'Scan Documents',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 12),
                 TextField(
@@ -180,11 +177,7 @@ class _DocumentScannerScreenState extends State<DocumentScannerScreen> {
             borderRadius: BorderRadius.circular(8),
           ),
           child: Center(
-            child: Icon(
-              Icons.description,
-              color: Colors.blue[700],
-              size: 28,
-            ),
+            child: Icon(Icons.description, color: Colors.blue[700], size: 28),
           ),
         ),
         title: Text(
@@ -230,10 +223,7 @@ class _DocumentScannerScreenState extends State<DocumentScannerScreen> {
               },
             ),
             PopupMenuItem(
-              child: const Text(
-                'Delete',
-                style: TextStyle(color: Colors.red),
-              ),
+              child: const Text('Delete', style: TextStyle(color: Colors.red)),
               onTap: () => _deleteDocument(index),
             ),
           ],
@@ -243,8 +233,9 @@ class _DocumentScannerScreenState extends State<DocumentScannerScreen> {
   }
 
   void _showRenameDialog(int index) {
-    final renameController =
-        TextEditingController(text: _documents[index].name);
+    final renameController = TextEditingController(
+      text: _documents[index].name,
+    );
 
     showDialog(
       context: context,
@@ -268,9 +259,9 @@ class _DocumentScannerScreenState extends State<DocumentScannerScreen> {
                 _documents[index].name = renameController.text;
               });
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Document renamed')),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('Document renamed')));
             },
             child: const Text('Rename'),
           ),

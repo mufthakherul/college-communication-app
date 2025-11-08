@@ -50,30 +50,35 @@ class WebsiteScraperService {
       // We need to make a POST request to the DataTables API
       late http.Response response;
       try {
-        response = await http.post(
-          Uri.parse(_apiUrl),
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (compatible; RPICommunicationApp/1.0)',
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Accept': 'application/json, text/javascript, */*; q=0.01',
-            'X-Requested-With': 'XMLHttpRequest',
-          },
-          body: {
-            'draw': '1',
-            'start': '0',
-            'length': '20', // Fetch 20 notices at a time
-            'domain_id': '',
-            'lang': 'bn',
-            'subdomain': '',
-            'content_type': 'notices',
-          },
-        ).timeout(
-          const Duration(seconds: 30),
-          onTimeout: () {
-            debugPrint('API request timed out, attempting HTML scraping...');
-            throw TimeoutException('API request timed out');
-          },
-        );
+        response = await http
+            .post(
+              Uri.parse(_apiUrl),
+              headers: {
+                'User-Agent':
+                    'Mozilla/5.0 (compatible; RPICommunicationApp/1.0)',
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Accept': 'application/json, text/javascript, */*; q=0.01',
+                'X-Requested-With': 'XMLHttpRequest',
+              },
+              body: {
+                'draw': '1',
+                'start': '0',
+                'length': '20', // Fetch 20 notices at a time
+                'domain_id': '',
+                'lang': 'bn',
+                'subdomain': '',
+                'content_type': 'notices',
+              },
+            )
+            .timeout(
+              const Duration(seconds: 30),
+              onTimeout: () {
+                debugPrint(
+                  'API request timed out, attempting HTML scraping...',
+                );
+                throw TimeoutException('API request timed out');
+              },
+            );
       } catch (e) {
         debugPrint('API request failed: $e, falling back to HTML scraping');
         return await _fetchNoticesFromHtml();
@@ -141,12 +146,14 @@ class WebsiteScraperService {
     try {
       debugPrint('Fetching notices via HTML scraping...');
 
-      final response = await http.get(
-        Uri.parse(_websiteUrl),
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (compatible; RPICommunicationApp/1.0)',
-        },
-      ).timeout(const Duration(seconds: 30));
+      final response = await http
+          .get(
+            Uri.parse(_websiteUrl),
+            headers: {
+              'User-Agent': 'Mozilla/5.0 (compatible; RPICommunicationApp/1.0)',
+            },
+          )
+          .timeout(const Duration(seconds: 30));
 
       if (response.statusCode != 200) {
         throw Exception('Failed to load website: ${response.statusCode}');
@@ -213,7 +220,8 @@ class WebsiteScraperService {
               if (title.isEmpty) continue;
               final url = (link.attributes['href'] as String?) ?? '';
               final publishedDate = DateTime.now();
-              final id = 'notice_${title.hashCode}_${publishedDate.millisecondsSinceEpoch}';
+              final id =
+                  'notice_${title.hashCode}_${publishedDate.millisecondsSinceEpoch}';
               notices.add(
                 ScrapedNotice(
                   id: id,
@@ -231,7 +239,8 @@ class WebsiteScraperService {
           // Table with at least 2 cells, title likely in cell 1
           if (cells.length >= 2) {
             final titleCell = cells.length > 1 ? cells[1] : cells[0];
-            final titleLink = (titleCell as dynamic).querySelector('a') as dynamic;
+            final titleLink =
+                (titleCell as dynamic).querySelector('a') as dynamic;
             var title = '';
             var url = '';
             if (titleLink != null) {
@@ -244,13 +253,15 @@ class WebsiteScraperService {
 
             DateTime publishedDate;
             if (cells.length >= 3) {
-              final dateText = (((cells[2] as dynamic).text as String?) ?? '').trim();
+              final dateText = (((cells[2] as dynamic).text as String?) ?? '')
+                  .trim();
               publishedDate = _parseDate(dateText) ?? DateTime.now();
             } else {
               publishedDate = DateTime.now();
             }
 
-            final id = 'notice_${title.hashCode}_${publishedDate.millisecondsSinceEpoch}';
+            final id =
+                'notice_${title.hashCode}_${publishedDate.millisecondsSinceEpoch}';
             notices.add(
               ScrapedNotice(
                 id: id,
@@ -288,7 +299,9 @@ class WebsiteScraperService {
 
       final decoded = json.decode(jsonString);
       if (decoded is! Map<String, dynamic>) {
-        debugPrint('API response root is not a JSON object, got: ${decoded.runtimeType}');
+        debugPrint(
+          'API response root is not a JSON object, got: ${decoded.runtimeType}',
+        );
         return notices;
       }
       final jsonData = decoded as Map<String, dynamic>;
@@ -296,7 +309,9 @@ class WebsiteScraperService {
       // Support alternative key names used by DataTables
       final dynamic rowsRaw = jsonData['data'] ?? jsonData['aaData'];
       if (rowsRaw == null) {
-        debugPrint('No data found in API response. Keys: ${jsonData.keys.join(", ")}');
+        debugPrint(
+          'No data found in API response. Keys: ${jsonData.keys.join(", ")}',
+        );
         return notices;
       }
       if (rowsRaw is! List) {
@@ -354,7 +369,9 @@ class WebsiteScraperService {
       }
 
       if (notices.isEmpty) {
-        debugPrint('No notices parsed from API. Keys found: ${jsonData.keys.join(', ')}');
+        debugPrint(
+          'No notices parsed from API. Keys found: ${jsonData.keys.join(', ')}',
+        );
       } else {
         debugPrint('Parsed ${notices.length} notices from API response');
       }
@@ -476,7 +493,8 @@ class WebsiteScraperService {
       DateTime? expiresAt,
       required String source,
       String? sourceUrl,
-    }) createNoticeCallback,
+    })
+    createNoticeCallback,
   ) async {
     try {
       final notices = await getNotices(forceRefresh: true);
@@ -569,13 +587,13 @@ class ScrapedNotice {
   });
 
   factory ScrapedNotice.fromJson(Map<String, dynamic> json) => ScrapedNotice(
-        id: json['id'] ?? '',
-        title: json['title'] ?? '',
-        description: json['description'] ?? '',
-        url: json['url'] ?? '',
-        publishedDate: DateTime.parse(json['publishedDate']),
-        source: json['source'] ?? 'Website',
-      );
+    id: json['id'] ?? '',
+    title: json['title'] ?? '',
+    description: json['description'] ?? '',
+    url: json['url'] ?? '',
+    publishedDate: DateTime.parse(json['publishedDate']),
+    source: json['source'] ?? 'Website',
+  );
   final String id;
   final String title;
   final String description;
@@ -584,11 +602,11 @@ class ScrapedNotice {
   final String source;
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'description': description,
-        'url': url,
-        'publishedDate': publishedDate.toIso8601String(),
-        'source': source,
-      };
+    'id': id,
+    'title': title,
+    'description': description,
+    'url': url,
+    'publishedDate': publishedDate.toIso8601String(),
+    'source': source,
+  };
 }
