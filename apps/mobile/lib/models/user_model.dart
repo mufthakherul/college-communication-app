@@ -23,7 +23,7 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> data) {
     return UserModel(
-      uid: data['id'] ?? data['uid'] ?? '',
+      uid: data['id'] ?? data['uid'] ?? data[r'$id'] ?? '',
       email: data['email'] ?? '',
       displayName: data['display_name'] ?? data['displayName'] ?? '',
       photoURL: data['photo_url'] ?? data['photoURL'] ?? '',

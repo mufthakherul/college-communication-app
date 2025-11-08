@@ -63,8 +63,8 @@ class _CreateGroupChatScreenState extends State<CreateGroupChatScreen> {
         queries: [Query.equal('is_active', true), Query.limit(100)],
       );
 
-      final users = response.documents
-          .map((doc) => UserModel.fromJson(doc.data))
+    final users = response.documents
+      .map((doc) => UserModel.fromJson({...doc.data, 'id': doc.$id}))
           .where((user) => user.uid != currentUserId)
           .toList();
 

@@ -252,6 +252,10 @@ class _MessagesScreenState extends State<MessagesScreen> {
                     } else {
                       try {
                         otherUser = await _authService.getUserProfile(userId);
+                        // Fallback: if profile lacks id field populate from userId
+                        if (otherUser != null && otherUser.uid.isEmpty) {
+                          otherUser = otherUser.copyWith(uid: userId);
+                        }
                         if (otherUser != null) {
                           _userCache[userId] = otherUser;
                         }
