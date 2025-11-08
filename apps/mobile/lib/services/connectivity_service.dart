@@ -66,7 +66,8 @@ class ConnectivityService {
   Future<void> _handleConnectivityChange(
     List<ConnectivityResult> results,
   ) async {
-    final hasConnection = results.isNotEmpty &&
+    final hasConnection =
+        results.isNotEmpty &&
         results.any((result) => result != ConnectivityResult.none);
 
     final wasOnline = _isOnline;

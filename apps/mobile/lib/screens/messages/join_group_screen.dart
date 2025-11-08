@@ -143,11 +143,11 @@ class _JoinGroupScreenState extends State<JoinGroupScreen> {
                         const SizedBox(width: 8),
                         Text(
                           'How it works',
-                          style:
-                              Theme.of(context).textTheme.titleMedium?.copyWith(
-                                    color: Colors.blue[700],
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(
+                                color: Colors.blue[700],
+                                fontWeight: FontWeight.bold,
+                              ),
                         ),
                       ],
                     ),

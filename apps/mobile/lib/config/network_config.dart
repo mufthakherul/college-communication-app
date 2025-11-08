@@ -283,36 +283,36 @@ class NetworkConfig {
 class NetworkProfiles {
   /// High performance profile
   static Map<String, dynamic> get highPerformance => {
-        'maxConcurrentRequests': 10,
-        'cacheSize': 100,
-        'backgroundSync': const Duration(minutes: 5),
-        'meshConnections': 20,
-      };
+    'maxConcurrentRequests': 10,
+    'cacheSize': 100,
+    'backgroundSync': const Duration(minutes: 5),
+    'meshConnections': 20,
+  };
 
   /// Balanced profile (default)
   static Map<String, dynamic> get balanced => {
-        'maxConcurrentRequests': NetworkConfig.maxConcurrentRequests,
-        'cacheSize': NetworkConfig.maxCacheSizeMB,
-        'backgroundSync': NetworkConfig.backgroundSyncInterval,
-        'meshConnections': NetworkConfig.maxMeshConnections,
-      };
+    'maxConcurrentRequests': NetworkConfig.maxConcurrentRequests,
+    'cacheSize': NetworkConfig.maxCacheSizeMB,
+    'backgroundSync': NetworkConfig.backgroundSyncInterval,
+    'meshConnections': NetworkConfig.maxMeshConnections,
+  };
 
   /// Battery saver profile
   static Map<String, dynamic> get batterySaver => {
-        'maxConcurrentRequests': 2,
-        'cacheSize': 20,
-        'backgroundSync': const Duration(hours: 1),
-        'meshConnections': 3,
-      };
+    'maxConcurrentRequests': 2,
+    'cacheSize': 20,
+    'backgroundSync': const Duration(hours: 1),
+    'meshConnections': 3,
+  };
 
   /// Offline first profile
   static Map<String, dynamic> get offlineFirst => {
-        'maxConcurrentRequests': 1,
-        'cacheSize': 50,
-        'backgroundSync': const Duration(hours: 2),
-        'meshConnections': 5,
-        'aggressiveCaching': true,
-      };
+    'maxConcurrentRequests': 1,
+    'cacheSize': 50,
+    'backgroundSync': const Duration(hours: 2),
+    'meshConnections': 5,
+    'aggressiveCaching': true,
+  };
 
   /// Get profile by name
   static Map<String, dynamic> getProfile(String name) {

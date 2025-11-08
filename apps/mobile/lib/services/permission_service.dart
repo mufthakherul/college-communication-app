@@ -35,8 +35,8 @@ class PermissionService implements PermissionProvider {
     try {
       if (await _isAndroid12OrAbove()) {
         return await Permission.bluetoothScan.isGranted &&
-               await Permission.bluetoothConnect.isGranted &&
-               await Permission.bluetoothAdvertise.isGranted;
+            await Permission.bluetoothConnect.isGranted &&
+            await Permission.bluetoothAdvertise.isGranted;
       }
       return await Permission.bluetooth.isGranted;
     } catch (e) {
@@ -131,7 +131,7 @@ class PermissionService implements PermissionProvider {
         Permission.camera,
         Permission.microphone,
       ].request();
-      
+
       return permissions.values.every((status) => status.isGranted);
     } catch (e) {
       debugPrint('Error requesting video call permissions: $e');

@@ -326,8 +326,9 @@ class _DebugConsoleScreenState extends State<DebugConsoleScreen> {
                     label: Text(
                       '${level.name} (${_debugLogger.getLogsByLevel(level).length})',
                     ),
-                    backgroundColor:
-                        _getLogLevelColor(level).withValues(alpha: 0.2),
+                    backgroundColor: _getLogLevelColor(
+                      level,
+                    ).withValues(alpha: 0.2),
                     onSelected: (selected) {},
                   ),
               ],

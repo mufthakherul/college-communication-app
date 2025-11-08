@@ -18,7 +18,7 @@ void main() {
           'source': 'admin',
           'is_active': true,
           'created_at': DateTime.now().toIso8601String(),
-        }
+        },
       ]);
 
       final rows = await db.getActiveNotices();
@@ -27,7 +27,9 @@ void main() {
     });
 
     test('Cleanup removes expired notices', () async {
-      final pastDate = DateTime.now().subtract(const Duration(days: 40)).toIso8601String();
+      final pastDate = DateTime.now()
+          .subtract(const Duration(days: 40))
+          .toIso8601String();
       await db.upsertNotices([
         {
           'id': 'expired',
@@ -40,7 +42,7 @@ void main() {
           'is_active': true,
           'created_at': pastDate,
           'expires_at': pastDate,
-        }
+        },
       ]);
 
       final deleted = await db.cleanupOldNotices(daysToKeep: 30);

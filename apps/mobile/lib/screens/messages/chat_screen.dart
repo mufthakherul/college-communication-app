@@ -134,10 +134,8 @@ class _ChatScreenState extends State<ChatScreen> {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => CallScreen(
-                    peerId: widget.otherUser.uid,
-                    video: false,
-                  ),
+                  builder: (_) =>
+                      CallScreen(peerId: widget.otherUser.uid, video: false),
                 ),
               );
             },
@@ -148,10 +146,8 @@ class _ChatScreenState extends State<ChatScreen> {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => CallScreen(
-                    peerId: widget.otherUser.uid,
-                    video: true,
-                  ),
+                  builder: (_) =>
+                      CallScreen(peerId: widget.otherUser.uid, video: true),
                 ),
               );
             },
@@ -250,7 +246,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 // Auto-scroll to bottom only when user is at bottom or sending new message
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   if (_scrollController.hasClients) {
-                    final isAtBottom = _scrollController.position.pixels >=
+                    final isAtBottom =
+                        _scrollController.position.pixels >=
                         _scrollController.position.maxScrollExtent - 100;
                     if (isAtBottom) {
                       _scrollController.animateTo(

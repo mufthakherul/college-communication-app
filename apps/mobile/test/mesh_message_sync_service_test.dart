@@ -20,10 +20,19 @@ void main() {
       mesh.setPermissionService(permissionService);
 
       await mesh.initialize(deviceId: 'test1', deviceName: 'Test Device');
-      
-      expect(mesh.availableConnectionTypes, contains(MeshConnectionType.bluetooth));
-      expect(mesh.availableConnectionTypes, contains(MeshConnectionType.wifiDirect));
-      expect(mesh.availableConnectionTypes, contains(MeshConnectionType.ethernet));
+
+      expect(
+        mesh.availableConnectionTypes,
+        contains(MeshConnectionType.bluetooth),
+      );
+      expect(
+        mesh.availableConnectionTypes,
+        contains(MeshConnectionType.wifiDirect),
+      );
+      expect(
+        mesh.availableConnectionTypes,
+        contains(MeshConnectionType.ethernet),
+      );
     });
 
     test('Connection types are limited when permissions denied', () async {
@@ -32,10 +41,13 @@ void main() {
       mesh.setPermissionService(permissionService);
 
       await mesh.initialize(deviceId: 'test2', deviceName: 'Test Device');
-      
+
       // Only ethernet should be available (no permissions needed)
       expect(mesh.availableConnectionTypes.length, equals(1));
-      expect(mesh.availableConnectionTypes, contains(MeshConnectionType.ethernet));
+      expect(
+        mesh.availableConnectionTypes,
+        contains(MeshConnectionType.ethernet),
+      );
     });
   });
 
@@ -48,7 +60,7 @@ void main() {
     // TODO: Re-enable when syncMessages method is implemented
     // test('Message sync works across different connection types', () async {
     //   await sync.initialize();
-    //   
+    //
     //   // Test sync over different connection types
     //   for (final type in [
     //     MeshConnectionType.bluetooth,
@@ -58,7 +70,7 @@ void main() {
     //     final result = await sync.syncMessages(connectionType: type);
     //     expect(result.success, isTrue);
     //   }
-    //   
+    //
     //   await sync.dispose();
     // });
   });

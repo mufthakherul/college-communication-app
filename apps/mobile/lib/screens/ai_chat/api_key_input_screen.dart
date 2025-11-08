@@ -40,7 +40,8 @@ class _ApiKeyInputScreenState extends State<ApiKeyInputScreen> {
 
         if (!isValid) {
           setState(() {
-            _errorMessage = 'API key validation failed. This could be due to '
+            _errorMessage =
+                'API key validation failed. This could be due to '
                 'network issues or an invalid key. You can try again or save '
                 'anyway and test it in the chat.';
             _isLoading = false;
@@ -58,7 +59,8 @@ class _ApiKeyInputScreenState extends State<ApiKeyInputScreen> {
       }
     } catch (e) {
       setState(() {
-        _errorMessage = 'Failed to validate API key: ${e.toString()}. '
+        _errorMessage =
+            'Failed to validate API key: ${e.toString()}. '
             'You can try again or save anyway.';
         _isLoading = false;
       });
@@ -137,8 +139,10 @@ class _ApiKeyInputScreenState extends State<ApiKeyInputScreen> {
                       children: [
                         Row(
                           children: [
-                            Icon(Icons.warning_amber,
-                                color: Colors.orange[700]),
+                            Icon(
+                              Icons.warning_amber,
+                              color: Colors.orange[700],
+                            ),
                             const SizedBox(width: 12),
                             Expanded(
                               child: Text(

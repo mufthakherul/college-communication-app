@@ -49,7 +49,9 @@ class NoticeService {
     // Always start with local cache for fast offline access
     try {
       final localRows = await _localDb.getActiveNotices(limit: 100);
-      final localNotices = localRows.map((r) => NoticeModel.fromJson(r)).toList();
+      final localNotices = localRows
+          .map((r) => NoticeModel.fromJson(r))
+          .toList();
 
       if (localNotices.isNotEmpty) {
         _noticesController?.add(localNotices);
@@ -75,11 +77,15 @@ class NoticeService {
         ],
       );
 
-      final remoteNotices = docs.documents.map((doc) => NoticeModel.fromJson(doc.data)).toList();
+      final remoteNotices = docs.documents
+          .map((doc) => NoticeModel.fromJson(doc.data))
+          .toList();
 
       // Upsert into local cache
       try {
-        await _localDb.upsertNotices(docs.documents.map((d) => d.data).toList());
+        await _localDb.upsertNotices(
+          docs.documents.map((d) => d.data).toList(),
+        );
         // Cleanup expired/old notices monthly policy (30 days)
         await _localDb.cleanupOldNotices(daysToKeep: 30);
       } catch (_) {
@@ -163,8 +169,11 @@ class NoticeService {
         try {
           final user = await _authService.currentUser;
           final role = user?.role;
-          if (role == null || (role != UserRole.admin && role != UserRole.teacher)) {
-            throw Exception('Permission denied: Only admins and teachers can create notices');
+          if (role == null ||
+              (role != UserRole.admin && role != UserRole.teacher)) {
+            throw Exception(
+              'Permission denied: Only admins and teachers can create notices',
+            );
           }
         } catch (_) {
           // If profile fetch fails, continue and rely on backend/collection permissions
@@ -195,7 +204,7 @@ class NoticeService {
         authorId = currentUserId;
         try {
           final user = await _authService.currentUser;
-      authorName = user?.displayName.isNotEmpty ?? false
+          authorName = user?.displayName.isNotEmpty ?? false
               ? user!.displayName
               : 'Admin';
         } catch (_) {
@@ -210,11 +219,15 @@ class NoticeService {
       // Generate a custom document ID so we can also populate the required `id` attribute
       final timePart = DateTime.now().microsecondsSinceEpoch.toString();
       final userPart = currentUserId ?? 'sys';
-      final userFrag = userPart.length >= 6 ? userPart.substring(0, 6) : userPart;
+      final userFrag = userPart.length >= 6
+          ? userPart.substring(0, 6)
+          : userPart;
       final documentId = 'ntc_${timePart}_$userFrag';
 
       // Lightweight de-duplication for scraped notices based on source URL
-      if (source == NoticeSource.scraped && sourceUrl != null && sourceUrl.isNotEmpty) {
+      if (source == NoticeSource.scraped &&
+          sourceUrl != null &&
+          sourceUrl.isNotEmpty) {
         try {
           final existing = await _appwrite.databases.listDocuments(
             databaseId: AppwriteConfig.databaseId,

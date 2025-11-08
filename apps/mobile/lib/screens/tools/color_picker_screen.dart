@@ -165,15 +165,17 @@ class _ColorPickerScreenState extends State<ColorPickerScreen> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             decoration: BoxDecoration(
-              color:
-                  _isLightColor(_selectedColor) ? Colors.black : Colors.white,
+              color: _isLightColor(_selectedColor)
+                  ? Colors.black
+                  : Colors.white,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
               _hexController.text,
               style: TextStyle(
-                color:
-                    _isLightColor(_selectedColor) ? Colors.white : Colors.black,
+                color: _isLightColor(_selectedColor)
+                    ? Colors.white
+                    : Colors.black,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Courier',

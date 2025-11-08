@@ -113,8 +113,10 @@ class _LoginScreenState extends State<LoginScreen> {
           SafeArea(
             child: Center(
               child: SingleChildScrollView(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 28, vertical: 20),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 28,
+                  vertical: 20,
+                ),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -122,38 +124,41 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(24),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: LinearGradient(
-                            colors: [scheme.primary, scheme.secondary],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: scheme.primary.withValues(alpha: 0.35),
-                              blurRadius: 30,
-                              offset: const Offset(0, 12),
+                            padding: const EdgeInsets.all(24),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: LinearGradient(
+                                colors: [scheme.primary, scheme.secondary],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: scheme.primary.withValues(alpha: 0.35),
+                                  blurRadius: 30,
+                                  offset: const Offset(0, 12),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        child: const Icon(Icons.school,
-                            size: 64, color: Colors.white),
-                      )
+                            child: const Icon(
+                              Icons.school,
+                              size: 64,
+                              color: Colors.white,
+                            ),
+                          )
                           .animate()
                           .fadeIn(duration: 400.ms)
                           .scaleXY(begin: 0.8, end: 1, curve: Curves.easeOut),
                       const SizedBox(height: 28),
                       Text(
-                        'RPI Communication',
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w800,
-                          fontSize: 28,
-                          letterSpacing: -0.5,
-                        ),
-                        textAlign: TextAlign.center,
-                      )
+                            'RPI Communication',
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 28,
+                              letterSpacing: -0.5,
+                            ),
+                            textAlign: TextAlign.center,
+                          )
                           .animate()
                           .fadeIn(duration: 450.ms)
                           .slideY(begin: 0.12, end: 0, curve: Curves.easeOut),
@@ -170,11 +175,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 6),
                       InkWell(
                         onTap: () async {
-                          final url =
-                              Uri.parse('https://rangpur.polytech.gov.bd');
+                          final url = Uri.parse(
+                            'https://rangpur.polytech.gov.bd',
+                          );
                           if (await canLaunchUrl(url)) {
-                            await launchUrl(url,
-                                mode: LaunchMode.externalApplication);
+                            await launchUrl(
+                              url,
+                              mode: LaunchMode.externalApplication,
+                            );
                           }
                         },
                         child: Text(
@@ -262,15 +270,17 @@ class _LoginScreenState extends State<LoginScreen> {
                                 child: SizedBox(
                                   height: 24,
                                   width: 24,
-                                  child:
-                                      CircularProgressIndicator(strokeWidth: 2),
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
                                 ),
                               )
                             : ElevatedButton(
                                 onPressed: _signIn,
                                 style: ElevatedButton.styleFrom(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
+                                  ),
                                   backgroundColor: scheme.primary,
                                   foregroundColor: scheme.onPrimary,
                                   shape: RoundedRectangleBorder(
@@ -316,8 +326,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           icon: const Icon(Icons.preview),
                           label: Text(
                             'Try Demo Mode (No Firebase)',
-                            style:
-                                GoogleFonts.inter(fontWeight: FontWeight.w600),
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                           style: OutlinedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 14),

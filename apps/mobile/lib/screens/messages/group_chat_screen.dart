@@ -159,7 +159,10 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
             Text(widget.groupName),
             Text(
               '${widget.participantCount} members',
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.normal),
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.normal,
+              ),
             ),
           ],
         ),
@@ -221,9 +224,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(color: Colors.grey[300]!),
-                ),
+                border: Border(bottom: BorderSide(color: Colors.grey[300]!)),
               ),
               child: _isLoadingParticipants
                   ? const SizedBox(
@@ -231,62 +232,60 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                       child: Center(child: CircularProgressIndicator()),
                     )
                   : _participants.isEmpty
-                      ? const SizedBox(
-                          height: 50,
-                          child: Center(child: Text('No participants loaded')),
-                        )
-                      : SizedBox(
-                          height: 70,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: _participants.length,
-                            itemBuilder: (context, index) {
-                              final participant = _participants[index];
-                              final displayName = participant['name'] ?? 'Unknown';
-                              final photoUrl = participant['photo'] as String?;
+                  ? const SizedBox(
+                      height: 50,
+                      child: Center(child: Text('No participants loaded')),
+                    )
+                  : SizedBox(
+                      height: 70,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: _participants.length,
+                        itemBuilder: (context, index) {
+                          final participant = _participants[index];
+                          final displayName = participant['name'] ?? 'Unknown';
+                          final photoUrl = participant['photo'] as String?;
 
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 4),
-                                child: Column(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 24,
-                                      backgroundColor: Colors.blue,
-                                      backgroundImage: photoUrl != null &&
-                                              photoUrl.isNotEmpty
-                                          ? NetworkImage(photoUrl)
-                                          : null,
-                                      child: photoUrl == null ||
-                                              photoUrl.isEmpty
-                                          ? Text(
-                                              displayName.isNotEmpty
-                                                  ? displayName[0]
-                                                      .toUpperCase()
-                                                  : '?',
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            )
-                                          : null,
-                                    ),
-                                    const SizedBox(height: 4),
-                                    SizedBox(
-                                      width: 60,
-                                      child: Text(
-                                        displayName,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(fontSize: 11),
-                                      ),
-                                    ),
-                                  ],
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 4),
+                            child: Column(
+                              children: [
+                                CircleAvatar(
+                                  radius: 24,
+                                  backgroundColor: Colors.blue,
+                                  backgroundImage:
+                                      photoUrl != null && photoUrl.isNotEmpty
+                                      ? NetworkImage(photoUrl)
+                                      : null,
+                                  child: photoUrl == null || photoUrl.isEmpty
+                                      ? Text(
+                                          displayName.isNotEmpty
+                                              ? displayName[0].toUpperCase()
+                                              : '?',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )
+                                      : null,
                                 ),
-                              );
-                            },
-                          ),
-                        ),
+                                const SizedBox(height: 4),
+                                SizedBox(
+                                  width: 60,
+                                  child: Text(
+                                    displayName,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(fontSize: 11),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
             ),
 
           // Messages list
@@ -351,7 +350,8 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                 // Auto-scroll to bottom
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   if (_scrollController.hasClients) {
-                    final isAtBottom = _scrollController.position.pixels >=
+                    final isAtBottom =
+                        _scrollController.position.pixels >=
                         _scrollController.position.maxScrollExtent - 100;
                     if (isAtBottom) {
                       _scrollController.animateTo(
@@ -369,13 +369,14 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
                     final message = messages[index];
-                    final isMe =
-                        message.senderId == _authService.currentUserId;
+                    final isMe = message.senderId == _authService.currentUserId;
 
                     // Group messages by sender and time
-                    final previousMessage =
-                        index > 0 ? messages[index - 1] : null;
-                    final showSenderInfo = previousMessage == null ||
+                    final previousMessage = index > 0
+                        ? messages[index - 1]
+                        : null;
+                    final showSenderInfo =
+                        previousMessage == null ||
                         previousMessage.senderId != message.senderId ||
                         _shouldShowTimeSeparator(previousMessage, message);
 
@@ -397,10 +398,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     );
   }
 
-  bool _shouldShowTimeSeparator(
-    MessageModel prev,
-    MessageModel current,
-  ) {
+  bool _shouldShowTimeSeparator(MessageModel prev, MessageModel current) {
     if (prev.createdAt == null || current.createdAt == null) return false;
     return current.createdAt!.difference(prev.createdAt!).inMinutes > 5;
   }
@@ -411,8 +409,9 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
     bool showSenderInfo,
   ) {
     return Column(
-      crossAxisAlignment:
-          isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      crossAxisAlignment: isMe
+          ? CrossAxisAlignment.end
+          : CrossAxisAlignment.start,
       children: [
         // Sender info (only show if it's from someone else)
         if (!isMe && showSenderInfo)
@@ -425,16 +424,14 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                     message.senderPhotoUrl!.isNotEmpty)
                   CircleAvatar(
                     radius: 14,
-                    backgroundImage:
-                        NetworkImage(message.senderPhotoUrl!),
+                    backgroundImage: NetworkImage(message.senderPhotoUrl!),
                   )
                 else
                   CircleAvatar(
                     radius: 14,
                     backgroundColor: Colors.grey[400],
                     child: Text(
-                      (message.senderDisplayName ?? 'U')[0]
-                          .toUpperCase(),
+                      (message.senderDisplayName ?? 'U')[0].toUpperCase(),
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 12,
@@ -463,8 +460,9 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
             8,
           ),
           child: Row(
-            mainAxisAlignment:
-                isMe ? MainAxisAlignment.end : MainAxisAlignment.start,
+            mainAxisAlignment: isMe
+                ? MainAxisAlignment.end
+                : MainAxisAlignment.start,
             children: [
               Flexible(
                 child: Container(
@@ -473,9 +471,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                     vertical: 8,
                   ),
                   decoration: BoxDecoration(
-                    color: isMe
-                        ? Colors.blue[600]
-                        : Colors.grey[300],
+                    color: isMe ? Colors.blue[600] : Colors.grey[300],
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Column(
@@ -493,9 +489,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                         _formatTime(message.createdAt),
                         style: TextStyle(
                           fontSize: 11,
-                          color: isMe
-                              ? Colors.white70
-                              : Colors.grey[600],
+                          color: isMe ? Colors.white70 : Colors.grey[600],
                         ),
                       ),
                     ],
@@ -536,9 +530,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                         child: SizedBox(
                           width: 20,
                           height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                          ),
+                          child: CircularProgressIndicator(strokeWidth: 2),
                         ),
                       )
                     : null,

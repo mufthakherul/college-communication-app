@@ -180,14 +180,14 @@ class LocalChatDatabase {
   /// Remove user from group chat
   Future<void> removeUserFromChat(String chatId, String userId) async {
     final db = await database;
-    
+
     try {
       final chat = await getChat(chatId);
       if (chat == null) return;
-      
+
       final participantIds = (chat['participant_ids'] as String).split(',');
       participantIds.removeWhere((id) => id == userId);
-      
+
       await db.update(
         'local_chats',
         {'participant_ids': participantIds.join(',')},
