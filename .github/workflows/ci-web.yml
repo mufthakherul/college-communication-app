@@ -1,0 +1,52 @@
+name: Web CI
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'apps/web/**'
+      - '.github/workflows/ci-web.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'apps/web/**'
+      - '.github/workflows/ci-web.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint-build:
+    name: Lint, Typecheck and Build (Web)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: apps/web/package-lock.json
+
+      - name: Install dependencies
+        working-directory: apps/web
+        run: npm ci
+
+      - name: Typecheck
+        working-directory: apps/web
+        run: npm run lint
+
+      - name: Build
+        working-directory: apps/web
+        run: npm run build
+
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-dist
+          path: apps/web/dist
+          retention-days: 7
