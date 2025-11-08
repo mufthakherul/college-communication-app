@@ -6,7 +6,7 @@ on:
 
 jobs:
   backup:
-    if: false  # Disabled; remove this to re-enable if Supabase is actually used
+    if: false # Disabled; remove this to re-enable if Supabase is actually used
     name: Backup Supabase Database
     runs-on: ubuntu-latest
     steps:
