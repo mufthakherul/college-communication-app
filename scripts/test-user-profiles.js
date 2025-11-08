@@ -3,6 +3,14 @@
 /**
  * Test script for user profiles functionality
  * Tests CRUD operations for all three roles (student, teacher, admin)
+ * 
+ * Updated: November 2025
+ * Changes: Modified to work with the new database structure:
+ * - users collection: Common user data (email, display_name, role, department, etc.)
+ * - user_profiles collection: Role-specific data (student/teacher/admin specific fields)
+ * 
+ * Each test now creates a user in the 'users' collection first, then creates
+ * the corresponding profile with role-specific data in 'user_profiles' collection.
  */
 
 const sdk = require('node-appwrite');
@@ -33,7 +41,7 @@ async function testProfiles() {
   try {
     console.log('📝 Test 1: Create student profile');
     
-    // First, create a test user
+    // First, create a test user in the users collection (common data only)
     const testUser = await databases.createDocument(
       DATABASE_ID,
       USERS_COLLECTION_ID,
@@ -50,6 +58,9 @@ async function testProfiles() {
       }
     );
 
+    console.log('  ✓ User created:', testUser.$id);
+
+    // Then create the student-specific profile in user_profiles collection
     const studentProfile = await databases.createDocument(
       DATABASE_ID,
       PROFILES_COLLECTION_ID,
@@ -83,6 +94,7 @@ async function testProfiles() {
   try {
     console.log('\n📝 Test 2: Create teacher profile');
     
+    // Create user in users collection
     const testUser = await databases.createDocument(
       DATABASE_ID,
       USERS_COLLECTION_ID,
@@ -98,6 +110,9 @@ async function testProfiles() {
       }
     );
 
+    console.log('  ✓ User created:', testUser.$id);
+
+    // Create teacher-specific profile in user_profiles collection
     const teacherProfile = await databases.createDocument(
       DATABASE_ID,
       PROFILES_COLLECTION_ID,
@@ -129,6 +144,7 @@ async function testProfiles() {
   try {
     console.log('\n📝 Test 3: Create admin profile');
     
+    // Create user in users collection
     const testUser = await databases.createDocument(
       DATABASE_ID,
       USERS_COLLECTION_ID,
@@ -144,6 +160,9 @@ async function testProfiles() {
       }
     );
 
+    console.log('  ✓ User created:', testUser.$id);
+
+    // Create admin-specific profile in user_profiles collection
     const adminProfile = await databases.createDocument(
       DATABASE_ID,
       PROFILES_COLLECTION_ID,
