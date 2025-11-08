@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   # Appwrite dependencies
-  appwrite: ^12.0.4
+  appwrite: ^17.1.0
   url_launcher: ^6.2.1
   webview_flutter: ^4.4.2
   shared_preferences: ^2.2.2
@@ -29,7 +29,7 @@ dependencies:
   # See: https://github.com/flutter/flutter/issues
   # flutter_nearby_connections: ^1.1.2
   nearby_service: ^0.2.1
-  flutter_webrtc: ^0.9.48
+  flutter_webrtc: ^1.2.0
   # QR code support
   qr_flutter: ^4.1.0
   mobile_scanner: ^4.0.1
@@ -87,10 +87,6 @@ dependency_overrides:
   # v4.1.0+ supports Flutter v2 embedding (required for Flutter 3.35.7+)
   # Used by appwrite package for OAuth authentication
   flutter_web_auth_2: ^4.1.0
-  # Override flutter_webrtc to fix v1 embedding compatibility
-  # v1.2.0+ supports Flutter v2 embedding (required for Flutter 3.35.7+)
-  # Used for WebRTC peer-to-peer communication
-  flutter_webrtc: ^1.2.0
 
 flutter:
   uses-material-design: true
