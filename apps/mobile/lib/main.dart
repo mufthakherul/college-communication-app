@@ -15,11 +15,55 @@ import 'package:campus_mesh/services/theme_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-void main() async {
-  // Wrap entire initialization in error handler
+/// Initialize essential services that are required for basic app functionality
+Future<void> _initializeEssentialServices() async {
+  // Initialize cache first - needed by many other services
+  await CacheService().initialize();
+
+  // Initialize auth service (required for most features)
   try {
+    await AuthService().initialize();
+  } catch (e) {
+    debugPrint('Failed to initialize auth service: $e');
+    // Continue without auth - will show login screen
+  }
+
+  // Initialize crash reporting in release mode
+  if (kReleaseMode) {
+    try {
+      const sentryDsn = String.fromEnvironment('SENTRY_DSN', defaultValue: '');
+      if (sentryDsn.isNotEmpty) {
+        await SentryService.initialize(
+          dsn: sentryDsn,
+          environment: 'production',
+          release: 'campus_mesh@2.0.0+2',
+          tracesSampleRate: 0.2,
+        );
+      }
+    } catch (e) {
+      debugPrint('Failed to initialize Sentry: $e');
+    }
+  }
+}
+
+void main() {
+  // Wrap in error zone to catch all errors including async ones
+  runZonedGuarded(() async {
+    FlutterError.onError = (FlutterErrorDetails details) {
+      FlutterError.presentError(details);
+      // Log to crash reporting
+      if (kReleaseMode) {
+        SentryService.captureException(details.exception, stackTrace: details.stack);
+      }
+    };
+    
     await _initializeApp();
-  } catch (e, stackTrace) {
+  }, (error, stack) {
+    debugPrint('Fatal error: $error');
+    debugPrint('Stack trace: $stack');
+    if (kReleaseMode) {
+      SentryService.captureException(error, stackTrace: stack);
+    }
     // If initialization fails catastrophically, show error screen
     debugPrint('Fatal initialization error: $e');
     debugPrint('Stack trace: $stackTrace');
@@ -65,9 +109,21 @@ void main() async {
 Future<void> _initializeApp() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // STARTUP: Handle initialization sequentially to avoid race conditions
+  try {
+    debugPrint('Initializing essential services...');
+    await _initializeEssentialServices();
+  } catch (e, stack) {
+    debugPrint('Failed to initialize essential services: $e\n$stack');
+    // Allow continuing with basic functionality
+  }
+
   // SECURITY: Perform security checks on startup
   if (kReleaseMode) {
     try {
+      // Load bare minimum cache and security services first
+      await CacheService().initialize();
+      
       final securityService = SecurityService();
       final securityResult = await securityService.performSecurityChecks();
 
@@ -235,14 +291,17 @@ Future<void> _initializeApp() async {
     // Continue without offline message sync
   }
 
-  // Initialize mesh message sync (P2P when nearby)
-  try {
-    final meshSync = MeshMessageSyncService();
-    await meshSync.initialize();
-  } catch (e) {
-    debugPrint('Failed to initialize mesh message sync: $e');
-  }
+  // Initialize mesh message sync (P2P when nearby) - Deferred until after app start
+  Future.microtask(() async {
+    try {
+      final meshSync = MeshMessageSyncService();
+      await meshSync.initialize();
+    } catch (e) {
+      debugPrint('Failed to initialize mesh message sync: $e');
+    }
+  });
 
+  // Start the app UI first, then initialize remaining services
   runApp(const CampusMeshApp());
 }
 

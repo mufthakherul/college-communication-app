@@ -8,28 +8,124 @@ class PermissionService {
   PermissionService._internal();
   static final PermissionService _instance = PermissionService._internal();
 
-  /// Request camera permission for QR scanning
+  /// Check location permissions
+  Future<bool> checkLocationPermissions() async {
+    try {
+      return await Permission.location.isGranted;
+    } catch (e) {
+      debugPrint('Error checking location permission: $e');
+      return false;
+    }
+  }
+
+  /// Check Bluetooth permissions
+  Future<bool> checkBluetoothPermissions() async {
+    try {
+      if (await _isAndroid12OrAbove()) {
+        return await Permission.bluetoothScan.isGranted &&
+               await Permission.bluetoothConnect.isGranted &&
+               await Permission.bluetoothAdvertise.isGranted;
+      }
+      return await Permission.bluetooth.isGranted;
+    } catch (e) {
+      debugPrint('Error checking bluetooth permissions: $e');
+      return false;
+    }
+  }
+
+  /// Check WiFi permissions
+  Future<bool> checkWifiPermissions() async {
+    try {
+      final hasNearbyDevices = await Permission.nearbyWifiDevices.isGranted;
+      final hasWifiState = await Permission.accessWifiState.isGranted;
+      final hasChangeWifiState = await Permission.changeWifiState.isGranted;
+      return hasNearbyDevices && hasWifiState && hasChangeWifiState;
+    } catch (e) {
+      debugPrint('Error checking wifi permissions: $e');
+      return false;
+    }
+  }
+
+  /// Check storage permissions
+  Future<bool> checkStoragePermissions() async {
+    try {
+      if (await _isAndroid13OrAbove()) {
+        final hasPhotos = await Permission.photos.isGranted;
+        final hasVideos = await Permission.videos.isGranted;
+        return hasPhotos && hasVideos;
+      }
+      return await Permission.storage.isGranted;
+    } catch (e) {
+      debugPrint('Error checking storage permissions: $e');
+      return false;
+    }
+  }
+
+  /// Check NFC permissions
+  Future<bool> checkNfcPermissions() async {
+    try {
+      return await Permission.nfc.isGranted;
+    } catch (e) {
+      debugPrint('Error checking NFC permission: $e');
+      return false;
+    }
+  }
+
+  /// Check microphone permissions
+  Future<bool> checkMicrophonePermissions() async {
+    try {
+      return await Permission.microphone.isGranted;
+    } catch (e) {
+      debugPrint('Error checking microphone permission: $e');
+      return false;
+    }
+  }
+
+  /// Check camera permissions
+  Future<bool> checkCameraPermissions() async {
+    try {
+      final hasCamera = await Permission.camera.isGranted;
+      final hasCameraPermission = !await Permission.camera.isPermanentlyDenied;
+      return hasCamera && hasCameraPermission;
+    } catch (e) {
+      debugPrint('Error checking camera permission: $e');
+      return false;
+    }
+  }
+
+  /// Request camera permission for QR scanning or video calls
   Future<bool> requestCameraPermission() async {
     try {
       final status = await Permission.camera.request();
-
-      if (status.isGranted) {
-        return true;
-      } else if (status.isPermanentlyDenied) {
-        if (kDebugMode) {
-          debugPrint('Camera permission permanently denied');
-        }
-        return false;
-      } else {
-        if (kDebugMode) {
-          debugPrint('Camera permission denied');
-        }
-        return false;
-      }
+      return status.isGranted;
     } catch (e) {
-      if (kDebugMode) {
-        debugPrint('Error requesting camera permission: $e');
-      }
+      debugPrint('Error requesting camera permission: $e');
+      return false;
+    }
+  }
+
+  /// Request microphone permission for voice/video calls
+  Future<bool> requestMicrophonePermission() async {
+    try {
+      final status = await Permission.microphone.request();
+      return status.isGranted;
+    } catch (e) {
+      debugPrint('Error requesting microphone permission: $e');
+      return false;
+    }
+  }
+
+  /// Request camera and microphone permissions together for video calls
+  Future<bool> requestVideoCallPermissions() async {
+    try {
+      final permissions = await [
+        Permission.camera,
+        Permission.microphone,
+      ].request();
+      
+      return permissions.values.every((status) => status.isGranted);
+    } catch (e) {
+      debugPrint('Error requesting video call permissions: $e');
       return false;
     }
   }
