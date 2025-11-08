@@ -21,9 +21,18 @@ class MessageModel {
     this.metadata,
     this.syncStatus,
     this.approvalStatus,
+    // Group message support
+    this.groupId,
+    this.groupName,
+    this.senderDisplayName,
+    this.senderPhotoUrl,
+    this.isGroupMessage = false,
   });
 
   factory MessageModel.fromJson(Map<String, dynamic> data) {
+    final groupId = data['group_id'] as String?;
+    final isGroupMessage = groupId != null && groupId.isNotEmpty;
+    
     return MessageModel(
       id: data['id'] ?? '',
       senderId: data['sender_id'] ?? data['senderId'] ?? '',
@@ -42,6 +51,12 @@ class MessageModel {
       metadata: data['metadata'] as Map<String, dynamic>?,
       syncStatus: _parseSyncStatus(data['sync_status']),
       approvalStatus: data['approval_status'] as String?,
+      // Group message fields
+      groupId: groupId,
+      groupName: data['group_name'] as String?,
+      senderDisplayName: data['sender_display_name'] as String?,
+      senderPhotoUrl: data['sender_photo_url'] as String?,
+      isGroupMessage: isGroupMessage,
     );
   }
   final String id;
@@ -59,6 +74,13 @@ class MessageModel {
   final Map<String, dynamic>? metadata; // Additional metadata
   final MessageSyncStatus? syncStatus; // Sync status for offline messages
   final String? approvalStatus;
+  
+  // Group message support
+  final String? groupId; // Group ID if this is a group message
+  final String? groupName; // Group name for context
+  final String? senderDisplayName; // Display name of sender (for groups)
+  final String? senderPhotoUrl; // Avatar of sender (for groups)
+  final bool isGroupMessage; // Whether this is a group message
 
   Map<String, dynamic> toJson() {
     return {
@@ -74,6 +96,11 @@ class MessageModel {
       'attachment_size': attachmentSize,
       'thumbnail_url': thumbnailUrl,
       'metadata': metadata,
+      // Group message fields
+      'group_id': groupId,
+      'group_name': groupName,
+      'sender_display_name': senderDisplayName,
+      'sender_photo_url': senderPhotoUrl,
     };
   }
 
@@ -127,6 +154,11 @@ class MessageModel {
     Map<String, dynamic>? metadata,
     MessageSyncStatus? syncStatus,
     String? approvalStatus,
+    String? groupId,
+    String? groupName,
+    String? senderDisplayName,
+    String? senderPhotoUrl,
+    bool? isGroupMessage,
   }) {
     return MessageModel(
       id: id ?? this.id,
@@ -144,6 +176,11 @@ class MessageModel {
       metadata: metadata ?? this.metadata,
       syncStatus: syncStatus ?? this.syncStatus,
       approvalStatus: approvalStatus ?? this.approvalStatus,
+      groupId: groupId ?? this.groupId,
+      groupName: groupName ?? this.groupName,
+      senderDisplayName: senderDisplayName ?? this.senderDisplayName,
+      senderPhotoUrl: senderPhotoUrl ?? this.senderPhotoUrl,
+      isGroupMessage: isGroupMessage ?? this.isGroupMessage,
     );
   }
 

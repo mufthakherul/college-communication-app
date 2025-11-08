@@ -25,6 +25,7 @@ import 'package:campus_mesh/screens/tools/timetable_screen.dart';
 import 'package:campus_mesh/screens/tools/unit_converter_screen.dart';
 import 'package:campus_mesh/screens/tools/world_clock_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ToolsScreen extends StatefulWidget {
   const ToolsScreen({super.key});
@@ -647,9 +648,39 @@ class _ToolsScreenState extends State<ToolsScreen>
   }
 }
 
-// Placeholder for Important Links screen
+// Important Links screen
 class ImportantLinksScreen extends StatelessWidget {
   const ImportantLinksScreen({super.key});
+
+  Future<void> _launchURL(BuildContext context, String url) async {
+    if (url == '#') {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('This link is not yet configured'),
+          backgroundColor: Colors.orange,
+        ),
+      );
+      return;
+    }
+
+    try {
+      final uri = Uri.parse(url);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      } else {
+        if (!context.mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Could not launch $url')),
+        );
+      }
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -675,19 +706,37 @@ class ImportantLinksScreen extends StatelessWidget {
         itemCount: links.length,
         itemBuilder: (context, index) {
           final link = links[index];
+          final url = link['url']! as String;
+          final isActive = url != '#';
+
           return Card(
             margin: const EdgeInsets.only(bottom: 12),
             child: ListTile(
-              leading: CircleAvatar(child: Icon(link['icon']! as IconData)),
-              title: Text(link['title']! as String),
-              subtitle: Text(link['url']! as String),
-              trailing: const Icon(Icons.open_in_new),
-              onTap: () {
-                // Open URL
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Opening ${link['title']}...')),
-                );
-              },
+              leading: CircleAvatar(
+                child: Icon(
+                  link['icon']! as IconData,
+                  color: isActive ? null : Colors.grey,
+                ),
+              ),
+              title: Text(
+                link['title']! as String,
+                style: TextStyle(
+                  color: isActive ? null : Colors.grey,
+                ),
+              ),
+              subtitle: Text(
+                isActive ? url : 'Not available yet',
+                style: TextStyle(
+                  color: isActive ? Colors.grey : Colors.grey.shade400,
+                ),
+              ),
+              trailing: Icon(
+                Icons.open_in_new,
+                color: isActive ? Colors.blue : Colors.grey,
+              ),
+              onTap: isActive
+                  ? () => _launchURL(context, url)
+                  : null,
             ),
           );
         },

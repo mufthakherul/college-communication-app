@@ -173,9 +173,40 @@ class NoticeService {
 
       // Generate a custom document ID so we can also populate the required `id` attribute
       final timePart = DateTime.now().microsecondsSinceEpoch.toString();
-      final userPart = (currentUserId ?? 'sys');
+      final userPart = currentUserId ?? 'sys';
       final userFrag = userPart.length >= 6 ? userPart.substring(0, 6) : userPart;
       final documentId = 'ntc_${timePart}_$userFrag';
+
+      // Lightweight de-duplication for scraped notices based on source URL
+      if (source == NoticeSource.scraped && sourceUrl != null && sourceUrl.isNotEmpty) {
+        try {
+          final existing = await _appwrite.databases.listDocuments(
+            databaseId: AppwriteConfig.databaseId,
+            collectionId: AppwriteConfig.noticesCollectionId,
+            queries: [
+              Query.equal('source_url', sourceUrl!),
+              Query.equal('is_active', true),
+            ],
+          );
+          if (existing.total > 0) {
+            // Optionally update title/content and updated_at
+            final docId = existing.documents.first.$id;
+            await _appwrite.databases.updateDocument(
+              databaseId: AppwriteConfig.databaseId,
+              collectionId: AppwriteConfig.noticesCollectionId,
+              documentId: docId,
+              data: {
+                'title': sanitizedTitle,
+                'content': sanitizedContent,
+                'updated_at': DateTime.now().toIso8601String(),
+              },
+            );
+            return docId;
+          }
+        } catch (_) {
+          // Ignore de-dup errors and continue to create
+        }
+      }
 
       final document = await _appwrite.databases.createDocument(
         databaseId: AppwriteConfig.databaseId,

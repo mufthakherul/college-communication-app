@@ -48,30 +48,36 @@ class WebsiteScraperService {
       // The website uses DataTables with server-side processing
       // Data is loaded via AJAX from the API endpoint
       // We need to make a POST request to the DataTables API
-      final response = await http.post(
-        Uri.parse(_apiUrl),
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (compatible; RPICommunicationApp/1.0)',
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Accept': 'application/json, text/javascript, */*; q=0.01',
-          'X-Requested-With': 'XMLHttpRequest',
-        },
-        body: {
-          'draw': '1',
-          'start': '0',
-          'length': '20', // Fetch 20 notices at a time
-          'domain_id': '',
-          'lang': 'bn',
-          'subdomain': '',
-          'content_type': 'notices',
-        },
-      ).timeout(
-        const Duration(seconds: 30),
-        onTimeout: () {
-          debugPrint('API request timed out, attempting HTML scraping...');
-          throw TimeoutException('API request timed out');
-        },
-      );
+      late http.Response response;
+      try {
+        response = await http.post(
+          Uri.parse(_apiUrl),
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (compatible; RPICommunicationApp/1.0)',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Accept': 'application/json, text/javascript, */*; q=0.01',
+            'X-Requested-With': 'XMLHttpRequest',
+          },
+          body: {
+            'draw': '1',
+            'start': '0',
+            'length': '20', // Fetch 20 notices at a time
+            'domain_id': '',
+            'lang': 'bn',
+            'subdomain': '',
+            'content_type': 'notices',
+          },
+        ).timeout(
+          const Duration(seconds: 30),
+          onTimeout: () {
+            debugPrint('API request timed out, attempting HTML scraping...');
+            throw TimeoutException('API request timed out');
+          },
+        );
+      } catch (e) {
+        debugPrint('API request failed: $e, falling back to HTML scraping');
+        return await _fetchNoticesFromHtml();
+      }
 
       if (response.statusCode != 200) {
         debugPrint(
@@ -179,38 +185,72 @@ class WebsiteScraperService {
     try {
       final document = html_parser.parse(htmlContent);
 
-      // Look for table rows in the notices table
-      // The structure may vary, so we try multiple selectors
-      final tableRows = document.querySelectorAll('table tbody tr');
+      // Try multiple selectors to accommodate site changes
+      final rowSelectors = <String>[
+        'table tbody tr',
+        'table tr',
+        '.notice-list li',
+        '#notices table tbody tr',
+        '.view-content table tbody tr',
+      ];
+      var tableRows = <dynamic>[];
+      for (final sel in rowSelectors) {
+        final found = document.querySelectorAll(sel);
+        if (found.isNotEmpty) {
+          tableRows = found;
+          break;
+        }
+      }
 
       for (final row in tableRows) {
         try {
-          final cells = row.querySelectorAll('td');
-          if (cells.length >= 3) {
-            // Extract title and link from second column
-            final titleCell = cells[1];
-            final titleLink = titleCell.querySelector('a');
+          // Flexible: table rows or list items
+          final cells = row.querySelectorAll('td') as List;
+          if (cells.isEmpty) {
+            final link = row.querySelector('a') as dynamic;
+            if (link != null) {
+              final title = (link.text as String).trim();
+              if (title.isEmpty) continue;
+              final url = (link.attributes['href'] as String?) ?? '';
+              final publishedDate = DateTime.now();
+              final id = 'notice_${title.hashCode}_${publishedDate.millisecondsSinceEpoch}';
+              notices.add(
+                ScrapedNotice(
+                  id: id,
+                  title: title,
+                  description: title,
+                  url: _makeAbsoluteUrl(url),
+                  publishedDate: publishedDate,
+                  source: 'College Website',
+                ),
+              );
+            }
+            continue;
+          }
 
+          // Table with at least 2 cells, title likely in cell 1
+          if (cells.length >= 2) {
+            final titleCell = cells.length > 1 ? cells[1] : cells[0];
+            final titleLink = (titleCell as dynamic).querySelector('a') as dynamic;
             var title = '';
             var url = '';
-
             if (titleLink != null) {
-              title = titleLink.text.trim();
-              url = titleLink.attributes['href'] ?? '';
+              title = ((titleLink.text as String?) ?? '').trim();
+              url = ((titleLink.attributes['href'] as String?) ?? '');
             } else {
-              title = titleCell.text.trim();
+              title = (((titleCell as dynamic).text as String?) ?? '').trim();
             }
-
             if (title.isEmpty) continue;
 
-            // Extract date from third column
-            final dateText = cells[2].text.trim();
-            final publishedDate = _parseDate(dateText) ?? DateTime.now();
+            DateTime publishedDate;
+            if (cells.length >= 3) {
+              final dateText = (((cells[2] as dynamic).text as String?) ?? '').trim();
+              publishedDate = _parseDate(dateText) ?? DateTime.now();
+            } else {
+              publishedDate = DateTime.now();
+            }
 
-            // Generate unique ID
-            final id =
-                'notice_${title.hashCode}_${publishedDate.millisecondsSinceEpoch}';
-
+            final id = 'notice_${title.hashCode}_${publishedDate.millisecondsSinceEpoch}';
             notices.add(
               ScrapedNotice(
                 id: id,
@@ -223,7 +263,7 @@ class WebsiteScraperService {
             );
           }
         } catch (e) {
-          debugPrint('Error parsing table row: $e');
+          debugPrint('Error parsing row (flex mode): $e');
           continue;
         }
       }
@@ -241,61 +281,83 @@ class WebsiteScraperService {
     final notices = <ScrapedNotice>[];
 
     try {
-      final jsonData = json.decode(jsonString) as Map<String, dynamic>;
+      if (jsonString.isEmpty) {
+        debugPrint('API response body is empty');
+        return notices;
+      }
 
-      // DataTables API returns data in the "data" array
-      // Each row is an array: [serial, title_with_link, date, download_link]
-      if (jsonData['data'] != null && jsonData['data'] is List) {
-        final dataRows = jsonData['data'] as List<dynamic>;
+      final decoded = json.decode(jsonString);
+      if (decoded is! Map<String, dynamic>) {
+        debugPrint('API response root is not a JSON object, got: ${decoded.runtimeType}');
+        return notices;
+      }
+      final jsonData = decoded as Map<String, dynamic>;
 
-        for (final row in dataRows) {
-          if (row is List && row.length >= 3) {
-            try {
-              // Parse the title column which contains HTML with link
-              final titleHtml = row[1].toString();
-              final titleDoc = html_parser.parse(titleHtml);
-              final titleLink = titleDoc.querySelector('a');
+      // Support alternative key names used by DataTables
+      final dynamic rowsRaw = jsonData['data'] ?? jsonData['aaData'];
+      if (rowsRaw == null) {
+        debugPrint('No data found in API response. Keys: ${jsonData.keys.join(", ")}');
+        return notices;
+      }
+      if (rowsRaw is! List) {
+        debugPrint('Data is not a list, got: ${rowsRaw.runtimeType}');
+        return notices;
+      }
+      final dataRows = rowsRaw as List;
 
-              var title = '';
-              var url = '';
+      for (final row in dataRows) {
+        if (row is List && row.length >= 3) {
+          try {
+            // Parse the title column which contains HTML with link
+            final titleHtml = row[1].toString();
+            final titleDoc = html_parser.parse(titleHtml);
+            final titleLink = titleDoc.querySelector('a');
 
-              if (titleLink != null) {
-                title = titleLink.text.trim();
-                url = titleLink.attributes['href'] ?? '';
-              } else {
-                // Fallback: extract text without HTML
-                title = titleDoc.body?.text.trim() ?? '';
-              }
+            var title = '';
+            var url = '';
 
-              if (title.isEmpty) continue;
-
-              // Parse the date from column 2
-              final dateText = row[2].toString().trim();
-              final publishedDate = _parseDate(dateText) ?? DateTime.now();
-
-              // Generate a unique ID based on title and date
-              final id =
-                  'notice_${title.hashCode}_${publishedDate.millisecondsSinceEpoch}';
-
-              notices.add(
-                ScrapedNotice(
-                  id: id,
-                  title: title,
-                  description: title, // Use title as description
-                  url: _makeAbsoluteUrl(url),
-                  publishedDate: publishedDate,
-                  source: 'College Website',
-                ),
-              );
-            } catch (e) {
-              debugPrint('Error parsing notice row: $e');
-              continue;
+            if (titleLink != null) {
+              title = titleLink.text.trim();
+              url = titleLink.attributes['href'] ?? '';
+            } else {
+              // Fallback: extract text without HTML
+              title = titleDoc.body?.text.trim() ?? '';
             }
+
+            if (title.isEmpty) continue;
+
+            // Parse the date from column 2 (may contain HTML spans)
+            final rawDate = row[2].toString();
+            final dateDoc = html_parser.parse(rawDate);
+            final dateText = (dateDoc.body?.text ?? rawDate).trim();
+            final publishedDate = _parseDate(dateText) ?? DateTime.now();
+
+            // Generate a unique ID based on title and date
+            final id =
+                'notice_${title.hashCode}_${publishedDate.millisecondsSinceEpoch}';
+
+            notices.add(
+              ScrapedNotice(
+                id: id,
+                title: title,
+                description: title, // Use title as description
+                url: _makeAbsoluteUrl(url),
+                publishedDate: publishedDate,
+                source: 'College Website',
+              ),
+            );
+          } catch (e) {
+            debugPrint('Error parsing notice row: $e');
+            continue;
           }
         }
       }
 
-      debugPrint('Parsed ${notices.length} notices from API response');
+      if (notices.isEmpty) {
+        debugPrint('No notices parsed from API. Keys found: ${jsonData.keys.join(', ')}');
+      } else {
+        debugPrint('Parsed ${notices.length} notices from API response');
+      }
     } catch (e) {
       debugPrint('Error parsing API response: $e');
     }

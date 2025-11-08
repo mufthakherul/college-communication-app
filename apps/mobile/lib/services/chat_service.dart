@@ -290,4 +290,98 @@ class ChatService {
     // TODO(copilot): Implement based on message service structure
     return [];
   }
+
+  /// Get group participants
+  Future<List<Map<String, dynamic>>> getGroupParticipants(
+    String groupId,
+  ) async {
+    try {
+      final chat = await _appwrite.databases.getDocument(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.studyGroupsCollectionId,
+        documentId: groupId,
+      );
+
+      final participantIds =
+          List<String>.from(chat.data['participant_ids'] as List? ?? []);
+
+      if (participantIds.isEmpty) {
+        return [];
+      }
+
+      // Fetch participant details
+      final participants = <Map<String, dynamic>>[];
+      for (final participantId in participantIds) {
+        try {
+          final userDoc = await _appwrite.databases.getDocument(
+            databaseId: AppwriteConfig.databaseId,
+            collectionId: AppwriteConfig.usersCollectionId,
+            documentId: participantId,
+          );
+
+          participants.add({
+            'id': participantId,
+            'name': userDoc.data['display_name'] ?? 'Unknown',
+            'photo': userDoc.data['photo_url'] as String?,
+            'email': userDoc.data['email'] as String?,
+          });
+        } catch (e) {
+          debugPrint('Failed to fetch participant info for $participantId: $e');
+          // Add placeholder
+          participants.add({
+            'id': participantId,
+            'name': 'Unknown',
+            'photo': null,
+            'email': null,
+          });
+        }
+      }
+
+      return participants;
+    } catch (e) {
+      debugPrint('Failed to get group participants: $e');
+      rethrow;
+    }
+  }
+
+  /// Leave a group
+  Future<void> leaveGroup(String groupId) async {
+    final currentUserId = _authService.currentUserId;
+    if (currentUserId == null) {
+      throw Exception('User must be authenticated');
+    }
+
+    try {
+      // Get current group
+      final chat = await _appwrite.databases.getDocument(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.studyGroupsCollectionId,
+        documentId: groupId,
+      );
+
+      // Remove current user from participants
+      final participantIds =
+          List<String>.from(chat.data['participant_ids'] as List? ?? []);
+      participantIds.removeWhere((id) => id == currentUserId);
+
+      // Update group
+      if (_connectivityService.isOnline) {
+        await _appwrite.databases.updateDocument(
+          databaseId: AppwriteConfig.databaseId,
+          collectionId: AppwriteConfig.studyGroupsCollectionId,
+          documentId: groupId,
+          data: {
+            'participant_ids': participantIds,
+          },
+        );
+        debugPrint('Left group: $groupId');
+      }
+
+      // Also update locally
+      await _localDb.removeUserFromChat(groupId, currentUserId);
+    } catch (e) {
+      debugPrint('Failed to leave group: $e');
+      rethrow;
+    }
+  }
 }

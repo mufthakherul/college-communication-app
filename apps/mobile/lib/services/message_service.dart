@@ -435,6 +435,306 @@ class MessageService {
     }
   }
 
+  /// Get messages for a group chat
+  Stream<List<MessageModel>> getGroupMessages(String groupId) {
+    final currentUserId = _currentUserId;
+    if (currentUserId == null) {
+      return Stream.value([]);
+    }
+
+    return (() async* {
+      // Yield initial messages
+      yield await _fetchGroupMessagesSync(groupId);
+      
+      // Then yield updates periodically
+      yield* Stream.periodic(const Duration(seconds: 3), (_) {
+        return _fetchGroupMessagesSync(groupId);
+      }).asyncMap((future) => future);
+    }).call();
+  }
+
+  /// Fetch group messages (synchronous version for stream)
+  Future<List<MessageModel>> _fetchGroupMessagesSync(String groupId) async {
+    try {
+      final allMessages = <MessageModel>[];
+
+      // Fetch from online database if connected
+      if (_connectivityService.isOnline) {
+        try {
+          final docs = await _appwrite.databases.listDocuments(
+            databaseId: AppwriteConfig.databaseId,
+            collectionId: AppwriteConfig.messagesCollectionId,
+            queries: [
+              Query.equal('group_id', groupId),
+              Query.orderDesc('created_at'),
+              Query.limit(100),
+            ],
+          );
+
+          allMessages.addAll(
+            docs.documents.map((doc) => MessageModel.fromJson(doc.data)),
+          );
+        } catch (e) {
+          debugPrint('Failed to fetch online group messages: $e');
+        }
+      }
+
+      // Fetch from local database (pending sync)
+      try {
+        final localMessages = await _localDb.getGroupMessages(groupId);
+        for (final localMsg in localMessages) {
+          allMessages.add(
+            MessageModel(
+              id: localMsg['id'] as String,
+              senderId: localMsg['sender_id'] as String,
+              recipientId: localMsg['recipient_id'] as String,
+              content: localMsg['content'] as String,
+              type: MessageType.values.firstWhere(
+                (t) => t.name == localMsg['type'],
+                orElse: () => MessageType.text,
+              ),
+              read: false,
+              createdAt: DateTime.parse(localMsg['created_at'] as String),
+              syncStatus: _parseSyncStatus(localMsg['sync_status'] as String?),
+              groupId: groupId,
+              senderDisplayName: localMsg['sender_display_name'] as String?,
+              isGroupMessage: true,
+            ),
+          );
+        }
+      } catch (e) {
+        debugPrint('Failed to fetch local group messages: $e');
+      }
+
+      // Sort by created_at
+      allMessages.sort((a, b) {
+        final aTime = a.createdAt;
+        final bTime = b.createdAt;
+        if (aTime == null && bTime == null) return 0;
+        if (aTime == null) return 1;
+        if (bTime == null) return -1;
+        return aTime.compareTo(bTime);
+      });
+
+      return allMessages;
+    } catch (e) {
+      debugPrint('Error fetching group messages: $e');
+      return [];
+    }
+  }
+
+  /// Send a message to a group
+  Future<void> sendGroupMessage({
+    required String groupId,
+    required String groupName,
+    required String content,
+  }) async {
+    final currentUserId = _currentUserId;
+    if (currentUserId == null) {
+      throw Exception('User must be authenticated');
+    }
+
+    final messageId = ID.unique();
+    final now = DateTime.now().toIso8601String();
+
+    // Get sender info (name and photo)
+    String senderDisplayName = 'Unknown';
+    String? senderPhotoUrl;
+    try {
+      final authService = AuthService();
+      final userProfile = await authService.getUserProfile(currentUserId);
+      senderDisplayName = userProfile?.displayName ?? 'Unknown';
+      senderPhotoUrl = userProfile?.photoURL;
+    } catch (e) {
+      debugPrint('Failed to get sender info: $e');
+    }
+
+    final messageData = {
+      'id': messageId,
+      'sender_id': currentUserId,
+      'recipient_id': groupId,
+      'group_id': groupId,
+      'group_name': groupName,
+      'sender_display_name': senderDisplayName,
+      'sender_photo_url': senderPhotoUrl,
+      'content': content,
+      'type': 'text',
+      'created_at': now,
+      'read': false,
+    };
+
+    // Check if offline
+    if (!_connectivityService.isOnline) {
+      // Save locally
+      await _localDb.saveMessage(
+        {...messageData, 'sync_status': 'pending'},
+      );
+      debugPrint('Group message saved locally: $messageId');
+      return;
+    }
+
+    // Send to database
+    try {
+      await _appwrite.databases.createDocument(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.messagesCollectionId,
+        documentId: messageId,
+        data: messageData,
+      );
+      debugPrint('Group message sent: $messageId');
+    } on AppwriteException catch (e) {
+      // If network error, save locally
+      if (e.code == 0 || e.code == 408 || e.code == 503) {
+        await _localDb.saveMessage(
+          {...messageData, 'sync_status': 'pending'},
+        );
+        debugPrint('Group message saved locally (fallback): $messageId');
+      } else {
+        rethrow;
+      }
+    }
+  }
+
+  /// Mark group messages as read
+  Future<void> markGroupMessagesAsRead(String groupId) async {
+    try {
+      final currentUserId = _currentUserId;
+      if (currentUserId == null) return;
+
+      // Update all unread messages in the group where current user is recipient
+      final docs = await _appwrite.databases.listDocuments(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.messagesCollectionId,
+        queries: [
+          Query.equal('group_id', groupId),
+          Query.equal('read', false),
+          Query.limit(100), // Batch process
+        ],
+      );
+
+      for (final doc in docs.documents) {
+        try {
+          await _appwrite.databases.updateDocument(
+            databaseId: AppwriteConfig.databaseId,
+            collectionId: AppwriteConfig.messagesCollectionId,
+            documentId: doc.$id,
+            data: {
+              'read': true,
+              'read_at': DateTime.now().toIso8601String(),
+            },
+          );
+        } catch (e) {
+          debugPrint('Error marking message as read: $e');
+        }
+      }
+
+      debugPrint('✅ Group messages marked as read: $groupId');
+    } catch (e) {
+      debugPrint('❌ Error marking group messages as read: $e');
+    }
+  }
+
+  /// Search group messages
+  Future<List<MessageModel>> searchGroupMessages({
+    required String groupId,
+    required String query,
+    int limit = 50,
+  }) async {
+    try {
+      final docs = await _appwrite.databases.listDocuments(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.messagesCollectionId,
+        queries: [
+          Query.equal('group_id', groupId),
+          Query.limit(limit),
+        ],
+      );
+
+      final messages = docs.documents
+          .map((doc) => MessageModel.fromJson(doc.data))
+          .where((msg) => msg.content.toLowerCase().contains(query.toLowerCase()))
+          .toList();
+
+      return messages;
+    } catch (e) {
+      debugPrint('❌ Error searching group messages: $e');
+      return [];
+    }
+  }
+
+  /// Get group message by ID
+  Future<MessageModel?> getGroupMessageById(String messageId) async {
+    try {
+      final doc = await _appwrite.databases.getDocument(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.messagesCollectionId,
+        documentId: messageId,
+      );
+
+      return MessageModel.fromJson(doc.data);
+    } catch (e) {
+      debugPrint('❌ Error fetching group message: $e');
+      return null;
+    }
+  }
+
+  /// Update message reaction
+  Future<void> addReaction({
+    required String messageId,
+    required String emoji,
+  }) async {
+    try {
+      final currentUserId = _currentUserId;
+      if (currentUserId == null) return;
+
+      final message = await getGroupMessageById(messageId);
+      if (message == null) return;
+
+      final reactions = message.metadata?['reactions'] as Map<String, dynamic>? ?? {};
+      final userIds = (reactions[emoji] as List?) ?? [];
+
+      if (!userIds.contains(currentUserId)) {
+        userIds.add(currentUserId);
+        reactions[emoji] = userIds;
+
+        await _appwrite.databases.updateDocument(
+          databaseId: AppwriteConfig.databaseId,
+          collectionId: AppwriteConfig.messagesCollectionId,
+          documentId: messageId,
+          data: {'metadata': {'reactions': reactions}},
+        );
+
+        debugPrint('✅ Reaction added: $emoji');
+      }
+    } catch (e) {
+      debugPrint('❌ Error adding reaction: $e');
+    }
+  }
+
+  /// Delete message
+  Future<void> deleteMessage(String messageId) async {
+    try {
+      final currentUserId = _currentUserId;
+      if (currentUserId == null) return;
+
+      // Verify user is the sender
+      final message = await getGroupMessageById(messageId);
+      if (message != null && message.senderId != currentUserId) {
+        throw Exception('Can only delete your own messages');
+      }
+
+      await _appwrite.databases.deleteDocument(
+        databaseId: AppwriteConfig.databaseId,
+        collectionId: AppwriteConfig.messagesCollectionId,
+        documentId: messageId,
+      );
+
+      debugPrint('✅ Message deleted: $messageId');
+    } catch (e) {
+      debugPrint('❌ Error deleting message: $e');
+    }
+  }
+
   // Clean up
   void dispose() {
     try {
