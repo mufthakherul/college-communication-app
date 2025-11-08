@@ -46,25 +46,33 @@ class UserProfile {
       // Teacher
       designation: data['designation'],
       officeRoom: data['office_room'],
-      subjects: data['subjects'] != null ? List<String>.from(data['subjects'] as List) : null,
+      subjects: data['subjects'] != null
+          ? List<String>.from(data['subjects'] as List)
+          : null,
       qualification: data['qualification'],
       officeHours: data['office_hours'],
       // Admin
       adminTitle: data['admin_title'],
-      adminScopes: data['admin_scopes'] != null ? List<String>.from(data['admin_scopes'] as List) : null,
-      createdAt: data['created_at'] != null ? DateTime.parse(data['created_at']) : null,
-      updatedAt: data['updated_at'] != null ? DateTime.parse(data['updated_at']) : null,
+      adminScopes: data['admin_scopes'] != null
+          ? List<String>.from(data['admin_scopes'] as List)
+          : null,
+      createdAt: data['created_at'] != null
+          ? DateTime.parse(data['created_at'])
+          : null,
+      updatedAt: data['updated_at'] != null
+          ? DateTime.parse(data['updated_at'])
+          : null,
     );
   }
 
   final String id;
   final String userId;
   final UserRole role;
-  
+
   // Common fields
   final String? bio;
   final String? phoneNumber;
-  
+
   // Student-specific
   final String? shift;
   final String? group;
@@ -73,18 +81,18 @@ class UserProfile {
   final String? registrationNo;
   final String? guardianName;
   final String? guardianPhone;
-  
+
   // Teacher-specific
   final String? designation;
   final String? officeRoom;
   final List<String>? subjects;
   final String? qualification;
   final String? officeHours;
-  
+
   // Admin-specific
   final String? adminTitle;
   final List<String>? adminScopes;
-  
+
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -111,7 +119,8 @@ class UserProfile {
       // Admin
       if (adminTitle != null) 'admin_title': adminTitle,
       if (adminScopes != null) 'admin_scopes': adminScopes,
-      'created_at': createdAt?.toIso8601String() ?? DateTime.now().toIso8601String(),
+      'created_at':
+          createdAt?.toIso8601String() ?? DateTime.now().toIso8601String(),
       if (updatedAt != null) 'updated_at': updatedAt!.toIso8601String(),
     };
   }

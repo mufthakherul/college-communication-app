@@ -160,11 +160,11 @@ class _NoticesScreenState extends State<NoticesScreen>
 
     return notices.where((notice) {
       final titleMatch = notice.title.toLowerCase().contains(
-            _searchQuery.toLowerCase(),
-          );
+        _searchQuery.toLowerCase(),
+      );
       final contentMatch = notice.content.toLowerCase().contains(
-            _searchQuery.toLowerCase(),
-          );
+        _searchQuery.toLowerCase(),
+      );
       return titleMatch || contentMatch;
     }).toList();
   }
@@ -394,13 +394,10 @@ class _NoticesScreenState extends State<NoticesScreen>
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          Theme.of(context)
-                              .colorScheme
-                              .surface
-                              .withValues(alpha: 0.85),
-                          Theme.of(context)
-                              .colorScheme
-                              .surfaceContainerHighest
+                          Theme.of(
+                            context,
+                          ).colorScheme.surface.withValues(alpha: 0.85),
+                          Theme.of(context).colorScheme.surfaceContainerHighest
                               .withValues(alpha: 0.6),
                         ],
                       ),
@@ -455,8 +452,8 @@ class _NoticesScreenState extends State<NoticesScreen>
                                                 .textTheme
                                                 .titleMedium
                                                 ?.copyWith(
-                                                    fontWeight:
-                                                        FontWeight.w700),
+                                                  fontWeight: FontWeight.w700,
+                                                ),
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
                                           ),
@@ -465,8 +462,11 @@ class _NoticesScreenState extends State<NoticesScreen>
                                             NoticeSource.scraped)
                                           const Padding(
                                             padding: EdgeInsets.only(left: 6),
-                                            child: Icon(Icons.link,
-                                                size: 16, color: Colors.blue),
+                                            child: Icon(
+                                              Icons.link,
+                                              size: 16,
+                                              color: Colors.blue,
+                                            ),
                                           ),
                                       ],
                                     ),
@@ -475,17 +475,17 @@ class _NoticesScreenState extends State<NoticesScreen>
                                       notice.content,
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium,
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.bodyMedium,
                                     ),
                                     const SizedBox(height: 6),
                                     if (notice.createdAt != null)
                                       Text(
                                         _formatDate(notice.createdAt!),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall,
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.bodySmall,
                                       ),
                                   ],
                                 ),
@@ -504,10 +504,11 @@ class _NoticesScreenState extends State<NoticesScreen>
                   .animate(delay: (50 * index).ms)
                   .fadeIn(duration: 350.ms, curve: Curves.easeOut)
                   .slideY(
-                      begin: 0.06,
-                      end: 0,
-                      duration: 300.ms,
-                      curve: Curves.easeOut);
+                    begin: 0.06,
+                    end: 0,
+                    duration: 300.ms,
+                    curve: Curves.easeOut,
+                  );
             },
           ),
         );

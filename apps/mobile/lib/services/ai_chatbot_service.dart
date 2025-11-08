@@ -91,12 +91,12 @@ Always maintain a respectful and supportive tone.
       );
 
       // Test with a simple prompt - use timeout to avoid hanging
-      final response = await testModel.generateContent([
-        Content.text('Say hello'),
-      ]).timeout(
-        const Duration(seconds: 15),
-        onTimeout: () => throw Exception('API validation timeout'),
-      );
+      final response = await testModel
+          .generateContent([Content.text('Say hello')])
+          .timeout(
+            const Duration(seconds: 15),
+            onTimeout: () => throw Exception('API validation timeout'),
+          );
 
       return response.text != null && response.text!.isNotEmpty;
     } catch (e) {
@@ -134,8 +134,11 @@ Always maintain a respectful and supportive tone.
   }
 
   // Send message and get response with retry logic
-  Future<String> sendMessage(String message, String sessionId,
-      {int retryCount = 0}) async {
+  Future<String> sendMessage(
+    String message,
+    String sessionId, {
+    int retryCount = 0,
+  }) async {
     await _ensureModelInitialized();
 
     try {
@@ -170,12 +173,14 @@ Always maintain a respectful and supportive tone.
       history.add(Content.text(message));
 
       // Generate response with timeout
-      final response = await _model!.generateContent(history).timeout(
-        const Duration(seconds: 60),
-        onTimeout: () => throw Exception(
-          'Gemini API took too long to respond. Please try again.',
-        ),
-      );
+      final response = await _model!
+          .generateContent(history)
+          .timeout(
+            const Duration(seconds: 60),
+            onTimeout: () => throw Exception(
+              'Gemini API took too long to respond. Please try again.',
+            ),
+          );
 
       // Check for valid response
       if (response.text == null || response.text!.isEmpty) {
@@ -191,9 +196,9 @@ Always maintain a respectful and supportive tone.
       return response.text!;
     } catch (e) {
       final errorStr = e.toString();
-      
+
       // Check for timeout errors
-      if (errorStr.contains('timeout') || 
+      if (errorStr.contains('timeout') ||
           errorStr.contains('TimeoutException') ||
           errorStr.contains('Gemini API took too long')) {
         if (retryCount < 1) {
@@ -205,7 +210,7 @@ Always maintain a respectful and supportive tone.
           'Request timed out. The Gemini API is taking too long. Please check your internet connection and try again.',
         );
       }
-      
+
       // Handle rate limiting (429 errors)
       if (errorStr.contains('429') || errorStr.contains('RESOURCE_EXHAUSTED')) {
         if (retryCount < 2) {
@@ -218,16 +223,16 @@ Always maintain a respectful and supportive tone.
           'API rate limit exceeded. You\'ve made too many requests. Please wait a few minutes and try again.',
         );
       }
-      
+
       // Handle quota exceeded
-      if (errorStr.contains('QUOTA_EXCEEDED') || 
+      if (errorStr.contains('QUOTA_EXCEEDED') ||
           errorStr.contains('quota') ||
           errorStr.contains('daily')) {
         throw Exception(
           'Daily API quota exceeded. Please check your Gemini API usage and try again tomorrow.',
         );
       }
-      
+
       // Handle invalid API key
       if (errorStr.contains('INVALID_ARGUMENT') ||
           errorStr.contains('invalid API key') ||
@@ -237,7 +242,7 @@ Always maintain a respectful and supportive tone.
           'Invalid or expired API key. Please verify your API key and try again.',
         );
       }
-      
+
       // Handle network errors
       if (errorStr.contains('SocketException') ||
           errorStr.contains('Failed host lookup') ||
@@ -338,7 +343,7 @@ Always maintain a respectful and supportive tone.
 
       // Build conversation history with proper roles
       final history = <Content>[];
-      
+
       // Add system instruction as first user message if this is first message
       if (messages.isEmpty) {
         history.add(Content.text(_systemInstruction));
@@ -350,7 +355,7 @@ Always maintain a respectful and supportive tone.
           ]),
         );
       }
-      
+
       for (final msg in messages.take(20)) {
         if (msg.isUser) {
           history.add(Content.text(msg.content));
@@ -373,20 +378,21 @@ Always maintain a respectful and supportive tone.
         }
       } catch (e) {
         final errorStr = e.toString();
-        
+
         // Check for timeout
-        if (errorStr.contains('timeout') || errorStr.contains('TimeoutException')) {
+        if (errorStr.contains('timeout') ||
+            errorStr.contains('TimeoutException')) {
           yield 'The request timed out. Please try again.';
-        } 
+        }
         // Check for rate limiting
-        else if (errorStr.contains('429') || errorStr.contains('RESOURCE_EXHAUSTED')) {
+        else if (errorStr.contains('429') ||
+            errorStr.contains('RESOURCE_EXHAUSTED')) {
           yield 'Rate limit exceeded. Please wait a moment and try again.';
-        } 
+        }
         // Check for authentication errors
         else if (errorStr.contains('401') || errorStr.contains('403')) {
           yield 'Authentication error. Please check your API key.';
-        } 
-        else {
+        } else {
           yield 'Error: Unable to generate response: $e';
         }
       }

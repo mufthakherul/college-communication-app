@@ -89,5 +89,6 @@ class GroupModel {
   }
 
   @override
-  String toString() => 'GroupModel(id: $id, name: $name, memberCount: $memberCount)';
+  String toString() =>
+      'GroupModel(id: $id, name: $name, memberCount: $memberCount)';
 }

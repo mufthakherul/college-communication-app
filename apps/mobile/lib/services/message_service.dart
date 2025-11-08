@@ -445,7 +445,7 @@ class MessageService {
     return (() async* {
       // Yield initial messages
       yield await _fetchGroupMessagesSync(groupId);
-      
+
       // Then yield updates periodically
       yield* Stream.periodic(const Duration(seconds: 3), (_) {
         return _fetchGroupMessagesSync(groupId);
@@ -566,9 +566,7 @@ class MessageService {
     // Check if offline
     if (!_connectivityService.isOnline) {
       // Save locally
-      await _localDb.saveMessage(
-        {...messageData, 'sync_status': 'pending'},
-      );
+      await _localDb.saveMessage({...messageData, 'sync_status': 'pending'});
       debugPrint('Group message saved locally: $messageId');
       return;
     }
@@ -585,9 +583,7 @@ class MessageService {
     } on AppwriteException catch (e) {
       // If network error, save locally
       if (e.code == 0 || e.code == 408 || e.code == 503) {
-        await _localDb.saveMessage(
-          {...messageData, 'sync_status': 'pending'},
-        );
+        await _localDb.saveMessage({...messageData, 'sync_status': 'pending'});
         debugPrint('Group message saved locally (fallback): $messageId');
       } else {
         rethrow;
@@ -618,10 +614,7 @@ class MessageService {
             databaseId: AppwriteConfig.databaseId,
             collectionId: AppwriteConfig.messagesCollectionId,
             documentId: doc.$id,
-            data: {
-              'read': true,
-              'read_at': DateTime.now().toIso8601String(),
-            },
+            data: {'read': true, 'read_at': DateTime.now().toIso8601String()},
           );
         } catch (e) {
           debugPrint('Error marking message as read: $e');
@@ -644,15 +637,14 @@ class MessageService {
       final docs = await _appwrite.databases.listDocuments(
         databaseId: AppwriteConfig.databaseId,
         collectionId: AppwriteConfig.messagesCollectionId,
-        queries: [
-          Query.equal('group_id', groupId),
-          Query.limit(limit),
-        ],
+        queries: [Query.equal('group_id', groupId), Query.limit(limit)],
       );
 
       final messages = docs.documents
           .map((doc) => MessageModel.fromJson(doc.data))
-          .where((msg) => msg.content.toLowerCase().contains(query.toLowerCase()))
+          .where(
+            (msg) => msg.content.toLowerCase().contains(query.toLowerCase()),
+          )
           .toList();
 
       return messages;
@@ -690,7 +682,8 @@ class MessageService {
       final message = await getGroupMessageById(messageId);
       if (message == null) return;
 
-      final reactions = message.metadata?['reactions'] as Map<String, dynamic>? ?? {};
+      final reactions =
+          message.metadata?['reactions'] as Map<String, dynamic>? ?? {};
       final userIds = (reactions[emoji] as List?) ?? [];
 
       if (!userIds.contains(currentUserId)) {
@@ -701,7 +694,9 @@ class MessageService {
           databaseId: AppwriteConfig.databaseId,
           collectionId: AppwriteConfig.messagesCollectionId,
           documentId: messageId,
-          data: {'metadata': {'reactions': reactions}},
+          data: {
+            'metadata': {'reactions': reactions},
+          },
         );
 
         debugPrint('✅ Reaction added: $emoji');

@@ -302,8 +302,9 @@ class ChatService {
         documentId: groupId,
       );
 
-      final participantIds =
-          List<String>.from(chat.data['participant_ids'] as List? ?? []);
+      final participantIds = List<String>.from(
+        chat.data['participant_ids'] as List? ?? [],
+      );
 
       if (participantIds.isEmpty) {
         return [];
@@ -360,8 +361,9 @@ class ChatService {
       );
 
       // Remove current user from participants
-      final participantIds =
-          List<String>.from(chat.data['participant_ids'] as List? ?? []);
+      final participantIds = List<String>.from(
+        chat.data['participant_ids'] as List? ?? [],
+      );
       participantIds.removeWhere((id) => id == currentUserId);
 
       // Update group
@@ -370,9 +372,7 @@ class ChatService {
           databaseId: AppwriteConfig.databaseId,
           collectionId: AppwriteConfig.studyGroupsCollectionId,
           documentId: groupId,
-          data: {
-            'participant_ids': participantIds,
-          },
+          data: {'participant_ids': participantIds},
         );
         debugPrint('Left group: $groupId');
       }

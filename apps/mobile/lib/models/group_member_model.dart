@@ -9,7 +9,7 @@ class GroupMemberModel {
   final DateTime? lastSeenAt;
   final int unreadCount;
   final Map<String, dynamic>? metadata;
-  
+
   // Denormalized fields for UI display
   final String? userDisplayName;
   final String? userPhotoUrl;

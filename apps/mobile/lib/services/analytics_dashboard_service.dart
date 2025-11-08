@@ -314,8 +314,9 @@ class AnalyticsDashboardService {
         }
       }
 
-      final avgMessagesPerUser =
-          allUsers.total > 0 ? messagesCount.total / allUsers.total : 0.0;
+      final avgMessagesPerUser = allUsers.total > 0
+          ? messagesCount.total / allUsers.total
+          : 0.0;
 
       return SystemAnalytics(
         totalUsers: allUsers.total,
@@ -484,16 +485,19 @@ class AnalyticsDashboardService {
 
       // Sort by date
       usersData.sort(
-        (a, b) => ((a['date'] as String?) ?? '')
-            .compareTo((b['date'] as String?) ?? ''),
+        (a, b) => ((a['date'] as String?) ?? '').compareTo(
+          (b['date'] as String?) ?? '',
+        ),
       );
       noticesData.sort(
-        (a, b) => ((a['date'] as String?) ?? '')
-            .compareTo((b['date'] as String?) ?? ''),
+        (a, b) => ((a['date'] as String?) ?? '').compareTo(
+          (b['date'] as String?) ?? '',
+        ),
       );
       messagesData.sort(
-        (a, b) => ((a['date'] as String?) ?? '')
-            .compareTo((b['date'] as String?) ?? ''),
+        (a, b) => ((a['date'] as String?) ?? '').compareTo(
+          (b['date'] as String?) ?? '',
+        ),
       );
 
       return {

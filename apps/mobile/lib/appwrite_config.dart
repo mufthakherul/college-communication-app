@@ -15,7 +15,7 @@ class AppwriteConfig {
 
   // Collection IDs
   static const String usersCollectionId = 'users';
-   static const String userProfilesCollectionId = 'user_profiles';
+  static const String userProfilesCollectionId = 'user_profiles';
   static const String noticesCollectionId = 'notices';
   static const String messagesCollectionId = 'messages';
   static const String messagesPendingCollectionId = 'messages_pending';
@@ -30,7 +30,7 @@ class AppwriteConfig {
   static const String timetablesCollectionId = 'timetables';
   static const String studyGroupsCollectionId = 'study_groups';
   static const String eventsCollectionId = 'events';
-  
+
   // Group chat collection IDs
   static const String groupsCollectionId = 'groups';
   static const String groupMembersCollectionId = 'group_members';

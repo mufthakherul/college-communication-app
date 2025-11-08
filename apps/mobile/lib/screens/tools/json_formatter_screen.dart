@@ -429,8 +429,7 @@ class _JSONFormatterScreenState extends State<JSONFormatterScreen>
                 color: Colors.grey[100],
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const SelectableText(
-                '''
+              child: const SelectableText('''
 <?xml version="1.0" encoding="UTF-8"?>
 <student>
   <name>John Doe</name>
@@ -446,9 +445,7 @@ class _JSONFormatterScreenState extends State<JSONFormatterScreen>
       <name>Data Structures</name>
     </course>
   </courses>
-</student>''',
-                style: TextStyle(fontFamily: 'Courier', fontSize: 12),
-              ),
+</student>''', style: TextStyle(fontFamily: 'Courier', fontSize: 12)),
             ),
           ],
         ),

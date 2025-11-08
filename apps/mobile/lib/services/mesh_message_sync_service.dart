@@ -21,12 +21,14 @@ class MeshMessageSyncService {
 
   Future<void> initialize() async {
     // Listen for incoming mesh chat messages
-    _meshSub = _mesh.messageStream.listen(_handleIncomingMeshMessage,
-        onError: (e) {
-      if (kDebugMode) {
-        debugPrint('Mesh message stream error: $e');
-      }
-    });
+    _meshSub = _mesh.messageStream.listen(
+      _handleIncomingMeshMessage,
+      onError: (e) {
+        if (kDebugMode) {
+          debugPrint('Mesh message stream error: $e');
+        }
+      },
+    );
 
     // Periodically try sending pending messages
     _timer?.cancel();
@@ -68,7 +70,8 @@ class MeshMessageSyncService {
         'type': payload['type'] as String? ?? 'text',
         'is_group_message': 0,
         'group_id': null,
-        'created_at': payload['created_at'] as String? ?? msg.timestamp.toIso8601String(),
+        'created_at':
+            payload['created_at'] as String? ?? msg.timestamp.toIso8601String(),
         'sync_status': 'pending', // still needs server sync later
         'approval_status': null,
         'retry_count': 0,
@@ -105,11 +108,13 @@ class MeshMessageSyncService {
       );
       if (node == null) continue;
 
-      final id = m['id'] as String? ?? '${DateTime.now().millisecondsSinceEpoch}';
+      final id =
+          m['id'] as String? ?? '${DateTime.now().millisecondsSinceEpoch}';
 
       // Throttle duplicate sends
       final last = _recentlySent[id];
-      if (last != null && DateTime.now().difference(last) < const Duration(minutes: 2)) {
+      if (last != null &&
+          DateTime.now().difference(last) < const Duration(minutes: 2)) {
         continue;
       }
 

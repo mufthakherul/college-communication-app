@@ -95,13 +95,16 @@ class DebugLoggerService {
 
     // Count by level
     for (final level in LogLevel.values) {
-      stats['${level.name}Count'] =
-          _logs.where((log) => log.level == level).length;
+      stats['${level.name}Count'] = _logs
+          .where((log) => log.level == level)
+          .length;
     }
 
     // Get unique tags
-    final tags =
-        _logs.map((log) => log.tag).where((tag) => tag != null).toSet();
+    final tags = _logs
+        .map((log) => log.tag)
+        .where((tag) => tag != null)
+        .toSet();
     stats['uniqueTags'] = tags.length;
 
     return stats;

@@ -143,8 +143,8 @@ class _AssignmentTrackerScreenState extends State<AssignmentTrackerScreen> {
       color: isOverdue
           ? Colors.red[50]
           : isDueSoon
-              ? Colors.orange[50]
-              : null,
+          ? Colors.orange[50]
+          : null,
       child: InkWell(
         onTap: () {
           _showAssignmentDetails(assignment);
@@ -202,14 +202,14 @@ class _AssignmentTrackerScreenState extends State<AssignmentTrackerScreen> {
                     isOverdue
                         ? Icons.error
                         : isDueSoon
-                            ? Icons.warning
-                            : Icons.schedule,
+                        ? Icons.warning
+                        : Icons.schedule,
                     size: 16,
                     color: isOverdue
                         ? Colors.red
                         : isDueSoon
-                            ? Colors.orange
-                            : Colors.blue,
+                        ? Colors.orange
+                        : Colors.blue,
                   ),
                   const SizedBox(width: 4),
                   Text(
@@ -222,8 +222,8 @@ class _AssignmentTrackerScreenState extends State<AssignmentTrackerScreen> {
                       color: isOverdue
                           ? Colors.red
                           : isDueSoon
-                              ? Colors.orange
-                              : Colors.blue,
+                          ? Colors.orange
+                          : Colors.blue,
                     ),
                   ),
                 ],

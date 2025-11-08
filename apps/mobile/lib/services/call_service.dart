@@ -67,7 +67,7 @@ class CallService {
     final config = {
       'iceServers': [
         {'urls': 'stun:stun.l.google.com:19302'},
-      ]
+      ],
     };
     final constraints = {
       'mandatory': {},
@@ -124,10 +124,8 @@ class CallService {
   }
 
   Map<String, dynamic> _sanitizeSdpMap(Map<String, dynamic> m) {
-    return {
-      'sdp': (m['sdp'] as String?)?.substring(0, 4096),
-      'type': m['type'],
-    }..removeWhere((key, value) => value == null);
+    return {'sdp': (m['sdp'] as String?)?.substring(0, 4096), 'type': m['type']}
+      ..removeWhere((key, value) => value == null);
   }
 
   Future<void> startCall(String peerId, {bool video = true}) async {
@@ -159,12 +157,17 @@ class CallService {
     await _mesh.sendMessage(peerId, msg);
   }
 
-  Future<void> _handleRemoteOffer(String peerId, Map<String, dynamic> sdp) async {
+  Future<void> _handleRemoteOffer(
+    String peerId,
+    Map<String, dynamic> sdp,
+  ) async {
     _currentPeerId = peerId;
     await _createPeerConnection();
     await _ensureLocalStream(video: true);
 
-  await _pc!.setRemoteDescription(RTCSessionDescription(sdp['sdp'], sdp['type']));
+    await _pc!.setRemoteDescription(
+      RTCSessionDescription(sdp['sdp'], sdp['type']),
+    );
     final answer = await _pc!.createAnswer();
     await _pc!.setLocalDescription(answer);
 
@@ -180,18 +183,22 @@ class CallService {
 
   Future<void> _handleRemoteAnswer(Map<String, dynamic> sdp) async {
     if (_pc == null) return;
-    await _pc!.setRemoteDescription(RTCSessionDescription(sdp['sdp'], sdp['type']));
+    await _pc!.setRemoteDescription(
+      RTCSessionDescription(sdp['sdp'], sdp['type']),
+    );
     _callState.value = CallState.inCall;
   }
 
   Future<void> _handleRemoteIce(Map<String, dynamic> ice) async {
     if (_pc == null) return;
     try {
-      await _pc!.addCandidate(RTCIceCandidate(
-        ice['candidate'] as String?,
-        ice['sdpMid'] as String?,
-        ice['sdpMLineIndex'] as int?,
-      ));
+      await _pc!.addCandidate(
+        RTCIceCandidate(
+          ice['candidate'] as String?,
+          ice['sdpMid'] as String?,
+          ice['sdpMLineIndex'] as int?,
+        ),
+      );
     } catch (e) {
       if (kDebugMode) {
         debugPrint('Error adding ICE: $e');

@@ -66,33 +66,59 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _profileService = UserProfileService(client);
 
     // Initialize common fields
-    _displayNameController = TextEditingController(text: widget.user.displayName);
+    _displayNameController = TextEditingController(
+      text: widget.user.displayName,
+    );
     _departmentController = TextEditingController(text: widget.user.department);
     _yearController = TextEditingController(text: widget.user.year);
     _bioController = TextEditingController(text: widget.profile.bio ?? '');
-    _phoneNumberController = TextEditingController(text: widget.profile.phoneNumber ?? '');
+    _phoneNumberController = TextEditingController(
+      text: widget.profile.phoneNumber ?? '',
+    );
 
     // Initialize student fields
     _shiftController = TextEditingController(text: widget.profile.shift ?? '');
     _groupController = TextEditingController(text: widget.profile.group ?? '');
-    _classRollController = TextEditingController(text: widget.profile.classRoll ?? '');
-    _academicSessionController = TextEditingController(text: widget.profile.academicSession ?? '');
-    _registrationNoController = TextEditingController(text: widget.profile.registrationNo ?? '');
-    _guardianNameController = TextEditingController(text: widget.profile.guardianName ?? '');
-    _guardianPhoneController = TextEditingController(text: widget.profile.guardianPhone ?? '');
-    _selectedShift = widget.profile.shift?.isEmpty ?? true ? null : widget.profile.shift;
+    _classRollController = TextEditingController(
+      text: widget.profile.classRoll ?? '',
+    );
+    _academicSessionController = TextEditingController(
+      text: widget.profile.academicSession ?? '',
+    );
+    _registrationNoController = TextEditingController(
+      text: widget.profile.registrationNo ?? '',
+    );
+    _guardianNameController = TextEditingController(
+      text: widget.profile.guardianName ?? '',
+    );
+    _guardianPhoneController = TextEditingController(
+      text: widget.profile.guardianPhone ?? '',
+    );
+    _selectedShift = widget.profile.shift?.isEmpty ?? true
+        ? null
+        : widget.profile.shift;
 
     // Initialize teacher fields
-    _designationController = TextEditingController(text: widget.profile.designation ?? '');
-    _officeRoomController = TextEditingController(text: widget.profile.officeRoom ?? '');
-    _qualificationController = TextEditingController(text: widget.profile.qualification ?? '');
-    _officeHoursController = TextEditingController(text: widget.profile.officeHours ?? '');
+    _designationController = TextEditingController(
+      text: widget.profile.designation ?? '',
+    );
+    _officeRoomController = TextEditingController(
+      text: widget.profile.officeRoom ?? '',
+    );
+    _qualificationController = TextEditingController(
+      text: widget.profile.qualification ?? '',
+    );
+    _officeHoursController = TextEditingController(
+      text: widget.profile.officeHours ?? '',
+    );
     _subjectsController = TextEditingController(
       text: widget.profile.subjects?.join(', ') ?? '',
     );
 
     // Initialize admin fields
-    _adminTitleController = TextEditingController(text: widget.profile.adminTitle ?? '');
+    _adminTitleController = TextEditingController(
+      text: widget.profile.adminTitle ?? '',
+    );
     _adminScopesController = TextEditingController(
       text: widget.profile.adminScopes?.join(', ') ?? '',
     );
@@ -243,9 +269,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             // Common fields section
             Text(
               'Basic Information',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
             TextFormField(
@@ -306,9 +332,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             const SizedBox(height: 32),
             Text(
               _getRoleSectionTitle(),
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
 
@@ -322,10 +348,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   prefixIcon: Icon(Icons.schedule),
                 ),
                 items: _shifts.map((shift) {
-                  return DropdownMenuItem(
-                    value: shift,
-                    child: Text(shift),
-                  );
+                  return DropdownMenuItem(value: shift, child: Text(shift));
                 }).toList(),
                 onChanged: (value) {
                   setState(() => _selectedShift = value);
