@@ -12,17 +12,17 @@ dependencies:
   flutter:
     sdk: flutter
   # Appwrite dependencies
-  appwrite: ^17.1.0
+  appwrite: ^20.3.0
   url_launcher: ^6.2.1
   webview_flutter: ^4.4.2
   shared_preferences: ^2.2.2
   cupertino_icons: ^1.0.2
   # Note: flutter_markdown is discontinued, but flutter_markdown_plus has API breaking changes
   # Keeping flutter_markdown until we can properly test the migration
-  flutter_markdown: ^0.6.18
+  flutter_markdown: ^0.7.7+1
   # Network improvements
-  connectivity_plus: ^6.0.0
-  workmanager: ^0.5.2
+  connectivity_plus: ^7.0.0
+  workmanager: ^0.9.0+3
   # Mesh networking
   # TODO(fix): flutter_nearby_connections uses deprecated v1 embedding API
   # Temporarily commented out until plugin is updated or we fork it
@@ -32,36 +32,36 @@ dependencies:
   flutter_webrtc: ^1.2.0
   # QR code support
   qr_flutter: ^4.1.0
-  mobile_scanner: ^4.0.1
+  mobile_scanner: ^7.1.3
   # Network utilities
-  network_info_plus: ^5.0.0
-  permission_handler: ^11.0.1
+  network_info_plus: ^7.0.0
+  permission_handler: ^12.0.1
   # Utilities
   path_provider: ^2.1.1
   path: ^1.8.3
-  archive: ^3.4.9
-  package_info_plus: ^8.0.0
-  device_info_plus: ^10.0.0
+  archive: ^4.0.7
+  package_info_plus: ^9.0.0
+  device_info_plus: ^12.2.0
   # Local database for offline storage
   sqflite: ^2.3.0
   # File handling
-  file_picker: ^8.0.0
+  file_picker: ^10.3.3
   image_picker: ^1.2.0
   # Monitoring & Analytics
-  sentry_flutter: ^7.14.0
+  sentry_flutter: ^9.8.0
   onesignal_flutter: ^5.0.0
   # Security
   crypto: ^3.0.3
   flutter_secure_storage: ^9.0.0
-  local_auth: ^2.1.8
+  local_auth: ^3.0.0
   # HTTP client
   http: ^1.1.0
   # HTML parser for web scraping
   html: ^0.15.4
   # Google Gemini AI
-  google_generative_ai: ^0.2.2
+  google_generative_ai: ^0.4.7
   # Charts for analytics
-  fl_chart: ^0.66.0
+  fl_chart: ^1.1.1
   # Modern typography
   google_fonts: ^6.2.1
   # Advanced animations & micro-interactions
@@ -73,7 +73,7 @@ dev_dependencies:
     sdk: flutter
   integration_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^6.0.0
   mockito: ^5.4.2
   build_runner: ^2.4.6
 

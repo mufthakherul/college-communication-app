@@ -1,6 +1,9 @@
 // ignore_for_file: do_not_use_environment
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+
 import 'package:campus_mesh/screens/auth/login_screen.dart';
 import 'package:campus_mesh/screens/home_screen.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
@@ -14,8 +17,6 @@ import 'package:campus_mesh/services/onesignal_service.dart';
 import 'package:campus_mesh/services/security_service.dart';
 import 'package:campus_mesh/services/sentry_service.dart';
 import 'package:campus_mesh/services/theme_service.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 
 /// Initialize essential services that are required for basic app functionality
 Future<void> _initializeEssentialServices() async {
@@ -306,14 +307,14 @@ Future<void> _initializeApp() async {
   }
 
   // Initialize mesh message sync (P2P when nearby) - Deferred until after app start
-  Future.microtask(() async {
+  unawaited(Future.microtask(() async {
     try {
       final meshSync = MeshMessageSyncService();
       await meshSync.initialize();
     } catch (e) {
       debugPrint('Failed to initialize mesh message sync: $e');
     }
-  });
+  }));
 
   // Start the app UI first, then initialize remaining services
   runApp(const CampusMeshApp());
