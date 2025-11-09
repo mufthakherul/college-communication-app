@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'package:appwrite/appwrite.dart';
 import 'package:campus_mesh/appwrite_config.dart';
 import 'package:campus_mesh/models/user_model.dart';
@@ -164,7 +166,7 @@ class UserProfileService {
         final created = await createUserProfile(profile);
         createdProfiles.add(created);
       } catch (e) {
-        print('Failed to create profile for user ${profile.userId}: $e');
+        debugPrint('Failed to create profile for user ${profile.userId}: $e');
         // Continue with other profiles
       }
     }

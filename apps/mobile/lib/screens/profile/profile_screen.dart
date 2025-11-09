@@ -534,19 +534,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildInfoTile(
-    BuildContext context,
-    IconData icon,
-    String label,
-    String value,
-  ) {
-    return ListTile(
-      leading: Icon(icon, color: Theme.of(context).primaryColor),
-      title: Text(label),
-      subtitle: Text(value),
-    );
-  }
-
   Color _getRoleColor(UserRole role) {
     switch (role) {
       case UserRole.admin:
