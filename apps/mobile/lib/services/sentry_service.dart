@@ -32,7 +32,8 @@ class SentryService {
       options.debug = kDebugMode;
 
       // Filter events before sending
-      options.beforeSend = (event, {hint}) {
+      // Updated signature for sentry_flutter ^9.x: (SentryEvent, Hint?)
+      options.beforeSend = (SentryEvent event, Hint? hint) {
         // Filter out demo mode errors
         if (event.tags?['demo_mode'] == 'true') {
           return null;
@@ -43,7 +44,7 @@ class SentryService {
           return null;
         }
 
-        return event;
+        return event; // returning the (possibly filtered) event
       };
 
       // Add breadcrumbs for better context

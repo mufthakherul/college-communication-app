@@ -14,8 +14,8 @@ dependencies:
   # Appwrite dependencies
   appwrite: ^20.3.0
   url_launcher: ^6.2.1
-  webview_flutter: ^4.4.2
-  shared_preferences: ^2.2.2
+  webview_flutter: ^4.13.0
+  shared_preferences: ^2.5.3
   cupertino_icons: ^1.0.2
   # Note: flutter_markdown is discontinued, but flutter_markdown_plus has API breaking changes
   # Keeping flutter_markdown until we can properly test the migration
@@ -37,13 +37,13 @@ dependencies:
   network_info_plus: ^7.0.0
   permission_handler: ^12.0.1
   # Utilities
-  path_provider: ^2.1.1
+  path_provider: ^2.1.5
   path: ^1.8.3
   archive: ^4.0.7
   package_info_plus: ^9.0.0
   device_info_plus: ^12.2.0
   # Local database for offline storage
-  sqflite: ^2.3.0
+  sqflite: ^2.4.2
   # File handling
   file_picker: ^10.3.3
   image_picker: ^1.2.0
@@ -55,7 +55,7 @@ dependencies:
   flutter_secure_storage: ^9.0.0
   local_auth: ^3.0.0
   # HTTP client
-  http: ^1.1.0
+  http: ^1.5.0
   # HTML parser for web scraping
   html: ^0.15.4
   # Google Gemini AI
@@ -79,7 +79,7 @@ dev_dependencies:
 
 dependency_overrides:
   # Override win32 to fix UnmodifiableUint8ListView errors with Dart 3.3+
-  win32: ^5.5.0
+  win32: ^5.15.0
   # Override flutter_plugin_android_lifecycle to fix v1 embedding compatibility
   # v2.0.32+ supports Flutter v2 embedding (required for Flutter 3.35.7+)
   flutter_plugin_android_lifecycle: ^2.0.32
@@ -87,6 +87,10 @@ dependency_overrides:
   # v4.1.0+ supports Flutter v2 embedding (required for Flutter 3.35.7+)
   # Used by appwrite package for OAuth authentication
   flutter_web_auth_2: ^4.1.0
+
+  # Force latest Android implementation of path_provider to avoid legacy v1 embedding code
+  path_provider_android:
+    version: ">=2.2.4 <3.0.0"
 
 flutter:
   uses-material-design: true
