@@ -15,7 +15,8 @@ import 'package:campus_mesh/services/offline_message_sync_service.dart';
 import 'package:campus_mesh/services/offline_queue_service.dart';
 import 'package:campus_mesh/services/onesignal_service.dart';
 import 'package:campus_mesh/services/security_service.dart';
-import 'package:campus_mesh/services/sentry_service.dart';
+// Sentry temporarily disabled (dependency retained but not initialized)
+// import 'package:campus_mesh/services/sentry_service.dart';
 import 'package:campus_mesh/services/theme_service.dart';
 
 /// Initialize essential services that are required for basic app functionality
@@ -31,22 +32,7 @@ Future<void> _initializeEssentialServices() async {
     // Continue without auth - will show login screen
   }
 
-  // Initialize crash reporting in release mode
-  if (kReleaseMode) {
-    try {
-      const sentryDsn = String.fromEnvironment('SENTRY_DSN', defaultValue: '');
-      if (sentryDsn.isNotEmpty) {
-        await SentryService.initialize(
-          dsn: sentryDsn,
-          environment: 'production',
-          release: 'campus_mesh@2.0.0+2',
-          tracesSampleRate: 0.2,
-        );
-      }
-    } catch (e) {
-      debugPrint('Failed to initialize Sentry: $e');
-    }
-  }
+  // Crash reporting disabled for now (Sentry)
 }
 
 void main() {
@@ -56,12 +42,7 @@ void main() {
       FlutterError.onError = (FlutterErrorDetails details) {
         FlutterError.presentError(details);
         // Log to crash reporting
-        if (kReleaseMode) {
-          SentryService().captureException(
-            details.exception,
-            stackTrace: details.stack,
-          );
-        }
+        // Sentry disabled
       };
 
       await _initializeApp();
@@ -69,9 +50,7 @@ void main() {
     (error, stack) {
       debugPrint('Fatal error: $error');
       debugPrint('Stack trace: $stack');
-      if (kReleaseMode) {
-        SentryService().captureException(error, stackTrace: stack);
-      }
+      // Sentry disabled
       // If initialization fails catastrophically, show error screen
       debugPrint('Fatal initialization error: $error');
       debugPrint('Stack trace: $stack');
@@ -165,27 +144,7 @@ Future<void> _initializeApp() async {
     }
   }
 
-  // Initialize Sentry (crash reporting)
-  // Replace 'YOUR_SENTRY_DSN' with your actual Sentry DSN
-  // Get it from: https://sentry.io/settings/YOUR_ORG/projects/YOUR_PROJECT/keys/
-  const sentryDsn = String.fromEnvironment(
-    'SENTRY_DSN',
-    defaultValue: '', // Empty by default - configure via --dart-define
-  );
-
-  if (sentryDsn.isNotEmpty) {
-    try {
-      await SentryService.initialize(
-        dsn: sentryDsn,
-        environment: kReleaseMode ? 'production' : 'development',
-        release: 'campus_mesh@2.0.0+2',
-        tracesSampleRate: kReleaseMode ? 0.2 : 1.0, // Sample 20% in production
-      );
-    } catch (e) {
-      debugPrint('Failed to initialize Sentry: $e');
-      // Continue app execution even if Sentry fails
-    }
-  }
+  // Sentry initialization skipped
 
   // Initialize Appwrite - CRITICAL: Must be done before any service uses it
   try {

@@ -47,8 +47,8 @@ dependencies:
   # File handling
   file_picker: ^10.3.3
   image_picker: ^1.2.0
-  # Monitoring & Analytics
-  sentry_flutter: ^9.8.0
+  # Monitoring & Analytics (temporarily disabled)
+  # sentry_flutter: ^9.8.0
   onesignal_flutter: ^5.0.0
   # Security
   crypto: ^3.0.3
