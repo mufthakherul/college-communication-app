@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPI Communication App - Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            display: none;
+            width: 90%;
+            max-width: 1200px;
+            height: 90vh;
+            background: white;
+            border-radius: 20px;
+            padding: 60px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            display: block;
+            animation: slideIn 0.5s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .slide h1 {
+            font-size: 3em;
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .slide h2 {
+            font-size: 2.5em;
+            color: #764ba2;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .slide h3 {
+            font-size: 1.8em;
+            color: #667eea;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        .slide p, .slide li {
+            font-size: 1.2em;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .slide ul {
+            margin-left: 40px;
+        }
+
+        .slide .subtitle {
+            font-size: 1.5em;
+            color: #666;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 1000;
+        }
+
+        .controls button {
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 10px;
+            background: #667eea;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .controls button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(118, 75, 162, 0.6);
+        }
+
+        .controls button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .slide-number {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            color: white;
+            font-size: 1.2em;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px 20px;
+            border-radius: 10px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature-card h4 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-size: 1em;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .credits-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .credits-section h4 {
+            font-size: 1.5em;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .developer-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .developer-card h3 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .developer-card p {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.3em;
+        }
+
+        .icon {
+            font-size: 2em;
+            margin-right: 10px;
+        }
+
+        .center-text {
+            text-align: center;
+        }
+
+        .highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #667eea;
+            color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #667eea;
+        }
+
+        .stat-box .number {
+            font-size: 2.5em;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .stat-box .label {
+            font-size: 1em;
+            color: #666;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <!-- Slide 1: Title -->
+        <div class="slide active">
+            <h1>🎓 RPI Communication App</h1>
+            <p class="subtitle">A Complete College Communication Platform</p>
+            <div class="developer-card">
+                <h3>Rangpur Polytechnic Institute</h3>
+                <p><strong>Developer:</strong> Mufthakherul</p>
+                <p><strong>Website:</strong> <a href="https://rangpur.polytech.gov.bd" style="color: white;">rangpur.polytech.gov.bd</a></p>
+            </div>
+            <p class="center-text" style="margin-top: 40px; font-size: 1.5em; color: #667eea;">
+                Press → to continue
+            </p>
+        </div>
+
+        <!-- Slide 2: What is it? -->
+        <div class="slide">
+            <h2>📱 What is RPI Communication App?</h2>
+            <p style="font-size: 1.4em; text-align: center; margin: 40px 0;">
+                A comprehensive communication platform designed specifically for <span class="highlight">Rangpur Polytechnic Institute</span> to connect students, teachers, and administrators.
+            </p>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="number">🎓</div>
+                    <div class="label">Built for Education</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">📱</div>
+                    <div class="label">Mobile App</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">🌐</div>
+                    <div class="label">Web Dashboard</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">🔒</div>
+                    <div class="label">Secure & Private</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">💯</div>
+                    <div class="label">100% Free</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Core Features -->
+        <div class="slide">
+            <h2>🎯 Core Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>📢 Notices & Announcements</h4>
+                    <p>Publish important information instantly with priority levels and file attachments</p>
+                </div>
+                <div class="feature-card">
+                    <h4>💬 Direct Messaging</h4>
+                    <p>Real-time chat between users with offline support</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📚 Digital Library</h4>
+                    <p>Browse and borrow books with PDF support</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🧮 GPA Calculator</h4>
+                    <p>Track academic performance automatically</p>
+                </div>
+                <div class="feature-card">
+                    <h4>⏱️ Study Timer</h4>
+                    <p>Pomodoro technique for better focus</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🤖 AI Chatbot</h4>
+                    <p>24/7 homework help powered by Gemini</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Web Dashboard -->
+        <div class="slide">
+            <h2>🌐 Web Dashboard Features</h2>
+            <h3>For Teachers & Administrators</h3>
+            <ul>
+                <li><strong>👥 User Management:</strong> Create and manage student, teacher, and admin accounts</li>
+                <li><strong>📢 Notice Management:</strong> Create announcements with file attachments</li>
+                <li><strong>💬 Message Monitoring:</strong> View and monitor all communications</li>
+                <li><strong>📊 Analytics Dashboard:</strong> Real-time statistics and insights</li>
+                <li><strong>🔍 Search & Filter:</strong> Quickly find users, notices, and messages</li>
+                <li><strong>🎯 Quick Actions:</strong> Toggle status with a single click</li>
+            </ul>
+            <p style="margin-top: 30px; font-size: 1.3em; text-align: center; color: #667eea;">
+                <strong>Access from any device with a web browser!</strong>
+            </p>
+        </div>
+
+        <!-- Slide 5: Advanced Features -->
+        <div class="slide">
+            <h2>🚀 Advanced Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🌙 Dark Mode</h4>
+                    <p>Eye-friendly theme with automatic switching</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔍 Full-Text Search</h4>
+                    <p>Fast search with relevance ranking</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📡 Offline Mode</h4>
+                    <p>Works without internet with auto-sync</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🌐 Mesh Network</h4>
+                    <p>P2P communication via Bluetooth/WiFi</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔐 Biometric Auth</h4>
+                    <p>Fingerprint and Face ID support</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📊 Analytics</h4>
+                    <p>Comprehensive engagement tracking</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Security -->
+        <div class="slide">
+            <h2>🔒 Enterprise-Grade Security</h2>
+            <h3>Authentication & Access</h3>
+            <ul>
+                <li>Secure email/password login with session persistence</li>
+                <li>Biometric authentication (Fingerprint, Face ID, Touch ID)</li>
+                <li>Role-based access control (Student, Teacher, Admin)</li>
+                <li>Hardware-backed encryption (Android KeyStore, iOS Keychain)</li>
+            </ul>
+            <h3>Data Protection</h3>
+            <ul>
+                <li>AES-256 encryption for all sensitive data</li>
+                <li>ProGuard obfuscation in production builds</li>
+                <li>Root detection and integrity checks</li>
+                <li>Zero security vulnerabilities (CodeQL verified)</li>
+            </ul>
+            <h3>Privacy First</h3>
+            <ul>
+                <li>All data stored on institutional servers</li>
+                <li>No third-party tracking or analytics</li>
+                <li>Students control their own data</li>
+            </ul>
+        </div>
+
+        <!-- Slide 7: Technical Stack -->
+        <div class="slide">
+            <h2>🏗️ Technical Architecture</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>Technology</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Mobile App</strong></td>
+                        <td>Flutter 3.x + Dart 3.3+</td>
+                        <td>Native Android app</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Web Dashboard</strong></td>
+                        <td>React 19 + TypeScript</td>
+                        <td>Teacher/admin portal</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Backend</strong></td>
+                        <td>Appwrite Cloud</td>
+                        <td>Database, auth, storage</td>
+                    </tr>
+                    <tr>
+                        <td><strong>UI Framework</strong></td>
+                        <td>Material-UI / Material Design 3</td>
+                        <td>Beautiful interfaces</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Local Storage</strong></td>
+                        <td>SQLite + Secure Storage</td>
+                        <td>Offline functionality</td>
+                    </tr>
+                    <tr>
+                        <td><strong>AI Assistant</strong></td>
+                        <td>Google Gemini API</td>
+                        <td>Homework help</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Slide 8: Why Choose This App? -->
+        <div class="slide">
+            <h2>🌟 Why RPI Communication App?</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="number">💰</div>
+                    <div class="label"><strong>Cost-Effective</strong><br>100% Free Forever</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">📦</div>
+                    <div class="label"><strong>Comprehensive</strong><br>All-in-One Solution</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">🔒</div>
+                    <div class="label"><strong>Secure</strong><br>Enterprise-Grade</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">🎓</div>
+                    <div class="label"><strong>Student-Focused</strong><br>Built by Students</div>
+                </div>
+            </div>
+            <h3>Advantages Over Alternatives</h3>
+            <table style="margin-top: 20px;">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>RPI App</th>
+                        <th>WhatsApp/Facebook</th>
+                        <th>Paid LMS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Cost</td>
+                        <td style="color: green;">✅ Free</td>
+                        <td style="color: green;">✅ Free</td>
+                        <td style="color: red;">❌ $1000s/year</td>
+                    </tr>
+                    <tr>
+                        <td>Academic Focus</td>
+                        <td style="color: green;">✅ Yes</td>
+                        <td style="color: red;">❌ No</td>
+                        <td style="color: green;">✅ Yes</td>
+                    </tr>
+                    <tr>
+                        <td>Privacy</td>
+                        <td style="color: green;">✅ Institution-owned</td>
+                        <td style="color: red;">❌ Data collection</td>
+                        <td style="color: orange;">⚠️ Varies</td>
+                    </tr>
+                    <tr>
+                        <td>Integrated Tools</td>
+                        <td style="color: green;">✅ GPA, Library, AI</td>
+                        <td style="color: red;">❌ No</td>
+                        <td style="color: orange;">⚠️ Limited</td>
+                    </tr>
+                    <tr>
+                        <td>Offline Support</td>
+                        <td style="color: green;">✅ Yes</td>
+                        <td style="color: red;">❌ Limited</td>
+                        <td style="color: red;">❌ No</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Slide 9: Project Statistics -->
+        <div class="slide">
+            <h2>📊 Project Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="number">15,000+</div>
+                    <div class="label">Lines of Code</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">49+</div>
+                    <div class="label">Unit Tests</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">50+</div>
+                    <div class="label">Documentation Files</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">100+</div>
+                    <div class="label">Lint Rules</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">6+</div>
+                    <div class="label">Months Development</div>
+                </div>
+                <div class="stat-box">
+                    <div class="number">30+</div>
+                    <div class="label">Features</div>
+                </div>
+            </div>
+            <h3 style="margin-top: 40px;">Quality Metrics</h3>
+            <ul>
+                <li>✅ <strong>Security:</strong> Zero vulnerabilities (CodeQL verified)</li>
+                <li>✅ <strong>Test Coverage:</strong> Comprehensive unit tests</li>
+                <li>✅ <strong>Code Quality:</strong> High (100+ lint rules enforced)</li>
+                <li>✅ <strong>Documentation:</strong> Complete and detailed</li>
+                <li>✅ <strong>Performance:</strong> Optimized and fast</li>
+            </ul>
+        </div>
+
+        <!-- Slide 10: Credits - Service Providers -->
+        <div class="slide">
+            <h2>🙏 Service Providers & Technologies</h2>
+            <h3>Free Pro Services (Educational Benefits)</h3>
+            <div class="credits-section">
+                <h4>☁️ Appwrite (Backend & Hosting)</h4>
+                <p><strong>Provides:</strong> 10 GB database, 100 GB file storage, unlimited users, real-time subscriptions, priority support</p>
+                <p><strong>Value:</strong> $15/month (FREE for students through educational program)</p>
+                <p><strong>Website:</strong> <a href="https://appwrite.io" target="_blank">appwrite.io</a></p>
+            </div>
+            <div class="credits-section">
+                <h4>🐙 GitHub (Code Hosting & CI/CD)</h4>
+                <p><strong>Provides:</strong> Free public repositories, GitHub Actions (2000 min/month), issue tracking, project management</p>
+                <p><strong>Value:</strong> Free for public repositories</p>
+                <p><strong>Website:</strong> <a href="https://github.com" target="_blank">github.com</a></p>
+            </div>
+            <div class="credits-section">
+                <h4>🤖 Google Gemini (AI Assistant)</h4>
+                <p><strong>Provides:</strong> Free AI API for educational purposes</p>
+                <p><strong>Value:</strong> Free tier available for students</p>
+                <p><strong>Website:</strong> <a href="https://ai.google.dev" target="_blank">ai.google.dev</a></p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Credits - Open Source -->
+        <div class="slide">
+            <h2>🛠️ Open Source Technologies</h2>
+            <h3>Mobile App Technologies (Free & Open Source)</h3>
+            <ul>
+                <li><strong>Flutter</strong> - Google's UI framework</li>
+                <li><strong>Dart</strong> - Programming language</li>
+                <li><strong>SQLite</strong> - Local database</li>
+                <li><strong>Material Design</strong> - UI design system</li>
+            </ul>
+            <h3>Web Dashboard Technologies (Free & Open Source)</h3>
+            <ul>
+                <li><strong>React</strong> - Facebook's UI library</li>
+                <li><strong>TypeScript</strong> - Microsoft's typed JavaScript</li>
+                <li><strong>Material-UI</strong> - React component library</li>
+                <li><strong>Vite</strong> - Build tool</li>
+            </ul>
+            <h3>Development Tools (Free)</h3>
+            <ul>
+                <li><strong>VS Code</strong> - Microsoft</li>
+                <li><strong>Android Studio</strong> - Google</li>
+                <li><strong>Git</strong> - Version control</li>
+            </ul>
+            <p style="text-align: center; margin-top: 30px; font-size: 1.3em; color: #667eea;">
+                <strong>Thank you to all open source contributors! 🙏</strong>
+            </p>
+        </div>
+
+        <!-- Slide 12: Developer -->
+        <div class="slide">
+            <h2>👨‍💻 About the Developer</h2>
+            <div class="developer-card">
+                <h3>Mufthakherul</h3>
+                <p style="font-size: 1.4em; margin: 20px 0;">Full Stack Developer</p>
+                <p>🎓 Student at Rangpur Polytechnic Institute</p>
+                <p>🌐 GitHub: <a href="https://github.com/mufthakherul" style="color: white;">@mufthakherul</a></p>
+                <p>📁 Project: <a href="https://github.com/mufthakherul/college-communication-app" style="color: white;">college-communication-app</a></p>
+            </div>
+            <h3 style="margin-top: 40px;">Development Journey</h3>
+            <ul>
+                <li>⏱️ <strong>6+ months</strong> of dedicated development</li>
+                <li>📝 <strong>15,000+ lines</strong> of code written</li>
+                <li>🎓 Built as a <strong>student project</strong> for the institution</li>
+                <li>💡 Focus on solving <strong>real problems</strong> faced by students</li>
+                <li>🌟 Open source to help <strong>other colleges</strong></li>
+            </ul>
+            <h3 style="margin-top: 30px;">Skills Demonstrated</h3>
+            <ul>
+                <li>📱 Mobile app development (Flutter/Dart)</li>
+                <li>🌐 Web development (React/TypeScript)</li>
+                <li>☁️ Backend integration (Appwrite)</li>
+                <li>🔒 Security implementation</li>
+                <li>📚 Technical documentation</li>
+            </ul>
+        </div>
+
+        <!-- Slide 13: Institution Credit -->
+        <div class="slide">
+            <h2>🏫 Rangpur Polytechnic Institute</h2>
+            <div class="developer-card">
+                <h3>RPI</h3>
+                <p style="font-size: 1.3em; margin: 20px 0;">A Premier Technical Education Institution</p>
+                <p>🌐 Website: <a href="https://rangpur.polytech.gov.bd" style="color: white;">rangpur.polytech.gov.bd</a></p>
+                <p>📍 Location: Rangpur, Bangladesh</p>
+            </div>
+            <h3 style="margin-top: 40px;">Why This App Matters</h3>
+            <ul>
+                <li>🎓 <strong>Modernizes</strong> institutional communication</li>
+                <li>💰 <strong>Zero cost</strong> solution for the college</li>
+                <li>🌟 <strong>Showcases</strong> student talent and capability</li>
+                <li>📈 <strong>Improves</strong> engagement between all stakeholders</li>
+                <li>🚀 <strong>Sets example</strong> for other institutions</li>
+            </ul>
+            <h3 style="margin-top: 30px;">Support from Institution</h3>
+            <ul>
+                <li>✅ Opportunity to develop and test the platform</li>
+                <li>✅ Access to student and teacher feedback</li>
+                <li>✅ Real-world deployment environment</li>
+                <li>✅ Encouragement for innovation</li>
+            </ul>
+        </div>
+
+        <!-- Slide 14: Future Roadmap -->
+        <div class="slide">
+            <h2>🔮 Future Roadmap</h2>
+            <h3>Phase 1 (Current - v2.1) ✅</h3>
+            <ul>
+                <li>✅ Core communication features</li>
+                <li>✅ Academic tools (GPA, Library, Study Timer)</li>
+                <li>✅ Web dashboard for teachers/admins</li>
+                <li>✅ Enterprise-grade security</li>
+                <li>✅ AI chatbot integration</li>
+            </ul>
+            <h3>Phase 2 (Next 3-6 months)</h3>
+            <ul>
+                <li>📱 iOS app support</li>
+                <li>🔔 Push notifications</li>
+                <li>📅 Class timetable management</li>
+                <li>📝 Assignment tracker and submission</li>
+                <li>🎉 College events calendar</li>
+            </ul>
+            <h3>Phase 3 (6-12 months)</h3>
+            <ul>
+                <li>📹 Video calling integration</li>
+                <li>🌍 Multi-language support (Bengali, English)</li>
+                <li>📊 Advanced analytics and reporting</li>
+                <li>🎓 Learning management features</li>
+                <li>🏆 Gamification and achievements</li>
+            </ul>
+        </div>
+
+        <!-- Slide 15: Call to Action -->
+        <div class="slide">
+            <h2>🎯 Get Started Today!</h2>
+            <h3>For Students</h3>
+            <ul>
+                <li>📱 Download the app from college portal</li>
+                <li>📝 Register with your college email</li>
+                <li>🚀 Start exploring features</li>
+                <li>💬 Provide feedback for improvements</li>
+            </ul>
+            <h3>For Teachers & Admins</h3>
+            <ul>
+                <li>🌐 Request access to web dashboard</li>
+                <li>📊 Attend training session</li>
+                <li>📢 Start publishing notices</li>
+                <li>👥 Manage student profiles</li>
+            </ul>
+            <h3>For Other Institutions</h3>
+            <ul>
+                <li>🍴 Fork the repository on GitHub</li>
+                <li>🎨 Customize for your college</li>
+                <li>☁️ Deploy on Appwrite (free)</li>
+                <li>🤝 Share your improvements back</li>
+            </ul>
+            <p style="text-align: center; margin-top: 40px; font-size: 1.5em; color: #667eea;">
+                <strong>📁 GitHub: <a href="https://github.com/mufthakherul/college-communication-app" target="_blank">mufthakherul/college-communication-app</a></strong>
+            </p>
+        </div>
+
+        <!-- Slide 16: Thank You -->
+        <div class="slide">
+            <h1 style="font-size: 4em; margin-bottom: 30px;">🙏 Thank You!</h1>
+            <div class="credits-section" style="text-align: center;">
+                <h3>Special Thanks To:</h3>
+                <p style="font-size: 1.3em; line-height: 2;">
+                    ☁️ <strong>Appwrite</strong> - For free educational program<br>
+                    🐙 <strong>GitHub</strong> - For hosting and CI/CD<br>
+                    🤖 <strong>Google</strong> - For Gemini AI API<br>
+                    🎨 <strong>Open Source Community</strong> - For amazing libraries<br>
+                    🏫 <strong>Rangpur Polytechnic Institute</strong> - For the opportunity<br>
+                    👨‍🏫 <strong>Teachers</strong> - For valuable feedback<br>
+                    🎓 <strong>Students</strong> - For testing and suggestions<br>
+                </p>
+            </div>
+            <div class="developer-card" style="margin-top: 40px;">
+                <h3>Remember:</h3>
+                <p style="font-size: 1.3em; line-height: 1.8;">
+                    🎓 Built for <strong>students</strong>, by a <strong>student</strong><br>
+                    💰 <strong>100% Free</strong> forever<br>
+                    🔒 <strong>Privacy-focused</strong> and secure<br>
+                    🌟 <strong>Open source</strong> and community-driven<br>
+                    🚀 <strong>Production ready</strong> and scalable
+                </p>
+            </div>
+            <h2 style="margin-top: 40px; text-align: center;">Questions? 💬</h2>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button id="prevBtn" onclick="changeSlide(-1)">← Previous</button>
+        <button id="nextBtn" onclick="changeSlide(1)">Next →</button>
+    </div>
+
+    <div class="slide-number">
+        <span id="currentSlide">1</span> / <span id="totalSlides">16</span>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        document.getElementById('totalSlides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            
+            document.getElementById('currentSlide').textContent = currentSlide + 1;
+            
+            // Update button states
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+        }
+
+        function changeSlide(direction) {
+            showSlide(currentSlide + direction);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft' && currentSlide > 0) {
+                changeSlide(-1);
+            } else if (e.key === 'ArrowRight' && currentSlide < totalSlides - 1) {
+                changeSlide(1);
+            }
+        });
+
+        // Initialize
+        showSlide(0);
+    </script>
+</body>
+</html>
