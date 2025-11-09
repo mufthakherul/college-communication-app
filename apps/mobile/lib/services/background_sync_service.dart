@@ -207,7 +207,8 @@ class BackgroundSyncService {
           networkType: NetworkType.connected,
           requiresBatteryNotLow: true,
         ),
-        existingWorkPolicy: ExistingWorkPolicy.keep,
+        // Updated for workmanager ^0.9.x: use ExistingPeriodicWorkPolicy
+        existingWorkPolicy: ExistingPeriodicWorkPolicy.keep,
       );
 
       if (kDebugMode) {
@@ -241,10 +242,11 @@ class BackgroundSyncService {
         'cleanupCache',
         frequency: frequency,
         constraints: Constraints(
-          networkType: NetworkType.not_required,
+          // Renamed in newer plugin versions: not_required -> notRequired
+          networkType: NetworkType.notRequired,
           requiresCharging: false,
         ),
-        existingWorkPolicy: ExistingWorkPolicy.keep,
+        existingWorkPolicy: ExistingPeriodicWorkPolicy.keep,
       );
 
       if (kDebugMode) {
@@ -336,7 +338,7 @@ class BackgroundSyncService {
           networkType: NetworkType.connected,
           requiresBatteryNotLow: true,
         ),
-        existingWorkPolicy: ExistingWorkPolicy.keep,
+        existingWorkPolicy: ExistingPeriodicWorkPolicy.keep,
       );
 
       if (kDebugMode) {
