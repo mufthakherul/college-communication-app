@@ -61,13 +61,6 @@ A comprehensive college communication platform for **Rangpur Polytechnic Institu
   - Real-time subscriptions
   - Complete examples & troubleshooting
 
-**What You Get:**
-- ✅ **Free Pro Plan** ($15/month value) for students
-- ✅ **10 GB database storage** (10x more than most free tiers)
-- ✅ **100 GB file storage** (perfect for college use)
-- ✅ **Unlimited users** (no limits on students/faculty)
-- ✅ **Priority support** from Appwrite team
-- ✅ **Learning resources** and workshops
 
 **Get Started:**
 1. 📚 **Appwrite Setup**: [docs/APPWRITE_GUIDE.md](docs/APPWRITE_GUIDE.md) - **START HERE** for backend setup
