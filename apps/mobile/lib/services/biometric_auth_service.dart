@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:local_auth/error_codes.dart' as auth_error;
 import 'package:local_auth/local_auth.dart';
+import 'package:local_auth_android/local_auth_android.dart';
+import 'package:local_auth_darwin/local_auth_darwin.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Service for handling biometric authentication
@@ -65,6 +66,7 @@ class BiometricAuthService {
       // Perform authentication
       return await _localAuth.authenticate(
         localizedReason: localizedReason,
+        authMessages: const <AuthMessages>[],
         options: AuthenticationOptions(
           useErrorDialogs: useErrorDialogs,
           stickyAuth: stickyAuth,
@@ -75,12 +77,11 @@ class BiometricAuthService {
       debugPrint('Biometric authentication error: ${e.code} - ${e.message}');
 
       // Handle specific error codes
-      if (e.code == auth_error.notAvailable) {
+      if (e.code == 'NotAvailable') {
         debugPrint('Biometric authentication not available');
-      } else if (e.code == auth_error.notEnrolled) {
+      } else if (e.code == 'NotEnrolled') {
         debugPrint('No biometrics enrolled on this device');
-      } else if (e.code == auth_error.lockedOut ||
-          e.code == auth_error.permanentlyLockedOut) {
+      } else if (e.code == 'LockedOut' || e.code == 'PermanentlyLockedOut') {
         debugPrint('Biometric authentication locked out');
       }
 

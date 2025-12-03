@@ -1,5 +1,6 @@
-/// Network configuration for the College Communication App
-/// Centralized configuration for all networking components
+/// Network configuration for the College Communication App.
+/// Centralized configuration for all networking components.
+library;
 
 /// Network configuration class
 class NetworkConfig {

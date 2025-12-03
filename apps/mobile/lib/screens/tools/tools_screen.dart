@@ -1,32 +1,6 @@
 import 'package:campus_mesh/screens/ai_chat/ai_chat_history_screen.dart';
-import 'package:campus_mesh/screens/tools/algorithm_complexity_screen.dart';
-import 'package:campus_mesh/screens/tools/ascii_table_screen.dart';
-import 'package:campus_mesh/screens/tools/assignment_tracker_screen.dart';
-import 'package:campus_mesh/screens/tools/attendance_tracker_screen.dart';
-import 'package:campus_mesh/screens/tools/base64_converter_screen.dart';
-import 'package:campus_mesh/screens/tools/binary_converter_screen.dart';
 import 'package:campus_mesh/screens/tools/calculator_screen.dart';
-import 'package:campus_mesh/screens/tools/code_snippet_manager_screen.dart';
-import 'package:campus_mesh/screens/tools/color_picker_screen.dart';
-import 'package:campus_mesh/screens/tools/dictionary_screen.dart';
-import 'package:campus_mesh/screens/tools/document_scanner_screen.dart';
-import 'package:campus_mesh/screens/tools/events_screen.dart';
-import 'package:campus_mesh/screens/tools/exam_countdown_screen.dart';
-import 'package:campus_mesh/screens/tools/expense_tracker_screen.dart';
-import 'package:campus_mesh/screens/tools/formula_sheet_screen.dart';
-import 'package:campus_mesh/screens/tools/hash_generator_screen.dart';
-import 'package:campus_mesh/screens/tools/ip_calculator_screen.dart';
-import 'package:campus_mesh/screens/tools/json_formatter_screen.dart';
 import 'package:campus_mesh/screens/tools/notes_screen.dart';
-import 'package:campus_mesh/screens/tools/periodic_table_screen.dart';
-import 'package:campus_mesh/screens/tools/qr_code_generator_screen.dart';
-import 'package:campus_mesh/screens/tools/regex_tester_screen.dart';
-import 'package:campus_mesh/screens/tools/rich_note_taking_screen.dart';
-import 'package:campus_mesh/screens/tools/schedule_builder_screen.dart';
-import 'package:campus_mesh/screens/tools/study_timer_screen.dart';
-import 'package:campus_mesh/screens/tools/timetable_screen.dart';
-import 'package:campus_mesh/screens/tools/unit_converter_screen.dart';
-import 'package:campus_mesh/screens/tools/world_clock_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -44,7 +18,7 @@ class _ToolsScreenState extends State<ToolsScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
@@ -60,12 +34,9 @@ class _ToolsScreenState extends State<ToolsScreen>
         title: const Text('Student Tools'),
         bottom: TabBar(
           controller: _tabController,
-          isScrollable: true,
+          isScrollable: false,
           tabs: const [
             Tab(icon: Icon(Icons.star), text: 'All'),
-            Tab(icon: Icon(Icons.computer), text: 'CST'),
-            Tab(icon: Icon(Icons.school), text: 'Academic'),
-            Tab(icon: Icon(Icons.access_time), text: 'Productivity'),
             Tab(icon: Icon(Icons.apps), text: 'Utilities'),
           ],
         ),
@@ -74,9 +45,6 @@ class _ToolsScreenState extends State<ToolsScreen>
         controller: _tabController,
         children: [
           _buildAllToolsGrid(),
-          _buildCSTToolsGrid(),
-          _buildAcademicToolsGrid(),
-          _buildProductivityToolsGrid(),
           _buildUtilitiesGrid(),
         ],
       ),
@@ -90,178 +58,6 @@ class _ToolsScreenState extends State<ToolsScreen>
       mainAxisSpacing: 16,
       crossAxisSpacing: 16,
       children: [
-        // CST Tools
-        _buildToolCard(
-          context,
-          'Binary Converter',
-          Icons.transform,
-          Colors.teal,
-          const BinaryConverterScreen(),
-          'CST',
-        ),
-        _buildToolCard(
-          context,
-          'ASCII Table',
-          Icons.grid_on,
-          Colors.indigo,
-          const ASCIITableScreen(),
-          'CST',
-        ),
-        _buildToolCard(
-          context,
-          'Code Snippets',
-          Icons.code,
-          Colors.deepPurple,
-          const CodeSnippetManagerScreen(),
-          'CST',
-        ),
-        _buildToolCard(
-          context,
-          'IP Calculator',
-          Icons.router,
-          Colors.blueGrey,
-          const IPCalculatorScreen(),
-          'CST',
-        ),
-        _buildToolCard(
-          context,
-          'Regex Tester',
-          Icons.find_in_page,
-          Colors.green,
-          const RegexTesterScreen(),
-          'CST',
-        ),
-        _buildToolCard(
-          context,
-          'JSON Formatter',
-          Icons.data_object,
-          Colors.amber,
-          const JSONFormatterScreen(),
-          'CST',
-        ),
-        _buildToolCard(
-          context,
-          'Hash Generator',
-          Icons.fingerprint,
-          Colors.red,
-          const HashGeneratorScreen(),
-          'CST',
-        ),
-        _buildToolCard(
-          context,
-          'Base64 Encoder',
-          Icons.transform,
-          Colors.cyan,
-          const Base64ConverterScreen(),
-          'CST',
-        ),
-        _buildToolCard(
-          context,
-          'Color Picker',
-          Icons.palette,
-          Colors.pink,
-          const ColorPickerScreen(),
-          'CST',
-        ),
-        _buildToolCard(
-          context,
-          'Algorithm Complexity',
-          Icons.analytics,
-          Colors.purple,
-          const AlgorithmComplexityScreen(),
-          'CST',
-        ),
-        // Academic Tools
-        _buildToolCard(
-          context,
-          'Calculator',
-          Icons.calculate,
-          Colors.blue,
-          const CalculatorScreen(),
-          'Academic',
-        ),
-        _buildToolCard(
-          context,
-          'Dictionary',
-          Icons.book,
-          Colors.brown,
-          const DictionaryScreen(),
-          'Academic',
-        ),
-        _buildToolCard(
-          context,
-          'Periodic Table',
-          Icons.science,
-          Colors.deepOrange,
-          const PeriodicTableScreen(),
-          'Academic',
-        ),
-        _buildToolCard(
-          context,
-          'Formula Sheet',
-          Icons.functions,
-          Colors.purple,
-          const FormulaSheetScreen(),
-          'Academic',
-        ),
-        // Productivity Tools
-        _buildToolCard(
-          context,
-          'Attendance',
-          Icons.event_available,
-          Colors.cyan,
-          const AttendanceTrackerScreen(),
-          'Productivity',
-        ),
-        _buildToolCard(
-          context,
-          'Exam Countdown',
-          Icons.event_note,
-          Colors.redAccent,
-          const ExamCountdownScreen(),
-          'Productivity',
-        ),
-        _buildToolCard(
-          context,
-          'Assignments',
-          Icons.assignment,
-          Colors.blueAccent,
-          const AssignmentTrackerScreen(),
-          'Productivity',
-        ),
-        _buildToolCard(
-          context,
-          'Timetable',
-          Icons.schedule,
-          Colors.green,
-          const TimetableScreen(),
-          'Productivity',
-        ),
-        _buildToolCard(
-          context,
-          'Events',
-          Icons.event,
-          Colors.orange,
-          const EventsScreen(),
-          'Productivity',
-        ),
-        _buildToolCard(
-          context,
-          'Study Timer',
-          Icons.timer,
-          Colors.teal,
-          const StudyTimerScreen(),
-          'Productivity',
-        ),
-        _buildToolCard(
-          context,
-          'Quick Notes',
-          Icons.note,
-          Colors.amber,
-          const NotesScreen(),
-          'Productivity',
-        ),
-        // Utility Tools
         _buildToolCard(
           context,
           'AI Chatbot',
@@ -272,26 +68,18 @@ class _ToolsScreenState extends State<ToolsScreen>
         ),
         _buildToolCard(
           context,
-          'Expense Tracker',
-          Icons.account_balance_wallet,
-          Colors.lightGreen,
-          const ExpenseTrackerScreen(),
+          'Calculator',
+          Icons.calculate,
+          Colors.blue,
+          const CalculatorScreen(),
           'Utilities',
         ),
         _buildToolCard(
           context,
-          'Unit Converter',
-          Icons.swap_horiz,
-          Colors.pink,
-          const UnitConverterScreen(),
-          'Utilities',
-        ),
-        _buildToolCard(
-          context,
-          'World Clock',
-          Icons.public,
-          Colors.blueGrey,
-          const WorldClockScreen(),
+          'Quick Notes',
+          Icons.note,
+          Colors.amber,
+          const NotesScreen(),
           'Utilities',
         ),
         _buildToolCard(
@@ -301,247 +89,6 @@ class _ToolsScreenState extends State<ToolsScreen>
           Colors.indigo,
           const ImportantLinksScreen(),
           'Utilities',
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCSTToolsGrid() {
-    return GridView.count(
-      crossAxisCount: 2,
-      padding: const EdgeInsets.all(16),
-      mainAxisSpacing: 16,
-      crossAxisSpacing: 16,
-      children: [
-        _buildToolCard(
-          context,
-          'Binary Converter',
-          Icons.transform,
-          Colors.teal,
-          const BinaryConverterScreen(),
-          'CST',
-        ),
-        _buildToolCard(
-          context,
-          'ASCII Table',
-          Icons.grid_on,
-          Colors.indigo,
-          const ASCIITableScreen(),
-          'CST',
-        ),
-        _buildToolCard(
-          context,
-          'Code Snippets',
-          Icons.code,
-          Colors.deepPurple,
-          const CodeSnippetManagerScreen(),
-          'CST',
-        ),
-        _buildToolCard(
-          context,
-          'IP Calculator',
-          Icons.router,
-          Colors.blueGrey,
-          const IPCalculatorScreen(),
-          'CST',
-        ),
-        _buildToolCard(
-          context,
-          'Regex Tester',
-          Icons.find_in_page,
-          Colors.green,
-          const RegexTesterScreen(),
-          'CST',
-        ),
-        _buildToolCard(
-          context,
-          'JSON Formatter',
-          Icons.data_object,
-          Colors.amber,
-          const JSONFormatterScreen(),
-          'CST',
-        ),
-        _buildToolCard(
-          context,
-          'Hash Generator',
-          Icons.fingerprint,
-          Colors.red,
-          const HashGeneratorScreen(),
-          'CST',
-        ),
-        _buildToolCard(
-          context,
-          'Base64 Encoder',
-          Icons.transform,
-          Colors.cyan,
-          const Base64ConverterScreen(),
-          'CST',
-        ),
-        _buildToolCard(
-          context,
-          'Color Picker',
-          Icons.palette,
-          Colors.pink,
-          const ColorPickerScreen(),
-          'CST',
-        ),
-        _buildToolCard(
-          context,
-          'Calculator',
-          Icons.calculate,
-          Colors.blue,
-          const CalculatorScreen(),
-          'CST',
-        ),
-        _buildToolCard(
-          context,
-          'Unit Converter',
-          Icons.swap_horiz,
-          Colors.pink,
-          const UnitConverterScreen(),
-          'CST',
-        ),
-        _buildToolCard(
-          context,
-          'Algorithm Complexity',
-          Icons.analytics,
-          Colors.purple,
-          const AlgorithmComplexityScreen(),
-          'CST',
-        ),
-      ],
-    );
-  }
-
-  Widget _buildAcademicToolsGrid() {
-    return GridView.count(
-      crossAxisCount: 2,
-      padding: const EdgeInsets.all(16),
-      mainAxisSpacing: 16,
-      crossAxisSpacing: 16,
-      children: [
-        _buildToolCard(
-          context,
-          'Calculator',
-          Icons.calculate,
-          Colors.blue,
-          const CalculatorScreen(),
-          'Academic',
-        ),
-        _buildToolCard(
-          context,
-          'Dictionary',
-          Icons.book,
-          Colors.brown,
-          const DictionaryScreen(),
-          'Academic',
-        ),
-        _buildToolCard(
-          context,
-          'Periodic Table',
-          Icons.science,
-          Colors.deepOrange,
-          const PeriodicTableScreen(),
-          'Academic',
-        ),
-        _buildToolCard(
-          context,
-          'Formula Sheet',
-          Icons.functions,
-          Colors.purple,
-          const FormulaSheetScreen(),
-          'Academic',
-        ),
-        _buildToolCard(
-          context,
-          'QR Code Generator',
-          Icons.qr_code_2,
-          Colors.teal,
-          const QRCodeGeneratorScreen(),
-          'Academic',
-        ),
-      ],
-    );
-  }
-
-  Widget _buildProductivityToolsGrid() {
-    return GridView.count(
-      crossAxisCount: 2,
-      padding: const EdgeInsets.all(16),
-      mainAxisSpacing: 16,
-      crossAxisSpacing: 16,
-      children: [
-        _buildToolCard(
-          context,
-          'Attendance',
-          Icons.event_available,
-          Colors.cyan,
-          const AttendanceTrackerScreen(),
-          'Productivity',
-        ),
-        _buildToolCard(
-          context,
-          'Exam Countdown',
-          Icons.event_note,
-          Colors.redAccent,
-          const ExamCountdownScreen(),
-          'Productivity',
-        ),
-        _buildToolCard(
-          context,
-          'Assignments',
-          Icons.assignment,
-          Colors.blueAccent,
-          const AssignmentTrackerScreen(),
-          'Productivity',
-        ),
-        _buildToolCard(
-          context,
-          'Timetable',
-          Icons.schedule,
-          Colors.green,
-          const TimetableScreen(),
-          'Productivity',
-        ),
-        _buildToolCard(
-          context,
-          'Events',
-          Icons.event,
-          Colors.orange,
-          const EventsScreen(),
-          'Productivity',
-        ),
-        _buildToolCard(
-          context,
-          'Study Timer',
-          Icons.timer,
-          Colors.teal,
-          const StudyTimerScreen(),
-          'Productivity',
-        ),
-        _buildToolCard(
-          context,
-          'Document Scanner',
-          Icons.document_scanner,
-          Colors.orange,
-          const DocumentScannerScreen(),
-          'Productivity',
-        ),
-        _buildToolCard(
-          context,
-          'Schedule Builder',
-          Icons.schedule,
-          Colors.cyan,
-          const ScheduleBuilderScreen(),
-          'Productivity',
-        ),
-        _buildToolCard(
-          context,
-          'Enhanced Notes',
-          Icons.note,
-          Colors.amber,
-          const NoteTakingScreen(),
-          'Productivity',
         ),
       ],
     );
@@ -564,26 +111,18 @@ class _ToolsScreenState extends State<ToolsScreen>
         ),
         _buildToolCard(
           context,
-          'Expense Tracker',
-          Icons.account_balance_wallet,
-          Colors.lightGreen,
-          const ExpenseTrackerScreen(),
+          'Calculator',
+          Icons.calculate,
+          Colors.blue,
+          const CalculatorScreen(),
           'Utilities',
         ),
         _buildToolCard(
           context,
-          'Unit Converter',
-          Icons.swap_horiz,
-          Colors.pink,
-          const UnitConverterScreen(),
-          'Utilities',
-        ),
-        _buildToolCard(
-          context,
-          'World Clock',
-          Icons.public,
-          Colors.blueGrey,
-          const WorldClockScreen(),
+          'Quick Notes',
+          Icons.note,
+          Colors.amber,
+          const NotesScreen(),
           'Utilities',
         ),
         _buildToolCard(

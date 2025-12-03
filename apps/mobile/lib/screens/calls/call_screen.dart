@@ -125,7 +125,8 @@ class _CallScreenState extends State<CallScreen> {
   }
 
   Widget _buildRTCVideo(dynamic renderer) {
-    return Texture(textureId: renderer.textureId!);
+    // ignore: avoid_dynamic_calls
+    return Texture(textureId: renderer.textureId as int);
   }
 
   Widget _buildStatus(String text) => Center(

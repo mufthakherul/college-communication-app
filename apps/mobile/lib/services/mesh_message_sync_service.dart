@@ -102,10 +102,8 @@ class MeshMessageSyncService {
       if (recipientId == null) continue;
 
       // Skip if not connected to recipient
-      final node = nodes.firstWhere(
-        (n) => n.id == recipientId,
-        orElse: () => null as dynamic,
-      );
+      final isConnected = nodes.any((n) => n.id == recipientId);
+      if (!isConnected) continue;
 
       final id =
           m['id'] as String? ?? '${DateTime.now().millisecondsSinceEpoch}';

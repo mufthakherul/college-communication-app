@@ -241,10 +241,9 @@ flutter run
 ### Core Features
 - 📢 **Notices & Announcements** - Share important information with students and faculty
 - 💬 **Direct Messaging** - Real-time communication between users
-- 📚 **Books Library** - 🆕 Digital library with borrowing system
-- 🎓 **Student Tools** - 🆕 GPA Calculator, Study Timer, and more
+- 📚 **Books Library** - Digital library with borrowing system
 - 👤 **Role-Based Access** - Admin, Teacher, and Student roles
-- 🔐 **Secure Authentication** - 🆕 Enhanced with session persistence
+- 🔐 **Secure Authentication** - Enhanced with session persistence
   - Email/password authentication via Appwrite
   - Session persistence with SharedPreferences
   - Automatic session restoration
@@ -291,16 +290,7 @@ flutter run
   - Digital book support (PDF preview/download)
   - Availability tracking
   - Borrow history
-- 🧮 **GPA Calculator** - Track academic performance
-  - Multiple courses with credits and grades
-  - Standard grading scale (A+, A, A-, B+, etc.)
-  - Automatic GPA calculation
-- ⏱️ **Study Timer** - Productivity tool
-  - Pomodoro technique (25-min focus + 5-min break)
-  - Stopwatch mode
-  - Customizable durations
-  - Session tracking
-- 🤖 **AI Chatbot** - 🆕 Intelligent assistant powered by Gemini
+- 🤖 **AI Chatbot** - Intelligent assistant powered by Gemini
   - User-provided Gemini Flash API key
   - Context-aware conversations
   - Educational focus with custom instructions
@@ -308,9 +298,6 @@ flutter run
   - API key cleared on logout for security
   - Multiple chat sessions support
   - See archived [AI_CHATBOT_GUIDE.md](archive_docs/AI_CHATBOT_GUIDE.md) for details
-- 📝 **Assignment Tracker** - Coming soon
-- 📅 **Class Timetable** - Coming soon
-- 🎉 **College Events** - Coming soon
 
 ### Enterprise Features
 - ⚡ **Edge Functions** - Serverless backend with Appwrite Functions
