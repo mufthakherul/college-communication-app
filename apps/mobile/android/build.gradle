@@ -1,6 +1,6 @@
 buildscript {
     // Pin stable Kotlin/AGP for better build stability on CI/containers
-    ext.kotlin_version = '1.9.24'
+    ext.kotlin_version = '2.1.0'
     repositories {
         google()
         mavenCentral()
