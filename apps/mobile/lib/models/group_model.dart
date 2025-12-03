@@ -1,5 +1,4 @@
 class GroupModel {
-
   GroupModel({
     required this.id,
     required this.name,

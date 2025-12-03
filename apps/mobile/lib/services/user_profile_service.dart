@@ -7,7 +7,6 @@ import 'package:campus_mesh/models/user_profile_model.dart';
 
 /// Service for managing user profiles with role-specific data
 class UserProfileService {
-
   UserProfileService(Client client) : _databases = Databases(client);
   final Databases _databases;
 

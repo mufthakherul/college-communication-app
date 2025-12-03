@@ -90,35 +90,38 @@ class _NoteTakingScreenState extends State<NoteTakingScreen>
         controller: _tabController,
         children: [
           // All notes tab
-          if (_notes.isEmpty) Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.note_outlined,
-                        size: 64,
-                        color: Colors.grey[300],
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'No notes yet',
-                        style: TextStyle(color: Colors.grey[600]),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Create your first note to get started',
-                        style: TextStyle(color: Colors.grey[500], fontSize: 12),
-                      ),
-                    ],
+          if (_notes.isEmpty)
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.note_outlined,
+                    size: 64,
+                    color: Colors.grey[300],
                   ),
-                ) else ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: _notes.length,
-                  itemBuilder: (context, index) {
-                    final note = _notes[index];
-                    return _buildNoteCard(note, index);
-                  },
-                ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'No notes yet',
+                    style: TextStyle(color: Colors.grey[600]),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Create your first note to get started',
+                    style: TextStyle(color: Colors.grey[500], fontSize: 12),
+                  ),
+                ],
+              ),
+            )
+          else
+            ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: _notes.length,
+              itemBuilder: (context, index) {
+                final note = _notes[index];
+                return _buildNoteCard(note, index);
+              },
+            ),
 
           // Tips tab
           SingleChildScrollView(
@@ -305,7 +308,6 @@ class _NoteTakingScreenState extends State<NoteTakingScreen>
 }
 
 class Note {
-
   Note({
     required this.title,
     required this.content,
@@ -427,7 +429,6 @@ class _CreateNoteDialogState extends State<CreateNoteDialog> {
 }
 
 class EditNoteDialog extends StatefulWidget {
-
   const EditNoteDialog({super.key, required this.note});
   final Note note;
 
