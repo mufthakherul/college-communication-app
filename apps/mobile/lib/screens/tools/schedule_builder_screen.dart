@@ -325,7 +325,6 @@ class _ScheduleBuilderScreenState extends State<ScheduleBuilderScreen> {
 }
 
 class ScheduleClass {
-
   ScheduleClass({
     required this.subject,
     required this.day,

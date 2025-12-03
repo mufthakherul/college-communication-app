@@ -1,5 +1,4 @@
 class GroupMemberModel {
-
   GroupMemberModel({
     required this.id,
     required this.groupId,

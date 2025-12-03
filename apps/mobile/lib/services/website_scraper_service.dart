@@ -236,7 +236,8 @@ class WebsiteScraperService {
 
           // Table with at least 2 cells, title likely in cell 1
           if (cells.length >= 2) {
-            final dom.Element titleCell = cells.length > 1 ? cells[1] : cells[0];
+            final dom.Element titleCell =
+                cells.length > 1 ? cells[1] : cells[0];
             final titleLink = titleCell.querySelector('a');
             var title = '';
             var url = '';

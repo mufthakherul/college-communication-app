@@ -167,40 +167,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   backgroundColor: _getRoleColor(widget.user!.role),
                 ),
                 // Role-specific views
-                if (_isLoadingProfile) const Padding(
-                        padding: EdgeInsets.all(24),
-                        child: Center(child: CircularProgressIndicator()),
-                      ) else Builder(
-                        builder: (context) {
-                          if (_userProfile == null) {
-                            return const Padding(
-                              padding: EdgeInsets.all(24),
-                              child: Center(
-                                child: Text('Profile data not available'),
-                              ),
-                            );
-                          }
+                if (_isLoadingProfile)
+                  const Padding(
+                    padding: EdgeInsets.all(24),
+                    child: Center(child: CircularProgressIndicator()),
+                  )
+                else
+                  Builder(
+                    builder: (context) {
+                      if (_userProfile == null) {
+                        return const Padding(
+                          padding: EdgeInsets.all(24),
+                          child: Center(
+                            child: Text('Profile data not available'),
+                          ),
+                        );
+                      }
 
-                          switch (widget.user!.role) {
-                            case UserRole.student:
-                              return StudentProfileView(
-                                user: widget.user!,
-                                profile: _userProfile!,
-                                canViewPrivate: _canViewPrivateInfo(),
-                              );
-                            case UserRole.teacher:
-                              return TeacherProfileView(
-                                user: widget.user!,
-                                profile: _userProfile!,
-                              );
-                            case UserRole.admin:
-                              return AdminProfileView(
-                                user: widget.user!,
-                                profile: _userProfile!,
-                              );
-                          }
-                        },
-                      ),
+                      switch (widget.user!.role) {
+                        case UserRole.student:
+                          return StudentProfileView(
+                            user: widget.user!,
+                            profile: _userProfile!,
+                            canViewPrivate: _canViewPrivateInfo(),
+                          );
+                        case UserRole.teacher:
+                          return TeacherProfileView(
+                            user: widget.user!,
+                            profile: _userProfile!,
+                          );
+                        case UserRole.admin:
+                          return AdminProfileView(
+                            user: widget.user!,
+                            profile: _userProfile!,
+                          );
+                      }
+                    },
+                  ),
                 const Divider(height: 32),
                 // Theme Settings Section
                 Padding(

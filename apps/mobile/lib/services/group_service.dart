@@ -7,7 +7,6 @@ import 'package:campus_mesh/services/auth_service.dart';
 import 'package:flutter/foundation.dart';
 
 class GroupService {
-
   GroupService({required Databases database, required AuthService authService})
       : _database = database,
         _authService = authService;

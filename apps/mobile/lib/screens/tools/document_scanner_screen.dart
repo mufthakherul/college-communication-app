@@ -291,7 +291,6 @@ class _DocumentScannerScreenState extends State<DocumentScannerScreen> {
 }
 
 class ScannedDocument {
-
   ScannedDocument({
     required this.name,
     required this.scanDate,

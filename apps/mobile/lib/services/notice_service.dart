@@ -49,8 +49,7 @@ class NoticeService {
     // Always start with local cache for fast offline access
     try {
       final localRows = await _localDb.getActiveNotices(limit: 100);
-      final localNotices =
-          localRows.map(NoticeModel.fromJson).toList();
+      final localNotices = localRows.map(NoticeModel.fromJson).toList();
 
       if (localNotices.isNotEmpty) {
         _noticesController?.add(localNotices);
