@@ -29,7 +29,8 @@ dependencies:
   # See: https://github.com/flutter/flutter/issues
   # flutter_nearby_connections: ^1.1.2
   nearby_service: ^0.2.1
-  flutter_webrtc: ^0.11.7
+  # Upgrade to v1+ to use Flutter v2 embedding and fix Registrar errors
+  flutter_webrtc: ^1.2.1
   # QR code support
   qr_flutter: ^4.1.0
   mobile_scanner: ^5.2.3
