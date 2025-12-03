@@ -25,7 +25,8 @@ if (flutterVersionName == null) {
 android {
     namespace "gov.bd.polytech.rgpi.communication.develop.by.mufthakherul"
     compileSdk 36
-    ndkVersion "27.0.12077973"
+    // Use highest required NDK version for plugin compatibility
+    ndkVersion "28.2.13676358"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
