@@ -244,7 +244,7 @@ class _GroupChatScreenState extends State<GroupChatScreen> {
                             itemBuilder: (context, index) {
                               final participant = _participants[index];
                               final displayName =
-                                  participant['name'] ?? 'Unknown';
+                                  (participant['name'] as String?) ?? 'Unknown';
                               final photoUrl = participant['photo'] as String?;
 
                               return Padding(

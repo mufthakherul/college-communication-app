@@ -337,21 +337,19 @@ class CacheService {
 
     try {
       final file = File('${_cacheDirectory!.path}/$key.gz');
-      final encoder = GZipEncoder();
+      final encoder = const GZipEncoder();
       final compressed = encoder.encode(utf8.encode(data));
 
-      if (compressed != null) {
-        await file.writeAsBytes(compressed);
+      await file.writeAsBytes(compressed);
 
-        if (kDebugMode) {
-          final originalSize = utf8.encode(data).length;
-          final compressedSize = compressed.length;
-          final ratio = (1 - compressedSize / originalSize) * 100;
-          logger.debug(
-            'Compressed cache: $key (${ratio.toStringAsFixed(1)}% reduction)',
-            category: 'Cache',
-          );
-        }
+      if (kDebugMode) {
+        final originalSize = utf8.encode(data).length;
+        final compressedSize = compressed.length;
+        final ratio = (1 - compressedSize / originalSize) * 100;
+        logger.debug(
+          'Compressed cache: $key (${ratio.toStringAsFixed(1)}% reduction)',
+          category: 'Cache',
+        );
       }
     } catch (e) {
       if (kDebugMode) {
@@ -368,7 +366,7 @@ class CacheService {
       final file = File('${_cacheDirectory!.path}/$key.gz');
       if (file.existsSync()) {
         final compressed = await file.readAsBytes();
-        final decoder = GZipDecoder();
+        final decoder = const GZipDecoder();
         final decompressed = decoder.decodeBytes(compressed);
         return utf8.decode(decompressed);
       }

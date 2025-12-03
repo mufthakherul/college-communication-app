@@ -221,7 +221,7 @@ class _NoteTakingScreenState extends State<NoteTakingScreen>
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: note.category.color.withOpacity(0.2),
+                      color: note.category.color.withValues(alpha: 0.2),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(

@@ -1,8 +1,11 @@
+// ignore_for_file: avoid_dynamic_calls
+
 import 'dart:async';
 import 'dart:convert';
 
 import 'package:campus_mesh/models/notification_model.dart';
 import 'package:flutter/foundation.dart';
+import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' as html_parser;
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -207,13 +210,13 @@ class WebsiteScraperService {
       for (final row in tableRows) {
         try {
           // Flexible: table rows or list items
-          final cells = row.querySelectorAll('td') as List;
+          final cells = row.querySelectorAll('td').cast<dom.Element>();
           if (cells.isEmpty) {
-            final link = row.querySelector('a') as dynamic;
+            final link = row.querySelector('a');
             if (link != null) {
-              final title = (link.text as String).trim();
+              final title = (link.text).trim();
               if (title.isEmpty) continue;
-              final url = (link.attributes['href'] as String?) ?? '';
+              final url = link.attributes['href'] ?? '';
               final publishedDate = DateTime.now();
               final id =
                   'notice_${title.hashCode}_${publishedDate.millisecondsSinceEpoch}';
@@ -233,23 +236,22 @@ class WebsiteScraperService {
 
           // Table with at least 2 cells, title likely in cell 1
           if (cells.length >= 2) {
-            final titleCell = cells.length > 1 ? cells[1] : cells[0];
-            final titleLink =
-                (titleCell as dynamic).querySelector('a') as dynamic;
+            final dom.Element titleCell = cells.length > 1 ? cells[1] : cells[0];
+            final titleLink = titleCell.querySelector('a');
             var title = '';
             var url = '';
             if (titleLink != null) {
-              title = ((titleLink.text as String?) ?? '').trim();
-              url = (titleLink.attributes['href'] as String?) ?? '';
+              title = titleLink.text.trim();
+              url = titleLink.attributes['href'] ?? '';
             } else {
-              title = (((titleCell as dynamic).text as String?) ?? '').trim();
+              title = titleCell.text.trim();
             }
             if (title.isEmpty) continue;
 
             DateTime publishedDate;
             if (cells.length >= 3) {
-              final dateText =
-                  (((cells[2] as dynamic).text as String?) ?? '').trim();
+              final dom.Element dateCell = cells[2];
+              final dateText = dateCell.text.trim();
               publishedDate = _parseDate(dateText) ?? DateTime.now();
             } else {
               publishedDate = DateTime.now();

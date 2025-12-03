@@ -58,7 +58,7 @@ void main() {
       await sync.dispose();
     });
 
-    // TODO: Re-enable when syncMessages method is implemented
+    // TODO(future): Re-enable when syncMessages method is implemented
     // test('Message sync works across different connection types', () async {
     //   await sync.initialize();
     //

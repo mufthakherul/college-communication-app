@@ -1,9 +1,10 @@
-/// Appwrite configuration for RPI Communication App
+/// Appwrite configuration for RPI Communication App.
 ///
 /// Educational benefits provided by Appwrite:
 /// - Organization: GitHub Student Organization
 /// - Project: rpi-communication
 /// - Region: Singapore (sgp)
+library;
 
 class AppwriteConfig {
   // Project credentials

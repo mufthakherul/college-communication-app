@@ -1,9 +1,6 @@
 // ignore_for_file: do_not_use_environment
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-
 import 'package:campus_mesh/screens/auth/login_screen.dart';
 import 'package:campus_mesh/screens/home_screen.dart';
 import 'package:campus_mesh/services/appwrite_service.dart';
@@ -18,6 +15,8 @@ import 'package:campus_mesh/services/security_service.dart';
 // Sentry temporarily disabled (dependency retained but not initialized)
 // import 'package:campus_mesh/services/sentry_service.dart';
 import 'package:campus_mesh/services/theme_service.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 /// Initialize essential services that are required for basic app functionality
 Future<void> _initializeEssentialServices() async {

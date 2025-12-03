@@ -271,7 +271,7 @@ class _ScheduleBuilderScreenState extends State<ScheduleBuilderScreen> {
           width: 50,
           height: 50,
           decoration: BoxDecoration(
-            color: cls.color.withOpacity(0.3),
+            color: cls.color.withValues(alpha: 0.3),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Center(child: Icon(Icons.class_, color: cls.color)),
